@@ -1,15 +1,9 @@
 # compiled output
-/packages/api/dist
-/packages/api/node_modules
-/packages/api/.env
 node_modules
-/packages/web/node_modules
-/packages/web/build
 package.json
 dump.rdb
 
 # Logs
-packages/api/logs
 *.log
 npm-debug.log*
 yarn-debug.log*
