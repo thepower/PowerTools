@@ -4,13 +4,9 @@
 
 In the project directory, you can run:
 
-### `yarn start`
+### `yarn lerna:init`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Init thepower hub project + install package's dependencies
 
 ### `yarn cm`
 Commit your changes through the commit wizard
