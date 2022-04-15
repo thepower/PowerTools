@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-sass-guidelines",
+    "stylelint-config-idiomatic-order"
+  ],
+  "rules": {
+    "at-rule-no-unknown": null,
+    "selector-class-pattern": null,
+    "scss/at-import-partial-extension-blacklist": null,
+    "order/properties-order": null,
+    "order/properties-alphabetical-order": null,
+    "max-nesting-depth": 5,
+    "selector-max-compound-selectors": 5,
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ],
+    "no-invalid-position-at-import-rule": null
+  }
+}
