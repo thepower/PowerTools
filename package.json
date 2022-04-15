@@ -13,6 +13,8 @@
     "typescript": "^4.6.3"
   },
   "scripts": {
+    "lerna:init": "yarn install && lerna bootstrap",
+    "cl": "lerna clean",
     "cm": "git add -A && lint-staged && git-cz"
   },
   "lint-staged": {
