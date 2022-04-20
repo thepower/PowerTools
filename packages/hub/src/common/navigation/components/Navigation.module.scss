@@ -1,0 +1,49 @@
+@import '../../../application/styles/variables';
+
+.navigation {
+  @media screen and (max-width: 768px) {
+    width: 180px;
+  }
+
+  @media screen and (max-width: 360px) {
+    display: none;
+  }
+}
+
+.navigationItem {
+  cursor: pointer;
+}
+
+.navigationLabel > span {
+  font-weight: 700;
+  font-size: 12pt;
+  transition: 0.3s ease-in-out;
+  letter-spacing: 0.04rem;
+  text-transform: uppercase;
+  color: $blue;
+}
+
+.activeNavigationLabel > span {
+  color: $black;
+}
+
+.copyrightLink {
+  margin-right: 10px;
+  color: #12bab7;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: #c2183f;
+  }
+}
+
+.navigationBottomPart {
+  display: flex;
+  flex-direction: column;
+  padding-left: $unit * 4;
+  padding-right: $unit * 4;
+  margin-top: auto;
+  margin-bottom: $unit * 4;
+  margin-right: $unit * 4;
+}
