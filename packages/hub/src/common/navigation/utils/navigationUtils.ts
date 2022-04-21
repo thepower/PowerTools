@@ -3,9 +3,9 @@ import { NavigationItemType } from '../typings/navigationTypings';
 export enum NavigationRoutesEnum {
   Dapps = '/dapps',
   Account = '/account',
-  SmartContracts = '/smartContracts',
+  SmartContracts = '/contracts',
   State = '/state',
-  ApiLinks = '/apiLinks',
+  ApiLinks = '/api',
   Nodes = '/nodes',
   Shards = '/shards',
 }

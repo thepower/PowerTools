@@ -1,12 +1,21 @@
 @import '../../../application/styles/variables';
 
 .navigation {
-  @media screen and (max-width: 768px) {
-    width: 180px;
-  }
+  width: $menu-width;
+  position: absolute;
+  top: $app-bar-height;
+  height: calc(100vh - #{$app-bar-height});
 
-  @media screen and (max-width: 360px) {
+  @media screen and (max-width: $tablet) {
     display: none;
+  }
+}
+
+.tabletNavigation {
+  @media screen and (max-width: $tablet) {
+    .navigation {
+      display: flex !important;
+    }
   }
 }
 
@@ -29,12 +38,12 @@
 
 .copyrightLink {
   margin-right: 10px;
-  color: #12bab7;
+  color: $green;
   text-decoration: none;
   cursor: pointer;
 
   &:hover {
-    color: #c2183f;
+    color: $red;
   }
 }
 
@@ -46,4 +55,39 @@
   margin-top: auto;
   margin-bottom: $unit * 4;
   margin-right: $unit * 4;
+}
+
+.menuIcon {
+  display: none;
+  cursor: pointer;
+}
+
+.appbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: $app-bar-height;
+  box-shadow: none;
+  background-color: $black;
+  padding: 0 $unit * 4;
+
+  @media screen and (max-width: $tablet) {
+    padding: 0 $unit * 2.5;
+
+    .menuIcon {
+      display: block;
+    }
+  }
+}
+
+.appbarIcon {
+  display: block;
+  width: $unit * 33.75;
+  height: $unit * 12.5;
+  overflow: hidden;
+  text-indent: $unit * 102.5;
+
+  @media screen and (max-width: $tablet) {
+    margin: auto;
+  }
 }
