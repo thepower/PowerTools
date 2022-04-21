@@ -1,7 +1,10 @@
 import React from "react";
+import { Page } from './common';
 
 export const Test = () => (
-  <div>
-    {'Тест'}
-  </div>
+  <Page>
+    <div>
+      {'Тест'}
+    </div>
+  </Page>
 );

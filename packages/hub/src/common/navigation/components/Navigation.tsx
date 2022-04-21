@@ -68,7 +68,7 @@ class NavigationComponent extends React.PureComponent<NavigationProps, Navigatio
       onClick={this.handleNavigateToItem(navigationItem)}
     >
       <ListItemText
-        className={classnames(styles.navigationLabel, currentItem === id ? styles.activeNavigationLabel : '')}
+        className={classnames(styles.navigationLabel, {[styles.activeNavigationLabel]: currentItem === id })}
         primary={label}
       />
     </ListItem>;
@@ -100,7 +100,7 @@ class NavigationComponent extends React.PureComponent<NavigationProps, Navigatio
         variant={openedTabletMenu ? 'temporary' : 'permanent'}
         classes={this.drawerClasses}
         onClose={this.closeTabletMenu}
-        className={classnames(openedTabletMenu ? styles.tabletNavigation : '')}
+        className={classnames({[styles.tabletNavigation]: openedTabletMenu})}
       >
         <List>
           {(navigationItems || []).map(this.renderNavigationItem)}

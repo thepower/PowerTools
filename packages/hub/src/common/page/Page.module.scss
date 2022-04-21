@@ -1,0 +1,28 @@
+@import '../../application/styles/variables';
+
+.page {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: $menu-width;
+  width: calc(100vw - #{$menu-width});
+  height: 100vh;
+  background-color: #fff;
+}
+
+.pageContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  width: 100%;
+  flex-grow: 1;
+  margin-top: $app-bar-height;
+  padding: $unit * 5;
+  overflow-y: hidden;
+
+  @media screen and (max-width: $tablet) {
+    padding: $unit * 2;
+  }
+}
