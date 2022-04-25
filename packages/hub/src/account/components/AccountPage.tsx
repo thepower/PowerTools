@@ -4,6 +4,9 @@ import { Grid } from '@mui/material';
 import { LinkBlock, Page } from '../../common';
 import styles from './AccountPage.module.scss';
 
+const mapStateToProps = () => ({});
+const mapDispatchToProps = {};
+
 class AccountPageComponent extends React.PureComponent<any, any> {
   render() {
     return <Page title={'My account'}>
