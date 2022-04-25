@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { branchCallFunction } from '../utils/common';
 import styles from './Linkblock.module.scss';
 import { UnknownFunctionType } from '../typings/common';
+import { Button } from '@mui/material';
 
 interface LinkBlockProps {
   className?: string;
@@ -11,7 +12,7 @@ interface LinkBlockProps {
   description?: string;
   descriptionClassName?: string;
   contentRenderer?: UnknownFunctionType;
-  buttonRenderer?: UnknownFunctionType;
+  buttonTitle?: string;
   onClick?: any;
 }
 
@@ -21,7 +22,7 @@ export const LinkBlock: React.FC<LinkBlockProps> = (props) => {
     titleClassName,
     description,
     descriptionClassName,
-    buttonRenderer,
+    buttonTitle = '→',
     contentRenderer,
     className,
     onClick,
@@ -31,9 +32,14 @@ export const LinkBlock: React.FC<LinkBlockProps> = (props) => {
     return <div>
       <div className={classnames(styles.title, titleClassName)}>{title}</div>
       <div className={classnames(descriptionClassName)}>{description}</div>
-      {branchCallFunction(buttonRenderer)}
+      <Button
+        color={'primary'}
+        variant="contained"
+        className={styles.linkButton}>
+        {buttonTitle}
+      </Button>
     </div>
-  }, [buttonRenderer, description, descriptionClassName, title, titleClassName]);
+  }, [buttonTitle, description, descriptionClassName, title, titleClassName]);
 
   return <div className={classnames(styles.linkBlock, className)} onClick={onClick}>
     {branchCallFunction(contentRenderer, renderLink)}

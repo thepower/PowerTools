@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { push } from 'connected-react-router';
 import { connect, ConnectedProps } from 'react-redux';
 import { LinkBlock, NavigationRoutesEnum, Page } from '../../common'
@@ -15,15 +15,6 @@ const connector = connect(null, mapDispatchToProps);
 type DappsPageProps = ConnectedProps<typeof connector>;
 
 class DappsPageComponent extends React.PureComponent<DappsPageProps, any> {
-  buttonRenderer = (title: string = '') => () => (
-    <Button
-      color={'primary'}
-      variant="contained"
-      className={styles.dappsLinkButton}>
-      {`${title} →`.trim()}
-    </Button>
-  );
-
   openNewPage = (url: string) => () => {
     window?.open(url,'_blank')?.focus()
   };
@@ -37,7 +28,6 @@ class DappsPageComponent extends React.PureComponent<DappsPageProps, any> {
     return <Grid key={item.title} item xs={12} md={6} lg={4}>
       <LinkBlock
         title={item.title}
-        buttonRenderer={this.buttonRenderer()}
         onClick={this.openNewPage(item.link)}
       />
     </Grid>
@@ -51,7 +41,7 @@ class DappsPageComponent extends React.PureComponent<DappsPageProps, any> {
   }
 
   render() {
-    return <Page contentClassName={styles.dappsPage}>
+    return <Page>
       <Grid container>
         <LinkBlock
           className={styles.walletBlock}
@@ -59,7 +49,7 @@ class DappsPageComponent extends React.PureComponent<DappsPageProps, any> {
           titleClassName={styles.walletBlockTitle}
           description={'Fast & Easy Payments'}
           descriptionClassName={styles.walletBlockDescription}
-          buttonRenderer={this.buttonRenderer('Get started')}
+          buttonTitle={'Get started →'}
           onClick={this.moveToWallet}
         />
       </Grid>

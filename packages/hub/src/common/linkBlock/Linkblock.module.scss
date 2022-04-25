@@ -16,3 +16,14 @@
   font-size: $unit * 6;
   font-weight: $bold;
 }
+
+.linkButton {
+  color: #fff;
+  margin-top: $unit * 4;
+  text-transform: none;
+  font-size: $unit * 4;
+
+  a {
+    text-decoration: none;
+  }
+}

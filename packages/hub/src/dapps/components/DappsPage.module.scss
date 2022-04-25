@@ -1,12 +1,5 @@
 @import '../../application/styles/variables';
 
-.dappsPage {
-  display: flex;
-  justify-content: flex-start;
-  height: 100%;
-  overflow-y: auto;
-}
-
 .walletBlock {
   height: $unit * 73.5;
   margin-bottom: $unit * 5;
@@ -20,17 +13,6 @@
 .walletBlockDescription {
   font-size: $unit * 5.25;
   font-weight: 500;
-}
-
-.dappsLinkButton {
-  color: #fff;
-  margin-top: $unit * 4;
-  text-transform: none;
-  font-size: $unit * 4;
-
-  a {
-    text-decoration: none;
-  }
 }
 
 .addDappsBlock {

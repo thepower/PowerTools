@@ -1,6 +1,6 @@
 import React from "react";
 import { LinkBlock, Page } from './common';
-import { Button, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 export const Test = () => (
   <Page title={'Test'}>
@@ -8,7 +8,7 @@ export const Test = () => (
      <LinkBlock
        title={'Power_wallet'}
        description={'Fast & Easy Payments'}
-       buttonRenderer={() => <Button color={'primary'} variant="contained">{'Create →'}</Button>}
+       buttonTitle={'Create'}
      />
    </Grid>
   </Page>
