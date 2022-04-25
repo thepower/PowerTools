@@ -10,14 +10,16 @@ import {
 import { Navigation, NavigationRoutesEnum } from '../../common';
 import { Test } from '../../Test';
 import { DappsPage } from '../../dapps/components/DappsPage';
+import { AccountPage } from '../../account/components/AccountPage';
 
 export const AppRoutes = (): ReactElement => (
   <div id={'reactRoot'}>
-    <Navigation/>
     <BrowserRouter>
+      <Navigation/>
       <Routes>
-        <Route path="/" element={<Test/>}/>
         <Route path={NavigationRoutesEnum.Dapps} element={<DappsPage/>}/>
+        <Route path={NavigationRoutesEnum.Account} element={<AccountPage/>}/>
+        <Route element={<Test/>}/>
       </Routes>
     </BrowserRouter>
   </div>

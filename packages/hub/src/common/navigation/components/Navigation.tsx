@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import classnames from 'classnames';
+import { NavLink } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import {
   AppBar,
@@ -41,6 +42,10 @@ class NavigationComponent extends React.PureComponent<NavigationProps, Navigatio
     };
   }
 
+  getActiveNavigationItemClassName = ({ isActive }: { isActive: boolean }) => {
+    return isActive ? styles.activeNavigationLabel : undefined;
+  };
+
   handleNavigateToItem = (navigationItem: NavigationItemType) => () => {
     const { changeUrl } = this.props;
     const { id, url } = navigationItem;
@@ -59,18 +64,22 @@ class NavigationComponent extends React.PureComponent<NavigationProps, Navigatio
   };
 
   renderNavigationItem = (navigationItem: NavigationItemType) => {
-    const { id, label } = navigationItem;
-    const { currentItem } = this.state;
+    const { id, label, url } = navigationItem;
 
     return <ListItem
       key={id}
       className={styles.navigationItem}
       onClick={this.handleNavigateToItem(navigationItem)}
     >
-      <ListItemText
-        className={classnames(styles.navigationLabel, {[styles.activeNavigationLabel]: currentItem === id })}
-        primary={label}
-      />
+      <NavLink
+        to={url}
+        className={this.getActiveNavigationItemClassName}
+      >
+        <ListItemText
+          className={styles.navigationLabel}
+          primary={label}
+        />
+      </NavLink>
     </ListItem>;
   };
 

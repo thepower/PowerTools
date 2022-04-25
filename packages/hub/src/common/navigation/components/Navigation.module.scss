@@ -21,6 +21,10 @@
 
 .navigationItem {
   cursor: pointer;
+
+  a {
+    text-decoration: none;
+  }
 }
 
 .navigationLabel > span {
@@ -32,7 +36,7 @@
   color: $blue;
 }
 
-.activeNavigationLabel > span {
+.activeNavigationLabel span {
   color: $black;
 }
 

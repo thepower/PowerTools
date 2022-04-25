@@ -1,5 +1,10 @@
 @import '../../application/styles/variables';
 
+.walletBlockLink {
+  width: 100%;
+  text-decoration: none;
+}
+
 .walletBlock {
   height: $unit * 73.5;
   margin-bottom: $unit * 5;
@@ -13,6 +18,7 @@
 .walletBlockDescription {
   font-size: $unit * 5.25;
   font-weight: 500;
+  color: $blue;
 }
 
 .addDappsBlock {

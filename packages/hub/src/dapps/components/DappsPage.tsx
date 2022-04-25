@@ -1,20 +1,12 @@
 import React from "react";
 import { Grid } from '@mui/material';
-import { push } from 'connected-react-router';
-import { connect, ConnectedProps } from 'react-redux';
+import { Link } from "react-router-dom";
 import { LinkBlock, NavigationRoutesEnum, Page } from '../../common'
 import styles from './DappsPage.module.scss';
-import { dappsPageData } from '../utils/dappsData';
+import { dappsPageData } from '../utils/dappsPageData';
 import { DappsPageDataItem } from '../typings/dappsPageTypings';
 
-const mapDispatchToProps = {
-  changeUrl: push,
-};
-
-const connector = connect(null, mapDispatchToProps);
-type DappsPageProps = ConnectedProps<typeof connector>;
-
-class DappsPageComponent extends React.PureComponent<DappsPageProps, any> {
+export class DappsPage extends React.PureComponent<any,  any> {
   openNewPage = (url: string) => () => {
     window?.open(url,'_blank')?.focus()
   };
@@ -43,15 +35,16 @@ class DappsPageComponent extends React.PureComponent<DappsPageProps, any> {
   render() {
     return <Page>
       <Grid container>
-        <LinkBlock
-          className={styles.walletBlock}
-          title={'Power_wallet'}
-          titleClassName={styles.walletBlockTitle}
-          description={'Fast & Easy Payments'}
-          descriptionClassName={styles.walletBlockDescription}
-          buttonTitle={'Get started →'}
-          onClick={this.moveToWallet}
-        />
+        <Link to={NavigationRoutesEnum.Wallet} className={styles.walletBlockLink}>
+          <LinkBlock
+            className={styles.walletBlock}
+            title={'Power_wallet'}
+            titleClassName={styles.walletBlockTitle}
+            description={'Fast & Easy Payments'}
+            descriptionClassName={styles.walletBlockDescription}
+            buttonTitle={'Get started →'}
+          />
+        </Link>
       </Grid>
       <Grid container spacing={6} wrap={'wrap'}>
         <Grid item xs={12} md={6} lg={4}>
@@ -65,6 +58,4 @@ class DappsPageComponent extends React.PureComponent<DappsPageProps, any> {
     </Page>;
   }
 }
-
-export const DappsPage = connector(DappsPageComponent);
 

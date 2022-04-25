@@ -8,7 +8,7 @@ export enum NavigationRoutesEnum {
   ApiLinks = '/api',
   Nodes = '/nodes',
   Shards = '/shards',
-  Wallet= '/wallet',
+  Wallet = '/wallet',
 }
 
 export const navigationItems: NavigationItemType[] = [

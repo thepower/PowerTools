@@ -31,7 +31,7 @@ export const LinkBlock: React.FC<LinkBlockProps> = (props) => {
   const renderLink = React.useCallback(() => {
     return <div>
       <div className={classnames(styles.title, titleClassName)}>{title}</div>
-      <div className={classnames(descriptionClassName)}>{description}</div>
+      <div className={classnames(styles.description, descriptionClassName)}>{description}</div>
       <Button
         color={'primary'}
         variant="contained"
