@@ -1,0 +1,18 @@
+@import '../../application/styles/variables';
+
+.linkBlock {
+  border-radius: $unit * 1.25;
+  color: $blue;
+  border: 2px solid $blue;
+  height: $unit * 48.75;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  padding: $unit * 4;
+}
+
+.title {
+  font-size: $unit * 6;
+  font-weight: $bold;
+}

@@ -6,6 +6,7 @@ interface PageProps extends React.ComponentProps<any> {
   className?: string;
   contentClassName?: string;
   loading?: boolean;
+  title?: string;
 }
 
 export const Page: React.FC<PageProps> = (props: PageProps) => {
@@ -13,9 +14,14 @@ export const Page: React.FC<PageProps> = (props: PageProps) => {
     className,
     contentClassName,
     children,
+    title,
   } = props;
 
   return <div className={classnames(styles.page, className)}>
+    {
+      title &&
+      <h1 className={styles.pageTitle}>{title}</h1>
+    }
     <div className={classnames(contentClassName, styles.pageContent)}>
       {children}
     </div>

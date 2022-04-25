@@ -9,6 +9,11 @@ const MUITheme = createTheme({
   typography: {
     fontFamily: 'Ubuntu',
   },
+  palette: {
+    primary: {
+      main: '#2997ff',
+    },
+  },
   spacing: 4,
   transitions: {
     duration: {
