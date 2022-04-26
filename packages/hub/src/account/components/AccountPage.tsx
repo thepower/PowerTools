@@ -15,25 +15,25 @@ class AccountPageComponent extends React.PureComponent<any, any> {
         <LinkBlock
           className={styles.accountBlock}
           title={'Create new account'}
-          description={'Power Ecosystem works on DID accounts. Support for multi-accounts will be added in the future.'}
+          description={'Power Ecosystem works on DID accounts. Support for multi-accounts will be added in the future'}
           buttonTitle={'Create →'}
         />
         <LinkBlock
           className={styles.accountBlock}
           title={'Export account'}
-          description={'Please make a backup of your account and save it to a safe place so that you can restore it if necessary.'}
+          description={'Please make a backup of your account and save it to a safe place so that you can restore it if necessary'}
           buttonTitle={'Export →'}
         />
         <LinkBlock
           className={styles.accountBlock}
           title={'Import account'}
-          description={'If you have a saved backup account, you can import it.'}
+          description={'If you have a saved backup account, you can import it'}
           buttonTitle={'Import →'}
         />
         <LinkBlock
           className={styles.accountBlock}
           title={'Reset account'}
-          description={'Erase account data. If you do not have a backup or seed phrase, then recovery will be impossible.'}
+          description={'Erase account data. If you do not have a backup or seed phrase, then recovery will be impossible'}
           buttonTitle={'Purge account →'}
         />
       </Grid>

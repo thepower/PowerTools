@@ -11,14 +11,10 @@ export class DappsPage extends React.PureComponent<any,  any> {
     window?.open(url,'_blank')?.focus()
   };
 
-  moveToWallet = () => {
-    const { changeUrl } = this.props;
-    changeUrl(NavigationRoutesEnum.Wallet);
-  };
-
   renderDappsPageItem = (item: DappsPageDataItem) => {
     return <Grid key={item.title} item xs={12} md={6} lg={4}>
       <LinkBlock
+        className={styles.dappsBlock}
         title={item.title}
         onClick={this.openNewPage(item.link)}
       />

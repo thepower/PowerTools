@@ -29,7 +29,7 @@ export const LinkBlock: React.FC<LinkBlockProps> = (props) => {
   } = props;
 
   const renderLink = React.useCallback(() => {
-    return <div>
+    return <>
       <div className={classnames(styles.title, titleClassName)}>{title}</div>
       <div className={classnames(styles.description, descriptionClassName)}>{description}</div>
       <Button
@@ -38,7 +38,7 @@ export const LinkBlock: React.FC<LinkBlockProps> = (props) => {
         className={styles.linkButton}>
         {buttonTitle}
       </Button>
-    </div>
+    </>
   }, [buttonTitle, description, descriptionClassName, title, titleClassName]);
 
   return <div className={classnames(styles.linkBlock, className)} onClick={onClick}>

@@ -8,8 +8,10 @@
   cursor: pointer;
   width: 100%;
   display: flex;
-  align-items: flex-end;
   padding: $unit * 4;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-around;
 }
 
 .title {
@@ -23,9 +25,10 @@
 
 .linkButton {
   color: #fff;
-  margin-top: $unit * 4;
+  margin-top: $unit * 2.5;
   text-transform: none;
   font-size: $unit * 4;
+  border-radius: $unit * 1.25;
 
   a {
     text-decoration: none;

@@ -8,6 +8,7 @@
 .walletBlock {
   height: $unit * 73.5;
   margin-bottom: $unit * 5;
+  justify-content: flex-end;
 }
 
 .walletBlockTitle {
@@ -19,6 +20,10 @@
   font-size: $unit * 5.25;
   font-weight: 500;
   color: $blue;
+}
+
+.dappsBlock {
+  justify-content: flex-end;
 }
 
 .addDappsBlock {

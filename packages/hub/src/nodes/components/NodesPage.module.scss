@@ -1,12 +1,6 @@
 @import '../../application/styles/variables';
 
-.accountId {
-  width: 100%;
-  font-size: $unit * 5;
-  margin-bottom: $unit * 4;
-}
-
-.accountBlock {
+.nodesBlock {
   margin-bottom: $unit * 5;
   min-height: $unit * 36.5;
   height: unset;
