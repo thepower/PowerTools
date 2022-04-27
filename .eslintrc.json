@@ -1,7 +1,10 @@
 {
     "root": true,
     "parser": "@typescript-eslint/parser",
-    "plugins": ["@typescript-eslint"],
+    "plugins": [
+        "@typescript-eslint",
+        "oclif"
+    ],
     "extends": [
         "airbnb-typescript",
         "airbnb/hooks"
@@ -12,7 +15,10 @@
         },
         "sourceType": "module",
         "project": [
-            "packages/**/tsconfig.json"
+            "packages/hub/tsconfig.json",
+            "packages/cli/tsconfig.json",
+            "packages/tssdk/tsconfig.json",
+            "packages/uploader/tsconfig.json"
         ]
     },
     "env": {

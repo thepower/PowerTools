@@ -5,6 +5,7 @@
   "dependencies": {
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-plugin-oclif": "^0.1.0",
     "lint-staged": "^12.3.7",
     "stylelint": "^14.6.1",
     "stylelint-config-idiomatic-order": "^8.1.0",
@@ -15,7 +16,7 @@
   "scripts": {
     "lerna:init": "yarn install && lerna bootstrap",
     "cl": "lerna clean",
-    "cm": "git add -A && lint-staged && git-cz"
+    "cm": "git add -A && git-cz"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --fix",

@@ -2,4 +2,6 @@
 packages/*/build
 packages/*/dist
 packages/*/dll
+packages/msgpack/*
+packages/jssdk/*
 
