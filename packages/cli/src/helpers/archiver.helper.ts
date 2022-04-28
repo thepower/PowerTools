@@ -29,7 +29,7 @@ export const archiveDir =  async (sourceDir: string): Promise<any> => {
     });
 
     archive.on('error', function(err){
-      unlinkSync(target);
+      unlinkSync(dir);
       rej(err);
     });
 
