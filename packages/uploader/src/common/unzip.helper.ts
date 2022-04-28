@@ -99,9 +99,7 @@ const getEntryStream = async (zipfile: any, entry: any): Promise<Readable> => {
 
 export const unzip = async (source: any, target: string) => {
   console.log('unzip started');
-
-
-  let zipfile: any = await openZip(source);
+  let zipfile;
 
   try {
     zipfile = await openZip(source);
