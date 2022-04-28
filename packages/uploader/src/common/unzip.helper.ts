@@ -98,12 +98,16 @@ const getEntryStream = async (zipfile: any, entry: any): Promise<Readable> => {
 };
 
 export const unzip = async (source: any, target: string) => {
-
+  console.log('unzip started');
   const zipfile: any = await openZip(source);
+
+  console.log('open zip ok');
 
   while (true) {
     const entry: any = await readEntry(zipfile);
     if (!entry) break;
+
+    console.log(entry.fileName);
 
     const path = `${target}/${entry.fileName}`;
 
