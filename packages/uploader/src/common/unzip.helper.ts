@@ -4,16 +4,16 @@ import {
   createWriteStream,
   mkdirSync,
   existsSync,
-  statSync,
-  promises, Stats,
-} from "fs";
+  promises,
+  Stats,
+} from 'fs';
 
-import {Readable} from "stream";
-import {getFileHash} from "./hash.helper";
+import { Readable } from 'stream';
+import { getFileHash } from './hash.helper';
 
 
 export const createDirIfNotExists = (dir: string) => {
-  if (!existsSync(dir)){
+  if (!existsSync(dir)) {
     mkdirSync(dir, { recursive: true });
   }
 };
@@ -55,11 +55,11 @@ export const validateDir = async (dir: string, manifestMap: any, isValid: boolea
 
 export const uploadFile = async (source: Readable, path: string) => {
   return new Promise((res, rej) => {
-    source.on("finish", () => {
+    source.on('finish', () => {
       res(true);
     });
 
-    source.on("error", (e) => {
+    source.on('error', (e) => {
       rej(e);
     });
 
@@ -71,11 +71,11 @@ export const uploadFile = async (source: Readable, path: string) => {
 
 export const openZip = async (source: any) => {
   return new Promise((res, rej) => {
-    yauzl.open(source, {autoClose: true, lazyEntries: true}, (err, zipfile) => {
-      if (err) rej(err);
+    yauzl.open(source, { autoClose: true, lazyEntries: true }, (err, zipfile) => {
+      if (err) {rej(err);}
       res(zipfile);
     });
-  })
+  });
 };
 
 const readEntry = async (zipfile: any) => {
@@ -91,27 +91,39 @@ const readEntry = async (zipfile: any) => {
 const getEntryStream = async (zipfile: any, entry: any): Promise<Readable> => {
   return new Promise((res, rej) => {
     zipfile.openReadStream(entry, async (err, stream) => {
-      if (err) rej(err);
+      if (err) {rej(err);}
       res(stream);
     });
   });
 };
 
 export const unzip = async (source: any, target: string) => {
+  console.log('unzip started');
+  let zipfile;
 
-  const zipfile: any = await openZip(source);
+  try {
+    zipfile = await openZip(source);
+  } catch (e) {
+    console.log(e.message);
+  }
 
-  while (true) {
-    const entry: any = await readEntry(zipfile);
-    if (!entry) break;
+  console.log('open zip ok');
 
-    const path = `${target}/${entry.fileName}`;
+  if (zipfile) {
+    while (true) {
+      const entry: any = await readEntry(zipfile);
+      if (!entry) {break;}
 
-    if (/\/$/.test(entry.fileName)) { // if directory
-      createDirIfNotExists(path);
-    } else {
-      const source = await getEntryStream(zipfile, entry);
-      await uploadFile(source, path);
+      console.log(entry.fileName);
+
+      const path = `${target}/${entry.fileName}`;
+
+      if (/\/$/.test(entry.fileName)) { // if directory
+        createDirIfNotExists(path);
+      } else {
+        const source = await getEntryStream(zipfile, entry);
+        await uploadFile(source, path);
+      }
     }
   }
 

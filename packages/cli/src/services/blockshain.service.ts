@@ -1,7 +1,8 @@
-import * as tpSdk from "the_power_sdk_js";
+import * as tpSdk from 'the_power_sdk_js';
 
 export class BlockChainService {
-  private shard: string = '104';
+  private shard: number = 104;
+
   private storageScAddress = 'AA030000174483055698';
 
   async chainTrx(login: string, wif: string, func: string, params: any[]) {
@@ -13,7 +14,7 @@ export class BlockChainService {
         'SK',
         20000,
         wif,
-        {},// fee settings
+        {}, // fee settings
       );
 
     const res = await tpSdk.networkLib.sendTxAndWaitForResponse(
@@ -103,7 +104,7 @@ export class BlockChainService {
   async registerProvider(
     login: string = 'AA030000174483048139',
     wif: string = 'KwYbZogSKLu94LXUGDEoJnj6nWA5UMipSyiP7WabLWBczU6BFaCd',
-    scAddress: string = 'AA030000174483055698'
+    scAddress: string = 'AA030000174483055698',
   ) {
     const tx = await tpSdk.transactionsLib
       .composeSCMethodCallTX(
@@ -114,13 +115,13 @@ export class BlockChainService {
           [ // TODO: describe this args
             'upload.c104sn1.thepower.io',
             '.c104sn1.thepower.io',
-            1
-          ]
+            1,
+          ],
         ],
         'SK',
         20000,
         wif,
-        {} // fee settings
+        {}, // fee settings
       );
 
     const res = await tpSdk.networkLib.sendTxAndWaitForResponse(
@@ -132,16 +133,16 @@ export class BlockChainService {
     return res;
   }
 
-  async getAllProviders(): Promise<string> {
-    const smartContract = await tpSdk.scLoader.instantiateSC(this.storageScAddress, this.shard);
-
-    return smartContract.executeMethod(
-      'get_all_providers_wrapper',
-      [],
-    );
-  }
-
-  async getProject(login: string, projectId: string): Promise<string> {
+  // async getAllProviders(): Promise<string> {
+  //   const smartContract = await tpSdk.scLoader.instantiateSC(this.storageScAddress, this.shard);
+  //
+  //   return smartContract.executeMethod(
+  //     'get_all_providers_wrapper',
+  //     [],
+  //   );
+  // }
+  //
+  async getProject(login: string, projectId: string): Promise<any> {
     const smartContract = await tpSdk.scLoader.instantiateSC(this.storageScAddress, this.shard);
 
     return smartContract.executeMethod(

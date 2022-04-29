@@ -1,6 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 import * as FormData from 'form-data';
-import {unlinkSync} from "fs";
+import { unlinkSync } from 'fs';
+
+const API_BASE_URL = 'http://51.15.116.231:3010';
 
 
 export class UploaderApi {
@@ -12,13 +14,13 @@ export class UploaderApi {
 
     try {
       response = await axios.post(
-        'http://localhost:3010/auth/login', // TODO: move to config
+        `${API_BASE_URL}/auth/login`,
         {
           address,
           wif,
         },
       );
-    } catch(e) {
+    } catch (e) {
       console.log(e.message);
       throw new Error(e.message);
     }
@@ -48,7 +50,7 @@ export class UploaderApi {
 
     try {
       const response = await axios.post(
-        'http://localhost:3010/uploader/upload', // TODO: move to config
+        `${API_BASE_URL}/uploader/upload`,
         form,
         {
           headers: {
@@ -61,7 +63,7 @@ export class UploaderApi {
       console.log(`file ${path} upload finished ${JSON.stringify(response.status)}`);
 
       unlinkSync(path);
-    } catch(e) {
+    } catch (e) {
       console.log(`file ${path} upload failed`);
     }
   }
