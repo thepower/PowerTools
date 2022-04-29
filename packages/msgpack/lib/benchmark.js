@@ -12,8 +12,8 @@ var notepack = try_require("notepack");
 msgpack5 = msgpack5 && msgpack5();
 msgpack_codec = msgpack_codec && msgpack_codec.msgpack;
 
-var pkg = require("../package.json");
-var data = require("../test/example");
+var pkg = require("../../msgpack2/package.json");
+var data = require("../test/example.json");
 var packed = msgpack_lite.encode(data);
 var expected = JSON.stringify(data);
 

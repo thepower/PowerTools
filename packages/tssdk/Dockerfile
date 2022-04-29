@@ -2,7 +2,7 @@ FROM node:16-alpine
 
 WORKDIR /app
 
-COPY package.json ./
+COPY ../tssdk2/package.json ./
 
 RUN yarn install --prod
 

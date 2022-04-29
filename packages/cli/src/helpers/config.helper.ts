@@ -1,7 +1,7 @@
 import { promises, existsSync } from 'fs';
-import {CliConfig} from "../types/cliConfig.type";
+import { CliConfig } from '../types/cliConfig.type';
 
-const CONFIG_FILE_NAME = 'tp-cli.json';
+const CONFIG_FILE_NAME = 'tp-cli2.json';
 
 export const validateConfig = (cfg: CliConfig) => {
 
@@ -31,7 +31,7 @@ export const getConfig = async (): Promise<CliConfig> => {
 
     try {
       cfgJSON = JSON.parse(buffer.toString());
-    } catch(e) {
+    } catch (e) {
       throw new Error(`Invalid config json (${CONFIG_FILE_NAME})`);
     }
 

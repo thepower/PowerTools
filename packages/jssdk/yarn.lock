@@ -3369,6 +3369,16 @@ tapable@^0.2.7:
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-0.2.9.tgz#af2d8bbc9b04f74ee17af2b4d9048f807acd18a8"
   integrity sha512-2wsvQ+4GwBvLPLWsNfLCDYGsW6xb7aeC6utq2Qh0PFwgEy7K7dsma9Jsmb2zSQj7GvYAyUGSntLtsv++GmgL1A==
 
+the_power_mpack@^1.0.0:
+  version "1.0.0"
+  resolved "https://npm.vmassive.ru/the_power_mpack/-/the_power_mpack-1.0.0.tgz#949cf138d018dd0321062ec98acc80e736a56409"
+  integrity sha512-EG5ulvZRaVOCXxy5LSzxXBZr7chRU5WOkLFltOqXlxvEOaFYjlLwUk7ywJpbvOHAciWdHX8qwZXcE19waoYSfQ==
+  dependencies:
+    event-lite "^0.1.1"
+    ieee754 "^1.1.8"
+    int64-buffer "^0.1.9"
+    isarray "^1.0.0"
+
 through2@^2.0.0:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/through2/-/through2-2.0.5.tgz#01c1e39eb31d07cb7d03a96a70823260b23132cd"

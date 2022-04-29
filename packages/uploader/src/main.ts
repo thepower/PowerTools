@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
-import { ConfigService } from "@nestjs/config";
-import {BlockChainService} from "./blockchain/blockchain.service";
+import { BlockChainService } from './blockchain/blockchain.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const config = app.get(ConfigService)
-  ;const port = config.get('port');
+  const config = app.get(ConfigService);
+  const port = config.get('port');
 
   await app.listen(port);
   console.log(`Application is running on: ${await app.getUrl()}`);
@@ -16,8 +16,8 @@ async function bootstrap() {
 
   const regPres = await blockChain.registerProvider(
     'AA030000174483048139',
-    'KwYbZogSKLu94LXUGDEoJnj6nWA5UMipSyiP7WabLWBczU6BFaCd'
-  ); // TODO: move to cli ?
+    'KwYbZogSKLu94LXUGDEoJnj6nWA5UMipSyiP7WabLWBczU6BFaCd',
+  ); // TODO: move to cli2 ?
 
   console.log('regPres=', regPres);
 

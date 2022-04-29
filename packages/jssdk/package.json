@@ -1,8 +1,20 @@
 {
-  "name": "the_power_sdk_js",
-  "version": "1.0.2",
+  "name": "@thepower/jssdk",
+  "version": "1.0.0",
   "description": "ThePower JavaScript SDK",
-  "main": "main.js",
+  "author": "thepower",
+  "homepage": "https://github.com/thepower/power_hub#readme",
+  "publishConfig": {
+    "registry": "https://npm.vmassive.ru/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thepower/power_hub.git"
+  },
+  "scripts": {
+    "prepare": "yarn build",
+    "build": "NODE_ENV='production' webpack"
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -30,18 +42,7 @@
     "clean-webpack-plugin": "^0.1.17",
     "webpack": "^3.8.1"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "NODE_ENV='production' webpack"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thepower/tp_sdk_js.git"
-  },
-  "author": "ThePower Team",
-  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/thepower/tp_sdk_js/issues"
-  },
-  "homepage": "https://github.com/thepower/tp_sdk_js#readme"
+    "url": "https://github.com/thepower/power_hub/issues"
+  }
 }

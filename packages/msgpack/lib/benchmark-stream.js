@@ -3,12 +3,12 @@
 var PassThrough = require("stream").PassThrough;
 var async = require("async");
 
-var msgpack = require("../");
+var msgpack = require("../index");
 var Encoder = require("./encoder").Encoder;
 var Decoder = require("./decoder").Decoder;
 var notepack = require("notepack");
 
-var pkg = require("../package.json");
+var pkg = require("../../msgpack2/package.json");
 
 // a sample fluentd message
 var data = ["tag", [[1440949922, {"message": "hi there"}]]];

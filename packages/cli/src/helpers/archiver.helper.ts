@@ -4,20 +4,20 @@ import * as archiver from 'archiver';
 
 
 export const createDirIfNotExists = (dir: string) => {
-  if (!existsSync(dir)){
+  if (!existsSync(dir)) {
     mkdirSync(dir, { recursive: true });
   }
 };
 
 export const archiveDir =  async (sourceDir: string): Promise<any> => {
   return new Promise((res, rej) => {
-    const dir = resolve('./tp-cli-tmp');
+    const dir = resolve('./tp-cli2-tmp');
     createDirIfNotExists(dir);
 
     const target = `${dir}/project.zip`;
 
     const archive = archiver('zip', {
-      zlib: { level: 9 } // Sets the compression level.
+      zlib: { level: 9 }, // Sets the compression level.
     });
 
     const output = createWriteStream(target);
@@ -28,7 +28,7 @@ export const archiveDir =  async (sourceDir: string): Promise<any> => {
       res(target);
     });
 
-    archive.on('error', function(err){
+    archive.on('error', function (err) {
       unlinkSync(target);
       rej(err);
     });

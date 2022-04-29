@@ -16,7 +16,7 @@
   "scripts": {
     "lerna:init": "yarn install && lerna bootstrap",
     "cl": "lerna clean",
-    "cm": "git add -A && git-cz"
+    "cm": "git add -A && lint-staged && git-cz"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --fix",

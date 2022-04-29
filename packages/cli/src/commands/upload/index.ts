@@ -1,21 +1,20 @@
-import {Command, Flags} from '@oclif/core';
-import ux from 'cli-ux'
+import { Command } from '@oclif/core';
+import ux from 'cli-ux';
 import { promises, statSync } from 'fs';
-import {getFileHash, getHash} from '../../helpers/calcHash.helper';
-import axios from 'axios';
-import * as FormData from 'form-data';
-import {File} from "../../types/file.type";
+import { getFileHash, getHash } from '../../helpers/calcHash.helper';
+import { File } from '../../types/file.type';
 import { resolve } from 'path';
-import {BlockChainService} from "../../services/blockshain.service";
-import {Config} from "@oclif/core/lib/config";
-import {UploaderApi} from "../../api/uploader.api";
-import {archiveDir} from "../../helpers/archiver.helper";
-import {getConfig, setConfig} from "../../helpers/config.helper";
-import {CliConfig} from "../../types/cliConfig.type";
+import { BlockChainService } from '../../services/blockshain.service';
+import { Config } from '@oclif/core/lib/config';
+import { UploaderApi } from '../../api/uploader.api';
+import { archiveDir } from '../../helpers/archiver.helper';
+import { getConfig, setConfig } from '../../helpers/config.helper';
+import { CliConfig } from '../../types/cliConfig.type';
 
 export default class Upload extends Command {
 
   private blockChainService: BlockChainService;
+
   private api: UploaderApi;
 
   constructor(argv: string[], config: Config) {
@@ -27,7 +26,7 @@ export default class Upload extends Command {
   static description = 'Upload application files to storage';
 
   static examples = [
-    `$ cd app_dir && pow-up`,
+    '$ cd app_dir && pow-up',
   ];
 
   static flags = {
@@ -77,9 +76,9 @@ export default class Upload extends Command {
       const address = await ux.prompt('Please, enter your account address, ex. "AA030000174483048139"');
       // TODO: check address is valid
 
-      const wif = await ux.prompt('Please, enter your account private key (wif)', {type: 'hide'});
+      const wif = await ux.prompt('Please, enter your account private key (wif)', { type: 'hide' });
 
-      config = {source, projectId, address, wif};
+      config = { source, projectId, address, wif };
       await setConfig(config);
     }
 
@@ -92,7 +91,7 @@ export default class Upload extends Command {
     this.log('upload process started...');
     const files = await this.scanDir(dir, dir);
     const manifestHash = getHash(JSON.stringify(files));
-    const totalSize = files.reduce((size, file) => size += file.size, 0);
+    const totalSize = files.reduce((size, file) => file.size + size, 0);
     this.log('totalSize =', totalSize);
     const existedProject = await this.blockChainService.getProject(address, projectId);
 

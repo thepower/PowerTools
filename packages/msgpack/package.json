@@ -1,8 +1,9 @@
 {
-  "name": "the_power_mpack",
+  "name": "@thepower/msgpack",
   "version": "1.0.0",
-  "description": "ThePower message pack",
-  "main": "index.js",
+  "description": "thepower msgpack",
+  "author": "thepower",
+  "homepage": "https://github.com/thepower/power_hub#readme",
   "dependencies": {
     "event-lite": "^0.1.1",
     "ieee754": "^1.1.8",
@@ -27,6 +28,17 @@
     "make": "make",
     "size": "make clean dist/msgpack.min.js && gzip -9fkv dist/msgpack.min.js && ls -l dist",
     "test": "make test",
-    "test-browser-local": "make test-browser-local"
+    "test-browser-local": "make test-browser-local",
+    "prepare": "yarn make"
+  },
+  "publishConfig": {
+    "registry": "https://npm.vmassive.ru/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thepower/power_hub.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thepower/power_hub/issues"
   }
 }

@@ -71,13 +71,14 @@
         "no-bitwise": "off",
         "max-classes-per-file": 0,
         "@typescript-eslint/explicit-function-return-type": 0,
-        "react/no-did-update-set-state": 1,
         "import/named": 0,
         "@typescript-eslint/no-throw-literal": 0,
         "react/jsx-pascal-case": 0,
         "react/no-this-in-sfc": 0,
         "react/no-find-dom-node": 0,
-        "curly": 1
+        "curly": 1,
+        "react/jsx-filename-extension": 0,
+        "import/no-extraneous-dependencies": 0
     },
     "globals": {
         "describe": "writable",

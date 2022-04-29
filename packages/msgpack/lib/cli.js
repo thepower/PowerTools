@@ -1,8 +1,8 @@
-// cli.js
+// cli2.js
 
 var fs = require("fs");
 var Stream = require("stream");
-var msgpack = require("../");
+var msgpack = require("../index");
 
 exports.CLI = CLI;
 
