@@ -12,7 +12,7 @@ import { Test } from '../../Test';
 import { DappsPage } from '../../dapps/components/DappsPage';
 import { AccountPage } from '../../account/components/AccountPage';
 import { SmartContractPage } from '../../smartContracts/components/SmartContractsPage';
-import { APISDKPage } from '../../apiSDK/components/APISDKPage';
+import { APISDKPage } from '../../apiPage/components/APISDKPage';
 import { NodesPage } from '../../nodes/components/NodesPage';
 import { ShardsPage } from '../../shards/components/ShardsPage';
 
