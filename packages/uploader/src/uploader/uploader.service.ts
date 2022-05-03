@@ -17,7 +17,7 @@ export class UploaderService {
 
     const manifestArr = JSON.parse(upload.manifest);
     const manifestMap = manifestArr.reduce((map, file) => {
-      map[file.hash] = file;
+      map[file.path] = file;
       return map;
     }, {});
 
@@ -42,7 +42,7 @@ export class UploaderService {
         throw new BadRequestException('Project archive extract failed');
       }
 
-      const isValid = await validateDir(target, manifestMap);
+      const isValid = await validateDir(target, target, manifestMap);
 
       if (!isValid) {
         console.log('validation error');

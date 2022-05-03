@@ -18,22 +18,24 @@ export const createDirIfNotExists = (dir: string) => {
   }
 };
 
-export const validateFile = async (fullPath: string, manifestMap: any, stat: Stats ): Promise<boolean> => {
+export const validateFile = async (root: string, fullPath: string, manifestMap: any, stat: Stats ): Promise<boolean> => {
   let result = false;
 
+  const path = fullPath.replace(root, '');
   const hash = await getFileHash(fullPath);
-  const manifestData = manifestMap[hash];
+  const manifestData = manifestMap[path];
 
   if (manifestData) {
     const isValidSize = stat.size === manifestData.size;
+    const isValidHash = hash === manifestData.hash;
     const isValidPath = fullPath.includes(manifestData.path);
-    result = isValidSize && isValidPath;
+    result = isValidSize && isValidPath && isValidHash;
   }
 
   return result;
 };
 
-export const validateDir = async (dir: string, manifestMap: any, isValid: boolean = true) => {
+export const validateDir = async (root:string, dir: string, manifestMap: any, isValid: boolean = true) => {
   const files = await promises.readdir(dir);
   let result = isValid;
 
@@ -42,10 +44,10 @@ export const validateDir = async (dir: string, manifestMap: any, isValid: boolea
     const stat = await promises.stat(fullPath);
 
     if (stat.isDirectory()) {
-      const isValidDir = await validateDir(fullPath, manifestMap);
+      const isValidDir = await validateDir(root, fullPath, manifestMap);
       result = result && isValidDir;
     } else {
-      const isValidFile = await validateFile(fullPath, manifestMap, stat);
+      const isValidFile = await validateFile(root, fullPath, manifestMap, stat);
       result = result && isValidFile;
     }
   }
@@ -114,7 +116,7 @@ export const unzip = async (source: any, target: string) => {
       const entry: any = await readEntry(zipfile);
       if (!entry) {break;}
 
-      console.log(entry.fileName);
+      // console.log(entry.fileName);
 
       const path = `${target}/${entry.fileName}`;
 
