@@ -11,7 +11,7 @@ export const createDirIfNotExists = (dir: string) => {
 
 export const archiveDir =  async (sourceDir: string): Promise<any> => {
   return new Promise((res, rej) => {
-    const dir = resolve('./tp-cli2-tmp');
+    const dir = resolve('./tp-cli-tmp');
     createDirIfNotExists(dir);
 
     const target = `${dir}/project.zip`;

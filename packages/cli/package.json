@@ -5,9 +5,6 @@
   "author": "thepower",
   "homepage": "https://github.com/thepower/power_hub#readme",
   "license": "ISC",
-  "publishConfig": {
-    "registry": "https://npm.vmassive.ru/"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thepower/power_hub.git"
@@ -52,8 +49,8 @@
     "typescript": "^4.4.3"
   },
   "oclif": {
-    "bin": "pow-up",
-    "dirname": "pow-up",
+    "bin": "tp",
+    "dirname": "tp",
     "commands": "./dist/src/commands",
     "plugins": [
       "@oclif/plugin-help",

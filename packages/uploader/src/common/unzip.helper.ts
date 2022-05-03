@@ -1,4 +1,8 @@
 import * as yauzl from 'yauzl';
+import * as Debug from 'debug';
+
+const info = new Debug('info');
+const error = new Debug('error');
 
 import {
   createWriteStream,
@@ -18,22 +22,27 @@ export const createDirIfNotExists = (dir: string) => {
   }
 };
 
-export const validateFile = async (fullPath: string, manifestMap: any, stat: Stats ): Promise<boolean> => {
+export const validateFile = async (root: string, fullPath: string, manifestMap: any, stat: Stats ): Promise<boolean> => {
   let result = false;
 
+  const path = fullPath.replace(root, '');
   const hash = await getFileHash(fullPath);
-  const manifestData = manifestMap[hash];
+  const manifestData = manifestMap[path];
+
+  info(fullPath, manifestData);
 
   if (manifestData) {
     const isValidSize = stat.size === manifestData.size;
+    const isValidHash = hash === manifestData.hash;
     const isValidPath = fullPath.includes(manifestData.path);
-    result = isValidSize && isValidPath;
+    info(fullPath, isValidSize, isValidPath, isValidHash);
+    result = isValidSize && isValidPath && isValidHash;
   }
 
   return result;
 };
 
-export const validateDir = async (dir: string, manifestMap: any, isValid: boolean = true) => {
+export const validateDir = async (root:string, dir: string, manifestMap: any, isValid: boolean = true) => {
   const files = await promises.readdir(dir);
   let result = isValid;
 
@@ -42,10 +51,10 @@ export const validateDir = async (dir: string, manifestMap: any, isValid: boolea
     const stat = await promises.stat(fullPath);
 
     if (stat.isDirectory()) {
-      const isValidDir = await validateDir(fullPath, manifestMap);
+      const isValidDir = await validateDir(root, fullPath, manifestMap);
       result = result && isValidDir;
     } else {
-      const isValidFile = await validateFile(fullPath, manifestMap, stat);
+      const isValidFile = await validateFile(root, fullPath, manifestMap, stat);
       result = result && isValidFile;
     }
   }
@@ -55,11 +64,15 @@ export const validateDir = async (dir: string, manifestMap: any, isValid: boolea
 
 export const uploadFile = async (source: Readable, path: string) => {
   return new Promise((res, rej) => {
-    source.on('finish', () => {
+    source.once('finish', () => {
       res(true);
     });
 
-    source.on('error', (e) => {
+    source.once('end', () => {
+      res(true);
+    });
+
+    source.once('error', (e) => {
       rej(e);
     });
 
@@ -98,23 +111,21 @@ const getEntryStream = async (zipfile: any, entry: any): Promise<Readable> => {
 };
 
 export const unzip = async (source: any, target: string) => {
-  console.log('unzip started');
+  info('unzip started');
   let zipfile;
 
   try {
     zipfile = await openZip(source);
   } catch (e) {
-    console.log(e.message);
+    error(e.message);
   }
 
-  console.log('open zip ok');
+  info('open zip ok');
 
   if (zipfile) {
     while (true) {
       const entry: any = await readEntry(zipfile);
       if (!entry) {break;}
-
-      console.log(entry.fileName);
 
       const path = `${target}/${entry.fileName}`;
 
