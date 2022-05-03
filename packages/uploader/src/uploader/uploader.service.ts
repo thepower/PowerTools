@@ -34,6 +34,8 @@ export class UploaderService {
       const target = resolve(`./uploads/${user.address}/${upload.projectId}`);
       createDirIfNotExists(target);
 
+      console.log(file);
+
       try  {
         await unzip(file.buffer, target);
         console.log('unzip ok');
