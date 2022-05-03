@@ -14,7 +14,7 @@ export const archiveDir =  async (sourceDir: string): Promise<any> => {
     const dir = resolve('./tp-cli-tmp');
     createDirIfNotExists(dir);
 
-    const target = `${dir}/project2.zip`;
+    const target = `${dir}/project.zip`;
 
     const archive = archiver('zip', {
       zlib: { level: 9 }, // Sets the compression level.

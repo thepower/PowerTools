@@ -5,7 +5,7 @@ import { BlockChainService } from '../blockchain/blockchain.service';
 import { createDirIfNotExists, unzip, uploadFile, validateDir } from '../common/unzip.helper';
 import { getHash } from '../common/hash.helper';
 import { LoggedUser } from '../common/loggedUser.type';
-import { unlinkSync } from 'fs';
+import { promises } from 'fs';
 import * as streamifier from 'streamifier';
 import * as Debug from 'debug';
 
@@ -50,7 +50,7 @@ export class UploaderService {
         error('unzip error', e.massage);
         throw new BadRequestException('Project archive extract failed');
       } finally {
-        unlinkSync(targetZip);
+        await promises.unlink(targetZip);
       }
 
       const isValid = await validateDir(target, target, manifestMap);
