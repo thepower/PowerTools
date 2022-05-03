@@ -10,8 +10,11 @@ import {
 import { UploaderService } from './uploader.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/auth-jwt.guard';
-import {FileInterceptor} from "@nestjs/platform-express";
-import {UploadDto} from "./upload.dto";
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadDto } from './upload.dto';
+import * as Debug from 'debug';
+
+const info = new Debug('info');
 
 
 @Controller('uploader')
@@ -24,14 +27,14 @@ export class UploaderController {
     FileInterceptor('file'),
   )
   async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
+  @UploadedFile() file: Express.Multer.File,
     @Body() upload: UploadDto,
     @Req() req,
   ) {
 
-    console.log(`${upload.projectId} started`);
+    info(`${upload.projectId} started`);
     await this.uploaderService.upload(req.user, file, upload);
-    console.log(`${upload.projectId} finished`);
+    info(`${upload.projectId} finished`);
     return 'ok';
   }
 }

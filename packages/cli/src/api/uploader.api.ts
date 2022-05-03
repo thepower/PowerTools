@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as FormData from 'form-data';
-import { unlinkSync } from 'fs';
+import { createReadStream, unlinkSync } from 'fs';
 
 const API_BASE_URL = process.env.API_BASE_URL || 'http://51.15.116.231:3010';
 
@@ -41,10 +41,9 @@ export class UploaderApi {
 
     console.log(`project ${projectId} upload started...`);
 
-    form.append('file', path, {
-      filename: 'project.zip',
-    });
 
+
+    form.append('file', createReadStream(path));
     form.append('manifest', manifest);
     form.append('projectId', projectId);
 

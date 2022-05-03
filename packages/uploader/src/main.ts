@@ -2,6 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { BlockChainService } from './blockchain/blockchain.service';
+import * as Debug from 'debug';
+
+const info = new Debug('info');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,7 +12,7 @@ async function bootstrap() {
   const port = config.get('port');
 
   await app.listen(port);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  info(`Application is running on: ${await app.getUrl()}`);
 
   const blockChain = app.get(BlockChainService);
   await blockChain.prepareShard();
@@ -19,7 +22,7 @@ async function bootstrap() {
     'KwYbZogSKLu94LXUGDEoJnj6nWA5UMipSyiP7WabLWBczU6BFaCd',
   ); // TODO: move to cli2 ?
 
-  console.log('regPres=', regPres);
+  info('regPres=', regPres);
 
 }
 bootstrap();
