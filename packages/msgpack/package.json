@@ -1,0 +1,44 @@
+{
+  "name": "@thepower/msgpack",
+  "version": "1.0.0",
+  "description": "thepower msgpack",
+  "author": "thepower",
+  "homepage": "https://github.com/thepower/power_hub#readme",
+  "dependencies": {
+    "event-lite": "^0.1.1",
+    "ieee754": "^1.1.8",
+    "int64-buffer": "^0.1.9",
+    "isarray": "^1.0.0"
+  },
+  "devDependencies": {
+    "async": "^2.1.1",
+    "browserify": "^13.1.0",
+    "concat-stream": "^1.5.2",
+    "jshint": "^2.9.3",
+    "mocha": "^3.1.2",
+    "msgpack.codec": "git+https://github.com/kawanet/msgpack-javascript.git#msgpack.codec",
+    "uglify-js": "^2.7.3",
+    "zuul": "^3.11.1"
+  },
+  "scripts": {
+    "benchmark": "./lib/benchmark.js",
+    "benchmark-lite": "./lib/benchmark.js msgpack-lite",
+    "benchmark-stream": "./lib/benchmark-stream.js",
+    "fixpack": "fixpack",
+    "make": "make",
+    "size": "make clean dist/msgpack.min.js && gzip -9fkv dist/msgpack.min.js && ls -l dist",
+    "test": "make test",
+    "test-browser-local": "make test-browser-local",
+    "prepare": "yarn make"
+  },
+  "publishConfig": {
+    "registry": "https://npm.vmassive.ru/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thepower/power_hub.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thepower/power_hub/issues"
+  }
+}

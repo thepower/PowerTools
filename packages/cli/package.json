@@ -1,0 +1,75 @@
+{
+  "name": "@thepower/cli",
+  "version": "1.0.0",
+  "description": "the power cli",
+  "author": "thepower",
+  "homepage": "https://github.com/thepower/power_hub#readme",
+  "license": "ISC",
+  "publishConfig": {
+    "registry": "https://npm.vmassive.ru/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thepower/power_hub.git"
+  },
+  "scripts": {
+    "prepare": "yarn build",
+    "build": "shx rm -rf dist && tsc -b",
+    "lint": "eslint . --ext .ts --config .eslintrc",
+    "postpack": "shx rm -f oclif.manifest.json",
+    "posttest": "yarn lint",
+    "prepack": "yarn build && oclif manifest && oclif readme",
+    "test": "mocha --forbid-only \\\"../cli/test/**/*.test.ts\\\"",
+    "version": "oclif readme && git add ../cli/README.md"
+  },
+  "bugs": {
+    "url": "https://github.com/thepower/power_hub/issues"
+  },
+  "dependencies": {
+    "@oclif/core": "^1",
+    "@oclif/plugin-help": "^5",
+    "@oclif/plugin-plugins": "^2.0.1",
+    "archiver": "^5.3.0",
+    "axios": "^0.26.1",
+    "cli-ux": "^6.0.9",
+    "form-data": "^4.0.0",
+    "reflect-metadata": "^0.1.13",
+    "the_power_sdk_js": "^1.0.2",
+    "typedi": "^0.10.0"
+  },
+  "devDependencies": {
+    "@oclif/test": "^2",
+    "@types/chai": "^4",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.9.4",
+    "chai": "^4",
+    "globby": "^11",
+    "mocha": "^9",
+    "oclif": "^2",
+    "shx": "^0.3.3",
+    "ts-node": "^10.2.1",
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.3"
+  },
+  "oclif": {
+    "bin": "pow-up",
+    "dirname": "pow-up",
+    "commands": "./dist/commands",
+    "plugins": [
+      "@oclif/plugin-help",
+      "@oclif/plugin-plugins"
+    ],
+    "topicSeparator": " ",
+    "topics": {
+      "hello": {
+        "description": "Say hello to the world and others"
+      }
+    }
+  },
+  "files": [
+    "/bin",
+    "/dist",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ]
+}

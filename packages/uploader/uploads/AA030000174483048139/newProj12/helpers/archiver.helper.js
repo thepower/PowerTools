@@ -1,0 +1,27 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.archiveDir = void 0;
+const fs_1 = require("fs");
+const path_1 = require("path");
+const archiver = require("archiver");
+const archiveDir = async (sourceDir) => {
+    return new Promise((res, rej) => {
+        const target = (0, path_1.resolve)('./tmp/project.zip');
+        const archive = archiver('zip', {
+            zlib: { level: 9 }
+        });
+        const output = (0, fs_1.createWriteStream)(target);
+        output.on('close', function () {
+            res(target);
+        });
+        archive.on('error', function (err) {
+            (0, fs_1.unlinkSync)(target);
+            rej(err);
+        });
+        archive.pipe(output);
+        archive.directory(sourceDir, false);
+        archive.finalize();
+    });
+};
+exports.archiveDir = archiveDir;
+//# sourceMappingURL=archiver.helper.js.map

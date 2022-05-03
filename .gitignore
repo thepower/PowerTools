@@ -1,8 +1,9 @@
 # compiled output
 node_modules
-package.json
 dump.rdb
 /packages/**/build
+/packages/**/dist
+/packages/**/uploads
 
 # Logs
 *.log
