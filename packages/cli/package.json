@@ -54,7 +54,7 @@
   "oclif": {
     "bin": "pow-up",
     "dirname": "pow-up",
-    "commands": "./dist/commands",
+    "commands": "./dist/src/commands",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-plugins"

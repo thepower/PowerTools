@@ -1,7 +1,7 @@
 import { promises, existsSync } from 'fs';
 import { CliConfig } from '../types/cliConfig.type';
 
-const CONFIG_FILE_NAME = 'tp-cli2.json';
+const CONFIG_FILE_NAME = 'tp-cli.json';
 
 export const validateConfig = (cfg: CliConfig) => {
 
