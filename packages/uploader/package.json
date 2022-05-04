@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "thepower uploader",
   "author": "thepower",
+  "publishConfig": {
+    "access": "public"
+  },
   "homepage": "https://github.com/thepower/power_hub#readme",
   "scripts": {
     "prebuild": "rimraf dist",

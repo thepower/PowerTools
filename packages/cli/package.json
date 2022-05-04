@@ -7,6 +7,9 @@
   "bin": {
     "tp": "./bin/run"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "homepage": "https://github.com/thepower/power_hub#readme",
   "license": "ISC",
   "repository": {
