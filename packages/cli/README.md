@@ -17,37 +17,37 @@ oclif example Hello World CLI
 <!-- usage -->
 ```sh-session
 $ npm install -g the_power_cli
-$ pow-up COMMAND
+$ tp COMMAND
 running command...
-$ pow-up (--version)
-the_power_cli/1.0.3 darwin-x64 node-v14.18.1
-$ pow-up --help [COMMAND]
+$ tp (--version)
+the_power_cli/1.1.2 darwin-x64 node-v14.18.1
+$ tp --help [COMMAND]
 USAGE
-  $ pow-up COMMAND
+  $ tp COMMAND
 ...
 ```
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`pow-up help [COMMAND]`](#pow-up-help-command)
-* [`pow-up plugins`](#pow-up-plugins)
-* [`pow-up plugins:install PLUGIN...`](#pow-up-pluginsinstall-plugin)
-* [`pow-up plugins:inspect PLUGIN...`](#pow-up-pluginsinspect-plugin)
-* [`pow-up plugins:install PLUGIN...`](#pow-up-pluginsinstall-plugin-1)
-* [`pow-up plugins:link PLUGIN`](#pow-up-pluginslink-plugin)
-* [`pow-up plugins:uninstall PLUGIN...`](#pow-up-pluginsuninstall-plugin)
-* [`pow-up plugins:uninstall PLUGIN...`](#pow-up-pluginsuninstall-plugin-1)
-* [`pow-up plugins:uninstall PLUGIN...`](#pow-up-pluginsuninstall-plugin-2)
-* [`pow-up plugins update`](#pow-up-plugins-update)
-* [`pow-up upload`](#pow-up-upload)
+* [`tp help [COMMAND]`](#tp-help-command)
+* [`tp plugins`](#tp-plugins)
+* [`tp plugins:install PLUGIN...`](#tp-pluginsinstall-plugin)
+* [`tp plugins:inspect PLUGIN...`](#tp-pluginsinspect-plugin)
+* [`tp plugins:install PLUGIN...`](#tp-pluginsinstall-plugin-1)
+* [`tp plugins:link PLUGIN`](#tp-pluginslink-plugin)
+* [`tp plugins:uninstall PLUGIN...`](#tp-pluginsuninstall-plugin)
+* [`tp plugins:uninstall PLUGIN...`](#tp-pluginsuninstall-plugin-1)
+* [`tp plugins:uninstall PLUGIN...`](#tp-pluginsuninstall-plugin-2)
+* [`tp plugins update`](#tp-plugins-update)
+* [`tp upload`](#tp-upload)
 
-## `pow-up help [COMMAND]`
+## `tp help [COMMAND]`
 
-Display help for pow-up.
+Display help for tp.
 
 ```
 USAGE
-  $ pow-up help [COMMAND] [-n]
+  $ tp help [COMMAND] [-n]
 
 ARGUMENTS
   COMMAND  Command to show help for.
@@ -56,18 +56,18 @@ FLAGS
   -n, --nested-commands  Include all nested commands in the output.
 
 DESCRIPTION
-  Display help for pow-up.
+  Display help for tp.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.10/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.12/src/commands/help.ts)_
 
-## `pow-up plugins`
+## `tp plugins`
 
 List installed plugins.
 
 ```
 USAGE
-  $ pow-up plugins [--core]
+  $ tp plugins [--core]
 
 FLAGS
   --core  Show core plugins.
@@ -76,18 +76,18 @@ DESCRIPTION
   List installed plugins.
 
 EXAMPLES
-  $ pow-up plugins
+  $ tp plugins
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.0.11/src/commands/plugins/index.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.1.0/src/commands/plugins/index.ts)_
 
-## `pow-up plugins:install PLUGIN...`
+## `tp plugins:install PLUGIN...`
 
 Installs a plugin into the CLI.
 
 ```
 USAGE
-  $ pow-up plugins:install PLUGIN...
+  $ tp plugins:install PLUGIN...
 
 ARGUMENTS
   PLUGIN  Plugin to install.
@@ -109,23 +109,23 @@ DESCRIPTION
   the CLI without the need to patch and update the whole CLI.
 
 ALIASES
-  $ pow-up plugins add
+  $ tp plugins add
 
 EXAMPLES
-  $ pow-up plugins:install myplugin 
+  $ tp plugins:install myplugin 
 
-  $ pow-up plugins:install https://github.com/someuser/someplugin
+  $ tp plugins:install https://github.com/someuser/someplugin
 
-  $ pow-up plugins:install someuser/someplugin
+  $ tp plugins:install someuser/someplugin
 ```
 
-## `pow-up plugins:inspect PLUGIN...`
+## `tp plugins:inspect PLUGIN...`
 
 Displays installation properties of a plugin.
 
 ```
 USAGE
-  $ pow-up plugins:inspect PLUGIN...
+  $ tp plugins:inspect PLUGIN...
 
 ARGUMENTS
   PLUGIN  [default: .] Plugin to inspect.
@@ -138,16 +138,16 @@ DESCRIPTION
   Displays installation properties of a plugin.
 
 EXAMPLES
-  $ pow-up plugins:inspect myplugin
+  $ tp plugins:inspect myplugin
 ```
 
-## `pow-up plugins:install PLUGIN...`
+## `tp plugins:install PLUGIN...`
 
 Installs a plugin into the CLI.
 
 ```
 USAGE
-  $ pow-up plugins:install PLUGIN...
+  $ tp plugins:install PLUGIN...
 
 ARGUMENTS
   PLUGIN  Plugin to install.
@@ -169,23 +169,23 @@ DESCRIPTION
   the CLI without the need to patch and update the whole CLI.
 
 ALIASES
-  $ pow-up plugins add
+  $ tp plugins add
 
 EXAMPLES
-  $ pow-up plugins:install myplugin 
+  $ tp plugins:install myplugin 
 
-  $ pow-up plugins:install https://github.com/someuser/someplugin
+  $ tp plugins:install https://github.com/someuser/someplugin
 
-  $ pow-up plugins:install someuser/someplugin
+  $ tp plugins:install someuser/someplugin
 ```
 
-## `pow-up plugins:link PLUGIN`
+## `tp plugins:link PLUGIN`
 
 Links a plugin into the CLI for development.
 
 ```
 USAGE
-  $ pow-up plugins:link PLUGIN
+  $ tp plugins:link PLUGIN
 
 ARGUMENTS
   PATH  [default: .] path to plugin
@@ -203,16 +203,16 @@ DESCRIPTION
   command will override the user-installed or core plugin implementation. This is useful for development work.
 
 EXAMPLES
-  $ pow-up plugins:link myplugin
+  $ tp plugins:link myplugin
 ```
 
-## `pow-up plugins:uninstall PLUGIN...`
+## `tp plugins:uninstall PLUGIN...`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ pow-up plugins:uninstall PLUGIN...
+  $ tp plugins:uninstall PLUGIN...
 
 ARGUMENTS
   PLUGIN  plugin to uninstall
@@ -225,17 +225,17 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ pow-up plugins unlink
-  $ pow-up plugins remove
+  $ tp plugins unlink
+  $ tp plugins remove
 ```
 
-## `pow-up plugins:uninstall PLUGIN...`
+## `tp plugins:uninstall PLUGIN...`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ pow-up plugins:uninstall PLUGIN...
+  $ tp plugins:uninstall PLUGIN...
 
 ARGUMENTS
   PLUGIN  plugin to uninstall
@@ -248,17 +248,17 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ pow-up plugins unlink
-  $ pow-up plugins remove
+  $ tp plugins unlink
+  $ tp plugins remove
 ```
 
-## `pow-up plugins:uninstall PLUGIN...`
+## `tp plugins:uninstall PLUGIN...`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ pow-up plugins:uninstall PLUGIN...
+  $ tp plugins:uninstall PLUGIN...
 
 ARGUMENTS
   PLUGIN  plugin to uninstall
@@ -271,17 +271,17 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ pow-up plugins unlink
-  $ pow-up plugins remove
+  $ tp plugins unlink
+  $ tp plugins remove
 ```
 
-## `pow-up plugins update`
+## `tp plugins update`
 
 Update installed plugins.
 
 ```
 USAGE
-  $ pow-up plugins update [-h] [-v]
+  $ tp plugins update [-h] [-v]
 
 FLAGS
   -h, --help     Show CLI help.
@@ -291,13 +291,13 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-## `pow-up upload`
+## `tp upload`
 
 Upload application files to storage
 
 ```
 USAGE
-  $ pow-up upload
+  $ tp upload
 
 DESCRIPTION
   Upload application files to storage
@@ -306,5 +306,5 @@ EXAMPLES
   $ cd app_dir && pow-up
 ```
 
-_See code: [dist/commands/upload/index.ts](https://github.com/sbabushkin/pow-up/blob/v1.0.3/dist/commands/upload/index.ts)_
+_See code: [dist/src/commands/upload/index.ts](https://github.com/thepower/power_hub/blob/v1.1.2/dist/src/commands/upload/index.ts)_
 <!-- commandsstop -->

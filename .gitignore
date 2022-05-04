@@ -4,6 +4,7 @@ dump.rdb
 /packages/**/build
 /packages/**/dist
 /packages/**/uploads
+tp-cli.json
 
 # Logs
 *.log

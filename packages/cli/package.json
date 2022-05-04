@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "the power cli",
   "author": "thepower",
+  "main": "dist/src/index.js",
+  "bin": {
+    "tp": "./bin/run"
+  },
   "homepage": "https://github.com/thepower/power_hub#readme",
   "license": "ISC",
   "repository": {
