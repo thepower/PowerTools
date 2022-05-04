@@ -16,11 +16,11 @@ oclif example Hello World CLI
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g the_power_cli
+$ npm install -g @thepower/cli
 $ tp COMMAND
 running command...
 $ tp (--version)
-the_power_cli/1.1.2 darwin-x64 node-v14.18.1
+@thepower/cli/1.0.1 darwin-x64 node-v14.18.1
 $ tp --help [COMMAND]
 USAGE
   $ tp COMMAND
@@ -306,5 +306,5 @@ EXAMPLES
   $ cd app_dir && pow-up
 ```
 
-_See code: [dist/src/commands/upload/index.ts](https://github.com/thepower/power_hub/blob/v1.1.2/dist/src/commands/upload/index.ts)_
+_See code: [dist/src/commands/upload/index.ts](https://github.com/thepower/power_hub/blob/v1.0.1/dist/src/commands/upload/index.ts)_
 <!-- commandsstop -->

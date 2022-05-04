@@ -1,6 +1,6 @@
 {
   "name": "@thepower/hub",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "thepower hub",
   "author": "thepower",
   "homepage": "https://github.com/thepower/power_hub#readme",
@@ -43,7 +43,6 @@
     "sass-loader": "^12.6.0",
     "typescript": "^4.6.3"
   },
-  "devDependencies": {},
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

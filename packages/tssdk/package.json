@@ -1,6 +1,6 @@
 {
   "name": "@thepower/tssdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "thepower tssdk",
   "author": "thepower",
   "scripts": {
@@ -17,9 +17,9 @@
     "bip32": "^3.0.1",
     "bip39": "^3.0.4",
     "bitcoinjs-lib": "^6.0.1",
-    "wif": "^2.0.6",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "wif": "^2.0.6"
   },
   "devDependencies": {
     "@types/create-hash": "^1.2.2",
