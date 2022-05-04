@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/uploader",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "thepower uploader",
   "author": "thepower",
   "publishConfig": {
@@ -85,5 +85,5 @@
   "bugs": {
     "url": "https://github.com/thepower/power_hub/issues"
   },
-  "gitHead": "f33b502f4a82399336cbc1881a6f6fe539176362"
+  "gitHead": "8e8003054b5373857a77c44981b01c05d749ba7c"
 }
