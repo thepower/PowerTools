@@ -1,5 +1,5 @@
 {
-  "name": "@thepower/jssdk",
+  "name": "@thepowereco/jssdk",
   "version": "1.0.1",
   "description": "ThePower JavaScript SDK",
   "author": "thepower",
@@ -44,5 +44,6 @@
   },
   "bugs": {
     "url": "https://github.com/thepower/power_hub/issues"
-  }
+  },
+  "gitHead": "f33b502f4a82399336cbc1881a6f6fe539176362"
 }
