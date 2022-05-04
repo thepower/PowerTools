@@ -32,7 +32,7 @@
     "prepare": "yarn make"
   },
   "publishConfig": {
-    "registry": "https://npm.vmassive.ru/"
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -41,5 +41,5 @@
   "bugs": {
     "url": "https://github.com/thepower/power_hub/issues"
   },
-  "gitHead": "8e8003054b5373857a77c44981b01c05d749ba7c"
+  "gitHead": "03d2f626f81fa6f56725c4108add483339a4fc1f"
 }
