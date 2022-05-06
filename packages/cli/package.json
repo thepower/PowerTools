@@ -23,8 +23,7 @@
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "yarn lint",
     "prepack": "yarn build && oclif manifest && oclif readme",
-    "test": "mocha --forbid-only \\\"../cli/test/**/*.test.ts\\\"",
-    "version": "oclif readme && git add ../cli/README.md"
+    "test": "mocha --forbid-only \\\"../cli/test/**/*.test.ts\\\""
   },
   "bugs": {
     "url": "https://github.com/thepower/power_hub/issues"
