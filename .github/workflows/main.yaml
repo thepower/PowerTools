@@ -17,13 +17,13 @@ jobs:
       - name: Install Packages
         run: yarn
 
-      - name: Authenticate
-        run: |
-          echo "@grandcore:registry=https://registry.npmjs.org/" > .npmrc
-          echo "registry=https://registry.npmjs.org/" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPMTOKEN }}
+#      - name: Authenticate
+#        run: |
+#          echo "@grandcore:registry=https://registry.npmjs.org/" > .npmrc
+#          echo "registry=https://registry.npmjs.org/" >> .npmrc
+#          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+#        env:
+#          NPM_TOKEN: ${{ secrets.NPMTOKEN }}
 
       - name: Publish
         run: lerna publish --yes --no-verify-access
