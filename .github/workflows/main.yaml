@@ -1,0 +1,30 @@
+name: autodeploy
+
+on:
+  push:
+    branches: [main]
+#  pull_request:
+#    branches: [main]
+
+jobs:
+  default:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Install Packages
+        run: npm install
+
+      - name: Authenticate
+        run: |
+          echo "@grandcore:registry=https://registry.npmjs.org/" > .npmrc
+          echo "registry=https://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPMTOKEN }}
+
+      - name: Publish
+        lerna publish --yes --no-verify-access
+        env:
+          NPM_TOKEN: ${{ secrets.NPMTOKEN }}
