@@ -25,6 +25,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPMTOKEN }}
 
       - name: Publish
-        lerna publish --yes --no-verify-access
+        run: lerna publish --yes --no-verify-access
         env:
           NPM_TOKEN: ${{ secrets.NPMTOKEN }}
