@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.2 (2022-05-09)
+
+
+### Bug Fixes
+
+* **cli:** version up ([d4c703a](https://github.com/thepower/power_hub/commit/d4c703a20dc820517a45a46558021ab85c287a33))
+
+
+
+
+
 ## 1.1.1 (2022-05-09)
 
 
