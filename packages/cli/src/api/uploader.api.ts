@@ -4,7 +4,6 @@ import { createReadStream, unlinkSync } from 'fs';
 
 const API_BASE_URL = process.env.API_BASE_URL || 'http://51.15.116.231:3010';
 
-// up
 export class UploaderApi {
 
   private jwt: string;
