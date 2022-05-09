@@ -32,6 +32,7 @@
   "dependencies": {
     "@oclif/core": "^1",
     "@oclif/plugin-help": "^5",
+    "@oclif/dev": "^1.26.10",
     "@oclif/plugin-plugins": "^2.0.1",
     "archiver": "^5.3.0",
     "axios": "^0.26.1",
