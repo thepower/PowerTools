@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as FormData from 'form-data';
-import { createReadStream, unlinkSync } from 'fs';
+import { createReadStream, promises } from 'fs';
 
 const API_BASE_URL = process.env.API_BASE_URL || 'http://51.15.116.231:3010';
 
@@ -25,13 +25,13 @@ export class UploaderApi {
       throw new Error(e.message);
     }
 
-    console.log('Login success!!!');
-
     const jwt = response.data?.jwt;
 
     if (!jwt) {
       throw new Error('Cannot login to uploader');
     }
+
+    console.log('Login success!!!');
 
     this.jwt = jwt;
   }
@@ -40,8 +40,6 @@ export class UploaderApi {
     const form = new FormData();
 
     console.log(`project ${projectId} upload started...`);
-
-
 
     form.append('file', createReadStream(path));
     form.append('manifest', manifest);
@@ -58,12 +56,11 @@ export class UploaderApi {
           },
         },
       );
-
       console.log(`file ${path} upload finished ${JSON.stringify(response.status)}`);
-
-      unlinkSync(path);
     } catch (e) {
       console.log(`file ${path} upload failed`);
+    } finally {
+     await  promises.unlink(path);
     }
   }
 }
