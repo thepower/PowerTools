@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "@oclif/core": "^1",
-    "@oclif/dev": "^1.26.10",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.0.1",
     "archiver": "^5.3.0",
