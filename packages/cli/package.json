@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/cli",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "the power cli",
   "author": "thepower",
   "main": "dist/src/index.js",
@@ -30,18 +30,18 @@
   },
   "dependencies": {
     "@oclif/core": "^1",
-    "@oclif/plugin-help": "^5",
     "@oclif/dev": "^1.26.10",
+    "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.0.1",
     "archiver": "^5.3.0",
     "axios": "^0.26.1",
     "cli-ux": "^6.0.9",
     "form-data": "^4.0.0",
-    "reflect-metadata": "^0.1.13",
-    "the_power_sdk_js": "^1.0.2",
-    "typedi": "^0.10.0",
     "oclif": "^2",
-    "shx": "^0.3.3"
+    "reflect-metadata": "^0.1.13",
+    "shx": "^0.3.3",
+    "the_power_sdk_js": "^1.0.2",
+    "typedi": "^0.10.0"
   },
   "devDependencies": {
     "@oclif/test": "^2",
