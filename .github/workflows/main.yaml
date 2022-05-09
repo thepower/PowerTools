@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      -name: Set Git User
+      - name: Set Git User
         run: |
                 git config --global user.name "The Power Ecosystem"
                 git config --global user.email "ext@thepower.io"
