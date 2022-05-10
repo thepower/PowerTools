@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.5 (2022-05-10)
+
+
+### Bug Fixes
+
+* **cli:** up ([90b5d99](https://github.com/thepower/power_hub/commit/90b5d99c8defec3a5d0897c9bb7f5e7fb8ff1d78))
+
+
+
+
+
 ## 1.1.4 (2022-05-09)
 
 **Note:** Version bump only for package @thepowereco/uploader
