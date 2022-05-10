@@ -19,9 +19,6 @@ jobs:
                 git config --global user.name "The Power Ecosystem"
                 git config --global user.email "ext@thepower.io"
 
-      - name: Install Packages
-        run: yarn
-
       - name: Init Lerna
         run: yarn lerna:init
 
