@@ -1,12 +1,23 @@
 import React from "react";
-import { Grid } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import { Link } from "react-router-dom";
-import { LinkBlock, NavigationRoutesEnum, Page } from '../../common'
+import { ConfirmModal, LinkBlock, NavigationRoutesEnum, Page } from '../../common'
 import styles from './DappsPage.module.scss';
 import { dappsPageData } from '../utils/dappsPageData';
 import { DappsPageDataItem } from '../typings/dappsPageTypings';
 
-export class DappsPage extends React.PureComponent<any,  any> {
+interface DappsPageState {
+  openedAddDappModal: boolean;
+}
+
+export class DappsPage extends React.PureComponent<any,  DappsPageState> {
+  constructor(props: any) {
+    super(props);
+
+    this.state = {
+      openedAddDappModal: false,
+    };
+  }
   openNewPage = (url: string) => () => {
     window?.open(url,'_blank')?.focus()
   };
@@ -22,14 +33,35 @@ export class DappsPage extends React.PureComponent<any,  any> {
   };
 
   addDappRenderer = () => {
-    return <div className={styles.addDappsBlock}>
+    return <div
+      className={styles.addDappsBlock}
+      onClick={this.openAddDappModal}
+    >
       <div className={styles.addDappsIcon}>{'+'}</div>
       <div className={styles.addDappsDescription}>{'Add your app'}</div>
     </div>
   }
 
+  openAddDappModal = () => {
+    this.setState({ openedAddDappModal: true });
+  };
+
+  closeAddDappModal = () => {
+    this.setState({ openedAddDappModal: false });
+  };
+
   render() {
+    const { openedAddDappModal } = this.state;
+
     return <Page>
+      <ConfirmModal
+        open={openedAddDappModal}
+        onClose={this.closeAddDappModal}
+        mainButtonLabel={'Load'}
+        secondaryButtonLabel={'Cancel'}
+      >
+        <TextField label="SC address" variant="outlined" fullWidth/>
+      </ConfirmModal>
       <Grid container>
         <Link to={NavigationRoutesEnum.Wallet} className={styles.walletBlockLink}>
           <LinkBlock
