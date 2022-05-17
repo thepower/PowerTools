@@ -10,7 +10,7 @@ import {
 import { Navigation, NavigationRoutesEnum } from '../../common';
 import { Test } from '../../Test';
 import { DappsPage } from '../../dapps/components/DappsPage';
-import { AccountPage } from '../../account/components/AccountPage';
+import { AccountPage } from '../../account/components/page/AccountPage';
 import { SmartContractPage } from '../../smartContracts/components/SmartContractsPage';
 import { APISDKPage } from '../../apiPage/components/APISDKPage';
 import { NodesPage } from '../../nodes/components/NodesPage';

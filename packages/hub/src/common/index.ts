@@ -14,3 +14,4 @@ export { NavigationRoutesEnum } from './navigation/utils/navigationUtils'
 
 // utils
 export { branchCallFunction } from './utils/common';
+export { FileReaderType, getFileData } from './utils/files';

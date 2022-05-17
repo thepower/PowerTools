@@ -1,4 +1,4 @@
-@import '../../application/styles/variables';
+@import '../../../application/styles/variables';
 
 .accountId {
   width: 100%;
@@ -11,4 +11,11 @@
   min-height: $unit * 36.5;
   height: unset;
   padding: $unit * 2.5;
+}
+
+.importAccountInput {
+  height: 1px;
+  width: 1px;
+  opacity: 0;
+  visibility: hidden;
 }
