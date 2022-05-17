@@ -5,10 +5,10 @@ import {
   Routes,
   Route,
   BrowserRouter,
+  Navigate,
 } from "react-router-dom";
 
 import { Navigation, NavigationRoutesEnum } from '../../common';
-import { Test } from '../../Test';
 import { DappsPage } from '../../dapps/components/DappsPage';
 import { AccountPage } from '../../account/components/page/AccountPage';
 import { SmartContractPage } from '../../smartContracts/components/SmartContractsPage';
@@ -27,7 +27,7 @@ export const AppRoutes = (): ReactElement => (
         <Route path={NavigationRoutesEnum.ApiLinks} element={<APISDKPage/>}/>
         <Route path={NavigationRoutesEnum.Nodes} element={<NodesPage/>}/>
         <Route path={NavigationRoutesEnum.Shards} element={<ShardsPage/>}/>
-        <Route element={<Test/>}/>
+        <Route path="/" element={<Navigate to={NavigationRoutesEnum.Dapps} replace />}/>
       </Routes>
     </BrowserRouter>
   </div>
