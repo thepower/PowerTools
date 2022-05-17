@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import * as tpSdk from "the_power_sdk_js";
-import {ConfigService} from "@nestjs/config";
+import * as tpSdk from 'the_power_sdk_js';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class BlockChainService {
   shard: string;
 
   private login = 'AA030000174483048139';
+
   private storageScAddress = 'AA030000174483055698';
 
-  constructor (private readonly configService: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
     this.shard = this.configService.get('blockChain.shard');
   }
 
@@ -74,7 +75,7 @@ export class BlockChainService {
         'SK',
         20000,
         wif,
-        {},// fee settings
+        {}, // fee settings
       );
 
     const res = await tpSdk.networkLib.sendTxAndWaitForResponse(
@@ -94,7 +95,7 @@ export class BlockChainService {
     return this.chainTrx(login, wif, 'register_provider', [
       'upload.c104sn1.thepower.io', // upload link
       'c104sn1.thepower.io', // nodes
-      1
+      1,
     ]);
   }
 

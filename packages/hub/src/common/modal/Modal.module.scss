@@ -1,0 +1,16 @@
+@import '../../application/styles/variables';
+
+.modal {
+  border-radius: $unit * 2.5;
+  min-width: $unit * 100;
+  min-height: $unit * 50;
+  padding: $unit * 6;
+}
+
+.confirmModalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $unit * 2;
+  margin-top: auto;
+  padding: 0 !important;
+}

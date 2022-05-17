@@ -1,0 +1,97 @@
+@import '../../../application/styles/variables';
+
+.navigation {
+  width: $menu-width;
+  position: absolute;
+  top: $app-bar-height;
+  height: calc(100vh - #{$app-bar-height});
+
+  @media screen and (max-width: $tablet) {
+    display: none;
+  }
+}
+
+.tabletNavigation {
+  @media screen and (max-width: $tablet) {
+    .navigation {
+      display: flex !important;
+    }
+  }
+}
+
+.navigationItem {
+  cursor: pointer;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.navigationLabel > span {
+  font-weight: 700;
+  font-size: 12pt;
+  transition: 0.3s ease-in-out;
+  letter-spacing: 0.04rem;
+  text-transform: uppercase;
+  color: $blue;
+}
+
+.activeNavigationLabel span {
+  color: $black;
+}
+
+.copyrightLink {
+  margin-right: 10px;
+  color: $green;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: $red;
+  }
+}
+
+.navigationBottomPart {
+  display: flex;
+  flex-direction: column;
+  padding-left: $unit * 4;
+  padding-right: $unit * 4;
+  margin-top: auto;
+  margin-bottom: $unit * 4;
+  margin-right: $unit * 4;
+}
+
+.menuIcon {
+  display: none;
+  cursor: pointer;
+}
+
+.appbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: $app-bar-height;
+  box-shadow: none;
+  background-color: $black;
+  padding: 0 $unit * 4;
+
+  @media screen and (max-width: $tablet) {
+    padding: 0 $unit * 2.5;
+
+    .menuIcon {
+      display: block;
+    }
+  }
+}
+
+.appbarIcon {
+  display: block;
+  width: $unit * 33.75;
+  height: $unit * 12.5;
+  overflow: hidden;
+  text-indent: $unit * 102.5;
+
+  @media screen and (max-width: $tablet) {
+    margin: auto;
+  }
+}

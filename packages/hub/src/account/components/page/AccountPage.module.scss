@@ -1,0 +1,21 @@
+@import '../../../application/styles/variables';
+
+.accountId {
+  width: 100%;
+  font-size: $unit * 5;
+  margin-bottom: $unit * 4;
+}
+
+.accountBlock {
+  margin-bottom: $unit * 5;
+  min-height: $unit * 36.5;
+  height: unset;
+  padding: $unit * 2.5;
+}
+
+.importAccountInput {
+  height: 1px;
+  width: 1px;
+  opacity: 0;
+  visibility: hidden;
+}

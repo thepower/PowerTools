@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { omit } from 'lodash';
 // import { WrongLoginOrPasswordException } from '../common/exceptions';
-import {ConfigService} from "@nestjs/config";
-import {BlockChainService} from "../blockchain/blockchain.service";
-import {WrongLoginOrPasswordException} from "../common/exceptions";
+import { ConfigService } from '@nestjs/config';
+import { BlockChainService } from '../blockchain/blockchain.service';
+import { WrongLoginOrPasswordException } from '../common/exceptions';
 
 @Injectable()
 export class AuthService {

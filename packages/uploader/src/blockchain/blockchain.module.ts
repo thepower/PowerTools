@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import {BlockChainService} from "./blockchain.service";
+import { BlockChainService } from './blockchain.service';
 
 @Module({
   imports: [],

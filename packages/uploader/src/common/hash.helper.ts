@@ -1,5 +1,5 @@
-import {createHash} from "crypto";
-import {promises} from 'fs';
+import { createHash } from 'crypto';
+import { promises } from 'fs';
 
 export const getHash = (jsonString: string) => {
   const hashSum = createHash('sha256');
