@@ -78,7 +78,8 @@
         "react/no-find-dom-node": 0,
         "curly": 1,
         "react/jsx-filename-extension": 0,
-        "import/no-extraneous-dependencies": 0
+        "import/no-extraneous-dependencies": 0,
+        "import/no-anonymous-default-export": 0
     },
     "globals": {
         "describe": "writable",
