@@ -13,7 +13,6 @@ const accountSlice = createSlice({
 
 const {
   reducer: accountReducer,
-  actions: {},
 } = accountSlice;
 
 export {
