@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/cli",
-  "version": "1.0.5",
+  "version": "1.1.6",
   "description": "the power cli",
   "author": "thepower",
   "main": "dist/src/index.js",
@@ -23,8 +23,7 @@
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "yarn lint",
     "prepack": "yarn build && oclif manifest && oclif readme",
-    "test": "mocha --forbid-only \\\"../cli/test/**/*.test.ts\\\"",
-    "version": "oclif readme && git add ../cli/README.md"
+    "test": "mocha --forbid-only \\\"../cli/test/**/*.test.ts\\\""
   },
   "bugs": {
     "url": "https://github.com/thepower/power_hub/issues"
@@ -37,7 +36,9 @@
     "axios": "^0.26.1",
     "cli-ux": "^6.0.9",
     "form-data": "^4.0.0",
+    "oclif": "^2",
     "reflect-metadata": "^0.1.13",
+    "shx": "^0.3.3",
     "the_power_sdk_js": "^1.0.2",
     "typedi": "^0.10.0"
   },
@@ -49,8 +50,6 @@
     "chai": "^4",
     "globby": "^11",
     "mocha": "^9",
-    "oclif": "^2",
-    "shx": "^0.3.3",
     "ts-node": "^10.2.1",
     "tslib": "^2.3.1",
     "typescript": "^4.4.3"
@@ -76,5 +75,5 @@
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json"
   ],
-  "gitHead": "03d2f626f81fa6f56725c4108add483339a4fc1f"
+  "gitHead": "7f5fc698db2721bbfda4682f432550807fd6d472"
 }
