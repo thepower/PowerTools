@@ -1,6 +1,6 @@
-import { Address } from './libs/address';
+import { AddressApi } from './libs/address';
 import { getCiphers } from 'crypto';
 
 
-console.log(Address.isTextAddressValid('AA030000174483048139'));
+console.log(AddressApi.isTextAddressValid('AA030000174483048139'));
 console.log(getCiphers());
