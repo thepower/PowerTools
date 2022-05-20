@@ -16,6 +16,7 @@ const KIND_GENERIC = 0x10;
 const KIND_REGISTER = 0x11;
 const KIND_DEPLOY = 0x12;
 const KIND_PATCH = 0x13;
+const KIND_LSTORE = 22;
 
 // tmp unsed
 // const TAG_TIMESTAMP = 0x01;
@@ -190,7 +191,24 @@ const wrapAndSignPayload = (payload: any, keyPair: any, publicKey: string) => {
   };
 };
 
+
 export const TransactionsAPI = {
+  isSingleSignatureValid(data: any, bsig: any) {
+    const publicKey = this.extractTaggedDataFromBSig(TAG_PUBLIC_KEY, bsig);
+    const signature = this.extractTaggedDataFromBSig(TAG_SIGNATURE, bsig);
+    const ecsig = Bitcoin.ECSignature.fromDER(signature);
+    const keyPair = Bitcoin.ECPair.fromPublicKeyBuffer(Buffer.from(publicKey));
+
+    const extraData = bsig.subarray(signature.length + 2);
+
+    let dataToHash = new Uint8Array(extraData.length + data.length);
+    dataToHash.set(extraData);
+    dataToHash.set(data, extraData.length);
+    const hash = createHash('sha256').update(dataToHash).digest();
+
+    return keyPair.verify(hash, ecsig);
+  },
+
   composeSimpleTransferTX(
     feeSettings: any,
     wif: string,
@@ -289,5 +307,73 @@ export const TransactionsAPI = {
       e: { 'code': Buffer.from(new Uint8Array(code)), 'vm': 'wasm', 'view': [] },
     };
     return TransactionsAPI.packAndSignTX(computeFee(body, feeSettings), wif);
+  },
+
+  decodeTx(tx: any) {
+    let selfTx = tx;
+    if (!Buffer.isBuffer(selfTx)) {
+      selfTx = new Buffer(selfTx, 'base64');
+    }
+    selfTx = msgPack.decode(selfTx);
+    tx.body = msgPack.decode(tx.body);
+    return tx;
+  },
+
+  listValidTxSignatures(tx: any) {
+    let selfTx = tx;
+    if (!Buffer.isBuffer(selfTx)) {
+      selfTx = new Buffer(selfTx, 'base64');
+    }
+    selfTx = msgPack.decode(selfTx);
+    let { body, sig } = selfTx;
+
+    const validSignatures = sig.filter((signature: any) => this.isSingleSignatureValid(body, signature));
+    const invalidSignaturesCount = sig.length - validSignatures.length;
+
+    return { validSignatures, invalidSignaturesCount };
+  },
+
+  extractTaggedDataFromBSig(tag: any, bsig: any) {
+    let index = 0;
+    while (bsig[index] !== tag && index < bsig.length) {
+      index = index + bsig[index + 1] + 2;
+    }
+    return bsig.subarray(index + 2, index + 2 + bsig[index + 1]);
+  },
+
+  composeSCMethodCallTX(
+    address: string,
+    sc: string,
+    toCall: string,
+    gasToken: string,
+    gasValue: number,
+    wif: string,
+    feeSettings: any,
+  ) {
+    const body = {
+      k: KIND_GENERIC,
+      t: +new Date(),
+      f: Buffer.from(AddressApi.parseTextAddress(address)),
+      to: Buffer.from(AddressApi.parseTextAddress(sc)),
+      s: +new Date(),
+      p: [/*[PURPOSE_GAS, gasToken, gasValue]*/],
+      c: toCall,
+    };
+
+    return this.packAndSignTX(computeFee(body, feeSettings), wif);
+  },
+
+  composeStoreTX(address: string, patches: any, wif: string, feeSettings: any) {
+    const body = {
+      k: KIND_LSTORE,
+      t: +new Date(),
+      f: Buffer.from(AddressApi.parseTextAddress(address)),
+      //to: Buffer.from(AddressAPI.parseTextAddress(sc)),
+      s: +new Date(),
+      p: [],
+      pa: msgPack.encode(patches.map((i: any) => msgPack.encode(i))),
+    };
+
+    return this.packAndSignTX(computeFee(body, feeSettings), wif);
   },
 };
