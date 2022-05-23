@@ -1,3 +1,5 @@
+import { AddressScopeEnum } from '../typings';
+
 let globalCrcTable: number[] = [];
 
 function makeCRCTable() {
@@ -32,7 +34,7 @@ function decodeAddress(address: any) {
   let binaryAddress = new Uint8Array(8);
   binaryAddress[0] = 0x80;
 
-  if (address.scope === 'private') {
+  if (address.scope === AddressScopeEnum.private) {
     binaryAddress[0] |= 0x20;
 
     binaryAddress[0] |= Math.floor(address.block / 4294967296) & 0x1F;
@@ -80,7 +82,7 @@ function pad(base: number, num: number, size: number) {
   return S;
 }
 
-export const Address = {
+export const AddressApi = {
   encodeAddress(address: Uint8Array) {
     // 100GGGGG GGGGGGGG GGGBBBBB BBBBBBBB BBBBBBBB AAAAAAAA AAAAAAAA AAAAAAAA
     // 101BBBBB BBBBBBBB BBBBBBBB BBBBBBBB BBBBBBBB AAAAAAAA AAAAAAAA AAAAAAAA
@@ -142,14 +144,14 @@ export const Address = {
       const wallet = intPart % 16777216;
       checksum = parseInt(textAddress.slice(18, 20));
 
-      binaryAddress = decodeAddress({ block, wallet, group, scope: 'public' });
+      binaryAddress = decodeAddress({ block, wallet, group, scope: AddressScopeEnum.public });
       addrChecksum = crc32(binaryAddress) % 100;
     } else {
       const block = parseInt(textAddress.slice(0, 10), 16);
       const wallet = parseInt(textAddress.slice(10, 16), 16);
       checksum = parseInt(textAddress.slice(16, 18), 16);
 
-      binaryAddress = decodeAddress({ block, wallet, scope: 'private' });
+      binaryAddress = decodeAddress({ block, wallet, scope: AddressScopeEnum.private });
       addrChecksum = crc32(binaryAddress) % 256;
     }
 
@@ -166,7 +168,7 @@ export const Address = {
   },
 
   textAddressToHex(address: string) {
-    const binaryAddress = Address.parseTextAddress(address);
+    const binaryAddress = this.parseTextAddress(address);
     let result = '';
     for (let i = 0; i < binaryAddress.length; i++) {
       result += pad(16, binaryAddress[i], 2);
@@ -177,7 +179,7 @@ export const Address = {
 
   isTextAddressValid(textAddress: string) {
     try {
-      Address.parseTextAddress(textAddress);
+      this.parseTextAddress(textAddress);
     } catch (e) {
       return false;
     }
@@ -186,7 +188,7 @@ export const Address = {
   },
 
   hexToTextAddress(hexAddress: string) {
-    const address = Address.hexToAddress(hexAddress);
-    return Address.encodeAddress(address).txt;
+    const address = this.hexToAddress(hexAddress);
+    return this.encodeAddress(address).txt;
   },
 };

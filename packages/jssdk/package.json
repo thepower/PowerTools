@@ -21,6 +21,7 @@
     "bip32": "^2.0.6",
     "bip39": "^3.0.2",
     "bitcoinjs-lib": "^3.3.0",
+    "ecpair": "^2.0.1",
     "event-lite": "^0.1.1",
     "idempotent-babel-polyfill": "^7.0.0",
     "ieee754": "^1.1.8",
@@ -28,6 +29,7 @@
     "isarray": "^1.0.0",
     "lz4js": "^0.2.0",
     "the_power_mpack": "^1.0.0",
+    "tiny-secp256k1": "^2.2.1",
     "wif": "^2.0.6"
   },
   "devDependencies": {
