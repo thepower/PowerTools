@@ -69,6 +69,7 @@ const blobURL = URL.createObjectURL(new Blob(
         do {
           nonce++;
           let packedBody = mergeTypedArrays(part1, numToArray(nonce), part2);
+          // @ts-ignore
           hash = window.sha512.array(packedBody);
         } while (!validateHash(hash, difficulty));
 

@@ -451,6 +451,11 @@ browserslist@^4.14.5:
     node-releases "^2.0.3"
     picocolors "^1.0.0"
 
+brutusin-json-forms@^0.0.0:
+  version "0.0.0"
+  resolved "https://npm.vmassive.ru/brutusin-json-forms/-/brutusin-json-forms-0.0.0.tgz#ef730295237be0d63d98fa0d37d4eafc4c418269"
+  integrity sha512-6rUATr3Q1+98+9x83ei9qGZLEQvNEJf7a2XKw0FXXVFEQN8WWSLWIMe9T87cwrq8LRBvtKClEzdyE07s8aVvhA==
+
 bs58@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/bs58/-/bs58-4.0.1.tgz#be161e76c354f6f788ae4071f63f34e8c4f0a42a"
@@ -1199,6 +1204,11 @@ lru-cache@^6.0.0:
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
+
+lz4js@^0.2.0:
+  version "0.2.0"
+  resolved "https://npm.vmassive.ru/lz4js/-/lz4js-0.2.0.tgz#09f1a397cb2158f675146c3351dde85058cb322f"
+  integrity sha1-CfGjl8shWPZ1FGwzUd3oUFjLMi8=
 
 make-dir@^3.0.0:
   version "3.1.0"
