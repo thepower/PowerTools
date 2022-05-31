@@ -1,6 +1,6 @@
-const path = require('path')
-const nodeExternals = require('webpack-node-externals')
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const path = require('path');
+const nodeExternals = require('webpack-node-externals');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   context: __dirname,
@@ -12,26 +12,26 @@ module.exports = {
         exclude: /node_modules/,
         test: /.ts$/,
         use: {
-          loader: 'ts-loader'
-        }
-      }
-    ]
+          loader: 'ts-loader',
+        },
+      },
+    ],
   },
   node: {
-    __dirname: false
+    __dirname: false,
   },
   resolve: {
     extensions: ['.ts', '.js'],
     plugins: [
       new TsconfigPathsPlugin({
-        baseUrl: './src'
-      })
-    ]
+        baseUrl: './src',
+      }),
+    ],
   },
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/dist/'
+    publicPath: '/dist/',
   },
-  target: 'node'
-}
+  target: 'node',
+};

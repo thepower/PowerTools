@@ -1,3 +1,5 @@
+import { AddressScopeEnum } from '../typings';
+
 let globalCrcTable: number[] = [];
 
 function makeCRCTable() {
@@ -32,7 +34,7 @@ function decodeAddress(address: any) {
   let binaryAddress = new Uint8Array(8);
   binaryAddress[0] = 0x80;
 
-  if (address.scope === 'private') {
+  if (address.scope === AddressScopeEnum.private) {
     binaryAddress[0] |= 0x20;
 
     binaryAddress[0] |= Math.floor(address.block / 4294967296) & 0x1F;
@@ -66,26 +68,26 @@ function pad(base: number, num: number, size: number) {
   let S;
 
   if (base === 26) {
-    let A = "A".charCodeAt(0),
+    let A = 'A'.charCodeAt(0),
       B0 = num % 26,
       B1 = Math.floor(num / 26);
     S = String.fromCharCode(B1 + A) + String.fromCharCode(B0 + A);
   } else {
     S = num.toString(base).toUpperCase();
     while (S.length < size) {
-      S = "0" + S;
+      S = '0' + S;
     }
   }
 
   return S;
 }
 
-export const Address = {
+export const AddressApi = {
   encodeAddress(address: Uint8Array) {
     // 100GGGGG GGGGGGGG GGGBBBBB BBBBBBBB BBBBBBBB AAAAAAAA AAAAAAAA AAAAAAAA
     // 101BBBBB BBBBBBBB BBBBBBBB BBBBBBBB BBBBBBBB AAAAAAAA AAAAAAAA AAAAAAAA
     if (address[0] < 128 || address[0] > 191) {
-      throw new Error("Bad address");
+      throw new Error('Bad address');
     }
 
     const wallet = address[7] | (address[6] << 8) | (address[5] << 16);
@@ -96,12 +98,12 @@ export const Address = {
       const block = ((address[4] | address[3] << 8 | address[2] << 16 | address[1] << 24) >>> 0) + ((0x1f & address[0]) * 4294967296);
       const txt = pad(16, block, 10) + pad(16, wallet, 6) + pad(16, checksum % 256, 2);
       result = {
-        scope: "private",
+        scope: 'private',
         checksum: checksum % 256,
         block,
         txt,
-        wallet
-      }
+        wallet,
+      };
     } else { //public
       const block = address[4] | (address[3] << 8) | ((0x1f & address[2]) << 16);
       const group = (address[2] | (address[1] << 8) | ((0x1f & address[0]) << 16)) >>> 5;
@@ -114,13 +116,13 @@ export const Address = {
         + pad(10, checksum % 100, 2);
 
       result = {
-        scope: "public",
+        scope: 'public',
         checksum: checksum % 100,
         wallet,
         block,
         txt,
-        group
-      }
+        group,
+      };
     }
 
     return result;
@@ -133,7 +135,7 @@ export const Address = {
     if (textAddress.length === 20) { //public
       const intPart = parseInt(textAddress.slice(4, 18));
       const groupRemainder = parseInt(textAddress.slice(2, 4));
-      const A = "A".charCodeAt(0);
+      const A = 'A'.charCodeAt(0);
       const B0 = textAddress.charCodeAt(1) - A;
       const B1 = textAddress.charCodeAt(0) - A;
       const groupQuotient = (B1 * 26) + B0;
@@ -142,19 +144,19 @@ export const Address = {
       const wallet = intPart % 16777216;
       checksum = parseInt(textAddress.slice(18, 20));
 
-      binaryAddress = decodeAddress({block, wallet, group, scope: 'public'});
+      binaryAddress = decodeAddress({ block, wallet, group, scope: AddressScopeEnum.public });
       addrChecksum = crc32(binaryAddress) % 100;
     } else {
       const block = parseInt(textAddress.slice(0, 10), 16);
       const wallet = parseInt(textAddress.slice(10, 16), 16);
       checksum = parseInt(textAddress.slice(16, 18), 16);
 
-      binaryAddress = decodeAddress({block, wallet, scope: 'private'});
+      binaryAddress = decodeAddress({ block, wallet, scope: AddressScopeEnum.private });
       addrChecksum = crc32(binaryAddress) % 256;
     }
 
     if (checksum !== addrChecksum) {
-      throw new Error('Invalid address checksum')
+      throw new Error('Invalid address checksum');
     }
     return binaryAddress;
   },
@@ -166,7 +168,7 @@ export const Address = {
   },
 
   textAddressToHex(address: string) {
-    const binaryAddress = Address.parseTextAddress(address);
+    const binaryAddress = this.parseTextAddress(address);
     let result = '';
     for (let i = 0; i < binaryAddress.length; i++) {
       result += pad(16, binaryAddress[i], 2);
@@ -177,7 +179,7 @@ export const Address = {
 
   isTextAddressValid(textAddress: string) {
     try {
-      Address.parseTextAddress(textAddress)
+      this.parseTextAddress(textAddress);
     } catch (e) {
       return false;
     }
@@ -186,7 +188,7 @@ export const Address = {
   },
 
   hexToTextAddress(hexAddress: string) {
-    const address = Address.hexToAddress(hexAddress);
-    return Address.encodeAddress(address).txt
-  }
+    const address = this.hexToAddress(hexAddress);
+    return this.encodeAddress(address).txt;
+  },
 };

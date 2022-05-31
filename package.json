@@ -1,21 +1,11 @@
 {
-  "name": "power-hub",
+  "name": "@thepower/power-hub",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-plugin-oclif": "^0.1.0",
-    "lint-staged": "^12.3.7",
-    "oclif": "^3.0.1",
-    "stylelint": "^14.6.1",
-    "stylelint-config-idiomatic-order": "^8.1.0",
-    "stylelint-config-sass-guidelines": "^9.0.1",
-    "stylelint-config-standard": "^25.0.0",
-    "typescript": "^4.6.3"
-  },
   "scripts": {
     "lerna:init": "yarn install && lerna bootstrap",
+    "publish": "lerna exec --concurrency 1 -- semantic-release -e semantic-release-monorepo --tag-format='${LERNA_PACKAGE_NAME}-v\\${version}'",
+    "lernapub": "lerna publish",
     "cl": "lerna clean",
     "cm": "git add -A && lint-staged && git-cz"
   },
@@ -34,6 +24,20 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "dependencies": {
+    "concurrency": "^0.1.4",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-plugin-oclif": "^0.1.0",
+    "lint-staged": "^12.3.7",
+    "semantic-release": "^19.0.2",
+    "semantic-release-monorepo": "^7.0.5",
+    "stylelint": "^14.6.1",
+    "stylelint-config-idiomatic-order": "^8.1.0",
+    "stylelint-config-sass-guidelines": "^9.0.1",
+    "stylelint-config-standard": "^25.0.0",
+    "typescript": "^4.6.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.19.0",

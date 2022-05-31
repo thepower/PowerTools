@@ -1,16 +1,7 @@
-import { Address } from './libs/address';
-import { getCiphers } from 'crypto';
+import { Network } from './libs/network';
 
-
-const textAddress = 'AA030000174483056089';
-
-// TODO: how it works
-const binaryAddress = Address.parseTextAddress(textAddress);
-const hexAddress = Address.textAddressToHex(textAddress);
-
-
-binaryAddress.map(dec => {
-  console.log((dec >>> 0).toString(2));
-  return 0;
+const network = new Network('102');
+network.bootstrap().then(() => {
+  console.log('ok');
 });
-// console.log(getCiphers());
+

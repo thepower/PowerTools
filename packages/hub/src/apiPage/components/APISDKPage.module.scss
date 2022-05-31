@@ -1,0 +1,13 @@
+@import '../../application/styles/variables';
+
+.apiSDKBlock {
+  margin-bottom: $unit * 5;
+  min-height: $unit * 36.5;
+  height: unset;
+  padding: $unit * 2.5;
+}
+
+.powerApiDescription {
+  line-height: $unit * 8;
+  white-space: pre-line;
+}

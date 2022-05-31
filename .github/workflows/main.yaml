@@ -11,11 +11,16 @@ jobs:
   default:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Packages
-        run: yarn
+      - name: Set Git User
+        run: |
+                git config --global user.name "The Power Ecosystem"
+                git config --global user.email "ext@thepower.io"
+
+      - name: Init Lerna
+        run: yarn lerna:init
 
 #      - name: Authenticate
 #        run: |

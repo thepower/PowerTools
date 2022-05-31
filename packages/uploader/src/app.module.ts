@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UploaderModule } from "./uploader/uploader.module";
-import { ConfigModule } from "@nestjs/config";
+import { UploaderModule } from './uploader/uploader.module';
+import { ConfigModule } from '@nestjs/config';
 import { config } from './config/base.config';
-import {AuthModule} from "./auth/auth.module";
-import {BlockChainModule} from "./blockchain/blockchain.module";
-import { MulterModule } from "@nestjs/platform-express";
+import { AuthModule } from './auth/auth.module';
+import { BlockChainModule } from './blockchain/blockchain.module';
 
 
 

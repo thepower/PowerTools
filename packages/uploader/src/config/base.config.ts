@@ -1,4 +1,4 @@
-import { MainConfig } from "./base.config.type";
+import { MainConfig } from './base.config.type';
 
 export const config = (): MainConfig => ({
   port: parseInt(process.env.PORT, 10) || 3010,
@@ -9,6 +9,6 @@ export const config = (): MainConfig => ({
     },
   },
   blockChain: {
-    shard: process.env.SHARD_NUMBER || "104"
-  }
+    shard: process.env.SHARD_NUMBER || '104',
+  },
 });

@@ -1,423 +1,343 @@
-import * as HTTP from 'axios';
-import * as createHash from 'create-hash';
+import axios from 'axios';
+import createHash from 'create-hash';
+import { config as cfg, chainConfig } from '../config/chain.config';
+import { ChainNode } from '../typings';
+import { queueNodes, transformResponse } from '../helpers/network.helper';
+import { ChainAction } from '../helpers/network.enum';
+import Debug from 'debug';
+const info = Debug('info');
 
-export interface RawNodes {
-  [key: string] : {
-    host: string[];
-    ip: string[];
+export class Network {
+  private currentChain: string = '';
+
+  private currentNodes: ChainNode[] = [];
+
+  private nodeIndex: number = 0;
+
+  constructor(chain: string) {
+    this.currentChain = chain;
   }
-}
 
-export interface ChainNode {
-  address: string;
-  nodeId: string;
-}
+  private setCurrentConfig = async (newNodes: ChainNode[]) => {
+    this.currentNodes = await queueNodes(newNodes);
+    this.nodeIndex = 0;
+    // nodesCache[newChain] = nodes; // TODO: cache for what?
+  };
 
-// TODO: define it
-let nodes: any[] = [];
-let nodeIndex = -1;
-let currentChain = 'X';
-const nodesCache: any = {};
+  public async sendTxAndWaitForResponse(tx: any, timeout = 120) {
+    // TODO: refactor this shit
+    return new Promise((resolve, reject) => {
+      this.sendPreparedTX(
+        tx,
+        (success: boolean, message: string) => success ?
+          resolve(message)
+          : reject(message), timeout);
+    });
+  }
 
-const setCurrentConfig = async (newChain: string, newNodes: RawNodes) => {
-  nodes = await queueNodes(newNodes);
-  currentChain = newChain;
-  nodeIndex = 0;
-  nodesCache[newChain] = nodes;
-};
+  public async getFeeSettings() {
+    const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {});
+    return this.calculateFeeSettings(settings);
+  }
 
-const bootstrap = {
-  '102': transformNodeList({
-    "2UYKF1HyNz7QSFTGY5ffZSG8oWem":
-      {
-        "host":[
-          "http://c102n6.thepower.io:43382",
-          "https://c102n6.thepower.io:43482"
-        ],
-        "ip":[
-          "http://c102n6.thepower.io:43382",
-          "https://c102n6.thepower.io:43482"
-        ]
-      },
-    "2i6tWT8XuT3jQcvpzKUM9V51L2sm":{"host":["http://c102n7.thepower.io:43382","https://c102n7.thepower.io:43482"],"ip":["http://c102n7.thepower.io:43382","https://c102n7.thepower.io:43482"]},"3UvkSW1iMARXVpxAwLRXppVJ5xNJ":{"host":["http://c102n2.thepower.io:43382","https://c102n2.thepower.io:43482"],"ip":["http://c102n2.thepower.io:43382","https://c102n2.thepower.io:43482"]},"4ChWotb5pfLvmGXBc5M8fu7jNHXB":{"host":["http://c102n4.thepower.io:43382","https://c102n4.thepower.io:43482"],"ip":["http://c102n4.thepower.io:43382","https://c102n4.thepower.io:43482"]},"4NoNQJzEcWr2gyszSUdGShXXseaC":{"host":["http://c102n5.thepower.io:43382","https://c102n5.thepower.io:43482"],"ip":["http://c102n5.thepower.io:43382","https://c102n5.thepower.io:43482"]},"NPvVcKpnHuGKsActjmEmWKgSbZh":{"host":["http://c102n9.thepower.io:43382","https://c102n9.thepower.io:43482"],"ip":["http://c102n9.thepower.io:43382","https://c102n9.thepower.io:43482"]},"oM2yj49e3g3gWquE1x1JDfa8ZQD":{"host":["http://c102n3.thepower.io:43382","https://c102n3.thepower.io:43482"],"ip":["http://c102n3.thepower.io:43382","https://c102n3.thepower.io:43482"]},"wFQYUgQLa2yJqdEgVD7sJLJxewC":{"host":["http://c102n10.thepower.io:43382","https://c102n10.thepower.io:43482"],"ip":["http://c102n10.thepower.io:43382","https://c102n10.thepower.io:43482"]}}),
-  '8':transformNodeList({"8rxo4eAncEqj8kraFFmS9MvJTGW":{"host":["http://c8n1.thepower.io:43288","https://c8n1.thepower.io:43388"],"ip":["http://51.15.80.38:43288","https://51.15.80.38:43388"]}}),
-  '2':transformNodeList({"2UYKF1HyNz7QSFTGY5ffZSG8oWem":{"host":["http://c102n6.thepower.io:43382","https://c102n6.thepower.io:43482"],"ip":["http://c102n6.thepower.io:43382","https://c102n6.thepower.io:43482"]},"2i6tWT8XuT3jQcvpzKUM9V51L2sm":{"host":["http://c102n7.thepower.io:43382","https://c102n7.thepower.io:43482"],"ip":["http://c102n7.thepower.io:43382","https://c102n7.thepower.io:43482"]},"3UvkSW1iMARXVpxAwLRXppVJ5xNJ":{"host":["http://c102n2.thepower.io:43382","https://c102n2.thepower.io:43482"],"ip":["http://c102n2.thepower.io:43382","https://c102n2.thepower.io:43482"]},"4ChWotb5pfLvmGXBc5M8fu7jNHXB":{"host":["http://c102n4.thepower.io:43382","https://c102n4.thepower.io:43482"],"ip":["http://c102n4.thepower.io:43382","https://c102n4.thepower.io:43482"]},"4NoNQJzEcWr2gyszSUdGShXXseaC":{"host":["http://c102n5.thepower.io:43382","https://c102n5.thepower.io:43482"],"ip":["http://c102n5.thepower.io:43382","https://c102n5.thepower.io:43482"]},"oM2yj49e3g3gWquE1x1JDfa8ZQD":{"host":["http://c102n3.thepower.io:43382","https://c102n3.thepower.io:43482"],"ip":["http://c102n3.thepower.io:43382","https://c102n3.thepower.io:43482"]},"wFQYUgQLa2yJqdEgVD7sJLJxewC":{"host":["http://c102n10.thepower.io:43382","https://c102n10.thepower.io:43482"],"ip":["http://c102n10.thepower.io:43382","https://c102n10.thepower.io:43482"]}}),
-};
+  public getBlock = async (hash = 'last') => {
+    return this.askBlockchainTo(
+      ChainAction.GET_BLOCK,
+      { chain: this.currentChain, hash })
+    ;
+  };
 
+  public getWallet = async (address: string) => {
+    return this.askBlockchainTo(
+      ChainAction.GET_WALLET,
+      { chain: this.currentChain, address },
+    );
+  };
 
+  public loadScCode = async (address: string) => {
+    return new Uint8Array(
+      await this.askBlockchainTo(
+        ChainAction.GET_SC_CODE,
+        { chain: this.currentChain, address },
+      ),
+    );
+  };
 
-const getBlockUrl = _ => `${nodes[nodeIndex].address}/api/block`;
-const getWalletUrl = _ => `${nodes[nodeIndex].address}/api/address`;
-const newTransactionUrl = _ => `${nodes[nodeIndex].address}/api/tx/new`;
-const transactionStatusUrl = _ => `${nodes[nodeIndex].address}/api/tx/status`;
-const whereAmIUrl = _ => `${nodes[nodeIndex].address}/api/where`;
-const chainNodesUrl = _ => `${nodes[nodeIndex].address}/api/nodes`;
-const settingsUrl = _ => `${nodes[nodeIndex].address}/api/settings`;
+  public loadScState = async (address: string) => {
+    return new Uint8Array(
+      await this.askBlockchainTo(
+        ChainAction.GET_SC_STATE,
+        { chain: this.currentChain, address },
+      ),
+    );
+  };
 
-function checkResponseValidity(data: any) {
-  if (!(data instanceof ArrayBuffer) && !(data instanceof Buffer)) {
-    if (!data.ok) {
-      if (data.msg) {
-        throw new Error(`(${data.code}) ${data.msg}`);
-      } else {
-        throw new Error(`Incorrect response (${data.code})`);
+  private getChain() {
+    return this.currentChain;
+  }
+
+  // Mock. Info about all chains will store in some system chain, have not implemented yet
+  private async getChainInfo() {
+    return Promise.resolve(chainConfig);
+  }
+
+  public bootstrap = async () => {
+    const chainInfo = await this.getChainInfo();
+
+    if (chainInfo[this.currentChain]) {
+
+      const fullNodes = chainInfo[this.currentChain];
+
+      if (!fullNodes.length) {
+        throw new Error(`No nodes found for chain ${this.currentChain}`);
       }
+
+      await this.setCurrentConfig(fullNodes);
+      info(`Bootstrapped chain ${this.currentChain}`, this.currentNodes);
+      return;
     }
-  }
-}
+    // } else {
+    //   //Нужного чейна нет в бутстрапе опрашиваем все из бутстрапа - может они знают
+    //   for (const key in defaultBootstrap) {
+    //     const bootstrapNodes = await queueNodes(defaultBootstrap[key]);
+    //
+    //     const unsortedNodes = await this.askBlockchainTo(
+    //       ChainAction.GET_CHAIN_NODES,
+    //       { remoteChain: this.currentChain },
+    //       bootstrapNodes,
+    //     );
+    //
+    //     const tempNodes = await queueNodes(unsortedNodes);
+    //
+    //     if (tempNodes.length) {
+    //       //Чейн сказал, что знает
+    //       const fullNodes = await this.askBlockchainTo(
+    //         ChainAction.GET_CHAIN_NODES,
+    //         { remoteChain: this.currentChain },
+    //         tempNodes,
+    //       );
+    //
+    //       if (fullNodes.length) {
+    //         //Нашли
+    //         await this.setCurrentConfig(chain, fullNodes);
+    //         console.log(`Bootstrapped chain ${chain}  via ${key}`, fullNodes);
+    //         return;
+    //       } else {
+    //         //Ни одна нода из переданных не отдала список нод
+    //         console.log(`No nodes found for chain ${chain} via ${key}`)
+    //       }
+    //     }
+    //   }
+    // }
 
-function transformResponse(response: any, kind: string) {
-  switch (kind) {
-    case 'GET_TRANSACTION_STATUS':
-      return response.res;
+    throw new Error(`Unknown chain ${this.currentChain}`);
+  };
 
-    case 'GET_CHAIN_NODES':
-      return transformNodeList(response.chain_nodes);
 
-    case 'GET_BLOCK':
-      return response.block;
 
-    case 'GET_WALLET':
-      return response.info;
+  private async loadRemoteSCInterface(interfaceData: any[]) {
+    const [ hashData, urlData] = interfaceData;
+    const [ hashAlg, hashValue ] = hashData.split(':');
 
-    case 'GET_NODE_SETTINGS':
-      return response.settings;
-  }
+    const baseURL = urlData.includes('ipfs') ?
+      `https://ipfs.io/ipfs/${urlData.split('://')[1]}` // TODO: what url is it? move to const (config)
+      : urlData + `?${+new Date()}`;
 
-  return response;
-}
+    const { data } = await axios.request({ baseURL, responseType: 'arraybuffer' });
+    const binaryCode = new Uint8Array(data);
+    const actualHash = createHash(hashAlg).update(binaryCode).digest().toString('hex');
 
-function transformNodeList(rawNodes: RawNodes) {
-  let nodesList: ChainNode[] = [];
-  const nodeIds = Object.keys(rawNodes);
-
-  nodeIds.forEach(nodeId => {
-    rawNodes[nodeId].ip.forEach((address) => nodesList.push({address, nodeId}));
-    rawNodes[nodeId].host.forEach((address) => nodesList.push({address, nodeId}));
-  });
-
-  return nodesList.reduce(
-    (acc: ChainNode[], {address, nodeId}) =>
-      acc.some(item => item.address === address && item.nodeId === nodeId)
-        ? acc // if address exists in acc - return acc
-        : [...acc, {address, nodeId}], // if address not exists - add it
-      []
-  );
-}
-
-async function queueNodes(nodesList) {
-  let sortedNodes = [];
-  let startTime = +new Date();
-
-  await HTTP.all(
-    nodesList.map(elem => HTTP.request({url: `${elem.address}/api/status`, timeout: 1000, node: elem.nodeId})
-      .then(data => {
-        //console.log(data.config)
-        let url = new URL(data.config.url);
-        sortedNodes.push({address: url.origin, time: +(new Date()) - startTime, nodeId: data.config.node})
-      }, data => {
-        let url = new URL(data.config.url);
-        sortedNodes.push({address: url.origin, time: 99999, nodeId: data.config.node});
-      }))
-  );
-  sortedNodes.sort((a, b) => a.time - b.time);
-  //console.log(sortedNodes);
-  return sortedNodes;
-}
-
-async function incrementNodeIndex() {
-  nodeIndex++;
-  if (nodeIndex >= nodes.length || nodes[nodeIndex].time === 99999) {
-    nodes = await queueNodes(nodes);
-    nodeIndex = 0;
-
-    if (nodeIndex >= nodes.length || nodes[nodeIndex].time === 99999) {
-      throw new Error("Chain unavailable.");
+    if (actualHash !== hashValue) {
+      throw new Error('Hash mismatch');
     }
-  }
-}
 
-async function httpRequest(urlCallback, parameters, overrideNodes) {
-  let success = false, result, i = 0, oldNodes = nodes, oldIndex = nodeIndex;
-  const totalAttempts = 5;
-
-  if (overrideNodes) {
-    nodes = await queueNodes(overrideNodes);
-    nodeIndex = 0;
+    return binaryCode;
   }
 
-  if (!nodes.length) {
-    nodes = oldNodes;
-    nodeIndex = oldIndex;
-    throw new Error('No nodes to query')
+  private async sendPreparedTX(tx: any, callback: Function, timeout: number) {
+    // await this.setChain(chain);
+    const response = await this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data: { tx } });
+    if (callback) {
+      setTimeout(() => this.checkTransaction(response.txid, callback, timeout), cfg.callbackCallDelay);
+    }
+    return response;
   }
 
-  while (!success) {
-    i++;
-    parameters.baseURL = urlCallback();
+
+
+  private calculateFeeSettings(settings: any) {
+    let result = settings.current;
+    let feeCur;
+
+    if (result.fee) {
+      result = result.fee;
+      if (result.SK) {
+        feeCur = 'SK';
+      } else if (result.FEE) {
+        feeCur = 'FEE';
+      } else {
+        return {};
+      }
+    } else {
+      return {};
+    }
+
+    return {
+      feeCur,
+      fee: result[feeCur].base,
+      baseEx: result[feeCur].baseextra,
+      kb: result[feeCur].kb,
+    };
+  }
+
+  private checkTransaction = async (txId: string, callback: Function, timeout: number, count = 0) => {
+    let status;
+    let finalCount = count;
+
     try {
-      result = await HTTP.request(parameters);
-      success = true;
+      status = await this.askBlockchainTo(ChainAction.GET_TRANSACTION_STATUS, { txId });
     } catch (e) {
-      if (e.response === undefined) {
-        //Server did not respond
-        if (i < totalAttempts) {
-          await incrementNodeIndex()
+      callback(false, 'Network error');
+    }
+
+    if (status) {
+      callback(!status.error, `${txId}: ${status.res}`);
+    } else if (count < timeout) {
+      setTimeout(() => this.checkTransaction(txId, callback, timeout, ++finalCount), cfg.callbackCallDelay);
+    } else {
+      callback(false, `${txId}: Transaction status lost`);
+    }
+  };
+
+  private incrementNodeIndex = async () => {
+    this.nodeIndex++;
+    if (this.nodeIndex >= this.currentNodes.length || this.currentNodes[this.nodeIndex].time === cfg.maxNodeResponseTime) {
+      this.currentNodes = await queueNodes(this.currentNodes);
+      this.nodeIndex = 0;
+
+      if (this.nodeIndex >= this.currentNodes.length || this.currentNodes[this.nodeIndex].time === cfg.maxNodeResponseTime) {
+        throw new Error('Chain unavailable.');
+      }
+    }
+  };
+
+  private httpRequest = async (actionUrl: string, parameters: any) => {
+    const totalAttempts = cfg.requestTotalAttempts;
+    let success = false;
+    let result: any;
+    let i = 0;
+
+    if (!this.currentNodes.length) {
+      throw new Error('No nodes to query, probably need to call bootstrap()');
+    }
+
+    while (!success) {
+      i++;
+      parameters.baseURL = `${this.currentNodes[this.nodeIndex].address}/api${actionUrl}`;
+      try {
+        result = await axios.request(parameters);
+        success = true;
+      } catch (e: any) {
+        if (e.response === undefined) {
+          // Server did not respond
+          if (i < totalAttempts) {
+            await this.incrementNodeIndex();
+          } else {
+            throw new Error('Too many attempts.');
+          }
         } else {
-          throw new Error("Too many attempts.")
+          //Server responded with error
+          throw new Error(e.response.data.msg);
         }
-      } else {
-        //Server responded with error
-        throw new Error(e.response.data.msg);
+      }
+    }
+
+    return result.data;
+  };
+
+  private checkResponseValidity(data: any) {
+    if (!(data instanceof ArrayBuffer) && !(data instanceof Buffer)) {
+      if (!data.ok) {
+        if (data.msg) {
+          throw new Error(`(${data.code}) ${data.msg}`);
+        } else {
+          throw new Error(`Incorrect response (${data.code})`);
+        }
       }
     }
   }
 
-  nodes = oldNodes;
-  nodeIndex = oldIndex;
-
-  return result.data;
-}
-
-const bootstrapChain = async (chain) => {
-  if (bootstrap[chain]) {
-    //Нужный чейн есть в бутстрапе - пробуем
-    const fullNodes = bootstrap[chain];
-    //const fullNodes = await NetworkLib.askBlockchainTo('GET_CHAIN_NODES', {remoteChain: chain}, bootstrap[chain]);
-    if (!fullNodes.length) {
-      throw new Error(`No nodes found for chain ${chain}`);
-    }
-    await setCurrentConfig(chain, fullNodes);
-    console.log(`Bootstrapped chain ${chain}`, nodes)
-    return;
-  } else {
-    //Нужного чейна нет в бутстрапе опрашиваем все из бутстрапа - может они знают
-    for (const key in bootstrap) {
-      const bootstrapNodes = await queueNodes(bootstrap[key]);
-      const tempNodes = await queueNodes(await NetworkLib.askBlockchainTo('GET_CHAIN_NODES', {remoteChain: chain}, bootstrapNodes));
-      if (tempNodes.length) {
-        //Чейн сказал, что знает
-        const fullNodes = await NetworkLib.askBlockchainTo('GET_CHAIN_NODES', {remoteChain: chain}, tempNodes);
-        if (fullNodes.length) {
-          //Нашли
-          await setCurrentConfig(chain, fullNodes);
-          console.log(`Bootstrapped chain ${chain}  via ${key}`, nodes)
-          return;
-        } else {
-          //Ни одна нода из переданных не отдала список нод
-          console.log(`No nodes found for chain ${chain} via ${key}`)
-        }
-      }
-    }
+  private async getAddressChain(address : string) {
+    const { chain } = await this.askBlockchainTo(ChainAction.GET_MY_CHAIN, { address });
+    return chain;
   }
 
-  throw new Error(`Unknown chain ${chain}`);
-};
+  private async askBlockchainTo(kind: ChainAction, parameters: any) {
+    let actionUrl;
 
-const checkTransaction = async (txId, callback, timeout, count = 0) => {
-  let status;
-
-  if (!callback) {
-    throw new Error('No tx status callback specified');
-  }
-
-  try {
-    status = await NetworkLib.askBlockchainTo('GET_TRANSACTION_STATUS', {txId});
-  } catch(e) {
-    callback(false, 'Network error');
-  }
-
-  if (status) {
-    /*if (status.error) {
-        callback(false, status.res);
-    } else {
-        callback(true, 'Success');
-    }*/
-    callback(!status.error, `${txId}: ${status.res}`);
-  } else if (count < timeout) {
-    setTimeout(() => checkTransaction(txId, callback, timeout, ++count), 900);
-  } else {
-    callback(false, `${txId}: Transaction status lost`);
-  }
-}
-
-function _getFeeSettings(settings) {
-  settings = settings.current;
-  let feeCur;
-
-  if (settings.fee) {
-    settings = settings.fee;
-    if (settings.SK) {
-      feeCur = 'SK'
-    } else if (settings.FEE) {
-      feeCur = 'FEE'
-    } else {
-      return {}
-    }
-  } else {
-    return {}
-  }
-
-  return {
-    feeCur,
-    fee: settings[feeCur].base,
-    baseEx: settings[feeCur].baseextra,
-    kb: settings[feeCur].kb,
-  }
-}
-
-const NetworkLib = {
-  async setChain(chain) {
-    if (chain === currentChain) return;
-
-    if (nodesCache[chain]) {
-      await setCurrentConfig(chain, nodesCache[chain]);
-    } else {
-      await bootstrapChain(chain);
-    }
-  },
-
-  getChain() {
-    return currentChain
-  },
-
-  async askBlockchainTo(kind, parameters, overrideNodes) {
-    let callback;
-    let requestParams = {
-      timeout: 10000,
-      method: 'get'
+    let requestParams: any = {
+      timeout: cfg.chainRequestTimeout,
+      method: 'get',
     };
 
-    if (overrideNodes) {
-      try {
-        overrideNodes = transformNodeList(overrideNodes)
-      } catch(e) {
-
-      }
-    }
-
     switch (kind) {
-      case 'GET_BLOCK':
-        callback = getBlockUrl;
+      case ChainAction.GET_BLOCK:
+        actionUrl = '/block';
         requestParams.url = parameters.hash;
         break;
 
-      case 'GET_WALLET':
-        callback = getWalletUrl;
+      case ChainAction.GET_WALLET:
+        actionUrl = '/address';
         requestParams.url = parameters.address;
         break;
 
-      case 'CREATE_TRANSACTION':
-        callback = newTransactionUrl;
+      case ChainAction.CREATE_TRANSACTION:
+        actionUrl = '/tx/new';
         requestParams.method = 'post';
         requestParams.data = parameters.data;
         break;
 
-      case 'GET_TRANSACTION_STATUS':
-        callback = transactionStatusUrl;
+      case ChainAction.GET_TRANSACTION_STATUS:
+        actionUrl = '/tx/status';
         requestParams.url = parameters.txId;
         break;
 
-      case 'GET_MY_CHAIN':
-        callback = whereAmIUrl;
+      case ChainAction.GET_MY_CHAIN:
+        actionUrl = '/where';
         requestParams.url = parameters.address;
         break;
 
-      case 'GET_CHAIN_NODES':
-        callback = chainNodesUrl;
+      case ChainAction.GET_CHAIN_NODES:
+        actionUrl = '/nodes';
         requestParams.url = parameters.remoteChain.toString();
         break;
 
-      case 'GET_NODE_SETTINGS':
-        callback = settingsUrl;
+      case ChainAction.GET_NODE_SETTINGS:
+        actionUrl = '/settings';
         break;
 
-      case 'GET_SC_CODE':
+      case ChainAction.GET_SC_CODE:
         requestParams.responseType = 'arraybuffer';
         requestParams.url = parameters.address + '/code';
-        callback = getWalletUrl;
+        actionUrl = '/address';
         break;
 
-      case 'GET_SC_STATE':
+      case ChainAction.GET_SC_STATE:
         requestParams.responseType = 'arraybuffer';
         requestParams.url = parameters.address + '/state';
-        callback = getWalletUrl;
+        actionUrl = '/address';
         break;
 
       default:
-        throw new Error("Unknown action");
+        throw new Error('Unknown action');
     }
 
-    let response = await httpRequest(callback, requestParams, overrideNodes);
-    checkResponseValidity(response);
+    let response = await this.httpRequest(actionUrl, requestParams);
+    this.checkResponseValidity(response);
 
     response = transformResponse(response, kind);
 
     return response;
-  },
-
-  async loadRemoteSCInterface(interfaceData) {
-    const hashAlg = interfaceData[0].split(':')[0];
-    const hashValue = interfaceData[0].split(':')[1];
-    const baseURL = interfaceData[1].includes('ipfs') ? `https://ipfs.io/ipfs/${interfaceData[1].split('://')[1]}` : interfaceData[1] + `?${+new Date()}`;
-    const binaryCode = new Uint8Array((await HTTP.request({baseURL, responseType: 'arraybuffer'})).data);
-    const actualHash = createHash(hashAlg).update(binaryCode).digest().toString('hex');
-    if (actualHash !== hashValue) {
-      throw new Error('Hash mismatch');
-    }
-    return binaryCode
-  },
-
-  async getAddressChain(address) {
-    const {chain} = await NetworkLib.askBlockchainTo('GET_MY_CHAIN', {address});
-
-    return chain;
-  },
-
-  async sendPreparedTX(tx, chain, callback, timeout) {
-    await NetworkLib.setChain(chain);
-    const response = await NetworkLib.askBlockchainTo('CREATE_TRANSACTION', {data: {tx}});
-    if (callback) {
-      setTimeout(() => checkTransaction(response.txid, callback, timeout), 900);
-    }
-    return response;
-  },
-
-  async sendTxAndWaitForResponse(tx, chain, timeout = 120) {
-    return new Promise((resolve, reject) => {
-      NetworkLib.sendPreparedTX(tx, chain,(success, message) => success ? resolve(message) : reject(message), timeout);
-      //setTimeout(() => reject('Timeout'), timeout);
-    })
-  },
-
-  async getFeeSettings(chain) {
-    await NetworkLib.setChain(chain);
-    const settings = await NetworkLib.askBlockchainTo('GET_NODE_SETTINGS');
-    return _getFeeSettings(settings);
-  },
-};
-
-//module.exports = NetworkLib;
-module.exports = {
-  sendTxAndWaitForResponse: NetworkLib.sendTxAndWaitForResponse,
-  getFeeSettings: NetworkLib.getFeeSettings,
-  getBlock: async (chain, hash = 'last') => {
-    await NetworkLib.setChain(chain);
-    return await NetworkLib.askBlockchainTo('GET_BLOCK',{hash});
-  },
-  getWallet: async (chain, address) => {
-    await NetworkLib.setChain(chain);
-    return await NetworkLib.askBlockchainTo('GET_WALLET',{address});
-  },
-  addChain: (number, nodes) => {
-    bootstrap[number] = nodes
-  },
-  loadScCode: async (chain, address) => {
-    await NetworkLib.setChain(chain);
-    return new Uint8Array(await NetworkLib.askBlockchainTo('GET_SC_CODE', {chain, address}))
-  },
-  loadScState: async (chain, address) => {
-    await NetworkLib.setChain(chain);
-    return new Uint8Array(await NetworkLib.askBlockchainTo('GET_SC_STATE', {chain, address}))
   }
-};
+}
+
