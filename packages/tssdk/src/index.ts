@@ -1,6 +1,7 @@
-import { AddressApi } from './libs/address';
-import { getCiphers } from 'crypto';
+import { Network } from './libs/network';
 
+const network = new Network('102');
+network.bootstrap().then(() => {
+  console.log('ok');
+});
 
-console.log(AddressApi.isTextAddressValid('AA030000174483048139'));
-console.log(getCiphers());

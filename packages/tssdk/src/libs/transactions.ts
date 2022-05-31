@@ -69,7 +69,8 @@ const blobURL = URL.createObjectURL(new Blob(
         do {
           nonce++;
           let packedBody = mergeTypedArrays(part1, numToArray(nonce), part2);
-          hash = window.sha512.array(packedBody);
+          console.log(packedBody); // TODO: remove this
+          hash = ''; //window.sha512.array(packedBody); // TODO: Property 'sha512' does not exist on type 'Window & typeof globalThis'.
         } while (!validateHash(hash, difficulty));
 
         postMessage(nonce);
