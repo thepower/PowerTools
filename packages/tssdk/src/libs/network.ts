@@ -14,8 +14,8 @@ export class Network {
 
   private nodeIndex: number = 0;
 
-  constructor(chain: string) {
-    this.currentChain = chain;
+  constructor(chain: number) {
+    this.currentChain = chain.toString();
   }
 
   private setCurrentConfig = async (newNodes: ChainNode[]) => {
