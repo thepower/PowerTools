@@ -60,7 +60,7 @@ export class UploaderApi {
     } catch (e) {
       console.log(`file ${path} upload failed`);
     } finally {
-     await  promises.unlink(path);
+      await  promises.unlink(path);
     }
   }
 }
