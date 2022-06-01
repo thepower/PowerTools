@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.10](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.1.9...@thepowereco/hub@1.1.10) (2022-06-01)
+
+
+### Bug Fixes
+
+* **sdk:** version up ([237bafc](https://github.com/thepower/power_hub/commit/237bafcfe07932c992456dc9fb42ced6817a871e))
+
+
+
+
+
 ## [1.1.9](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.1.8...@thepowereco/hub@1.1.9) (2022-06-01)
 
 
