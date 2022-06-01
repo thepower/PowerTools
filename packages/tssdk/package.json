@@ -21,6 +21,7 @@
     "bitcoinjs-lib": "^6.0.1",
     "brutusin-json-forms": "^0.0.0",
     "create-hash": "^1.2.0",
+    "debug": "^4.3.4",
     "ecpair": "^2.0.1",
     "lz4js": "^0.2.0",
     "safe-buffer": "^5.2.1",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@types/create-hash": "^1.2.2",
+    "@types/debug": "^4.1.7",
     "@types/node": "^17.0.25",
     "@types/wif": "^2.0.2",
     "dotenv": "^16.0.0",

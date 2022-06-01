@@ -13,3 +13,29 @@ export type PKCS5PEMInfoType = {
   type?: string;
   data?: string;
 };
+
+export interface RawNodes {
+  [key: string] : {
+    host: string[];
+    ip: string[];
+  }
+}
+
+export interface ChainNode {
+  address: string;
+  nodeId: string;
+  time?: number;
+}
+
+export interface ChainBootstrapConfig {
+  [key: string] : ChainNode[];
+}
+
+export interface ChainConfig {
+  requestTotalAttempts: number;
+  callbackCallDelay: number;
+  chainRequestTimeout: number;
+  maxNodeResponseTime: number;
+}
+
+
