@@ -31,8 +31,6 @@
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-plugin-oclif": "^0.1.0",
     "lint-staged": "^12.3.7",
-    "semantic-release": "^19.0.2",
-    "semantic-release-monorepo": "^7.0.5",
     "stylelint": "^14.6.1",
     "stylelint-config-idiomatic-order": "^8.1.0",
     "stylelint-config-sass-guidelines": "^9.0.1",

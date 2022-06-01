@@ -1,2 +1,1 @@
-// up
 export * from 'libs';
