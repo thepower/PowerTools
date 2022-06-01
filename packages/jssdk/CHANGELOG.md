@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.7](https://github.com/thepower/power_hub/compare/@thepowereco/jssdk@1.1.6...@thepowereco/jssdk@1.1.7) (2022-06-01)
+
+
+### Bug Fixes
+
+* **tssdk:** transactions rework ([7e43fb5](https://github.com/thepower/power_hub/commit/7e43fb57a3a08285c535a24f850aee1d4e8987bb))
+
+
+
+
+
 ## 1.1.6 (2022-05-17)
 
 **Note:** Version bump only for package @thepowereco/jssdk
