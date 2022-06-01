@@ -20,7 +20,7 @@ $ npm install -g @thepowereco/cli
 $ tp COMMAND
 running command...
 $ tp (--version)
-@thepowereco/cli/1.2.1 darwin-x64 node-v14.18.1
+@thepowereco/cli/1.2.2 darwin-x64 node-v14.18.1
 $ tp --help [COMMAND]
 USAGE
   $ tp COMMAND
@@ -306,5 +306,5 @@ EXAMPLES
   $ cd app_dir && pow-up
 ```
 
-_See code: [dist/src/commands/upload/index.ts](https://github.com/thepower/power_hub/blob/v1.2.1/dist/src/commands/upload/index.ts)_
+_See code: [dist/src/commands/upload/index.ts](https://github.com/thepower/power_hub/blob/v1.2.2/dist/src/commands/upload/index.ts)_
 <!-- commandsstop -->
