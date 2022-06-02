@@ -193,7 +193,7 @@ const wrapAndSignPayload = (payload: any, keyPair: any, publicKey: string) => {
 };
 
 
-export const TransactionsAPI = {
+export const TransactionsApi = {
   isSingleSignatureValid(data: any, bsig: any) {
     const publicKey = this.extractTaggedDataFromBSig(TAG_PUBLIC_KEY, bsig);
     const signature = this.extractTaggedDataFromBSig(TAG_SIGNATURE, bsig);
@@ -307,7 +307,7 @@ export const TransactionsAPI = {
       //"e": {'code': Buffer.from(new Uint8Array(code)), "vm": "wasm", "view": ["sha1:2b4ccea0d1de703012832f374e30effeff98fe4d", "/questions.wasm"]}
       e: { 'code': Buffer.from(new Uint8Array(code)), 'vm': 'wasm', 'view': [] },
     };
-    return TransactionsAPI.packAndSignTX(computeFee(body, feeSettings), wif);
+    return TransactionsApi.packAndSignTX(computeFee(body, feeSettings), wif);
   },
 
   decodeTx(tx: any) {
