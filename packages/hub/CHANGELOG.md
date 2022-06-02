@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.10](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.1.9...@thepowereco/hub@1.1.10) (2022-06-01)
+
+
+### Bug Fixes
+
+* **sdk:** version up ([237bafc](https://github.com/thepower/power_hub/commit/237bafcfe07932c992456dc9fb42ced6817a871e))
+
+
+
+
+
+## [1.1.9](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.1.8...@thepowereco/hub@1.1.9) (2022-06-01)
+
+
+### Bug Fixes
+
+* **sdk:** version up ([2b0b418](https://github.com/thepower/power_hub/commit/2b0b418fb9a49fd593b5557070fb037daeeff2c2))
+
+
+
+
+
+## [1.1.8](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.1.7...@thepowereco/hub@1.1.8) (2022-06-01)
+
+
+### Bug Fixes
+
+* **tssdk:** version up ([b152499](https://github.com/thepower/power_hub/commit/b1524998073d708130677b270e2421b47d02d965))
+
+
+
+
+
+## [1.1.7](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.1.6...@thepowereco/hub@1.1.7) (2022-06-01)
+
+**Note:** Version bump only for package @thepowereco/hub
+
+
+
+
+
 ## 1.1.6 (2022-05-17)
 
 **Note:** Version bump only for package @thepowereco/hub

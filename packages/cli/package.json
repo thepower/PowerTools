@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/cli",
-  "version": "1.1.7",
+  "version": "1.2.3",
   "description": "the power cli",
   "author": "thepower",
   "main": "dist/src/index.js",
@@ -75,5 +75,5 @@
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json"
   ],
-  "gitHead": "7f5fc698db2721bbfda4682f432550807fd6d472"
+  "gitHead": "5ea79b224c98e691182ef957e7122558b6c95a26"
 }

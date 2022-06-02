@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.3.0...@thepowereco/tssdk@1.3.1) (2022-06-02)
+
+
+### Bug Fixes
+
+* **tssdk:** up version ([0804620](https://github.com/thepower/power_hub/commit/08046204b0a1be37c3745a9df133a0e2628bc36e))
+
+
+
+
+
+# [1.3.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.2.3...@thepowereco/tssdk@1.3.0) (2022-06-02)
+
+
+### Features
+
+* **tssdk:** typings gen ([bb2a96c](https://github.com/thepower/power_hub/commit/bb2a96ca571c524674f4689edace514260ace11e))
+
+
+
+
+
+## [1.2.3](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.2.2...@thepowereco/tssdk@1.2.3) (2022-06-01)
+
+
+### Bug Fixes
+
+* **sdk:** version up ([237bafc](https://github.com/thepower/power_hub/commit/237bafcfe07932c992456dc9fb42ced6817a871e))
+
+
+
+
+
+## [1.2.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.2.1...@thepowereco/tssdk@1.2.2) (2022-06-01)
+
+
+### Bug Fixes
+
+* **sdk:** version up ([2b0b418](https://github.com/thepower/power_hub/commit/2b0b418fb9a49fd593b5557070fb037daeeff2c2))
+
+
+
+
+
+## [1.2.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.2.0...@thepowereco/tssdk@1.2.1) (2022-06-01)
+
+
+### Bug Fixes
+
+* **tssdk:** version up ([b152499](https://github.com/thepower/power_hub/commit/b1524998073d708130677b270e2421b47d02d965))
+
+
+
+
+
+# [1.2.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.1.6...@thepowereco/tssdk@1.2.0) (2022-06-01)
+
+
+### Bug Fixes
+
+* (init): start ([f3ee829](https://github.com/thepower/power_hub/commit/f3ee82917d6131bd9ce3910ae2047f007167549e))
+* **tssdk:** exports fixes ([ca16633](https://github.com/thepower/power_hub/commit/ca166336a113e0b9ba0b4e0ebefc1b944f0430b9))
+* **tssdk:** sc refactoring ([3c8a8e6](https://github.com/thepower/power_hub/commit/3c8a8e6bf923c83f3d1dcfcb1c1f670353b9be44))
+* **tssdk:** sc rework ([2c750f4](https://github.com/thepower/power_hub/commit/2c750f4b09134e82f05aef4ab68f6dfcfe2c27db))
+* **tssdk:** transactions rework ([7e43fb5](https://github.com/thepower/power_hub/commit/7e43fb57a3a08285c535a24f850aee1d4e8987bb))
+
+
+### Features
+
+* **tssdk:** transactions lib ref ([6ece69b](https://github.com/thepower/power_hub/commit/6ece69bc8ff9bb2d6278982a3654abefbebc0926))
+
+
+
+
+
 ## 1.1.6 (2022-05-17)
 
 **Note:** Version bump only for package @thepowereco/tssdk
