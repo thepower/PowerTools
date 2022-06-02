@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.12 (2022-06-02)
+
+**Note:** Version bump only for package @thepowereco/jssdk
+
+
+
+
+
 ## [1.1.11](https://github.com/thepower/power_hub/compare/@thepowereco/jssdk@1.1.10...@thepowereco/jssdk@1.1.11) (2022-06-02)
 
 
