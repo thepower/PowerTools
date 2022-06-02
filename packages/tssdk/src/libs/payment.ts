@@ -5,7 +5,7 @@ const TRANSACTIONS_URL = 'http://wallet.thepower.io/api/paygw/txs';
 const INVITE_URL = 'https://thepower.io/invite.php';
 const TOKENS_URL = () => 'http://wallet.thepower.io/api/paygw/currency';
 
-export const PaymentsLib = {
+export const PaymentsApi = {
   // unused
   // async checkTransactionStatus(txId) {
   //   let status = await HTTP.get(`${transactionStatusUrl()}/${txId}`);
