@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.8](https://github.com/thepower/power_hub/compare/@thepowereco/uploader@1.1.7...@thepowereco/uploader@1.1.8) (2022-06-02)
+
+**Note:** Version bump only for package @thepowereco/uploader
+
+
+
+
+
 ## 1.1.7 (2022-06-02)
 
 **Note:** Version bump only for package @thepowereco/uploader
