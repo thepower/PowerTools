@@ -5,6 +5,7 @@ dump.rdb
 /packages/**/dist
 /packages/**/uploads
 tp-cli.json
+/packages/tssdk/dist/index.js
 
 # Logs
 *.log
