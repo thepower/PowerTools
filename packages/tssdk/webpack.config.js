@@ -28,10 +28,10 @@ module.exports = {
       }),
     ],
     fallback: {
-      "util": false,
-      "stream": false,
-      "crypto": false,
-      "buffer": false
+      buffer: require.resolve('buffer'),
+      crypto: require.resolve('crypto-browserify'),
+      stream: require.resolve('stream-browserify'),
+      util: require.resolve('util'),
     },
   },
   output: {
