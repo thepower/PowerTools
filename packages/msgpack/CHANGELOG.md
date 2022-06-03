@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.11 (2022-06-03)
+
+
+### Bug Fixes
+
+* **api:** versions ([3b38be1](https://github.com/thepower/power_hub/commit/3b38be145b482c09d61f289a5ddd24ff427b8303))
+
+
+
+
+
 ## [1.1.10](https://github.com/thepower/power_hub/compare/@thepowereco/msgpack@1.1.9...@thepowereco/msgpack@1.1.10) (2022-06-03)
 
 
