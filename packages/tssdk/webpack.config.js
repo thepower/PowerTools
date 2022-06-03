@@ -27,6 +27,12 @@ module.exports = {
         baseUrl: './src',
       }),
     ],
+    fallback: {
+      "util": false,
+      "stream": false,
+      "crypto": false,
+      "buffer": false
+    },
   },
   output: {
     filename: 'index.js',
