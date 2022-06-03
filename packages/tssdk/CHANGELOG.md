@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.5](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.3.4...@thepowereco/tssdk@1.3.5) (2022-06-03)
+
+
+### Bug Fixes
+
+* **api:** versions ([b2c2876](https://github.com/thepower/power_hub/commit/b2c2876cdc8e66b74f51bbda48a46977e82c94bf))
+* **tssdk:** webpack fallback ([beb0733](https://github.com/thepower/power_hub/commit/beb07336d9169e615a206ed643e211bdbd39f579))
+* **tssdk:** webpack fix ([6118e4f](https://github.com/thepower/power_hub/commit/6118e4fb507d2399142cc299355eb9a532eccd04))
+
+
+
+
+
 ## [1.3.4](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.3.3...@thepowereco/tssdk@1.3.4) (2022-06-02)
 
 
