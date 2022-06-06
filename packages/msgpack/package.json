@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/msgpack",
-  "version": "1.1.8",
+  "version": "1.1.13",
   "description": "thepower msgpack",
   "author": "thepower",
   "homepage": "https://github.com/thepower/power_hub#readme",
@@ -41,5 +41,5 @@
   "bugs": {
     "url": "https://github.com/thepower/power_hub/issues"
   },
-  "gitHead": "03d2f626f81fa6f56725c4108add483339a4fc1f"
+  "gitHead": "fc1bd3a0ef3ec4badf1fa7dcf555f5ac5fba7049"
 }

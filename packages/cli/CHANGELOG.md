@@ -3,6 +3,66 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.2.12 (2022-06-06)
+
+**Note:** Version bump only for package @thepowereco/cli
+
+
+
+
+
+## [1.2.11](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.2.10...@thepowereco/cli@1.2.11) (2022-06-06)
+
+
+### Bug Fixes
+
+* **version:** up ([412af4c](https://github.com/thepower/power_hub/commit/412af4c46a98ae5a72d9ea6b53585f9da8138183))
+
+
+
+
+
+## 1.2.10 (2022-06-06)
+
+**Note:** Version bump only for package @thepowereco/cli
+
+
+
+
+
+## 1.2.9 (2022-06-03)
+
+
+### Bug Fixes
+
+* **api:** versions ([3b38be1](https://github.com/thepower/power_hub/commit/3b38be145b482c09d61f289a5ddd24ff427b8303))
+
+
+
+
+
+## [1.2.8](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.2.7...@thepowereco/cli@1.2.8) (2022-06-03)
+
+
+### Bug Fixes
+
+* **version:** up ([a120bd9](https://github.com/thepower/power_hub/commit/a120bd988bce6ee0c15c60f0b791d409d5c90b4c))
+
+
+
+
+
+## [1.2.7](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.2.6...@thepowereco/cli@1.2.7) (2022-06-03)
+
+
+### Bug Fixes
+
+* **api:** versions ([b2c2876](https://github.com/thepower/power_hub/commit/b2c2876cdc8e66b74f51bbda48a46977e82c94bf))
+
+
+
+
+
 ## [1.2.6](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.2.5...@thepowereco/cli@1.2.6) (2022-06-02)
 
 **Note:** Version bump only for package @thepowereco/cli
