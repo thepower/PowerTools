@@ -15,7 +15,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@thepowereco/msgpack": "^1.1.13",
+    "@thepowereco/msgpack": "^1.1.10",
     "axios": "^0.27.2",
     "bip32": "^3.0.1",
     "bip39": "^3.0.4",
