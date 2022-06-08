@@ -39,3 +39,4 @@ jobs:
         run: lerna publish --yes --no-verify-access
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMTOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
