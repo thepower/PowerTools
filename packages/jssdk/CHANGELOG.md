@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.20 (2022-06-08)
+
+
+### Bug Fixes
+
+* **tssdk:** up ([38fcfa9](https://github.com/thepower/power_hub/commit/38fcfa95439b5f2929dfd340a84a1d9106ea3051))
+
+
+
+
+
 ## 1.1.19 (2022-06-08)
 
 **Note:** Version bump only for package @thepowereco/jssdk
