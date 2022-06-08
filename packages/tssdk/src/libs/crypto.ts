@@ -1,6 +1,4 @@
 import wif from 'wif';
-import { BIP32Factory } from 'bip32';
-import * as ecc from 'tiny-secp256k1';
 import bip39 from 'bip39';
 const Bitcoin = require('bitcoinjs-lib');
 import Crypto, { BinaryLike, CipherGCM, CipherGCMTypes, CipherKey } from 'crypto';
@@ -12,7 +10,6 @@ import { PKCS5PEMInfoType, Maybe, MaybeUndef } from '../typings';
 const DERIVATION_PATH_BASE = 'm/44';
 const COIN = '31337';
 const AES_CBC_ALGORITHM = 'aes-128-cbc';
-const bip32 = BIP32Factory(ecc);
 
 const splitTextToChunks = (text: string): MaybeUndef<string> => (
   text.match(/.{1,64}/g)?.join('\n')
@@ -145,7 +142,7 @@ export const CryptoApi = {
 
   async generateKeyPairFromSeedPhrase(seedPhrase: string, block: number, group: number) {
     const seed = await bip39.mnemonicToSeed(seedPhrase);
-    const node = bip32.fromSeed(seed);
+    const node = Bitcoin.bip32.fromSeed(seed);
     const derivationPath = `${DERIVATION_PATH_BASE}/${COIN}'/0'/${group}'/${block}'`;
     const rootKey = node.derivePath(derivationPath);
 
