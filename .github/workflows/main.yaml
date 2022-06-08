@@ -19,11 +19,11 @@ jobs:
                 git config --global user.name "The Power Ecosystem"
                 git config --global user.email "ext@thepower.io"
 
+      - name: Check secret
+        run: echo ${{ secrets.NPMTOKEN }}
+
       - name: Init Lerna
         run: yarn lerna:init
-
-      - name: Check secret
-        run: console.log(${{ secrets.NPMTOKEN }})
 
 #      - name: Authenticate
 #        run: |
