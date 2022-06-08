@@ -29,7 +29,6 @@
     "lz4js": "^0.2.0",
     "safe-buffer": "^5.2.1",
     "stream-browserify": "^3.0.0",
-    "tiny-secp256k1": "^2.2.1",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
     "util": "^0.12.4",
     "webpack-node-externals": "^3.0.0",
