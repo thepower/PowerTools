@@ -1,10 +1,10 @@
 import { SmartContractWrapper } from './sc-interface';
 import * as msgPack from '@thepowereco/msgpack';
-import { Network } from '../libs';
+import { NetworkApi } from '../libs';
 
 export const instantiateSC = async (address: string, chain: number = 8) => {
   let loadedSC: any = {};
-  const network = new Network(chain);
+  const network = new NetworkApi(chain);
   await network.bootstrap();
   loadedSC[address] = loadedSC[address] || (await network.loadScCode(address));
   const state = await network.loadScState(address);

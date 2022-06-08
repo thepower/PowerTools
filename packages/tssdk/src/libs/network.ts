@@ -7,7 +7,7 @@ import { ChainAction } from '../helpers/network.enum';
 import Debug from 'debug';
 const info = Debug('info');
 
-export class Network {
+export class NetworkApi {
   private currentChain: string = '';
 
   private currentNodes: ChainNode[] = [];

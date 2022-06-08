@@ -1,7 +1,7 @@
-export * from './address';
-export * from './crypto';
-export * from './network';
-export * from './payment';
-export * from './sc-interface';
-export * from './sc-loader';
-export * from './transactions';
+export { AddressApi } from './address';
+export { CryptoApi } from './crypto';
+export { NetworkApi } from './network';
+export { PaymentsApi } from './payment';
+export { SmartContractWrapper } from './sc-interface';
+export { instantiateSC, loadScLocal } from './sc-loader';
+export { TransactionsApi } from './transactions';
