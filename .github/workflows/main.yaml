@@ -19,9 +19,6 @@ jobs:
                 git config --global user.name "The Power Ecosystem"
                 git config --global user.email "ext@thepower.io"
 
-      - name: Check secret
-        run: echo ${{ secrets.NPMTOKEN }}
-
       - name: Init Lerna
         run: yarn lerna:init
 
@@ -36,4 +33,4 @@ jobs:
       - name: Publish
         run: lerna publish --yes --no-verify-access
         env:
-          NPM_TOKEN: ${{ secrets.NPMTOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPMTOKEN }}
