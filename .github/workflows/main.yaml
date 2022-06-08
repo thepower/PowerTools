@@ -22,6 +22,9 @@ jobs:
       - name: Init Lerna
         run: yarn lerna:init
 
+      - name: Check secret
+        run: console.log(${{ secrets.NPMTOKEN }})
+
 #      - name: Authenticate
 #        run: |
 #          echo "@grandcore:registry=https://registry.npmjs.org/" > .npmrc
