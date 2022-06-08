@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.12](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.3.11...@thepowereco/tssdk@1.3.12) (2022-06-08)
+
+
+### Bug Fixes
+
+* **api:** tssdk up ([14696bb](https://github.com/thepower/power_hub/commit/14696bbafbfa8edc5905cdeff9bad38b9769db21))
+* **tssdk:** bitcoinjs fromSeed implementation ([09ebbb1](https://github.com/thepower/power_hub/commit/09ebbb1858cc52195f35b2cb3497fcb4375ddefc))
+
+
+
+
+
 ## 1.3.11 (2022-06-06)
 
 **Note:** Version bump only for package @thepowereco/tssdk
