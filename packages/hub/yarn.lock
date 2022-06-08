@@ -2556,7 +2556,7 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
-"@thepowereco/jssdk@^1.1.15":
+"@thepowereco/jssdk@^1.1.19":
   version "1.1.15"
   resolved "https://npm.vmassive.ru/@thepowereco%2fjssdk/-/jssdk-1.1.15.tgz#e7f46a15cb4511ccc8889b8107ec3bdf4446636c"
   integrity sha512-AcisodE7ndfLRtzlaVout3gxNjTU3Ah/BiHXxQSPd29sJobd9ULG+IgYj/ovviv3xrTphcNO1oRgpOEdQnSIlw==
@@ -2577,7 +2577,7 @@
     tiny-secp256k1 "^2.2.1"
     wif "^2.0.6"
 
-"@thepowereco/msgpack@^1.1.12":
+"@thepowereco/msgpack@^1.1.13":
   version "1.1.10"
   resolved "https://npm.vmassive.ru/@thepowereco%2fmsgpack/-/msgpack-1.1.10.tgz#57b1c397fdde870e97cdd6388630fa4ae84df925"
   integrity sha512-LQOECAM/LOX9CH9sEcuDJPY0rthKPMfL123U7ENQku6+GeA+ytU/T6tGA6sWHgpyvpV5wdY7FHuyuTkAxlHB1Q==
@@ -2587,12 +2587,12 @@
     int64-buffer "^0.1.9"
     isarray "^1.0.0"
 
-"@thepowereco/tssdk@^1.3.10":
-  version "1.3.10"
-  resolved "https://npm.vmassive.ru/@thepowereco%2ftssdk/-/tssdk-1.3.10.tgz#00f985801be12970ae609916f5523aef766ea0ef"
-  integrity sha512-/sYlO3CsH0x+2GZ2UWm0YDNH1MyIjZCiNrnL2c5lY7FCoYAW9/+EV17pV8uoG1R1hIyIpkVVrG2BYx18v8tnMw==
+"@thepowereco/tssdk@^1.3.12":
+  version "1.3.12"
+  resolved "https://npm.vmassive.ru/@thepowereco%2ftssdk/-/tssdk-1.3.12.tgz#99974e136e18568394e5a2aa85e1cbdfa0698191"
+  integrity sha512-SNf+OtHQCdizcveX7BZMasYl+RL5nkbsRfQa7jClKEHuyhtPETZkPhOm5BBfEyhSO52DwGRvag9c6ybJ3FuoRw==
   dependencies:
-    "@thepowereco/msgpack" "^1.1.12"
+    "@thepowereco/msgpack" "^1.1.13"
     axios "^0.27.2"
     bip32 "^3.0.1"
     bip39 "^3.0.4"
@@ -2606,7 +2606,6 @@
     lz4js "^0.2.0"
     safe-buffer "^5.2.1"
     stream-browserify "^3.0.0"
-    tiny-secp256k1 "^2.2.1"
     tsconfig-paths-webpack-plugin "^3.5.2"
     util "^0.12.4"
     webpack-node-externals "^3.0.0"
@@ -3317,6 +3316,11 @@ acorn@^8.4.1, acorn@^8.7.1:
   version "8.7.1"
   resolved "https://npm.vmassive.ru/acorn/-/acorn-8.7.1.tgz#0197122c843d1bf6d0a5e83220a788f278f63c30"
   integrity sha512-Xx54uLJQZ19lKygFXOWsscKUbsBZW0CPykPhVQdhIeIwrbPmJzqeASDInc8nKBnp/JT6igTs82qPXz069H8I/A==
+
+add@^2.0.6:
+  version "2.0.6"
+  resolved "https://npm.vmassive.ru/add/-/add-2.0.6.tgz#248f0a9f6e5a528ef2295dbeec30532130ae2235"
+  integrity sha1-JI8Kn25aUo7yKV2+7DBTITCuIjU=
 
 address@^1.0.1:
   version "1.1.2"
@@ -9079,7 +9083,7 @@ react-router@6.3.0, react-router@^6.3.0:
   dependencies:
     history "^5.2.0"
 
-react-scripts@^5.0.1:
+react-scripts@5.0.1:
   version "5.0.1"
   resolved "https://npm.vmassive.ru/react-scripts/-/react-scripts-5.0.1.tgz#6285dbd65a8ba6e49ca8d651ce30645a6d980003"
   integrity sha512-8VAmEm/ZAwQzJ+GOMLbBsTdDKOpuZh7RPs0UymvBR2vRk4iZWCskjbFnxqjrzoIvlNNRZ3QJFx6/qDSi6zSnaQ==
@@ -11020,6 +11024,11 @@ yargs@^16.2.0:
     string-width "^4.2.0"
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
+
+yarn@^1.22.19:
+  version "1.22.19"
+  resolved "https://npm.vmassive.ru/yarn/-/yarn-1.22.19.tgz#4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+  integrity sha512-/0V5q0WbslqnwP91tirOvldvYISzaqhClxzyUKXYxs07yUILIs5jx/k6CFe8bvKSkds5w+eiOqta39Wk3WxdcQ==
 
 yocto-queue@^0.1.0:
   version "0.1.0"

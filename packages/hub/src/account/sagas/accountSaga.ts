@@ -1,5 +1,5 @@
 import { call } from 'redux-saga/effects';
-import * as Api from '@thepowereco/tssdk';
+import Api from '@thepowereco/tssdk';
 import { NullableUndef } from '../../typings/common';
 import { FileReaderType, getFileData } from '../../common';
 
@@ -11,6 +11,7 @@ export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef
   }
 
   console.log(Api);
+  debugger;
 
   try {
     const binaryData: string = yield call(getFileData, payload, FileReaderType.binary);
