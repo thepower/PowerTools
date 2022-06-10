@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.23 (2022-06-08)
+
+
+### Bug Fixes
+
+* **tssdk:** final test actions ([e66a37a](https://github.com/thepower/power_hub/commit/e66a37a0b63e0be319b39ee646514cd6e258eaa3))
+
+
+
+
+
+## 1.1.22 (2022-06-08)
+
+**Note:** Version bump only for package @thepowereco/hub
+
+
+
+
+
+## 1.1.21 (2022-06-08)
+
+**Note:** Version bump only for package @thepowereco/hub
+
+
+
+
+
+## 1.1.20 (2022-06-08)
+
+
+### Bug Fixes
+
+* **tssdk:** up ([38fcfa9](https://github.com/thepower/power_hub/commit/38fcfa95439b5f2929dfd340a84a1d9106ea3051))
+
+
+
+
+
 ## 1.1.19 (2022-06-08)
 
 **Note:** Version bump only for package @thepowereco/hub
