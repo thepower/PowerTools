@@ -19,3 +19,14 @@
   opacity: 0;
   visibility: hidden;
 }
+
+.passwordModalTitle {
+  margin-bottom: $unit * 7;
+  width: 100%;
+  text-align: center;
+}
+
+.passwordModalInput {
+  margin-bottom: $unit * 6;
+  margin-top: $unit * 6;
+}

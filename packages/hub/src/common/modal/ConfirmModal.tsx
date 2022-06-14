@@ -48,10 +48,10 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = (props: ConfirmModalPro
       }
     </>
     <DialogActions className={styles.confirmModalActions}>
-      <Button onClick={handleMainButtonClick} variant={'contained'}>
+      <Button className={styles.modalButton} onClick={handleMainButtonClick} variant={'contained'}>
         {mainButtonLabel}
       </Button>
-      <Button onClick={handleSecondaryButtonClick} variant={'text'}>
+      <Button className={styles.modalButton} onClick={handleSecondaryButtonClick} variant={'text'}>
         {secondaryButtonLabel}
       </Button>
     </DialogActions>

@@ -1,14 +1,22 @@
 import React, { ChangeEvent } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Grid } from '@mui/material';
-import { LinkBlock, Page } from '../../../common';
+import { Grid, TextField } from '@mui/material';
+import { ConfirmModal, LinkBlock, Page } from '../../../common';
 import { importAccountFromFile } from '../../slice/accountSlice';
 import styles from './AccountPage.module.scss';
 import { Maybe } from '../../../typings/common';
+import { getAccountPageProps } from '../../selectors/accountSelectors';
+import { ApplicationState } from '../../../application';
+import { toggleAccountPasswordModal, toggleEncryptPasswordModal, decryptWalletData } from '../../slice/accountSlice';
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state: ApplicationState) => ({
+  ...getAccountPageProps(state),
+});
 const mapDispatchToProps = {
   importAccountFromFile,
+  toggleAccountPasswordModal,
+  toggleEncryptPasswordModal,
+  decryptWalletData,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -19,7 +27,11 @@ type AccountPageProps = ConnectedProps<typeof connector>;
 class AccountPageComponent extends React.PureComponent<AccountPageProps, any> {
   private importAccountInput: Maybe<HTMLInputElement> = null;
 
+  private walletPasswordInput: Maybe<HTMLInputElement> = null;
+
   setImportAccountRef = (el: HTMLInputElement) => this.importAccountInput = el;
+
+  setWalletPasswordInputRef = (el: HTMLInputElement) => this.walletPasswordInput = el;
 
   handleOpenImportFile = () => {
     this.importAccountInput?.click();
@@ -30,9 +42,40 @@ class AccountPageComponent extends React.PureComponent<AccountPageProps, any> {
     importAccountFromFile(event.target?.files?.[0]);
   };
 
+  closeAccountPasswordModal = () => {
+    this.props.toggleAccountPasswordModal(false);
+  };
+
+  handleConfirmPassword = () => {
+    this.props.decryptWalletData(this.walletPasswordInput?.value!);
+  };
+
   render() {
+    const { showAccountPasswordModal, hint } = this.props;
+
     return <Page title={'My account'}>
       <div className={styles.accountId}>{'ID: Not logged in'}</div>
+      <ConfirmModal
+        onClose={this.closeAccountPasswordModal}
+        open={showAccountPasswordModal}
+        mainButtonLabel={'Confirm'}
+        secondaryButtonLabel={'Cancel'}
+        onMainSubmit={this.handleConfirmPassword}
+      >
+        <h2 className={styles.passwordModalTitle}>
+          {'Password required'}
+        </h2>
+        <div>{`Your hint is: ${hint}`}</div>
+        <TextField
+          inputRef={this.setWalletPasswordInputRef}
+          label={'Password'}
+          variant={'outlined'}
+          size={'small'}
+          className={styles.passwordModalInput}
+          type={'password'}
+          autoFocus={true}
+        />
+      </ConfirmModal>
       <input
         ref={this.setImportAccountRef}
         className={styles.importAccountInput}
