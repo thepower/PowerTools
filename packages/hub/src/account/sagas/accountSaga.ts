@@ -1,5 +1,5 @@
-import { call, put, select } from 'redux-saga/effects';
-import { CryptoApi } from '@thepowereco/tssdk';
+import { call, put } from 'redux-saga/effects';
+import { AddressApi } from '@thepowereco/tssdk';
 import { NullableUndef } from '../../typings/common';
 import { FileReaderType, getFileData } from '../../common';
 // import { parseAccountExportData } from '../utils/accountUtils';
@@ -8,10 +8,11 @@ import {
   toggleAccountPasswordModal,
   setImportWalletBinaryData,
 } from '../slice/accountSlice';
-import { getImportWalletData } from '../selectors/accountSelectors';
+// import { getImportWalletData } from '../selectors/accountSelectors';
 
 export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef<File> }) {
   console.log(payload);
+  console.log(AddressApi);
   if (!payload) {
     // alert
     return;
@@ -42,12 +43,13 @@ export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef
 }
 
 export function* decryptWalletDataSaga({ payload }: { payload: string }) {
-  const walletData: string = yield select(getImportWalletData);
+  // const walletData: string = yield select(getImportWalletData);
   console.log(payload);
-  console.log(CryptoApi);
-  const decryptedData = CryptoApi.decryptWalletData(walletData, payload);
+  console.log(AddressApi.encodeAddress);
+  // console.log(CryptoApi);
+  // const decryptedData = CryptoApi.decryptWalletData(walletData, payload);
 
-  console.log(decryptedData);
+  // console.log(decryptedData);
 }
 
 // CryptoAPI.decryptWalletData(data, password)
