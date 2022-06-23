@@ -1,23 +1,38 @@
 import { createSlice, createAction, PayloadAction } from '@reduxjs/toolkit';
-import { NullableUndef } from '../../typings/common';
+import { NullableUndef, Maybe } from '../../typings/common';
+
+export type WalletData = {
+  address: string;
+  wif: string;
+};
 
 export interface AccountState {
   showAccountPasswordModal: boolean;
   showEncryptPasswordModal: boolean;
   passwordHint: string;
-  importWalletData: string;
+  walletBinaryData: string;
+  walletData: WalletData;
+  subChain: Maybe<number>;
+  logged: boolean;
 };
 
 const SLICE_NAME = 'account';
 
 const importAccountFromFile = createAction<NullableUndef<File>>(`${SLICE_NAME}/importAccount`);
 const decryptWalletData = createAction<string>(`${SLICE_NAME}/decryptWalletData`);
+const loginToWallet = createAction<string>(`${SLICE_NAME}/loginToWallet`);
 
 const initialState: AccountState = {
   showAccountPasswordModal: false,
   showEncryptPasswordModal: false,
   passwordHint: '',
-  importWalletData: '',
+  walletBinaryData: '',
+  walletData: {
+    address: '',
+    wif: '',
+  },
+  subChain: null,
+  logged: false,
 };
 
 const accountSlice = createSlice({
@@ -34,7 +49,20 @@ const accountSlice = createSlice({
       state.passwordHint = action.payload;
     },
     setImportWalletBinaryData: (state: AccountState, action: PayloadAction<string>) => {
-      state.importWalletData = action.payload;
+      state.walletBinaryData = action.payload;
+    },
+    setImportWalletData: (state: AccountState, action: PayloadAction<WalletData>) => {
+      state.walletData = {
+        ...state.walletData,
+        ...action.payload,
+      };
+    },
+    setAccountDataAfterLogin: (state: AccountState, action: PayloadAction<Partial<AccountState>>) => {
+      state.walletData = action.payload.walletData!;
+      state.subChain = action.payload.subChain!;
+      state.walletBinaryData = initialState.walletBinaryData;
+      state.passwordHint = initialState.passwordHint;
+      state.logged = true;
     },
   },
 });
@@ -46,6 +74,8 @@ const {
     toggleEncryptPasswordModal,
     setPasswordHint,
     setImportWalletBinaryData,
+    setImportWalletData,
+    setAccountDataAfterLogin,
   }
 } = accountSlice;
 
@@ -57,4 +87,7 @@ export {
   setPasswordHint,
   setImportWalletBinaryData,
   decryptWalletData,
+  setImportWalletData,
+  loginToWallet,
+  setAccountDataAfterLogin,
 };

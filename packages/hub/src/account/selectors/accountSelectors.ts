@@ -10,11 +10,17 @@ export const getAccountPageProps = createSelector(
     showAccountPasswordModal: accountData.showAccountPasswordModal,
     showEncryptPasswordModal: accountData.showEncryptPasswordModal,
     hint: accountData.passwordHint,
+    address: accountData.logged ? accountData.walletData.address : 'Not logged in',
   }),
 );
 
-export const getImportWalletData = createSelector(
+export const getWalletBinaryData = createSelector(
   getAccountState,
-  (accountData: AccountState) => accountData.importWalletData,
+  (accountData: AccountState) => accountData.walletBinaryData,
+);
+
+export const getWalletData = createSelector(
+  getAccountState,
+  (accountData: AccountState) => accountData.walletData,
 );
 

@@ -267,9 +267,8 @@ export class NetworkApi {
     }
   }
 
-  private async getAddressChain(address : string) {
-    const { chain } = await this.askBlockchainTo(ChainAction.GET_MY_CHAIN, { address });
-    return chain;
+  public async getAddressChain(address : string) {
+    return this.askBlockchainTo(ChainAction.GET_MY_CHAIN, { address });
   }
 
   private async askBlockchainTo(kind: ChainAction, parameters: any) {

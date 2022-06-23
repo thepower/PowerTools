@@ -30,3 +30,7 @@ export const parseAccountExportData = async (data: string) => {
 
   return CryptoApi.decryptWalletData(data, '1');
 };
+
+export const isPEM = (wif: string) => (
+  /-----BEGIN EC PRIVATE KEY-----[\s\S]+^-----END EC PRIVATE KEY-----/m.test(wif)
+);
