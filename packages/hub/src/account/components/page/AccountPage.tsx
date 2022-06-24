@@ -12,6 +12,7 @@ import {
   toggleEncryptPasswordModal,
   decryptWalletData,
   loginToWallet,
+  resetAccount,
 } from '../../slice/accountSlice';
 
 const mapStateToProps = (state: ApplicationState) => ({
@@ -23,6 +24,7 @@ const mapDispatchToProps = {
   toggleEncryptPasswordModal,
   decryptWalletData,
   loginToWallet,
+  resetAccount,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -31,9 +33,8 @@ type AccountPageProps = ConnectedProps<typeof connector>;
 interface AccountPageState {
   password: string;
   repeatedPassword: string;
+  openResetAccountModal: boolean;
 }
-
-// early service chunk tourist easily cage family glide taste humble december genuine
 
 class AccountPageComponent extends React.PureComponent<AccountPageProps, AccountPageState> {
   private importAccountInput: Maybe<HTMLInputElement> = null;
@@ -46,6 +47,7 @@ class AccountPageComponent extends React.PureComponent<AccountPageProps, Account
     this.state = {
       password: '',
       repeatedPassword: '',
+      openResetAccountModal: false,
     };
   }
 
@@ -92,74 +94,113 @@ class AccountPageComponent extends React.PureComponent<AccountPageProps, Account
     });
   };
 
+  handleResetAccount = () => {
+    this.props.resetAccount();
+    this.closeResetAccountModal();
+  };
+
   comparePasswords = () => {
     const { password, repeatedPassword } = this.state;
     return password !== '' && password === repeatedPassword;
   };
 
+  openResetAccountModal = () => {
+    this.setState({ openResetAccountModal: true });
+  };
 
-  render() {
+  closeResetAccountModal = () => {
+    this.setState({ openResetAccountModal: false });
+  };
+
+  renderAccountPasswordModal = () => {
     const {
       showAccountPasswordModal,
       hint,
-      showEncryptPasswordModal,
-      address,
     } = this.props;
+
+    return <ConfirmModal
+      onClose={this.closeAccountPasswordModal}
+      open={showAccountPasswordModal}
+      mainButtonLabel={'Confirm'}
+      secondaryButtonLabel={'Cancel'}
+      onMainSubmit={this.handleConfirmPassword}
+    >
+      <h2 className={styles.passwordModalTitle}>
+        {'Password required'}
+      </h2>
+      <div>{`Your hint is: ${hint}`}</div>
+      <TextField
+        inputRef={this.setWalletPasswordInputRef}
+        label={'Password'}
+        variant={'outlined'}
+        size={'small'}
+        className={styles.passwordModalInput}
+        type={'password'}
+        autoFocus
+      />
+    </ConfirmModal>;
+  }
+
+  renderEncryptPasswordModal = () => {
+    const { showEncryptPasswordModal } = this.props;
     const { password, repeatedPassword } = this.state;
 
+    return <ConfirmModal
+      onClose={this.closeEncryptPasswordModal}
+      open={showEncryptPasswordModal}
+      mainButtonLabel={'Confirm'}
+      secondaryButtonLabel={'Cancel'}
+      onMainSubmit={this.handleConfirmEncryptPassword}
+      hideSecondaryButton={true}
+      disableMainButton={!this.comparePasswords()}
+    >
+      <h4>{'Enter password to encrypt your private key'}</h4>
+      <TextField
+        label={'Password'}
+        variant={'outlined'}
+        size={'small'}
+        className={styles.passwordModalInput}
+        type={'password'}
+        autoFocus
+        value={password}
+        onChange={this.handleChangePassword}
+      />
+      <TextField
+        label={'Repeat password'}
+        variant={'outlined'}
+        size={'small'}
+        className={styles.passwordModalInput}
+        type={'password'}
+        value={repeatedPassword}
+        onChange={this.handleChangeRepeatedPassword}
+      />
+    </ConfirmModal>;
+  };
+
+  renderResetAccountModal = () => {
+    const { openResetAccountModal } = this.state;
+
+    return <ConfirmModal
+      onClose={this.closeResetAccountModal}
+      open={openResetAccountModal}
+      mainButtonLabel={'Confirm'}
+      secondaryButtonLabel={'Cancel'}
+      onMainSubmit={this.handleResetAccount}
+    >
+      <div className={styles.resetAccountModalDesc}>
+        {'Account data will be removed permanently! Are you sure you want to remove it?'}
+      </div>
+    </ConfirmModal>
+  };
+
+  render() {
+    const { address, notLogged } = this.props;
+
     return <Page title={'My account'}>
-      <div className={styles.accountId}>{`ID: ${address}`}</div>
-      <ConfirmModal
-        onClose={this.closeAccountPasswordModal}
-        open={showAccountPasswordModal}
-        mainButtonLabel={'Confirm'}
-        secondaryButtonLabel={'Cancel'}
-        onMainSubmit={this.handleConfirmPassword}
-      >
-        <h2 className={styles.passwordModalTitle}>
-          {'Password required'}
-        </h2>
-        <div>{`Your hint is: ${hint}`}</div>
-        <TextField
-          inputRef={this.setWalletPasswordInputRef}
-          label={'Password'}
-          variant={'outlined'}
-          size={'small'}
-          className={styles.passwordModalInput}
-          type={'password'}
-          autoFocus={true}
-        />
-      </ConfirmModal>
-      <ConfirmModal
-        onClose={this.closeEncryptPasswordModal}
-        open={showEncryptPasswordModal}
-        mainButtonLabel={'Confirm'}
-        secondaryButtonLabel={'Cancel'}
-        onMainSubmit={this.handleConfirmEncryptPassword}
-        hideSecondaryButton={true}
-        disableMainButton={!this.comparePasswords()}
-      >
-        <h4>{'Enter password to encrypt your private key'}</h4>
-        <TextField
-          label={'Password'}
-          variant={'outlined'}
-          size={'small'}
-          className={styles.passwordModalInput}
-          type={'password'}
-          autoFocus={true}
-          value={password}
-          onChange={this.handleChangePassword}
-        />
-        <TextField
-          label={'Repeat password'}
-          variant={'outlined'}
-          size={'small'}
-          className={styles.passwordModalInput}
-          type={'password'}
-          value={repeatedPassword}
-          onChange={this.handleChangeRepeatedPassword}
-        />
-      </ConfirmModal>
+      <div className={styles.accountId}>{`ID: ${notLogged ? 'Not logged in' : address}`}</div>
+      {this.renderAccountPasswordModal()}
+      {this.renderEncryptPasswordModal()}
+      {this.renderResetAccountModal()}
       <input
         ref={this.setImportAccountRef}
         className={styles.importAccountInput}
@@ -178,6 +219,7 @@ class AccountPageComponent extends React.PureComponent<AccountPageProps, Account
           title={'Export account'}
           description={'Please make a backup of your account and save it to a safe place so that you can restore it if necessary'}
           buttonTitle={'Export →'}
+          hideButton={notLogged}
         />
         <LinkBlock
           className={styles.accountBlock}
@@ -188,9 +230,11 @@ class AccountPageComponent extends React.PureComponent<AccountPageProps, Account
         />
         <LinkBlock
           className={styles.accountBlock}
+          onClick={this.openResetAccountModal}
           title={'Reset account'}
           description={'Erase account data. If you do not have a backup or seed phrase, then recovery will be impossible'}
           buttonTitle={'Purge account →'}
+          hideButton={notLogged}
         />
       </Grid>
     </Page>;

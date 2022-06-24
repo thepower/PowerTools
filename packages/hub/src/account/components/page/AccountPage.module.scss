@@ -8,7 +8,6 @@
 
 .accountBlock {
   margin-bottom: $unit * 5;
-  min-height: $unit * 36.5;
   height: unset;
   padding: $unit * 2.5;
 }
@@ -29,4 +28,9 @@
 .passwordModalInput {
   margin-bottom: $unit * 6;
   margin-top: $unit * 6;
+}
+
+.resetAccountModalDesc {
+  margin-bottom: auto;
+  margin-top: auto;
 }

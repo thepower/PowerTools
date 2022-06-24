@@ -15,12 +15,17 @@ import { NavigationItemType } from '../typings/navigationTypings';
 import { navigationItems } from '../utils/navigationUtils';
 import styles from './Navigation.module.scss';
 import { PowerHubLogoIcon } from '../../icons/PowerHubLogoIcon';
+import { ApplicationState } from '../../../application';
+
+const mapStateToProps = (state: ApplicationState) => ({
+  currentChain: state.account.subChain,
+});
 
 const mapDispatchToProps = {
   changeUrl: push,
 };
 
-const connector = connect(null, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 type NavigationProps = ConnectedProps<typeof connector>;
 
 type NavigationState = {
@@ -93,6 +98,7 @@ class NavigationComponent extends React.PureComponent<NavigationProps, Navigatio
 
   render() {
     const { openedTabletMenu } = this.state;
+    const { currentChain } = this.props;
 
     return <React.Fragment key={'left'}>
       <AppBar className={styles.appbar} position="fixed">
@@ -115,6 +121,10 @@ class NavigationComponent extends React.PureComponent<NavigationProps, Navigatio
           {(navigationItems || []).map(this.renderNavigationItem)}
         </List>
         <div className={styles.navigationBottomPart}>
+          {
+            currentChain &&
+            <div>{`Current shard: ${currentChain}`}</div>
+          }
           <div>{'Having problems?'}</div>
           <a className={styles.copyrightLink} href={'mailto:support@thepower.io'}>{'Email us'}</a>
           <a className={styles.copyrightLink} href='https://hub.thepower.io/'>

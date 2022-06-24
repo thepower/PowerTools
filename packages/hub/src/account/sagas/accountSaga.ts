@@ -1,26 +1,30 @@
 import { call, put, select } from 'redux-saga/effects';
 import { CryptoApi, AddressApi, NetworkApi } from '@thepowereco/tssdk';
 import { NullableUndef } from '../../typings/common';
-import { FileReaderType, getFileData } from '../../common';
+import { FileReaderType, getFileData, NavigationRoutesEnum } from '../../common';
 import { isPEM } from '../utils/accountUtils';
 import {
   setPasswordHint,
   toggleAccountPasswordModal,
   setImportWalletBinaryData,
   setImportWalletData,
-  toggleEncryptPasswordModal, WalletData, setAccountDataAfterLogin,
+  toggleEncryptPasswordModal,
+  WalletData,
+  setAccountDataAfterLogin,
+  clearAccountData,
 } from '../slice/accountSlice';
 import { getWalletBinaryData, getWalletData } from '../selectors/accountSelectors';
 import { GetChainResultType } from '../typings/accountTypings';
-import { setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
+import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
 
 type LoginToWalletSagaInput = {
   password?: string;
   forceChain?: boolean;
+  address?: string;
+  wif?: string;
 }
 
 export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef<File> }) {
-  console.log(payload);
   if (!payload) {
     // alert
     return;
@@ -77,8 +81,8 @@ export function* loginToWalletSaga(input?: LoginToWalletSagaInput) {
   const walletData: WalletData = yield select(getWalletData);
   const password = input?.password;
   const forceChain = input?.forceChain;
-  const { address } = walletData;
-  let { wif } = walletData;
+  const address = input?.address || walletData.address;
+  let wif = input?.wif || walletData.wif;
 
   if (password) {
     wif = CryptoApi.encryptWif(wif, password);
@@ -132,4 +136,10 @@ export function* loginToWalletSaga(input?: LoginToWalletSagaInput) {
   } catch (e) {
     console.log(e);
   }
+}
+
+export function* resetAccountSaga() {
+  window.location.replace(NavigationRoutesEnum.Dapps);
+  yield clearApplicationStorage();
+  yield put(clearAccountData());
 }

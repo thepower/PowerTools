@@ -11,7 +11,6 @@ interface ConfirmModalProps extends ModalProps {
   hideSecondaryButton?: boolean;
   disableMainButton?: boolean;
   disableSecondaryButton?: boolean;
-
 }
 
 export const ConfirmModal: React.FC<ConfirmModalProps> = (props: ConfirmModalProps) => {

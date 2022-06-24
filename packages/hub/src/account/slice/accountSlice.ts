@@ -21,6 +21,7 @@ const SLICE_NAME = 'account';
 const importAccountFromFile = createAction<NullableUndef<File>>(`${SLICE_NAME}/importAccount`);
 const decryptWalletData = createAction<string>(`${SLICE_NAME}/decryptWalletData`);
 const loginToWallet = createAction<string>(`${SLICE_NAME}/loginToWallet`);
+const resetAccount = createAction(`${SLICE_NAME}/resetAccount`);
 
 const initialState: AccountState = {
   showAccountPasswordModal: false,
@@ -64,6 +65,7 @@ const accountSlice = createSlice({
       state.passwordHint = initialState.passwordHint;
       state.logged = true;
     },
+    clearAccountData: () => initialState,
   },
 });
 
@@ -76,6 +78,7 @@ const {
     setImportWalletBinaryData,
     setImportWalletData,
     setAccountDataAfterLogin,
+    clearAccountData,
   }
 } = accountSlice;
 
@@ -90,4 +93,6 @@ export {
   setImportWalletData,
   loginToWallet,
   setAccountDataAfterLogin,
+  resetAccount,
+  clearAccountData,
 };

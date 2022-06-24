@@ -10,7 +10,8 @@ export const getAccountPageProps = createSelector(
     showAccountPasswordModal: accountData.showAccountPasswordModal,
     showEncryptPasswordModal: accountData.showEncryptPasswordModal,
     hint: accountData.passwordHint,
-    address: accountData.logged ? accountData.walletData.address : 'Not logged in',
+    address: accountData.walletData.address,
+    notLogged: !Boolean(accountData?.walletData?.address),
   }),
 );
 

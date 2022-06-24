@@ -2,6 +2,7 @@ import { put } from 'redux-saga/effects';
 import { setTestnetAvailable } from '../slice/applicationSlice';
 import { getIsProductionOnlyDomains } from '../utils/applicationUtils';
 import { getKeyFromApplicationStorage } from '../utils/localStorageUtils';
+import { loginToWalletSaga } from '../../account/sagas/accountSaga';
 
 export function* initApplicationSaga() {
   // let subChain = -1;
@@ -24,6 +25,9 @@ export function* initApplicationSaga() {
   }
 
   if (address && wif) {
-    //if (address && wif) { src/actions/wallet-action-creators.js
+    yield loginToWalletSaga({
+      address,
+      wif,
+    })
   }
 }
