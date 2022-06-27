@@ -136,7 +136,7 @@ class AccountPageComponent extends React.PureComponent<AccountPageProps, Account
         size={'small'}
         className={styles.passwordModalInput}
         type={'password'}
-        autoFocus
+        autoFocus={true}
       />
     </ConfirmModal>;
   }
