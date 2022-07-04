@@ -28,11 +28,11 @@ const classes = {
 };
 
 const NotificationComponent: React.FC<NotificationProps> = (props) => {
-  const { notification } = props;
+  const { notification, hideNotification } = props;
 
   const handleClose = useCallback(() => {
-    hideNotification()
-  }, []);
+    hideNotification();
+  }, [hideNotification]);
 
   if (!notification) {
     return null;

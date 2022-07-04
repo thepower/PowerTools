@@ -22,6 +22,7 @@ const accountSlice = createSlice({
     showNotification: (state: NotificationState, action: PayloadAction<NotificationType>) => {
       const notification = {
         ...action.payload,
+        autoHideDuration: action.payload.autoHideDuration || 4000,
         date: format(new Date(), "hh:mm a")
       }
       state.currentNotification = notification;

@@ -1,7 +1,7 @@
 import { call, put, select } from 'redux-saga/effects';
 import { CryptoApi, AddressApi, NetworkApi } from '@thepowereco/tssdk';
 import { NullableUndef } from '../../typings/common';
-import { FileReaderType, getFileData, NavigationRoutesEnum } from '../../common';
+import { FileReaderType, getFileData, NavigationRoutesEnum, showNotification } from '../../common';
 import { isPEM } from '../utils/accountUtils';
 import {
   setPasswordHint,
@@ -26,7 +26,10 @@ type LoginToWalletSagaInput = {
 
 export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef<File> }) {
   if (!payload) {
-    // alert
+    yield put(showNotification({
+      text: 'Please select a file',
+      type: 'error',
+    }));
     return;
   }
 
@@ -59,8 +62,10 @@ export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef
     }
     return ;
   } catch (e) {
-    // alert
-    return;
+    yield put(showNotification({
+      text: `Import error: ${e}`,
+      type: 'error',
+    }));
   }
 }
 
@@ -107,7 +112,11 @@ export function* loginToWalletSaga(input?: LoginToWalletSagaInput) {
 
         if (subChain.result === 'other_chain') {
           if (prevChain === subChain.chain) {
-            throw 'Portation in progress. Try again in a few minutes.';
+            yield put(showNotification({
+              text: 'Portation in progress. Try again in a few minutes.',
+              type: 'error',
+            }));
+            return;
           }
 
           prevChain = currentChain;
@@ -115,13 +124,6 @@ export function* loginToWalletSaga(input?: LoginToWalletSagaInput) {
         }
       } while (subChain.result !== 'found');
 
-      try {
-        // todo: clarify
-        const balanceData: string = yield NetworkAPI.getWallet(address);
-        console.log(balanceData);
-      } catch (e) {
-        console.log(e);
-      }
       yield put(setAccountDataAfterLogin({
         walletData: {
           address,
@@ -134,7 +136,10 @@ export function* loginToWalletSaga(input?: LoginToWalletSagaInput) {
       yield setKeyToApplicationStorage('wif', wif);
     }
   } catch (e) {
-    console.log(e);
+    yield put(showNotification({
+      text: 'Login error',
+      type: 'error',
+    }));
   }
 }
 

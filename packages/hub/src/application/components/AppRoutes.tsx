@@ -7,15 +7,15 @@ import {
   BrowserRouter,
   Navigate,
 } from "react-router-dom";
+import { connect, ConnectedProps } from 'react-redux';
 
-import { Navigation, NavigationRoutesEnum } from '../../common';
+import { Navigation, NavigationRoutesEnum, Notification } from '../../common';
 import { DappsPage } from '../../dapps/components/DappsPage';
 import { AccountPage } from '../../account/components/page/AccountPage';
 import { SmartContractPage } from '../../smartContracts/components/SmartContractsPage';
 import { APISDKPage } from '../../apiPage/components/APISDKPage';
 import { NodesPage } from '../../nodes/components/NodesPage';
 import { ShardsPage } from '../../shards/components/ShardsPage';
-import { connect, ConnectedProps } from 'react-redux';
 import { initApplication } from '../slice/applicationSlice';
 
 const mapDispatchToProps = {
@@ -32,6 +32,7 @@ class AppRoutesComponent extends React.PureComponent<AppRoutesProps> {
 
   render() {
     return <div id={'reactRoot'}>
+      <Notification/>
       <BrowserRouter>
         <Navigation/>
         <Routes>
