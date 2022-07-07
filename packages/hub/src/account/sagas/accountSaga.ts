@@ -14,15 +14,8 @@ import {
   clearAccountData,
 } from '../slice/accountSlice';
 import { getWalletBinaryData, getWalletData } from '../selectors/accountSelectors';
-import { GetChainResultType } from '../typings/accountTypings';
+import { GetChainResultType, LoginToWalletSagaInput } from '../typings/accountTypings';
 import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
-
-type LoginToWalletSagaInput = {
-  password?: string;
-  forceChain?: boolean;
-  address?: string;
-  wif?: string;
-}
 
 export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef<File> }) {
   if (!payload) {
@@ -82,16 +75,18 @@ export function* decryptWalletDataSaga({ payload }: { payload: string }) {
   }
 }
 
-export function* loginToWalletSaga(input?: LoginToWalletSagaInput) {
+export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInput } = {}) {
   const walletData: WalletData = yield select(getWalletData);
-  const password = input?.password;
-  const forceChain = input?.forceChain;
-  const address = input?.address || walletData.address;
-  let wif = input?.wif || walletData.wif;
+  const password = payload?.password;
+  const forceChain = payload?.forceChain;
+  const address = payload?.address || walletData.address;
+  let wif = payload?.wif || walletData.wif;
 
   if (password) {
+    debugger;
     wif = CryptoApi.encryptWif(wif, password);
   }
+  debugger;
 
   try {
     if (!forceChain) {

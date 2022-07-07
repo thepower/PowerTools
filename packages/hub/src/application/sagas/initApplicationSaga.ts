@@ -3,6 +3,7 @@ import { setTestnetAvailable } from '../slice/applicationSlice';
 import { getIsProductionOnlyDomains } from '../utils/applicationUtils';
 import { getKeyFromApplicationStorage } from '../utils/localStorageUtils';
 import { loginToWalletSaga } from '../../account/sagas/accountSaga';
+import { setImportWalletData } from '../../account/slice/accountSlice';
 
 export function* initApplicationSaga() {
   // let subChain = -1;
@@ -26,8 +27,15 @@ export function* initApplicationSaga() {
 
   if (address && wif) {
     yield loginToWalletSaga({
+      payload: {
+        address,
+        wif,
+      }
+    });
+
+    yield put(setImportWalletData({
       address,
       wif,
-    })
+    }));
   }
 }

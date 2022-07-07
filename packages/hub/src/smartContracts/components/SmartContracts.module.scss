@@ -6,3 +6,14 @@
   height: unset;
   padding: $unit * 2.5;
 }
+
+.deploySCInput {
+  height: 1px;
+  width: 1px;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.deploySCDesc {
+  width: $unit * 100;
+}

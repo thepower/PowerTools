@@ -6,3 +6,10 @@ export type GetChainResultType = {
   result: 'found' | 'other_chain';
   txtaddress: string;
 };
+
+export type LoginToWalletSagaInput = {
+  password?: string;
+  forceChain?: boolean;
+  address?: string;
+  wif?: string;
+}
