@@ -1,5 +1,5 @@
 import { call, put, select } from 'redux-saga/effects';
-import { CryptoApi, AddressApi, NetworkApi } from '@thepowereco/tssdk';
+import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
 import { NullableUndef } from '../../typings/common';
 import { FileReaderType, getFileData, NavigationRoutesEnum, showNotification } from '../../common';
 import { isPEM } from '../utils/accountUtils';
@@ -83,15 +83,13 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
   let wif = payload?.wif || walletData.wif;
 
   if (password) {
-    debugger;
     wif = CryptoApi.encryptWif(wif, password);
   }
-  debugger;
 
   try {
     if (!forceChain) {
-      const NetworkAPI = new NetworkApi(103);
-      yield NetworkAPI.bootstrap();
+      // @ts-ignore
+      const NetworkAPI = window['NetworkApi'];
 
       let subChain: GetChainResultType;
       let currentChain = 8;

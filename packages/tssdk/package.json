@@ -20,10 +20,11 @@
   "license": "MIT",
   "dependencies": {
     "@thepowereco/msgpack": "^1.1.18",
+    "@types/bitcoinjs-lib": "^5.0.0",
     "axios": "^0.27.2",
     "bip32": "^3.0.1",
     "bip39": "^3.0.4",
-    "bitcoinjs-lib": "^6.0.1",
+    "bitcoinjs-lib": "3.3.2",
     "brutusin-json-forms": "^0.0.0",
     "buffer": "^6.0.3",
     "create-hash": "^1.2.0",

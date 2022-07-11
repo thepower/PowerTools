@@ -1,25 +1,30 @@
 import { createSlice, createAction, PayloadAction } from '@reduxjs/toolkit';
-
-export interface SmartContractsSlice {
-  showSCPasswordModal: boolean;
-  smartContractBinaryData: string;
-};
+import { SmartContractMachineType, SmartContractsState } from '../typings/smartContractTypes';
+import { NullableUndef } from '../../typings/common';
 
 const SLICE_NAME = 'smartContract';
 
-const readSmartContractBinaryData = createAction(`${SLICE_NAME}/readSmartContractBinaryData`);
+const readSmartContractBinaryData = createAction<NullableUndef<File>>(`${SLICE_NAME}/readSmartContractBinaryData`);
+const deploySmartContract = createAction<string>(`${SLICE_NAME}/deploySmartContract`);
 
-const initialState: SmartContractsSlice = {
+const initialState: SmartContractsState = {
   showSCPasswordModal: false,
   smartContractBinaryData: '',
+  scMachineType: null,
 };
 
 const smartContractSlice = createSlice({
   name: SLICE_NAME,
   initialState,
   reducers: {
-    setSmartContractBinaryData: (state: SmartContractsSlice, action: PayloadAction<string>) => {
+    setSCBinaryData: (state: SmartContractsState, action: PayloadAction<string>) => {
       state.smartContractBinaryData = action.payload;
+    },
+    toggleSCPasswordModal: (state: SmartContractsState, action: PayloadAction<boolean>) => {
+      state.showSCPasswordModal = action.payload;
+    },
+    setSCMachineType: (state: SmartContractsState, action: PayloadAction<SmartContractMachineType>) => {
+      state.scMachineType = action.payload;
     },
   },
 });
@@ -27,12 +32,17 @@ const smartContractSlice = createSlice({
 const {
   reducer: smartContractReducer,
   actions: {
-    setSmartContractBinaryData,
+    setSCBinaryData,
+    setSCMachineType,
+    toggleSCPasswordModal,
   }
 } = smartContractSlice;
 
 export {
   smartContractReducer,
   readSmartContractBinaryData,
-  setSmartContractBinaryData,
+  setSCBinaryData,
+  setSCMachineType,
+  toggleSCPasswordModal,
+  deploySmartContract,
 };

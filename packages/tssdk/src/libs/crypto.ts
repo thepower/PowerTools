@@ -23,6 +23,7 @@ const privateKeyPemTemplate = (encryptedKey: Buffer, iv: Buffer, algorithm = AES
   `-----BEGIN EC PRIVATE KEY-----
 Proc-Type: 4,ENCRYPTED
 DEK-Info: ${algorithm.toUpperCase()},${iv.toString('hex').toUpperCase()}
+
 ${splitTextToChunks(encryptedKey.toString('base64'))}
 -----END EC PRIVATE KEY-----`;
 
