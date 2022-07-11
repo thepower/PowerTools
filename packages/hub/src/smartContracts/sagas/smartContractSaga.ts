@@ -9,6 +9,7 @@ import { isPEM } from '../../account/utils/accountUtils';
 import { getSCBinaryData, getSCMachineType } from '../selectors/smartContractSelectors';
 import { SmartContractMachineType } from '../typings/smartContractTypes';
 import store from '../../application/store/rootStore'
+import { NetworkAPI } from '../../application/utils/applicationUtils';
 
 function transactionCheckSaga(success: boolean, message: string, txNumber: number) {
   if (success) {
@@ -70,7 +71,7 @@ export function* deploySmartContractSaga({ payload }: { payload?: string } = {})
     }
   }
   // @ts-ignore
-  const feeSettings: any = yield window['NetworkApi'].getFeeSettings();
+  const feeSettings: any = yield NetworkAPI.getFeeSettings();
 
   let binaryData: string = yield select(getSCBinaryData);
   let scMachineType: SmartContractMachineType = yield select(getSCMachineType);
@@ -86,5 +87,5 @@ export function* deploySmartContractSaga({ payload }: { payload?: string } = {})
     scMachineType,
   );
   // @ts-ignore
-  yield window['NetworkApi'].sendPreparedTX(tx, transactionCheckSaga, 1000, scMachineType);
+  yield NetworkAPI.sendPreparedTX(tx, transactionCheckSaga, 1000, scMachineType);
 }

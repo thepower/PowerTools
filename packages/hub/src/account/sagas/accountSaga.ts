@@ -16,6 +16,7 @@ import {
 import { getWalletBinaryData, getWalletData } from '../selectors/accountSelectors';
 import { GetChainResultType, LoginToWalletSagaInput } from '../typings/accountTypings';
 import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
+import { NetworkAPI } from '../../application/utils/applicationUtils';
 
 export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef<File> }) {
   if (!payload) {
@@ -88,9 +89,6 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
 
   try {
     if (!forceChain) {
-      // @ts-ignore
-      const NetworkAPI = window['NetworkApi'];
-
       let subChain: GetChainResultType;
       let currentChain = 8;
       let prevChain = null;

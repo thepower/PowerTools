@@ -1,5 +1,4 @@
 import { put } from 'redux-saga/effects';
-import { NetworkApi } from '@thepowereco/tssdk';
 import { setTestnetAvailable } from '../slice/applicationSlice';
 import { getIsProductionOnlyDomains } from '../utils/applicationUtils';
 import { getKeyFromApplicationStorage } from '../utils/localStorageUtils';
@@ -7,11 +6,6 @@ import { loginToWalletSaga } from '../../account/sagas/accountSaga';
 import { setImportWalletData } from '../../account/slice/accountSlice';
 
 export function* initApplicationSaga() {
-  const NetworkAPI = new NetworkApi(103);
-  yield NetworkAPI.bootstrap();
-  // @ts-ignore
-  window.NetworkApi = NetworkAPI;
-
   // let subChain = -1;
   let address: string = '';
   let wif: string = '';
