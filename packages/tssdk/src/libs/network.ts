@@ -154,16 +154,14 @@ export class NetworkApi {
     return binaryCode;
   }
 
-  private async sendPreparedTX(tx: any, callback: Function, timeout: number) {
+  public async sendPreparedTX(tx: any, callback: Function, timeout: number = 1000, vm: 'wasm' | 'evm' = 'evm' ) {
     // await this.setChain(chain);
-    const response = await this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data: { tx } });
+    const response = await this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data: { tx, extra: { vm } } });
     if (callback) {
       setTimeout(() => this.checkTransaction(response.txid, callback, timeout), cfg.callbackCallDelay);
     }
     return response;
   }
-
-
 
   private calculateFeeSettings(settings: any) {
     let result = settings.current;
@@ -267,9 +265,8 @@ export class NetworkApi {
     }
   }
 
-  private async getAddressChain(address : string) {
-    const { chain } = await this.askBlockchainTo(ChainAction.GET_MY_CHAIN, { address });
-    return chain;
+  public async getAddressChain(address : string) {
+    return this.askBlockchainTo(ChainAction.GET_MY_CHAIN, { address });
   }
 
   private async askBlockchainTo(kind: ChainAction, parameters: any) {

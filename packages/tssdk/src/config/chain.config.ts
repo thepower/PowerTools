@@ -175,4 +175,16 @@ export const chainConfig: ChainBootstrapConfig = {
       ],
     },
   }),
+  '103': transformNodeList({
+    '2YEYpJT9bBFfu9rdHpZpqdS1Dweo': {
+      'host': [
+        'http://c103n10.thepower.io:49841',
+        'https://c103n10.thepower.io:43392',
+      ],
+      'ip': [
+        'http://c103n10.thepower.io:49841',
+        'https://c103n10.thepower.io:43392',
+      ],
+    },
+  }),
 };

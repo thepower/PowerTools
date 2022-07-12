@@ -4,7 +4,6 @@ import * as msgPack from '@thepowereco/msgpack';
 const Bitcoin = require('bitcoinjs-lib');
 import { AddressApi } from './address';
 
-
 const TAG_PUBLIC_KEY = 0x02;
 const TAG_SIGNATURE = 0xFF;
 
@@ -294,6 +293,7 @@ export const TransactionsApi = {
     gasValue: number,
     wif: string,
     feeSettings: any,
+    vm: 'wasm' | 'evm' = 'wasm',
   ) {
     const selfInitParams = [Buffer.from(AddressApi.parseTextAddress(address))];
     const body = {
@@ -305,7 +305,7 @@ export const TransactionsApi = {
       p: [[PURPOSE_GAS, gasToken, gasValue]],
       c: ['init', selfInitParams],
       //"e": {'code': Buffer.from(new Uint8Array(code)), "vm": "wasm", "view": ["sha1:2b4ccea0d1de703012832f374e30effeff98fe4d", "/questions.wasm"]}
-      e: { 'code': Buffer.from(new Uint8Array(code)), 'vm': 'wasm', 'view': [] },
+      e: { 'code': Buffer.from(new Uint8Array(code)), 'vm': vm, 'view': [] },
     };
     return TransactionsApi.packAndSignTX(computeFee(body, feeSettings), wif);
   },

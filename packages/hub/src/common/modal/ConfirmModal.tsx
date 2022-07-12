@@ -8,6 +8,9 @@ interface ConfirmModalProps extends ModalProps {
   onSecondarySubmit?: () => void;
   mainButtonLabel?: string;
   secondaryButtonLabel?: string;
+  hideSecondaryButton?: boolean;
+  disableMainButton?: boolean;
+  disableSecondaryButton?: boolean;
 }
 
 export const ConfirmModal: React.FC<ConfirmModalProps> = (props: ConfirmModalProps) => {
@@ -18,6 +21,9 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = (props: ConfirmModalPro
     mainButtonLabel = 'Удалить',
     secondaryButtonLabel = 'Отмена',
     children,
+    hideSecondaryButton,
+    disableMainButton,
+    disableSecondaryButton,
     ...otherProps
   } = props;
 
@@ -48,12 +54,25 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = (props: ConfirmModalPro
       }
     </>
     <DialogActions className={styles.confirmModalActions}>
-      <Button onClick={handleMainButtonClick} variant={'contained'}>
+      <Button
+        className={styles.modalButton}
+        onClick={handleMainButtonClick}
+        variant={'contained'}
+        disabled={disableMainButton}
+      >
         {mainButtonLabel}
       </Button>
-      <Button onClick={handleSecondaryButtonClick} variant={'text'}>
-        {secondaryButtonLabel}
-      </Button>
+      {
+        !hideSecondaryButton &&
+        <Button
+          className={styles.modalButton}
+          onClick={handleSecondaryButtonClick}
+          variant={'text'}
+          disabled={disableSecondaryButton}
+        >
+          {secondaryButtonLabel}
+        </Button>
+      }
     </DialogActions>
   </Modal>;
 };

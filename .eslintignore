@@ -5,5 +5,4 @@ packages/*/uploads
 packages/*/dll
 packages/msgpack/*
 packages/jssdk/*
-packages/tssdk/webpack.config.js
 
