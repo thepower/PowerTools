@@ -103,6 +103,18 @@ export const chainConfig: ChainBootstrapConfig = {
       ],
     },
   }),
+  '1':transformNodeList({
+    "BZQcNTcWE9qrWDVXfysZyarSdaA":{
+	"host":[
+	    "http://c1n2:44002",
+	    "https://c1n2:45002"]
+	,
+	"ip":[
+	    "http://testnet.thepower.io:44002",
+	    "https://testnet.thepower.io:45002"
+	    ],
+	},
+  }),
   '2':transformNodeList({
     '2UYKF1HyNz7QSFTGY5ffZSG8oWem': {
       'host': [

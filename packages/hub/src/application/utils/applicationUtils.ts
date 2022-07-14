@@ -15,7 +15,7 @@ export const parseHash = () => (
     .map((item) => item.split('='))
 );
 
-export const getNetworkApi = async (chain: number = 103) => {
+export const getNetworkApi = async (chain: number = 1) => {
   const api = new NetworkApi(chain);
   await api.bootstrap();
   return api;
