@@ -22,4 +22,4 @@ export const getNetworkApi = async (chain: number = 103) => {
 };
 
 // @ts-ignore
-export const NetworkAPI = await getNetworkApi();
+export const NetworkAPI = await getNetworkApi(1);
