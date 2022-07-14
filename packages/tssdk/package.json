@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/tssdk",
-  "version": "1.3.17",
+  "version": "1.3.18",
   "main": "dist/index.js",
   "files": [
     "dist/index.d.ts",
@@ -19,7 +19,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@thepowereco/msgpack": "^1.1.18",
+    "@thepowereco/msgpack": "^1.1.19",
     "@types/bitcoinjs-lib": "^5.0.0",
     "axios": "^0.27.2",
     "bip32": "^3.0.1",
