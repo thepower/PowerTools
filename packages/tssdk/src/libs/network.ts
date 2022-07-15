@@ -156,7 +156,7 @@ export class NetworkApi {
 
   public async sendPreparedTX(tx: any, callback: Function, timeout: number = 1000, vm: 'wasm' | 'evm' = 'evm' ) {
     // await this.setChain(chain);
-    const response = await this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data: { tx, extra: { vm } } });
+    const response = await this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data: { tx } });
     if (callback) {
       setTimeout(() => this.checkTransaction(response.txid, callback, timeout), cfg.callbackCallDelay);
     }
