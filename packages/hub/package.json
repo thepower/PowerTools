@@ -55,6 +55,7 @@
     "safe-buffer": "^5.2.1",
     "sass": "^1.50.1",
     "sass-loader": "^12.6.0",
+    "serve": "^14.0.1",
     "tiny-secp256k1": "^2.2.1",
     "typescript": "^4.6.3"
   },
@@ -78,7 +79,9 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "prepare": "yarn run build"
+    "prepare": "yarn run build",
+    "prod": "serve -s build",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
