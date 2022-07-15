@@ -80,7 +80,8 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "prepare": "yarn run build",
-    "prod": "serve -s build"
+    "prod": "serve -s build",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
