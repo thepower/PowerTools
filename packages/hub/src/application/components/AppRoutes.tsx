@@ -17,6 +17,7 @@ import { APISDKPage } from '../../apiPage/components/APISDKPage';
 import { NodesPage } from '../../nodes/components/NodesPage';
 import { ShardsPage } from '../../shards/components/ShardsPage';
 import { initApplication } from '../slice/applicationSlice';
+import { RegistrationPage } from '../../registration/components/RegistrationPage';
 
 const mapDispatchToProps = {
   initApplication,
@@ -42,7 +43,8 @@ class AppRoutesComponent extends React.PureComponent<AppRoutesProps> {
           <Route path={NavigationRoutesEnum.ApiLinks} element={<APISDKPage/>}/>
           <Route path={NavigationRoutesEnum.Nodes} element={<NodesPage/>}/>
           <Route path={NavigationRoutesEnum.Shards} element={<ShardsPage/>}/>
-          <Route path="/" element={<Navigate to={NavigationRoutesEnum.Dapps} replace />}/>
+          {/*<Route path="/" element={<Navigate to={NavigationRoutesEnum.Dapps} replace />}/>*/}
+          <Route path="/" element={<RegistrationPage/>} />
         </Routes>
       </BrowserRouter>
     </div>;

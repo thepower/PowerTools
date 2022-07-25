@@ -1,0 +1,10 @@
+@mixin the-power-color {
+  background: $the-power-gradient;
+}
+
+@mixin the-power-color-text {
+  @include the-power-color;
+
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
