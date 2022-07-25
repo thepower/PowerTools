@@ -1,0 +1,86 @@
+@import '../../../application/styles/variables';
+@import '../../../application/styles/mixins';
+
+.breadcrumbsHolder {
+  display: flex;
+  margin-bottom: $unit * 6;
+}
+
+.breadcrumb {
+  display: flex;
+  flex-direction: row;
+  color: #969696;
+  font-style: normal;
+  font-weight: normal;
+  font-size: $unit * 3.5;
+  line-height: 17px;
+  letter-spacing: 0.2px;
+  text-align: center;
+  margin-right: $unit * 8;
+}
+
+.breadcrumbIcon {
+  margin: 0 $unit * 3;
+  margin-top: $unit * 0.5;
+}
+
+.selectedBreadcrumb {
+  color: #000;
+}
+
+.selectedBreadcrumbIcon {
+  fill: #000;
+}
+
+.tabBreadcrumb.selectedBreadcrumb {
+  border-bottom: 2px solid #169888;
+}
+
+.tabsBreadcrumbsHolder {
+  align-self: flex-start;
+  height: $unit * 8.5;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+
+  &_button {
+    background: #f7f7fa;
+    border-radius: $unit * 2;
+
+    .breadcrumb {
+      max-width: 250px;
+      border: 0.5px solid transparent;
+    }
+
+    .selectedBreadcrumb {
+      border: 0.5px solid rgb(0 0 0 / 4%);
+      box-shadow: 0 3px 8px rgb(0 0 0 / 12%), 0 3px 1px rgb(0 0 0 / 4%);
+      border-radius: 8px;
+      border-bottom: unset !important;
+      margin-bottom: $unit * 0.5;
+    }
+  }
+
+  .breadcrumb {
+    cursor: pointer;
+    color: #000;
+    align-items: center;
+    justify-content: center;
+    height: $unit * 8.5;
+    box-sizing: border-box;
+    border-bottom: 2px solid transparent;
+
+    .breadcrumbIcon {
+      display: none;
+    }
+  }
+
+  .selectedBreadcrumb {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: #fff;
+    border-bottom: $the-power-gradient;
+    height: $unit * 7.5;
+  }
+}
