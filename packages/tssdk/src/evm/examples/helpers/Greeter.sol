@@ -9,7 +9,7 @@ contract Greeter {
     }
 
     function setGreeting(string memory _greeting) public {
-        greeting = _greeting;
+        greeting = _greeting; // set state
     }
 
     function greet() public view returns (string memory) {
