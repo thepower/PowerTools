@@ -14,6 +14,7 @@ interface LinkBlockProps {
   contentRenderer?: UnknownFunctionType;
   buttonTitle?: string;
   onClick?: any;
+  hideButton?: boolean;
 }
 
 export const LinkBlock: React.FC<LinkBlockProps> = (props) => {
@@ -26,20 +27,24 @@ export const LinkBlock: React.FC<LinkBlockProps> = (props) => {
     contentRenderer,
     className,
     onClick,
+    hideButton,
   } = props;
 
   const renderLink = React.useCallback(() => {
     return <>
       <div className={classnames(styles.title, titleClassName)}>{title}</div>
       <div className={classnames(styles.description, descriptionClassName)}>{description}</div>
-      <Button
-        color={'primary'}
-        variant="contained"
-        className={styles.linkButton}>
-        {buttonTitle}
-      </Button>
+      {
+        !hideButton &&
+        <Button
+          color={'primary'}
+          variant="contained"
+          className={styles.linkButton}>
+          {buttonTitle}
+        </Button>
+      }
     </>
-  }, [buttonTitle, description, descriptionClassName, title, titleClassName]);
+  }, [buttonTitle, description, descriptionClassName, title, titleClassName, hideButton]);
 
   return <div className={classnames(styles.linkBlock, className)} onClick={onClick}>
     {branchCallFunction(contentRenderer, renderLink)}

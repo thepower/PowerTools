@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.2.20 (2022-07-15)
+
+**Note:** Version bump only for package @thepowereco/cli
+
+
+
+
+
+## 1.2.19 (2022-07-15)
+
+**Note:** Version bump only for package @thepowereco/cli
+
+
+
+
+
+## 1.2.18 (2022-07-14)
+
+
+### Bug Fixes
+
+* **tssdk:** confid fix ([1f4967f](https://github.com/thepower/power_hub/commit/1f4967ffe6520e536d2d998d3763cc98bd269cde))
+
+
+
+
+
 ## 1.2.17 (2022-06-08)
 
 

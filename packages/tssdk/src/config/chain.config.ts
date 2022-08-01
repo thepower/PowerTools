@@ -103,6 +103,18 @@ export const chainConfig: ChainBootstrapConfig = {
       ],
     },
   }),
+  '1':transformNodeList({
+    'BZQcNTcWE9qrWDVXfysZyarSdaA':{
+      'host':[
+	    'http://c1n2:44002',
+	    'https://c1n2:45002']
+      ,
+      'ip':[
+	    'http://testnet.thepower.io:44002',
+	    'https://testnet.thepower.io:45002',
+	    ],
+    },
+  }),
   '2':transformNodeList({
     '2UYKF1HyNz7QSFTGY5ffZSG8oWem': {
       'host': [
@@ -172,6 +184,18 @@ export const chainConfig: ChainBootstrapConfig = {
       'ip': [
         'http://c102n10.thepower.io:43382',
         'https://c102n10.thepower.io:43482',
+      ],
+    },
+  }),
+  '103': transformNodeList({
+    '2YEYpJT9bBFfu9rdHpZpqdS1Dweo': {
+      'host': [
+        'http://c103n10.thepower.io:49841',
+        'https://c103n10.thepower.io:43392',
+      ],
+      'ip': [
+        'http://c103n10.thepower.io:49841',
+        'https://c103n10.thepower.io:43392',
       ],
     },
   }),

@@ -23,6 +23,7 @@ const privateKeyPemTemplate = (encryptedKey: Buffer, iv: Buffer, algorithm = AES
   `-----BEGIN EC PRIVATE KEY-----
 Proc-Type: 4,ENCRYPTED
 DEK-Info: ${algorithm.toUpperCase()},${iv.toString('hex').toUpperCase()}
+
 ${splitTextToChunks(encryptedKey.toString('base64'))}
 -----END EC PRIVATE KEY-----`;
 
@@ -81,7 +82,8 @@ const encryptAddressToPEM = (address: string, password: string, algorithm: strin
 const decryptPrivateKey = (encrypted: any, password: string, iv: string, algorithm = AES_CBC_ALGORITHM) => {
   const selfEncrypted: any = SafeBuffer.from(encrypted, 'base64');
   const hexedIv = textToHex(iv);
-  const key = passwordToKey(password, iv.slice(0, 8));
+  // @ts-ignore
+  const key = passwordToKey(password, hexedIv.slice(0, 8));
   const decrypted = decrypt(selfEncrypted, key, hexedIv as unknown as BinaryLike, algorithm);
   if (decrypted.slice(18, 23).toString('hex').toUpperCase() !== '2B8104000A') {
     throw new Error('Unknown curve');
@@ -91,9 +93,10 @@ const decryptPrivateKey = (encrypted: any, password: string, iv: string, algorit
 
 const decryptAddress = (encrypted: any, password: string, iv: string, algorithm: string = AES_CBC_ALGORITHM) => {
   const selfEncrypted: any = SafeBuffer.from(encrypted, 'base64');
+  const hexedIv = textToHex(iv);
   // @ts-ignore
-  const key = passwordToKey(password, textToHex(iv).slice(0, 8));
-  const decrypted = decrypt(selfEncrypted, key, iv, algorithm);
+  const key = passwordToKey(password, hexedIv.slice(0, 8));
+  const decrypted = decrypt(selfEncrypted, key, hexedIv, algorithm);
   return AddressApi.encodeAddress(decrypted.slice(-8) as unknown as Uint8Array)?.txt;
 };
 
@@ -102,8 +105,8 @@ function parsePKCS5PEM(sPKCS5PEM: string): PKCS5PEMInfoType {
 
   const cipherAndSaltMatch: Maybe<RegExpMatchArray> = sPKCS5PEM.match(new RegExp('DEK-Info: ([^,]+),([0-9A-Fa-f]+)', 'm'));
   if (cipherAndSaltMatch) {
-    info.cipher = cipherAndSaltMatch[0];
-    info.ivsalt = cipherAndSaltMatch[1];
+    info.cipher = cipherAndSaltMatch[1];
+    info.ivsalt = cipherAndSaltMatch[2];
   }
 
   const typeMatch: Maybe<RegExpMatchArray> = sPKCS5PEM.match(new RegExp('-----BEGIN ([A-Z]+) PRIVATE KEY-----'));
