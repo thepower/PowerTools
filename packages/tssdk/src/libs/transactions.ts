@@ -351,7 +351,7 @@ export const TransactionsApi = {
   composeSCMethodCallTX(
     address: string,
     sc: string,
-    toCall: string,
+    toCall: [ string, [ string ] ],
     gasToken: string,
     gasValue: number,
     wif: string,
