@@ -101,7 +101,7 @@ export class EvmScLoader {
 
     console.log(method, params, outputs);
 
-    const paramStringAbi = params.length ? AbiCoder.encode(['uint256'], params) : '';
+    const paramStringAbi = params.length ? AbiCoder.encode([inputTypes], params) : '';
 
     console.log(paramStringAbi);
 
