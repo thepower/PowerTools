@@ -2,12 +2,9 @@ import VM from '@ethereumjs/vm';
 import { Address } from 'ethereumjs-util';
 import axios from 'axios';
 import { defaultAbiCoder as AbiCoder, Interface } from '@ethersproject/abi';
+import { NetworkApi } from '../libs';
+import { TransactionsApi } from '../libs';
 // import {encodeFunction} from "../evm/examples/helpers/tx";
-
-
-// TODO: link with blockchain
-// TODO: keybuf
-// TODO: params
 
 function bitnot(bnParam: any) {
   let bn = -bnParam;
@@ -22,7 +19,6 @@ function bitnot(bnParam: any) {
   }).join('');
   return BigInt('0b' + prefix + bin) + BigInt(1);
 }
-
 
 function bnToHex(bnParam: any) {
   let bn = BigInt(bnParam);
@@ -69,40 +65,10 @@ export class EvmScLoader {
     return new EvmScLoader(scAddress, vm);
   }
 
-
-  // Send trx to chain
-  // public async scSet( // TODO: send to power chain
-  //   senderPrivateKey: Buffer,
-  //   method: string,
-  //   params: any[]
-  // ) {
-
-  // const data = encodeFunction('method', {
-  //   types: ['string'], // TODO: define types
-  //   values: params,
-  // });
-
-  // const txData = {
-  //   to: this.scAddress,
-  //   data,
-  // nonce: await getAccountNonce(this.vm, senderPrivateKey),
-  // };
-
-  // const tx = Transaction.fromTxData(buildTransaction(txData), { common }).sign(senderPrivateKey)
-  //
-  // const txResult = await this.vm.runTx({ tx });
-  //
-  // if (txResult.execResult.exceptionError) {
-  //   throw txResult.execResult.exceptionError
-  // }
-  // }
-
   public async scGet(method: string, params: any[], outputs: any[], inputTypes = '') {
-
     console.log(method, params, outputs);
 
     const paramStringAbi = params.length ? AbiCoder.encode([inputTypes], params) : '';
-
     console.log(paramStringAbi);
 
     const sigHash = new Interface([`function ${method}(${inputTypes})`])
@@ -116,7 +82,6 @@ export class EvmScLoader {
 
     const defaultAddress = '0x0000000000000000000000000000000000000000';
     const contractAddress = Address.fromString(defaultAddress);
-
     const finalStr = params.length ? sigHash.slice(2) + paramStringAbi.slice(2) : sigHash.slice(2);
 
     const greetResult = await this.vm.runCall({
@@ -131,7 +96,51 @@ export class EvmScLoader {
 
     // TODO: define return types
     const results = AbiCoder.decode(outputs, greetResult.execResult.returnValue);
-
     return results[0];
+  }
+
+  private encodeFunction = (
+    method: string,
+    params?: {
+      types: any[]
+      values: unknown[]
+    },
+  ): string => {
+    const parameters = params?.types ?? [];
+    const methodWithParameters = `function ${method}(${parameters.join(',')})`;
+    const signatureHash = new Interface([methodWithParameters]).getSighash(method);
+    const encodedArgs = AbiCoder.encode(parameters, params?.values ?? []);
+
+    return signatureHash + encodedArgs.slice(2);
+  };
+
+  // Send trx to chain
+  public async scSet( // TODO: send to power chain
+    chain: number,
+    userAddress: string,
+    contract: string,
+    senderPrivateKey: string,
+    method: string,
+    params?: {
+      types: any[]
+      values: unknown[]
+    },
+  ) {
+    const data = this.encodeFunction(method, params);
+    const network = new NetworkApi(chain);
+    await network.bootstrap();
+    const feeSettings = await network.getFeeSettings();
+
+    const tx = await TransactionsApi.composeSCMethodCallTX(
+      userAddress,
+      contract,
+      ['0x00', [data]],
+      'SK',
+      20000,
+      senderPrivateKey,
+      feeSettings,
+    );
+
+    console.log('Transaction result:', tx);
   }
 }
