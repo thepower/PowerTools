@@ -134,7 +134,7 @@ export class EvmScLoader {
     const tx = await TransactionsApi.composeSCMethodCallTX(
       userAddress,
       contract,
-      ['0x00', [data]],
+      ['0x0', [data]],
       'SK',
       20000,
       senderPrivateKey,
