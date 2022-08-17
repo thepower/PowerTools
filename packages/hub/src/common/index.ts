@@ -6,6 +6,7 @@ export { Modal } from './modal/Modal';
 export { ConfirmModal } from './modal/ConfirmModal';
 export { Notification } from './notification/components/Notification';
 export { Breadcrumbs } from './breadcrumbs/components/Breadcrumbs';
+export { Wizard } from './wizard/Wizard';
 
 // types
 export type { NavigationItemType } from './navigation/typings/navigationTypings';

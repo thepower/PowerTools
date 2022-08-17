@@ -18,6 +18,7 @@ import { NodesPage } from '../../nodes/components/NodesPage';
 import { ShardsPage } from '../../shards/components/ShardsPage';
 import { initApplication } from '../slice/applicationSlice';
 import { RegistrationPage } from '../../registration/components/RegistrationPage';
+import { UserHasAuth } from './Redirect';
 
 const mapDispatchToProps = {
   initApplication,
@@ -37,13 +38,36 @@ class AppRoutesComponent extends React.PureComponent<AppRoutesProps> {
       <BrowserRouter>
         <Navigation/>
         <Routes>
-          <Route path={NavigationRoutesEnum.Dapps} element={<DappsPage/>}/>
-          <Route path={NavigationRoutesEnum.Account} element={<AccountPage/>}/>
-          <Route path={NavigationRoutesEnum.SmartContracts} element={<SmartContractPage/>}/>
-          <Route path={NavigationRoutesEnum.ApiLinks} element={<APISDKPage/>}/>
-          <Route path={NavigationRoutesEnum.Nodes} element={<NodesPage/>}/>
-          <Route path={NavigationRoutesEnum.Shards} element={<ShardsPage/>}/>
-          {/*<Route path="/" element={<Navigate to={NavigationRoutesEnum.Dapps} replace />}/>*/}
+          <Route path={NavigationRoutesEnum.Dapps} element={
+            <UserHasAuth>
+              <DappsPage/>
+            </UserHasAuth>}
+          />
+          <Route path={NavigationRoutesEnum.Account} element={
+            <UserHasAuth>
+              <AccountPage/>
+            </UserHasAuth>
+          }/>
+          <Route path={NavigationRoutesEnum.SmartContracts} element={
+            <UserHasAuth>
+              <SmartContractPage/>
+            </UserHasAuth>
+          }/>
+          <Route path={NavigationRoutesEnum.ApiLinks} element={
+            <UserHasAuth>
+              <APISDKPage/>
+            </UserHasAuth>
+          }/>
+          <Route path={NavigationRoutesEnum.Nodes} element={
+            <UserHasAuth>
+              <NodesPage/>
+            </UserHasAuth>
+          }/>
+          <Route path={NavigationRoutesEnum.Shards} element={
+            <UserHasAuth>
+              <ShardsPage/>
+            </UserHasAuth>
+          }/>
           <Route path="/" element={<RegistrationPage/>} />
         </Routes>
       </BrowserRouter>

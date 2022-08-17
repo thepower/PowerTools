@@ -36,6 +36,7 @@ export function* initApplicationSaga() {
     yield put(setImportWalletData({
       address,
       wif,
+      logged: true,
     }));
   }
 }

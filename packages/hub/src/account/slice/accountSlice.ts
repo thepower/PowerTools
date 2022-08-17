@@ -53,7 +53,7 @@ const accountSlice = createSlice({
     setImportWalletBinaryData: (state: AccountState, action: PayloadAction<string>) => {
       state.walletBinaryData = action.payload;
     },
-    setImportWalletData: (state: AccountState, action: PayloadAction<WalletData>) => {
+    setImportWalletData: (state: AccountState, action: PayloadAction<WalletData & { logged?: boolean; }>) => {
       state.walletData = {
         ...state.walletData,
         ...action.payload,

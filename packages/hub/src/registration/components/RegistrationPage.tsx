@@ -26,7 +26,11 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
       <div className={styles.registrationPageCover}/>
       <div className={styles.registrationTitle}>{'Power Hub'}</div>
       <div className={styles.registrationDesc}>{'home for everyone and every dapp'}</div>
-      <Button className={styles.registrationButton} variant='contained' size='large'>
+      <Button
+        className={styles.registrationButton}
+        variant='contained'
+        size='large'
+      >
         {'Join to Web3'}
       </Button>
     </div>
