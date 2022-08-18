@@ -7,12 +7,13 @@ async function testVm() {
   const mapAddress = '0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c';
 
   const sc = await EvmScLoader.build(scAddress);
+  
   const greeting = await sc.scGet('getGreeting', [], ['string']);
   console.log('getGreeting:', greeting);
 
   const bool = await sc.scGet('getBoolean', [], ['bool']);
   console.log('getBoolean:', bool);
-  //
+  
   const hello = await sc.scGet('getHelloMap', [0], ['string'], 'uint');
   console.log('getHelloMap:', hello);
 
@@ -42,27 +43,28 @@ async function testVm() {
     return CryptoApi.decryptWalletData(key, password);
   };
   const key = await loadFile('./AA100000001677722039.pem');
-
+/*
   console.log('setGreeting:');
 
   await sc.scSet(1, key.address, scAddress, key.wif, 'setGreeting', {
     types: ['string'],
     values: ['Hello! Again'],
   });
-
+*/
   console.log('registerProvider:');
 
-  await sc.scSet(1, key.address, scAddress, key.wif, 'registerProvider', {
+  await sc.scSet(1, key.address, 'AA100000001677721940', key.wif, 'registerProvider', {
     types: ['string', 'string'],
-    values: ['testnet.thepower.io/upload', 'testnet.thepower.io'],
+    values: ['testnet2.thepower.io/upload', 'testnet2.thepower.io'],
   });
 
   console.log('addTask:');
 
-  await sc.scSet(1, key.address, scAddress, key.wif, 'addTask', {
+  await sc.scSet(1, key.address, 'AA100000001677721940', key.wif, 'addTask', {
     types: ['string', 'uint', 'uint', 'uint'],
-    values: ['test', 19475395488208537825465945478401395837262577036183212407145262800528316595495n, 1660825869, 106532],
+    values: ['test2', 19475395488208537825465945478401395837262577036183212407145262800528316595495n, 1660825869, 106532],
   });
+  
 }
 
 testVm()

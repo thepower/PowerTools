@@ -115,7 +115,7 @@ export class EvmScLoader {
   };
 
   // Send trx to chain
-  public async scSet( // TODO: send to power chain
+  public async scSet( 
     chain: number,
     userAddress: string,
     contract: string,
@@ -126,7 +126,9 @@ export class EvmScLoader {
       values: unknown[]
     },
   ) {
-    const data = this.encodeFunction(method, params);
+
+    const encodedata = this.encodeFunction(method, params);
+    const data = Buffer.from(encodedata.slice(2), 'hex');
     const network = new NetworkApi(chain);
     await network.bootstrap();
     const feeSettings = await network.getFeeSettings();
@@ -140,7 +142,9 @@ export class EvmScLoader {
       senderPrivateKey,
       feeSettings,
     );
-
-    console.log('Transaction result:', tx);
+    const res= await network.sendTxAndWaitForResponse(tx);
+    console.log('Transaction result:', res);
+    
+    
   }
 }
