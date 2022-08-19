@@ -11,6 +11,7 @@ export interface WizardProps {
   className?: string;
   onSelectBreadCrumb?: (data?: any) => void;
   type: BreadcrumbsTypeEnum;
+  breadCrumbHasBorder?: boolean;
 }
 
 export type WizardComponentType = {
@@ -20,6 +21,11 @@ export type WizardComponentType = {
 
 export interface WizardState {
   currentStep: number;
+}
+
+export type WizardComponentProps = {
+  setNextStep: () => void;
+  setPrevStep: () => void;
 }
 
 export class Wizard extends React.Component<WizardProps, WizardState> {
@@ -100,6 +106,7 @@ export class Wizard extends React.Component<WizardProps, WizardState> {
       breadcrumbs,
       className,
       type,
+      breadCrumbHasBorder,
     } = this.props;
     const { currentStep } = this.state;
 
@@ -109,6 +116,7 @@ export class Wizard extends React.Component<WizardProps, WizardState> {
         breadcrumbs={breadcrumbs}
         setCurrentStep={this.setCurrentStep}
         type={type}
+        breadCrumbHasBorder={breadCrumbHasBorder}
       />
       {this.renderComponent()}
     </div>;

@@ -10,6 +10,7 @@ interface BreadcrumbsProps {
   setCurrentStep: (step: number) => void;
   className?: string;
   type: BreadcrumbsTypeEnum;
+  breadCrumbHasBorder?: boolean;
 }
 
 export class Breadcrumbs extends React.PureComponent<BreadcrumbsProps, any> {
@@ -36,7 +37,8 @@ export class Breadcrumbs extends React.PureComponent<BreadcrumbsProps, any> {
       onClick={this.handleSetCurrentBreadcrumb(index)}
       className={cn(styles.breadcrumb, isSelectedBreadcrumb && styles.selectedBreadcrumb)}
     >
-      {label}
+      <span className={styles.breadcrumbIndex}>{index + 1}</span>
+      <span className={styles.breadcrumbLabel}>{label}</span>
       {!isLastBreadcrumb && (
         <ChevronRight
           className={cn(
@@ -53,7 +55,9 @@ export class Breadcrumbs extends React.PureComponent<BreadcrumbsProps, any> {
       breadcrumbs,
       className,
       type,
+      breadCrumbHasBorder,
     } = this.props;
+
     const breadcrumbsData = Array.from(breadcrumbs.values());
     const notDirectionMode = type !== BreadcrumbsTypeEnum.direction;
 
@@ -65,6 +69,7 @@ export class Breadcrumbs extends React.PureComponent<BreadcrumbsProps, any> {
       className={cn(
         className,
         styles.breadcrumbsHolder,
+        breadCrumbHasBorder && styles.breadcrumbsHolderBordered,
         notDirectionMode && styles.tabsBreadcrumbsHolder,
         styles[`tabsBreadcrumbsHolder_${type}`],
       )}

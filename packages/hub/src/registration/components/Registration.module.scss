@@ -13,6 +13,12 @@
   justify-content: center;
 }
 
+.registrationPageIcon {
+  margin-top: $unit * 4;
+  margin-bottom: $unit * 4;
+  flex-shrink: 0;
+}
+
 .registrationPageCover {
   height: 100vh;
   width: 60vw;
@@ -67,4 +73,120 @@
     width: 280px;
     height: 48px;
   }
+}
+
+.registrationWizardComponent {
+  width: 100%;
+  height: 100%;
+  padding: 0 $unit * 26 $unit * 17.5 $unit * 26;
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+
+  @media screen and (max-width: $tablet) {
+    padding: $unit * 6 $unit * 4;
+  }
+}
+
+.registrationWizardHolder {
+  background-color: #151516 !important;
+  border-radius: $unit * 5;
+  width: 100%;
+  padding: 0 $unit * 26;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media screen and (max-width: $tablet) {
+    padding: $unit * 13 $unit * 4;
+  }
+}
+
+.registrationWizard {
+  background-color: transparent;
+  margin-top: $unit * 5;
+}
+
+.registrationBackground {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: linear-gradient(90deg, #1768e5 50.44%, #00f0ff 129.31%);
+  border-radius: $unit * 5;
+  height: 100%;
+  padding: $unit * 3 $unit * 21;
+
+  div:not(:last-child) {
+    margin-bottom: $unit * 4;
+  }
+
+  @media screen and (max-width: $tablet) {
+    padding: $unit * 13 $unit * 4;
+  }
+}
+
+.registrationStatement {
+  padding: $unit * 3 $unit * 5 $unit * 4;
+  background: #151516;
+  border-radius: $unit * 5;
+}
+
+.registrationStatementTitle {
+  font-weight: 500;
+  font-size: $unit * 4.5;
+  line-height: $unit * 6;
+  color: #2997ff;
+  text-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+  padding-bottom: $unit * 2;
+}
+
+.registrationStatementDesc {
+  font-weight: 400;
+  font-size: $unit * 3.5;
+  line-height: $unit * 4;
+  color: #f5f5f7;
+  text-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+}
+
+.registrationPageTitle {
+  font-weight: 700;
+  font-size: $unit * 6;
+  line-height: $unit * 7;
+  color: #f5f5f7;
+  margin-bottom: $unit * 4;
+  margin-left: $unit * 5;
+}
+
+.registrationButtonsHolder {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  button:nth-child(2) {
+    margin-left: $unit * 3;
+  }
+
+  @media screen and (max-width: $tablet) {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+}
+
+.registrationNextButton {
+  @include the-power-color;
+
+  margin-top: $unit * 4;
+  margin-bottom: $unit * 5;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  border-radius: 5px;
+  color: #f5f5f7;
+  text-transform: unset;
+  width: 178px;
+  height: 48px;
 }

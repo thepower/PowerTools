@@ -12,7 +12,9 @@ export { Wizard } from './wizard/Wizard';
 export type { NavigationItemType } from './navigation/typings/navigationTypings';
 export type { UnknownFunctionType } from './typings/common';
 export type { NotificationType } from './notification/typings/notificationTypings';
-export type { BreadcrumbsTypeEnum, BreadcrumbsDataType } from './breadcrumbs/typings/breadcrumbsTypings';
+export type { BreadcrumbsDataType } from './breadcrumbs/typings/breadcrumbsTypings';
+export { BreadcrumbsTypeEnum } from './breadcrumbs/typings/breadcrumbsTypings';
+export type { WizardComponentProps } from './wizard/Wizard';
 
 // enums
 export { NavigationRoutesEnum } from './navigation/utils/navigationUtils'
@@ -23,3 +25,6 @@ export { FileReaderType, getFileData } from './utils/files';
 
 // actions
 export { showNotification, clearNotificationLog, hideNotification } from './notification/slice/notificationSlice';
+
+// svg
+export { PELogo } from './icons/PELogo';

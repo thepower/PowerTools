@@ -1,6 +1,6 @@
 export type BreadcrumbsDataType = {
   label: string;
-  component?: React.Component;
+  component?: any;
   componentProps?: any;
 };
 

@@ -4,12 +4,26 @@
 .breadcrumbsHolder {
   display: flex;
   margin-bottom: $unit * 6;
+  justify-content: space-evenly;
+}
+
+.breadcrumbsHolderBordered {
+  padding-bottom: $unit * 6;
+  border-bottom: 2px solid #2e3642;
+}
+
+.breadcrumbLabel {
+  display: block;
+
+  @media screen and (max-width: $tablet) {
+    display: none;
+  }
 }
 
 .breadcrumb {
   display: flex;
   flex-direction: row;
-  color: #969696;
+  color: #6b798f;
   font-style: normal;
   font-weight: normal;
   font-size: $unit * 3.5;
@@ -17,6 +31,11 @@
   letter-spacing: 0.2px;
   text-align: center;
   margin-right: $unit * 8;
+  align-items: center;
+
+  @media screen and (max-width: $tablet) {
+    margin-right: unset !important;
+  }
 }
 
 .breadcrumbIcon {
@@ -25,11 +44,17 @@
 }
 
 .selectedBreadcrumb {
-  color: #000;
+  color: #f5f5f7;
+
+  .breadcrumbLabel {
+    @media screen and (max-width: $tablet) {
+      display: block;
+    }
+  }
 }
 
 .selectedBreadcrumbIcon {
-  fill: #000;
+  fill: #f5f5f7;
 }
 
 .tabBreadcrumb.selectedBreadcrumb {
@@ -83,4 +108,8 @@
     border-bottom: $the-power-gradient;
     height: $unit * 7.5;
   }
+}
+
+.breadcrumbIndex {
+  margin-right: $unit;
 }
