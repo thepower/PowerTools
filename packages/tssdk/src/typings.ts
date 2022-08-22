@@ -28,7 +28,7 @@ export interface ChainNode {
 }
 
 export interface ChainBootstrapConfig {
-  [key: string] : ChainNode[];
+  [key: number] : ChainNode[];
 }
 
 export interface ChainConfig {

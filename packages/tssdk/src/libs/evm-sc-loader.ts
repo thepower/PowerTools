@@ -40,29 +40,37 @@ function bnToHex(bnParam: any) {
 }
 
 export class EvmScLoader {
-
   private vm: VM;
+
+  private network: NetworkApi;
 
   private scAddress: string;
 
-  constructor(scAddress: string, vm: VM) {
+  private cache: Map<string, any> = new Map();
+
+  constructor(scAddress: string, vm: VM, network: NetworkApi) {
     this.scAddress = scAddress;
+    this.network = network;
     this.vm = vm;
   }
 
-  public static async build(scAddress: string): Promise<EvmScLoader> {
+  public static async build(scAddress: string, chain: number): Promise<EvmScLoader> {
+    const network = new NetworkApi(chain);
+    await network.bootstrap();
+
     const vm = await VM.create();
 
     vm.stateManager.getContractStorage = async (address: Address, key: Buffer) => {
       const val = bnToHex('0x' + key.toString('hex')); // TODO: make it easy
-      const data  =  await axios.get(
+
+      const data  =  await axios.get( // TODO: get from chain????
         `http://testnet.thepower.io:44002/api/address/${scAddress}/state/0x${val}`,
       );
 
       return Buffer.from(data.data);
     };
 
-    return new EvmScLoader(scAddress, vm);
+    return new EvmScLoader(scAddress, vm, network);
   }
 
   public async scGet(method: string, params: any[], outputs: any[], inputTypes = '') {
@@ -74,12 +82,16 @@ export class EvmScLoader {
     const sigHash = new Interface([`function ${method}(${inputTypes})`])
       .getSighash(method);
 
-    // TODO: save sc code to cache
-    const data  =  await axios.get(
-      `http://testnet.thepower.io:44002/api/address/${this.scAddress}/code`,
-      { responseType: 'arraybuffer' },
-    );
+    if (!this.cache.has(this.scAddress)) {
+      const loadedData  =  await axios.get(
+        `http://testnet.thepower.io:44002/api/address/${this.scAddress}/code`,
+        { responseType: 'arraybuffer' },
+      );
 
+      this.cache.set(this.scAddress, loadedData);
+    }
+
+    const data = this.cache.get(this.scAddress);
     const defaultAddress = '0x0000000000000000000000000000000000000000';
     const contractAddress = Address.fromString(defaultAddress);
     const finalStr = params.length ? sigHash.slice(2) + paramStringAbi.slice(2) : sigHash.slice(2);
@@ -115,7 +127,7 @@ export class EvmScLoader {
   };
 
   // Send trx to chain
-  public async scSet( 
+  public async scSet(
     chain: number,
     userAddress: string,
     contract: string,
@@ -129,9 +141,8 @@ export class EvmScLoader {
 
     const encodedata = this.encodeFunction(method, params);
     const data = Buffer.from(encodedata.slice(2), 'hex');
-    const network = new NetworkApi(chain);
-    await network.bootstrap();
-    const feeSettings = await network.getFeeSettings();
+
+    const feeSettings = await this.network.getFeeSettings();
 
     const tx = await TransactionsApi.composeSCMethodCallTX(
       userAddress,
@@ -142,9 +153,9 @@ export class EvmScLoader {
       senderPrivateKey,
       feeSettings,
     );
-    const res= await network.sendTxAndWaitForResponse(tx);
+    const res = await this.network.sendTxAndWaitForResponse(tx);
     console.log('Transaction result:', res);
-    
-    
+
+
   }
 }

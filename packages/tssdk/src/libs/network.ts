@@ -5,17 +5,18 @@ import { ChainNode } from '../typings';
 import { queueNodes, transformResponse } from '../helpers/network.helper';
 import { ChainAction } from '../helpers/network.enum';
 import Debug from 'debug';
+import { ChainNameEnum } from '../config/chain.enum';
 const info = Debug('info');
 
 export class NetworkApi {
-  private currentChain: string = '';
+  private currentChain: ChainNameEnum;
 
   private currentNodes: ChainNode[] = [];
 
   private nodeIndex: number = 0;
 
-  constructor(chain: number) {
-    this.currentChain = chain.toString();
+  constructor(chain: ChainNameEnum) {
+    this.currentChain = chain;
   }
 
   private setCurrentConfig = async (newNodes: ChainNode[]) => {
