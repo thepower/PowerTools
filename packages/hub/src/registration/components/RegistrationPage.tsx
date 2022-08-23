@@ -59,7 +59,7 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
       <div className={styles.registrationDesc}>{'home for everyone and every dapp'}</div>
       <Button
         className={styles.registrationButton}
-        variant='contained'
+        variant='outlined'
         size='large'
         onClick={this.handleProceedToRegistration}
       >

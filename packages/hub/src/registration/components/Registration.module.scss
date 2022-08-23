@@ -55,14 +55,18 @@
   }
 }
 
+.registrationNextButtonText {
+  @include the-power-color-text;
+}
+
 .registrationButton {
   @include the-power-color;
 
+  border-radius: 5px;
   margin-top: $unit * 15;
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
-  border-radius: 5px;
   color: #f5f5f7;
   text-transform: unset;
   width: 312px;
@@ -98,6 +102,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 70%;
 
   @media screen and (max-width: $tablet) {
     padding: $unit * 13 $unit * 4;
@@ -189,4 +194,10 @@
   text-transform: unset;
   width: 178px;
   height: 48px;
+
+  &_outlined {
+    @include the-power-color-outlined;
+
+    padding: 0 !important;
+  }
 }
