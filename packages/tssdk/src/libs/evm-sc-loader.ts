@@ -57,38 +57,26 @@ export class EvmScLoader {
   public static async build(scAddress: string, chain: number): Promise<EvmScLoader> {
     const network = new NetworkApi(chain);
     await network.bootstrap();
-
     const vm = await VM.create();
 
     vm.stateManager.getContractStorage = async (address: Address, key: Buffer) => {
       const val = bnToHex('0x' + key.toString('hex')); // TODO: make it easy
-
-      const data  =  await axios.get( // TODO: get from chain????
-        `http://testnet.thepower.io:44002/api/address/${scAddress}/state/0x${val}`,
-      );
-
-      return Buffer.from(data.data);
+      const state = await network.loadScStateByKey(scAddress, val);
+      return Buffer.from(state);
     };
 
     return new EvmScLoader(scAddress, vm, network);
   }
 
   public async scGet(method: string, params: any[], outputs: any[], inputTypes = '') {
-    console.log(method, params, outputs);
-
     const paramStringAbi = params.length ? AbiCoder.encode([inputTypes], params) : '';
-    console.log(paramStringAbi);
 
     const sigHash = new Interface([`function ${method}(${inputTypes})`])
       .getSighash(method);
 
     if (!this.cache.has(this.scAddress)) {
-      const loadedData  =  await axios.get(
-        `http://testnet.thepower.io:44002/api/address/${this.scAddress}/code`,
-        { responseType: 'arraybuffer' },
-      );
-
-      this.cache.set(this.scAddress, loadedData);
+      const loadedData = await this.network.loadScCode(this.scAddress);
+      this.cache.set(this.scAddress, Buffer.from(loadedData));
     }
 
     const data = this.cache.get(this.scAddress);
@@ -99,7 +87,7 @@ export class EvmScLoader {
     const greetResult = await this.vm.runCall({
       to: contractAddress,
       data: Buffer.from(finalStr, 'hex'),
-      code: data.data,
+      code: data,
     });
 
     if (greetResult.execResult.exceptionError) {

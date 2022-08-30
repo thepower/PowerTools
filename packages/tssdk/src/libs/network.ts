@@ -73,6 +73,15 @@ export class NetworkApi {
     );
   };
 
+  public loadScStateByKey = async (address: string, key: string) => {
+    return new Uint8Array(
+      await this.askBlockchainTo(
+        ChainAction.GET_SC_STATE_BY_KEY,
+        { chain: this.currentChain, address, key },
+      ),
+    );
+  };
+
   private getChain() {
     return this.currentChain;
   }
@@ -323,6 +332,12 @@ export class NetworkApi {
       case ChainAction.GET_SC_STATE:
         requestParams.responseType = 'arraybuffer';
         requestParams.url = parameters.address + '/state';
+        actionUrl = '/address';
+        break;
+
+      case ChainAction.GET_SC_STATE_BY_KEY:
+        requestParams.responseType = 'arraybuffer';
+        requestParams.url = parameters.address + '/state/0x' + parameters.key;
         actionUrl = '/address';
         break;
 
