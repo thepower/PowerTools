@@ -229,7 +229,7 @@
   height: 100%;
 }
 
-.loginRegisterAccountCreateHolder {
+.loginRegisterAccountHolder {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
@@ -280,7 +280,7 @@
   color: #f5f5f7;
 }
 
-.seedPhraseTextArea {
+.loginTextArea {
   gap: 10px;
   width: 502px;
   min-height: 64px;

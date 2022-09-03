@@ -2,19 +2,17 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { LoginRegisterAccountTabs } from '../../../typings/registrationTypes';
 import { CreateNewAccount } from './CreateNewAccount';
-import { generateSeedPhrase, setCreatingStep } from '../../../slice/registrationSlice';
+import { setCurrentRegisterCreateAccountTab } from '../../../slice/registrationSlice';
 import { ApplicationState } from '../../../../application';
-import { getCurrentCreatingStep, getCurrentRegistrationTab, getCurrentShardSelector } from '../../../selectors/registrationSelectors';
+import { LoginToAccount } from './LoginToAccount';
+import { getCurrentRegistrationTab } from '../../../selectors/registrationSelectors';
 
 const mapStateToProps = (state: ApplicationState) => ({
   tab: getCurrentRegistrationTab(state),
-  currentShard: getCurrentShardSelector(state),
-  creatingStep: getCurrentCreatingStep(state),
 });
 
 const mapDispatchToProps = {
-  generateSeedPhrase,
-  setCreatingStep,
+  setCurrentRegisterCreateAccountTab,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -28,10 +26,17 @@ class LoginRegisterAccountComponent extends React.PureComponent<LoginRegisterAcc
     this.state = {};
   }
 
+  onChangeTab = (_event: React.SyntheticEvent, value: LoginRegisterAccountTabs) => {
+    this.props.setCurrentRegisterCreateAccountTab(value);
+  };
+
   render() {
     const { tab } = this.props;
-    if (tab === LoginRegisterAccountTabs.create) {
-      return <CreateNewAccount/>
+    switch (tab) {
+      case LoginRegisterAccountTabs.create:
+        return <CreateNewAccount tab={tab} onChangeTab={this.onChangeTab}/>;
+      case LoginRegisterAccountTabs.login:
+        return <LoginToAccount tab={tab} onChangeTab={this.onChangeTab}/>
     }
 
     return null;

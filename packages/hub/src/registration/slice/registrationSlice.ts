@@ -6,12 +6,14 @@ const SLICE_NAME = 'registration';
 
 const generateSeedPhrase = createAction(`${SLICE_NAME}/generateSeedPhrase`);
 const createWallet = createAction<string>(`${SLICE_NAME}/createWallet`);
+const loginToWallet = createAction<LoginToWalletInputType>(`${SLICE_NAME}/loginToWallet`);
 
 export type RegistrationState = {
   tab: LoginRegisterAccountTabs;
   currentShard: Maybe<number>;
   seedPhrase: Maybe<string>;
   creatingStep: CreateAccountStepsEnum;
+  loginErrors: LoginErrorsType;
 };
 
 const initialState: RegistrationState = {
@@ -19,12 +21,26 @@ const initialState: RegistrationState = {
   currentShard: null,
   seedPhrase: null,
   creatingStep: CreateAccountStepsEnum.selectSubChain,
+  loginErrors: {
+    addressError: '',
+    seedOrPasswordError: '',
+  },
 };
 
 export type SetSeedPhraseInput = {
   seedPhrase: string;
   nextStep: CreateAccountStepsEnum;
 }
+
+export type LoginToWalletInputType = {
+  address: string;
+  seedOrPassword: string;
+};
+
+type LoginErrorsType = {
+  addressError: string;
+  seedOrPasswordError: string;
+};
 
 const registrationSlice = createSlice({
   name: SLICE_NAME,
@@ -43,6 +59,12 @@ const registrationSlice = createSlice({
     setCreatingStep: (state: RegistrationState, action: PayloadAction<CreateAccountStepsEnum>) => {
       state.creatingStep = action.payload;
     },
+    setLoginErrors: (state: RegistrationState, action: PayloadAction<Partial<LoginErrorsType>>) => {
+      state.loginErrors = {
+        addressError: action.payload.addressError!,
+        seedOrPasswordError: action.payload.seedOrPasswordError!,
+      };
+    },
   },
 });
 
@@ -53,6 +75,7 @@ const {
     setCreatingCurrentShard,
     setSeedPhrase,
     setCreatingStep,
+    setLoginErrors,
   },
 } = registrationSlice;
 
@@ -64,4 +87,6 @@ export {
   setSeedPhrase,
   setCreatingStep,
   createWallet,
+  loginToWallet,
+  setLoginErrors,
 };

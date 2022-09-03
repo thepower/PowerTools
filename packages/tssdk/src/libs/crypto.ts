@@ -1,5 +1,5 @@
 import wif from 'wif';
-import { mnemonicToSeed, generateMnemonic } from 'bip39';
+import { mnemonicToSeed, generateMnemonic, validateMnemonic } from 'bip39';
 const Bitcoin = require('bitcoinjs-lib');
 import Crypto, { BinaryLike, CipherGCM, CipherGCMTypes, CipherKey } from 'crypto';
 import { Buffer as SafeBuffer } from 'safe-buffer';
@@ -192,5 +192,9 @@ export const CryptoApi = {
     const parsedPEM = parsePKCS5PEM(encrypted);
     const privateKey = decryptPrivateKey(parsedPEM.data, password, parsedPEM.ivsalt!);
     return  wif.encode(128, textToHex(privateKey), true);
+  },
+
+  validateMnemonic(mnemonic: string) {
+    return validateMnemonic(mnemonic);
   },
 };

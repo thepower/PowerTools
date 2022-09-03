@@ -8,15 +8,15 @@ import {
 } from '@mui/material';
 import { Tabs, OutlinedInput } from '../../../../common'
 import {
-  setCurrentRegisterCreateAccountTab,
   setCreatingCurrentShard,
   generateSeedPhrase,
   setCreatingStep,
   setSeedPhrase,
   createWallet,
+  setCurrentRegisterCreateAccountTab,
 } from '../../../slice/registrationSlice';
 import { CreateAccountStepsEnum, LoginRegisterAccountTabs, LoginRegisterAccountTabsLabels } from '../../../typings/registrationTypes';
-import { getCurrentCreatingStep, getCurrentRegistrationTab, getCurrentShardSelector, getGeneratedSeedPhrase } from '../../../selectors/registrationSelectors';
+import { getCurrentCreatingStep, getCurrentShardSelector, getGeneratedSeedPhrase } from '../../../selectors/registrationSelectors';
 import { ApplicationState } from '../../../../application';
 import { SelectChangeEvent } from '@mui/material/Select/SelectInput';
 import { RegistrationBackground } from '../../common/RegistrationBackground';
@@ -25,22 +25,24 @@ import { RegistrationStatement } from '../../common/RegistrationStatement';
 
 const mapStateToProps = (state: ApplicationState) => ({
   currentShard: getCurrentShardSelector(state),
-  tab: getCurrentRegistrationTab(state),
   creatingStep: getCurrentCreatingStep(state),
   generatedSeedPhrase: getGeneratedSeedPhrase(state),
 });
 
 const mapDispatchToProps = {
-  setCurrentRegisterCreateAccountTab,
   setCreatingCurrentShard,
   generateSeedPhrase,
   setCreatingStep,
   setSeedPhrase,
   createWallet,
+  setCurrentRegisterCreateAccountTab,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-type CreateNewAccountProps = ConnectedProps<typeof connector>;
+type CreateNewAccountProps = ConnectedProps<typeof connector> & {
+  onChangeTab: (_event: React.SyntheticEvent, value: LoginRegisterAccountTabs) => void;
+  tab: LoginRegisterAccountTabs;
+};
 
 interface CreateNewAccountState {
   userSeedPhrase: string;
@@ -161,10 +163,6 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
     }
   };
 
-  onChangeTab = (_event: React.SyntheticEvent, value: any) => {
-    this.props.setCurrentRegisterCreateAccountTab(value);
-  };
-
   renderContent = () => {
     const { creatingStep } = this.props;
     switch (creatingStep) {
@@ -182,18 +180,18 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
   };
 
   renderSelectSubChain = () => {
-    const { currentShard, tab} = this.props;
+    const { currentShard, tab, onChangeTab } = this.props;
 
     return <RegistrationBackground>
       <div className={styles.loginRegisterAccountTitle}>
         {'Create, login or import an account'}
       </div>
-      <div className={styles.loginRegisterAccountCreateHolder}>
+      <div className={styles.loginRegisterAccountHolder}>
         <Tabs
           tabs={LoginRegisterAccountTabs}
           tabsLabels={LoginRegisterAccountTabsLabels}
           value={tab}
-          onChange={this.onChangeTab}
+          onChange={onChangeTab}
         />
         <div className={styles.selectShardHolder}>
           <div className={styles.loginRegisterAccountCreateDesc}>
@@ -259,7 +257,7 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
       </div>
       <OutlinedInput
         placeholder={generatedSeedPhrase!}
-        className={styles.seedPhraseTextArea}
+        className={styles.loginTextArea}
         multiline
         value={userSeedPhrase}
         onChange={this.onChangeUserSeedPhrase}
@@ -285,7 +283,7 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
       </div>
       <OutlinedInput
         placeholder={generatedSeedPhrase!}
-        className={styles.seedPhraseTextArea}
+        className={styles.loginTextArea}
         multiline
         value={confirmedSeedPhrase}
         onChange={this.onChangeConfirmedSeedPhrase}
