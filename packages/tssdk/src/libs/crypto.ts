@@ -1,5 +1,6 @@
 import wif from 'wif';
 import { mnemonicToSeed, generateMnemonic, validateMnemonic } from 'bip39';
+const bip32 = require('bip32');
 const Bitcoin = require('bitcoinjs-lib');
 import Crypto, { BinaryLike, CipherGCM, CipherGCMTypes, CipherKey } from 'crypto';
 import { Buffer as SafeBuffer } from 'safe-buffer';
@@ -145,7 +146,7 @@ export const CryptoApi = {
 
   async generateKeyPairFromSeedPhrase(seedPhrase: string, block: number, group: number) {
     const seed = await mnemonicToSeed(seedPhrase);
-    const node = Bitcoin.bip32.fromSeed(seed);
+    const node = bip32.fromSeed(seed);
     const derivationPath = `${DERIVATION_PATH_BASE}/${COIN}'/0'/${group}'/${block}'`;
     const rootKey = node.derivePath(derivationPath);
 

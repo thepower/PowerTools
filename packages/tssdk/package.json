@@ -22,7 +22,7 @@
     "@thepowereco/msgpack": "^1.1.21",
     "@types/bitcoinjs-lib": "^5.0.0",
     "axios": "^0.27.2",
-    "bip32": "^3.0.1",
+    "bip32": "1.0.4",
     "bip39": "^3.0.4",
     "bitcoinjs-lib": "3.3.2",
     "brutusin-json-forms": "^0.0.0",

@@ -6,14 +6,14 @@ import { OutlinedInput, Tabs } from '../../../../common';
 import { LoginRegisterAccountTabs, LoginRegisterAccountTabsLabels } from '../../../typings/registrationTypes';
 import { ApplicationState } from '../../../../application';
 import { RegistrationBackground } from '../../common/RegistrationBackground';
-import { loginToWallet } from '../../../slice/registrationSlice';
+import { loginToWalletFromRegistration } from '../../../slice/registrationSlice';
 import { getLoginErrors } from '../../../selectors/registrationSelectors';
 
 const mapStateToProps = (state: ApplicationState) => ({
   ...getLoginErrors(state),
 });
 const mapDispatchToProps = {
-  loginToWallet,
+  loginToWalletFromRegistration,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -49,10 +49,10 @@ class LoginToAccountComponent extends React.PureComponent<LoginToAccountProps, L
   };
 
   loginToAccount = () => {
-    const { loginToWallet } = this.props;
+    const { loginToWalletFromRegistration } = this.props;
     const { address, seedOrPassword } = this.state;
 
-    loginToWallet({ address, seedOrPassword });
+    loginToWalletFromRegistration({ address, seedOrPassword });
   };
 
   render() {

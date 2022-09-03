@@ -1,9 +1,9 @@
-// import { call, put, select } from 'redux-saga/effects';
 import { put } from 'redux-saga/effects';
 import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
 import { LoginToWalletInputType, setLoginErrors, setSeedPhrase } from '../slice/registrationSlice';
 import { CreateAccountStepsEnum } from '../typings/registrationTypes';
 import { NetworkAPI } from '../../application/utils/applicationUtils';
+import { loginToWallet } from '../../account/slice/accountSlice';
 
 export function* generateSeedPhraseSaga() {
   const phrase: string = yield CryptoApi.generateSeedPhrase();
@@ -47,7 +47,7 @@ export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputTyp
   } else {
     wif = seedOrPassword;
   }
+  yield put(loginToWallet({ address, wif, }));
 
-  console.log(wif);
-  debugger;
+  // todo: redirect and rework login to wallet saga
 }

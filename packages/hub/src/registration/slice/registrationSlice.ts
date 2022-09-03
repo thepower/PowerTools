@@ -6,7 +6,7 @@ const SLICE_NAME = 'registration';
 
 const generateSeedPhrase = createAction(`${SLICE_NAME}/generateSeedPhrase`);
 const createWallet = createAction<string>(`${SLICE_NAME}/createWallet`);
-const loginToWallet = createAction<LoginToWalletInputType>(`${SLICE_NAME}/loginToWallet`);
+const loginToWalletFromRegistration = createAction<LoginToWalletInputType>(`${SLICE_NAME}/loginToWallet`);
 
 export type RegistrationState = {
   tab: LoginRegisterAccountTabs;
@@ -87,6 +87,6 @@ export {
   setSeedPhrase,
   setCreatingStep,
   createWallet,
-  loginToWallet,
+  loginToWalletFromRegistration,
   setLoginErrors,
 };
