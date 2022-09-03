@@ -82,7 +82,6 @@
 .registrationWizardComponent {
   width: 100%;
   height: 100%;
-  padding: 0 $unit * 26 $unit * 17.5 $unit * 26;
   z-index: 100000;
   display: flex;
   flex-direction: column;
@@ -97,7 +96,7 @@
 .registrationWizardHolder {
   background-color: #151516 !important;
   border-radius: $unit * 5;
-  width: 100%;
+  width: 1000px;
   padding: 0 $unit * 26;
   display: flex;
   flex-direction: column;
@@ -112,6 +111,7 @@
 .registrationWizard {
   background-color: transparent;
   margin-top: $unit * 5;
+  height: 100%;
 }
 
 .registrationBackground {
@@ -122,8 +122,10 @@
   border-radius: $unit * 5;
   height: 100%;
   padding: $unit * 3 $unit * 21;
+  width: 800px;
+  margin-bottom: $unit * 4;
 
-  div:not(:last-child) {
+  div:not(:last-of-type) {
     margin-bottom: $unit * 4;
   }
 
@@ -200,4 +202,135 @@
 
     padding: 0 !important;
   }
+}
+
+.loginRegisterAccountTitle {
+  font-weight: 700;
+  font-size: $unit * 6;
+  line-height: $unit * 7;
+  color: #f5f5f7;
+  width: 100%;
+  text-align: center;
+}
+
+.loginRegisterAccountBreadCrumb {
+  @include the-power-color-text;
+
+  border-bottom: 2px #2e3642 solid !important;
+  margin: 0 !important;
+  width: 100%;
+  height: 34px !important;
+}
+
+.loginRegisterAccountWizard {
+  background: #151516;
+  border-radius: $unit * 5;
+  padding: $unit * 5 $unit * 16;
+  height: 100%;
+}
+
+.loginRegisterAccountCreateHolder {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 370px;
+  background: #151516;
+  border-radius: 20px;
+  padding: 20px 67px;
+}
+
+.selectShardHolder {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.loginRegisterAccountCreateDesc {
+  font-weight: 400;
+  font-size: $unit * 3.3;
+  line-height: $unit * 4;
+  display: flex;
+  align-items: center;
+  color: #f5f5f7;
+  white-space: pre-line;
+  margin-top: 48px;
+}
+
+.loginRegisterAccountCreateSelect {
+  width: 168px;
+  height: 34px;
+}
+
+.loginRegisterAccountCreateSelectMenu {
+  z-index: 15000;
+}
+
+.seedPhraseTitle {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  color: #f5f5f7;
+}
+
+.seedPhraseTextArea {
+  gap: 10px;
+  width: 502px;
+  min-height: 64px;
+  background: #252b35;
+  border-radius: 20px;
+}
+
+.confirmSeedPhraseHolder {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 500px;
+  margin: 132px auto 172px;
+}
+
+.confirmSeedPhraseTitle {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  color: #f5f5f7;
+  margin-bottom: 20px;
+}
+
+.confirmSeedPhraseError {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  color: #ac2d2d;
+}
+
+.encryptKeyHolder {
+  width: 451px;
+  height: 305px;
+  background: #151516;
+  border-radius: 20px;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.passwordInput {
+  width: 280px;
+  height: 48px;
+  background: #1d242e;
+  border-radius: 5px;
 }

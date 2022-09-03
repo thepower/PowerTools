@@ -1,0 +1,25 @@
+@import '../../application/styles/variables';
+@import '../../application/styles/mixins';
+
+.selectedTab {
+  @include the-power-color-text;
+}
+
+.tab {
+  height: 20px;
+  min-height: unset;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: none;
+  font-style: normal;
+  padding-top: 4px;
+}
+
+.tabsRoot {
+  min-height: unset;
+}
+
+.tabsFlexContainer {
+  margin-bottom: 4px !important;
+}

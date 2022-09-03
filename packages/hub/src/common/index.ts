@@ -7,6 +7,8 @@ export { ConfirmModal } from './modal/ConfirmModal';
 export { Notification } from './notification/components/Notification';
 export { Breadcrumbs } from './breadcrumbs/components/Breadcrumbs';
 export { Wizard } from './wizard/Wizard';
+export { Tabs } from './tabs/Tabs';
+export { OutlinedInput } from './input/OulinedInput';
 
 // types
 export type { NavigationItemType } from './navigation/typings/navigationTypings';
@@ -28,3 +30,5 @@ export { showNotification, clearNotificationLog, hideNotification } from './noti
 
 // svg
 export { PELogo } from './icons/PELogo';
+export { ClosedEyeIcon } from './icons/ClosedEyeIcon';
+export { EyeIcon } from './icons/EyeIcon';

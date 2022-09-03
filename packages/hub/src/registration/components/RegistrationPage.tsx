@@ -11,6 +11,8 @@ import {
 import { RegistrationTabsEnum } from '../typings/registrationTypes';
 import { QuickGuide } from './pages/QuickGuide';
 import { BeAware } from './pages/BeAware';
+import { LoginRegisterAccount } from './pages/loginRegisterAccount/LoginRegisterAccount';
+import { Backup } from './pages/Backup';
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = {};
@@ -25,6 +27,10 @@ interface RegistrationPageState {
 class RegistrationComponent extends React.PureComponent<RegistrationPageProps, RegistrationPageState> {
   private registrationBreadcrumbs: BreadcrumbsDataType[] = [
     {
+      label: RegistrationTabsEnum.loginRegister,
+      component: LoginRegisterAccount,
+    },
+    {
       label: RegistrationTabsEnum.quickGuide,
       component: QuickGuide,
     },
@@ -33,12 +39,8 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
       component: BeAware,
     },
     {
-      label: RegistrationTabsEnum.loginRegister,
-      component: null,
-    },
-    {
       label: RegistrationTabsEnum.backup,
-      component: null,
+      component: Backup,
     },
   ];
 
@@ -87,7 +89,7 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
 
     return <div className={styles.registrationPage}>
       <div className={styles.registrationPageCover}/>
-      {enterButtonPressed ? this.renderRegistration() : this.renderWelcome()}
+      {!enterButtonPressed ? this.renderRegistration() : this.renderWelcome()}
     </div>
   }
 }

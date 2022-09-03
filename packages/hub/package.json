@@ -25,6 +25,7 @@
     "@types/react-redux": "^7.1.24",
     "@types/react-router": "^5.1.18",
     "@types/react-router-dom": "^5.3.3",
+    "@types/redux-auth-wrapper": "^2.0.13",
     "@types/redux-logger": "^3.0.9",
     "@types/redux-saga": "^0.10.5",
     "@types/wif": "^2.0.2",

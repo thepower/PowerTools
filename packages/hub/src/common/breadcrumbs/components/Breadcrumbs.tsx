@@ -11,6 +11,7 @@ interface BreadcrumbsProps {
   className?: string;
   type: BreadcrumbsTypeEnum;
   breadCrumbHasBorder?: boolean;
+  breadCrumbClassName?: string;
 }
 
 export class Breadcrumbs extends React.PureComponent<BreadcrumbsProps, any> {
@@ -26,6 +27,8 @@ export class Breadcrumbs extends React.PureComponent<BreadcrumbsProps, any> {
     const {
       currentStep,
       breadcrumbs,
+      breadCrumbClassName,
+      type,
     } = this.props;
 
     const isSelectedBreadcrumb = index === currentStep;
@@ -35,9 +38,12 @@ export class Breadcrumbs extends React.PureComponent<BreadcrumbsProps, any> {
     return <div
       key={index}
       onClick={this.handleSetCurrentBreadcrumb(index)}
-      className={cn(styles.breadcrumb, isSelectedBreadcrumb && styles.selectedBreadcrumb)}
+      className={cn(styles.breadcrumb, isSelectedBreadcrumb && styles.selectedBreadcrumb, breadCrumbClassName)}
     >
-      <span className={styles.breadcrumbIndex}>{index + 1}</span>
+      {
+        type === BreadcrumbsTypeEnum.direction &&
+        <span className={styles.breadcrumbIndex}>{index + 1}</span>
+      }
       <span className={styles.breadcrumbLabel}>{label}</span>
       {!isLastBreadcrumb && (
         <ChevronRight
