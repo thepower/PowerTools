@@ -1,7 +1,7 @@
 import { ChainNode, RawNodes } from '../typings';
 import axios from 'axios';
 import { ChainAction } from './network.enum';
-import { config as cfg } from '../config/chain.config';
+import { config } from '../config/chain.config';
 
 /**
  * Asks all nodes in chain and sorts it by answer time
@@ -33,7 +33,7 @@ export const queueNodes = async (nodesList: ChainNode[]) => {
 
         return {
           address: url.origin,
-          time: cfg.maxNodeResponseTime, // default max response time
+          time: config.maxNodeResponseTime, // default max response time
           nodeId: data.config?.params?.node,
         };
       })),

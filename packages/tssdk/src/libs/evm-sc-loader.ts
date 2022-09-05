@@ -1,10 +1,9 @@
 import VM from '@ethereumjs/vm';
 import { Address } from 'ethereumjs-util';
-import axios from 'axios';
 import { defaultAbiCoder as AbiCoder, Interface } from '@ethersproject/abi';
 import { NetworkApi } from '../libs';
 import { TransactionsApi } from '../libs';
-// import {encodeFunction} from "../evm/examples/helpers/tx";
+import { ChainNameEnum } from '../config/chain.enum';
 
 function bitnot(bnParam: any) {
   let bn = -bnParam;
@@ -54,7 +53,7 @@ export class EvmScLoader {
     this.vm = vm;
   }
 
-  public static async build(scAddress: string, chain: number): Promise<EvmScLoader> {
+  public static async build(scAddress: string, chain: ChainNameEnum): Promise<EvmScLoader> {
     const network = new NetworkApi(chain);
     await network.bootstrap();
     const vm = await VM.create();

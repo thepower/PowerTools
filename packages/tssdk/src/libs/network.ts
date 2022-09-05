@@ -1,8 +1,8 @@
 import axios from 'axios';
 import createHash from 'create-hash';
-import { config as cfg, chainConfig } from '../config/chain.config';
+import { config as cfg } from '../config/chain.config';
 import { ChainNode } from '../typings';
-import { queueNodes, transformResponse } from '../helpers/network.helper';
+import { queueNodes, transformNodeList, transformResponse } from '../helpers/network.helper';
 import { ChainAction } from '../helpers/network.enum';
 import Debug from 'debug';
 import { ChainNameEnum } from '../config/chain.enum';
@@ -86,17 +86,17 @@ export class NetworkApi {
     return this.currentChain;
   }
 
-  // Mock. Info about all chains will store in some system chain, have not implemented yet
   private async getChainInfo() {
-    return Promise.resolve(chainConfig);
+    const baseURL = 'https://raw.githubusercontent.com/thepower/power_hub/master/packages/tssdk/src/config/config.json';
+    const { data } = await axios.request({ baseURL });
+    return data;
   }
 
   public bootstrap = async () => {
     const chainInfo = await this.getChainInfo();
 
     if (chainInfo[this.currentChain]) {
-
-      const fullNodes = chainInfo[this.currentChain];
+      const fullNodes = transformNodeList(chainInfo[this.currentChain]);
 
       if (!fullNodes.length) {
         throw new Error(`No nodes found for chain ${this.currentChain}`);
