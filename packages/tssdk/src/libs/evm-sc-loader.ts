@@ -45,15 +45,18 @@ export class EvmScLoader {
 
   private scAddress: string;
 
+  private abiJSON: any;
+
   private cache: Map<string, any> = new Map();
 
-  constructor(scAddress: string, vm: VM, network: NetworkApi) {
+  constructor(scAddress: string, vm: VM, network: NetworkApi, abiJSON: any) {
     this.scAddress = scAddress;
     this.network = network;
     this.vm = vm;
+    this.abiJSON = abiJSON;
   }
 
-  public static async build(scAddress: string, chain: ChainNameEnum): Promise<EvmScLoader> {
+  public static async build(scAddress: string, chain: ChainNameEnum, abiJSON: any): Promise<EvmScLoader> {
     const network = new NetworkApi(chain);
     await network.bootstrap();
     const vm = await VM.create();
@@ -64,17 +67,25 @@ export class EvmScLoader {
       return Buffer.from(state);
     };
 
-    return new EvmScLoader(scAddress, vm, network);
+    return new EvmScLoader(scAddress, vm, network, abiJSON);
   }
 
-  public async scGet(method: string, params: any[], outputs: any[], inputTypes = '') {
-    const paramStringAbi = params.length ? AbiCoder.encode([inputTypes], params) : '';
+  public async scGet(method: string, params: any[]) {
+    const abiItem = this.abiJSON.abi.find((item: any) => item.name === method);
+    if (!abiItem) {
+      throw new Error('ABI not found');
+    }
 
-    const sigHash = new Interface([`function ${method}(${inputTypes})`])
+    const outputs = abiItem.outputs.map((output: any) => output.type);
+    const inputs = abiItem.inputs.map((input: any) => input.type);
+    const paramStringAbi = params.length ? AbiCoder.encode(inputs, params) : '';
+
+    const sigHash = new Interface([`function ${method}(${inputs.join(',')})`])
       .getSighash(method);
 
     if (!this.cache.has(this.scAddress)) {
       const loadedData = await this.network.loadScCode(this.scAddress);
+      // const encoded = AbiCoder.encode(parameters);
       this.cache.set(this.scAddress, Buffer.from(loadedData));
     }
 
@@ -93,51 +104,46 @@ export class EvmScLoader {
       throw greetResult.execResult.exceptionError;
     }
 
-    // TODO: define return types
     const results = AbiCoder.decode(outputs, greetResult.execResult.returnValue);
     return results[0];
   }
 
   private encodeFunction = (
     method: string,
-    params?: {
-      types: any[]
-      values: unknown[]
-    },
+    params: string[] = [],
   ): string => {
-    const parameters = params?.types ?? [];
-    const methodWithParameters = `function ${method}(${parameters.join(',')})`;
-    const signatureHash = new Interface([methodWithParameters]).getSighash(method);
-    const encodedArgs = AbiCoder.encode(parameters, params?.values ?? []);
 
-    return signatureHash + encodedArgs.slice(2);
+    const abiItem = this.abiJSON.abi.find((item: any) => item.name === method);
+    if (!abiItem) {
+      throw new Error('ABI not found');
+    }
+
+    const inputs = abiItem.inputs.map((input: any) => input.type);
+    const paramStringAbi = params.length ? AbiCoder.encode(inputs, params) : '';
+    const methodWithParameters = `function ${method}(${inputs.join(',')})`;
+    const signatureHash = new Interface([methodWithParameters]).getSighash(method);
+
+    return signatureHash + paramStringAbi.slice(2);
   };
 
   // Send trx to chain
   public async scSet(
-    chain: number,
-    userAddress: string,
-    contract: string,
-    senderPrivateKey: string,
+    key: any, // TODO: define type (address. wif)
     method: string,
-    params?: {
-      types: any[]
-      values: unknown[]
-    },
+    params?: string[],
   ) {
-
     const encodedata = this.encodeFunction(method, params);
     const data = Buffer.from(encodedata.slice(2), 'hex');
 
     const feeSettings = await this.network.getFeeSettings();
 
     const tx = await TransactionsApi.composeSCMethodCallTX(
-      userAddress,
-      contract,
+      key.address,
+      this.scAddress,
       ['0x0', [data]],
       'SK',
       20000,
-      senderPrivateKey,
+      key.wif,
       feeSettings,
     );
     const res = await this.network.sendTxAndWaitForResponse(tx);
