@@ -1,14 +1,13 @@
 import { EvmScLoader } from '../../libs/evm-sc-loader';
-import { promises } from 'fs';
-import { CryptoApi }  from '../../libs/crypto';
 import { ChainNameEnum } from '../../config/chain.enum';
 import abiJson from './contractAbi.json';
+import { loadKey } from '../../helpers/key.helper';
 
 async function testVm() {
   const scAddress = 'AA100000001677721810';
   const mapAddress = '0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c';
 
-  const sc = await EvmScLoader.build(scAddress, ChainNameEnum.first, abiJson);
+  const sc = await EvmScLoader.build(scAddress, ChainNameEnum.first, abiJson.abi);
 
   const greeting = await sc.scGet('getGreeting', []);
   console.log('getGreeting:', greeting);
@@ -32,37 +31,10 @@ async function testVm() {
   console.log('getHelloMapArrEl:', getHelloMapArrEl);
 
   //set
-  const keySignature = '-----BEGIN EC PRIVATE KEY-----';
-  const password = '1';
-  const readFilex = async (path: string): Promise<string> => {
-    const data: any = await promises.readFile(path, {} );
-    return data.toString();
-  };
-
-  const loadFile = async (fileName: string) => {
-    const file:string = await readFilex(fileName);
-    const key = file.substr(file.indexOf(keySignature));
-    return CryptoApi.decryptWalletData(key, password);
-  };
-  const key = await loadFile('./AA100000001677722039.pem');
+  const key = await loadKey('./AA100000001677722039.pem', '1');
 
   console.log('setGreeting:');
   await sc.scSet(key, 'setGreeting', ['VALERA']);
-
-  // console.log('registerProvider:');
-  //
-  // await sc.scSet(key.address, 'AA100000001677721940', key.wif, 'registerProvider', {
-  //   types: ['string', 'string'],
-  //   values: ['testnet2.thepower.io/upload', 'testnet2.thepower.io'],
-  // });
-  //
-  // console.log('addTask:');
-  //
-  // await sc.scSet(key.address, 'AA100000001677721940', key.wif, 'addTask', {
-  //   types: ['string', 'uint', 'uint', 'uint'],
-  //   values: ['test2', 19475395488208537825465945478401395837262577036183212407145262800528316595495n, 1660825869, 106532],
-  // });
-
 }
 
 testVm()
