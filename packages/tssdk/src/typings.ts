@@ -27,6 +27,11 @@ export interface ChainNode {
   time?: number;
 }
 
+export interface AccountKey {
+  address: string;
+  wif: string;
+}
+
 export interface ChainBootstrapConfig {
   [key: number] : ChainNode[];
 }
