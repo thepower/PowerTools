@@ -1,4 +1,5 @@
 // components
+
 export { Navigation } from './navigation/components/Navigation'
 export { Page } from './page/Page';
 export { LinkBlock } from './linkBlock/LinkBlock';
@@ -32,3 +33,5 @@ export { showNotification, clearNotificationLog, hideNotification } from './noti
 export { PELogo } from './icons/PELogo';
 export { ClosedEyeIcon } from './icons/ClosedEyeIcon';
 export { EyeIcon } from './icons/EyeIcon';
+export { AttachIcon } from './icons/AttachIcon';
+

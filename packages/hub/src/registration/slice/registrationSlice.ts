@@ -1,12 +1,13 @@
 import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CreateAccountStepsEnum, LoginRegisterAccountTabs } from '../typings/registrationTypes';
-import { Maybe } from '../../typings/common';
+import { Maybe, NullableUndef } from '../../typings/common';
 
 const SLICE_NAME = 'registration';
 
 const generateSeedPhrase = createAction(`${SLICE_NAME}/generateSeedPhrase`);
 const createWallet = createAction<string>(`${SLICE_NAME}/createWallet`);
 const loginToWalletFromRegistration = createAction<LoginToWalletInputType>(`${SLICE_NAME}/loginToWallet`);
+const importAccountFromFile = createAction<NullableUndef<File>>(`${SLICE_NAME}/importAccount`);
 
 export type RegistrationState = {
   tab: LoginRegisterAccountTabs;
@@ -89,4 +90,5 @@ export {
   createWallet,
   loginToWalletFromRegistration,
   setLoginErrors,
+  importAccountFromFile,
 };

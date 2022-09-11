@@ -240,17 +240,17 @@
   height: 370px;
   background: #151516;
   border-radius: 20px;
-  padding: 20px 67px;
+  padding: 20px 45px;
 }
 
-.selectShardHolder {
+.registrationFormHolder {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
 }
 
-.loginRegisterAccountCreateDesc {
+.registrationFormDesc {
   font-weight: 400;
   font-size: $unit * 3.3;
   line-height: $unit * 4;
@@ -333,4 +333,43 @@
   height: 48px;
   background: #1d242e;
   border-radius: 5px;
+}
+
+.importAccountFormHolder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.importAccountInput {
+  height: 1px;
+  width: 1px;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.importAccountButton {
+  background: #151516;
+  margin-top: 32px;
+}
+
+.importAccountButtonLabel {
+  @include the-power-color-text;
+
+  margin-left: 16px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.importAccountFormDesc {
+  display: flex;
+  align-items: center;
+  color: #f5f5f7;
+  white-space: pre-line;
+  margin-top: 48px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
 }

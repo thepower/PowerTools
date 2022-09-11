@@ -68,7 +68,7 @@ class AppRoutesComponent extends React.PureComponent<AppRoutesProps> {
               <ShardsPage/>
             </UserHasAuth>
           }/>
-          <Route path="/" element={<RegistrationPage/>} />
+          <Route path="/dsa" element={<RegistrationPage/>} />
         </Routes>
       </BrowserRouter>
     </div>;

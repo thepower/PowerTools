@@ -11,7 +11,7 @@ import {
 import { RegistrationTabsEnum } from '../typings/registrationTypes';
 import { QuickGuide } from './pages/QuickGuide';
 import { BeAware } from './pages/BeAware';
-import { LoginRegisterAccount } from './pages/loginRegisterAccount/LoginRegisterAccount';
+import { RegisterPage } from './pages/loginRegisterAccount/RegisterPage';
 import { Backup } from './pages/Backup';
 
 const mapStateToProps = () => ({});
@@ -28,7 +28,7 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
   private registrationBreadcrumbs: BreadcrumbsDataType[] = [
     {
       label: RegistrationTabsEnum.loginRegister,
-      component: LoginRegisterAccount,
+      component: RegisterPage,
     },
     {
       label: RegistrationTabsEnum.quickGuide,

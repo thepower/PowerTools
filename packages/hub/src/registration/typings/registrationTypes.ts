@@ -1,3 +1,5 @@
+import React from 'react';
+
 export enum RegistrationTabsEnum {
   quickGuide = 'Quick guide',
   beAware = 'Be aware',
@@ -23,3 +25,8 @@ export enum CreateAccountStepsEnum {
   confirmSeedPhrase = 'confirmSeedPhrase',
   encryptPrivateKey = 'encryptPrivateKey',
 }
+
+export type RegistrationPageAdditionalProps = {
+  onChangeTab: (_event: React.SyntheticEvent, value: LoginRegisterAccountTabs) => void;
+  tab: LoginRegisterAccountTabs;
+};

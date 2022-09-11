@@ -269,6 +269,25 @@ export class NetworkApi {
     return this.askBlockchainTo(ChainAction.GET_MY_CHAIN, { address });
   }
 
+  public async getChainNodes(chain: string, remoteChain: string) {
+    return this.askBlockchainTo(ChainAction.GET_CHAIN_NODES, {
+      chain,
+      remoteChain,
+    });
+  }
+
+  public async getNodeSettings() {
+    return this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {});
+  }
+
+  public async createTransaction(data: { tx: string }) {
+    return this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data });
+  }
+
+  public async getTransactionStatus(txId: string) {
+    return this.askBlockchainTo(ChainAction.GET_TRANSACTION_STATUS, { txId });
+  }
+
   private async askBlockchainTo(kind: ChainAction, parameters: any) {
     let actionUrl;
 

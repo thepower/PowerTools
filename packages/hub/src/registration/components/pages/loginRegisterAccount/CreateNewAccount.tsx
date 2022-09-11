@@ -15,7 +15,7 @@ import {
   createWallet,
   setCurrentRegisterCreateAccountTab,
 } from '../../../slice/registrationSlice';
-import { CreateAccountStepsEnum, LoginRegisterAccountTabs, LoginRegisterAccountTabsLabels } from '../../../typings/registrationTypes';
+import { CreateAccountStepsEnum, LoginRegisterAccountTabs, LoginRegisterAccountTabsLabels, RegistrationPageAdditionalProps } from '../../../typings/registrationTypes';
 import { getCurrentCreatingStep, getCurrentShardSelector, getGeneratedSeedPhrase } from '../../../selectors/registrationSelectors';
 import { ApplicationState } from '../../../../application';
 import { SelectChangeEvent } from '@mui/material/Select/SelectInput';
@@ -39,10 +39,7 @@ const mapDispatchToProps = {
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-type CreateNewAccountProps = ConnectedProps<typeof connector> & {
-  onChangeTab: (_event: React.SyntheticEvent, value: LoginRegisterAccountTabs) => void;
-  tab: LoginRegisterAccountTabs;
-};
+type CreateNewAccountProps = ConnectedProps<typeof connector> & RegistrationPageAdditionalProps;
 
 interface CreateNewAccountState {
   userSeedPhrase: string;
@@ -193,8 +190,8 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
           value={tab}
           onChange={onChangeTab}
         />
-        <div className={styles.selectShardHolder}>
-          <div className={styles.loginRegisterAccountCreateDesc}>
+        <div className={styles.registrationFormHolder}>
+          <div className={styles.registrationFormDesc}>
             {'The wallet is still in alpha-testing phase. \nWallet creation may take a couple of minutes'}
           </div>
           <div>{'Selected shard:'}</div>

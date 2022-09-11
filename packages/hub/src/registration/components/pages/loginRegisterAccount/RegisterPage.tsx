@@ -6,6 +6,7 @@ import { setCurrentRegisterCreateAccountTab } from '../../../slice/registrationS
 import { ApplicationState } from '../../../../application';
 import { LoginToAccount } from './LoginToAccount';
 import { getCurrentRegistrationTab } from '../../../selectors/registrationSelectors';
+import { ImportAccount } from './ImportAccount';
 
 const mapStateToProps = (state: ApplicationState) => ({
   tab: getCurrentRegistrationTab(state),
@@ -36,11 +37,13 @@ class LoginRegisterAccountComponent extends React.PureComponent<LoginRegisterAcc
       case LoginRegisterAccountTabs.create:
         return <CreateNewAccount tab={tab} onChangeTab={this.onChangeTab}/>;
       case LoginRegisterAccountTabs.login:
-        return <LoginToAccount tab={tab} onChangeTab={this.onChangeTab}/>
+        return <LoginToAccount tab={tab} onChangeTab={this.onChangeTab}/>;
+      case LoginRegisterAccountTabs.import:
+        return <ImportAccount tab={tab} onChangeTab={this.onChangeTab}/>;
+      default:
+        return null;
     }
-
-    return null;
   }
 }
 
-export const LoginRegisterAccount = connector(LoginRegisterAccountComponent);
+export const RegisterPage = connector(LoginRegisterAccountComponent);

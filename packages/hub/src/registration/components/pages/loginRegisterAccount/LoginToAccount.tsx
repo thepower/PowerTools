@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Button } from '@mui/material';
 import styles from '../../Registration.module.scss';
 import { OutlinedInput, Tabs } from '../../../../common';
-import { LoginRegisterAccountTabs, LoginRegisterAccountTabsLabels } from '../../../typings/registrationTypes';
+import { LoginRegisterAccountTabs, LoginRegisterAccountTabsLabels, RegistrationPageAdditionalProps } from '../../../typings/registrationTypes';
 import { ApplicationState } from '../../../../application';
 import { RegistrationBackground } from '../../common/RegistrationBackground';
 import { loginToWalletFromRegistration } from '../../../slice/registrationSlice';
@@ -17,10 +17,7 @@ const mapDispatchToProps = {
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-type LoginToAccountProps = ConnectedProps<typeof connector> & {
-  onChangeTab: (_event: React.SyntheticEvent, value: LoginRegisterAccountTabs) => void;
-  tab: LoginRegisterAccountTabs;
-};;
+type LoginToAccountProps = ConnectedProps<typeof connector> & RegistrationPageAdditionalProps;
 
 interface LoginToAccountState {
   address: string;
@@ -76,8 +73,8 @@ class LoginToAccountComponent extends React.PureComponent<LoginToAccountProps, L
             value={tab}
             onChange={onChangeTab}
           />
-          <div className={styles.selectShardHolder}>
-            <div className={styles.loginRegisterAccountCreateDesc}>
+          <div className={styles.registrationFormHolder}>
+            <div className={styles.registrationFormDesc}>
               {'To login, you need enter the address\nand private key or seed phrase'}
             </div>
             <OutlinedInput
