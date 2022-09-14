@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { NetworkApi } from '@thepowereco/tssdk';
+import { NetworkApi, WalletApi } from '@thepowereco/tssdk';
 
 export const getIsProductionOnlyDomains = () => (
   [
@@ -22,4 +22,5 @@ export const getNetworkApi = async (chain: number = 1) => {
 };
 
 // @ts-ignore
-export const NetworkAPI = await getNetworkApi(1);
+export const NetworkAPI = await getNetworkApi(103);
+export const WalletAPI = new WalletApi(103);

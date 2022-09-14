@@ -18,6 +18,7 @@ import { GetChainResultType, LoginToWalletSagaInput } from '../typings/accountTy
 import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
 import { NetworkAPI } from '../../application/utils/applicationUtils';
 
+// @todo: cut
 export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef<File> }) {
   if (!payload) {
     yield put(showNotification({
@@ -63,6 +64,7 @@ export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef
   }
 }
 
+// @todo: cut
 export function* decryptWalletDataSaga({ payload }: { payload: string }) {
   const walletData: string = yield select(getWalletBinaryData);
   const decryptedData = CryptoApi.decryptWalletData(walletData, payload);

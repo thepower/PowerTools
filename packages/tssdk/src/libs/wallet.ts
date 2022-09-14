@@ -6,6 +6,7 @@ import { correctAmount, correctAmountsObject } from '../utils/numbers';
 import { Maybe } from '../typings';
 
 
+
 export class WalletApi {
   private networkApi;
 
@@ -68,19 +69,23 @@ export class WalletApi {
     return tx;
   }
 
+  private async sleep(ms: number) {
+    return new Promise((r) => setTimeout(r, ms));
+  }
+
   public async createNew(
     chain: string,
     seedPhrase: string,
     referrer: string = '',
     wait: boolean = false,
   ) {
-    const nodes = await this.networkApi.getChainNodes(chain, chain);
+    // const nodes = await this.networkApi.getChainNodes(chain, chain);
 
-    if (Object.keys(nodes.chain_nodes).length === 0) {
-      throw 'Can not access chain';
-    }
+    // if (Object.keys(nodes.chain_nodes).length === 0) {
+    //   throw 'Can not access chain';
+    // }
 
-    const { settings } = await this.networkApi.getNodeSettings();
+    const settings = await this.networkApi.getNodeSettings();
 
     const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
       seedPhrase,
@@ -106,7 +111,7 @@ export class WalletApi {
           throw 'Timeout';
         }
         count++;
-        const { res: status } = await this.networkApi.getTransactionStatus(txid);
+        const status = await this.networkApi.getTransactionStatus(txid);
         if (status?.error) {
           throw status?.error;
         }
@@ -114,6 +119,8 @@ export class WalletApi {
           walletAddress = status.res;
           break;
         }
+
+        await this.sleep(500);
       }
 
       return { privateKey: wif, address: walletAddress };

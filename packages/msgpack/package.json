@@ -28,8 +28,7 @@
     "make": "make",
     "size": "make clean dist/msgpack.min.js && gzip -9fkv dist/msgpack.min.js && ls -l dist",
     "test": "make test",
-    "test-browser-local": "make test-browser-local",
-    "prepare": "yarn make"
+    "test-browser-local": "make test-browser-local"
   },
   "publishConfig": {
     "access": "public"

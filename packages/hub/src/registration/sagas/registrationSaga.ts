@@ -1,9 +1,10 @@
-import { put } from 'redux-saga/effects';
+import { put, select } from 'redux-saga/effects';
 import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
 import { LoginToWalletInputType, setLoginErrors, setSeedPhrase } from '../slice/registrationSlice';
 import { CreateAccountStepsEnum } from '../typings/registrationTypes';
-import { NetworkAPI } from '../../application/utils/applicationUtils';
+import { NetworkAPI, WalletAPI } from '../../application/utils/applicationUtils';
 import { loginToWallet } from '../../account/slice/accountSlice';
+import { getGeneratedSeedPhrase } from '../selectors/registrationSelectors';
 
 export function* generateSeedPhraseSaga() {
   const phrase: string = yield CryptoApi.generateSeedPhrase();
@@ -15,7 +16,11 @@ export function* generateSeedPhraseSaga() {
 }
 
 export function* createWalletSaga({ payload }: { payload: string }) {
-  yield console.log(payload);
+  console.log(payload);
+  const seedPhrase: string = yield select(getGeneratedSeedPhrase);
+  const walletData: string = yield WalletAPI.createNew('104', seedPhrase, '', true);
+  console.log(walletData);
+  // todo: redirect and rework login to wallet saga
 }
 
 
@@ -51,3 +56,25 @@ export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputTyp
 
   // todo: redirect and rework login to wallet saga
 }
+
+// export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef<File> }) {
+//   if (!payload) {
+//     yield put(showNotification({
+//       text: 'Please select a file',
+//       type: 'error',
+//     }));
+//     return;
+//   }
+//
+//   try {
+//     const data: string = yield call(getFileData, payload, FileReaderType.binary);
+//     const { wif, address  }  = yield WalletAPI.parseExportData(data);
+//     yield put(loginToWallet({ address, wif, }));
+//     // todo: redirect and rework login to wallet saga
+//   } catch (e) {
+//     yield put(showNotification({
+//       text: `Import error: ${e}`,
+//       type: 'error',
+//     }));
+//   }
+// }
