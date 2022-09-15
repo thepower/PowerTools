@@ -83,6 +83,7 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
       generatedSeedPhrase,
       setCreatingStep,
       createWallet,
+      setNextStep,
     } = this.props;
     const {
       userSeedPhrase,
@@ -124,7 +125,10 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
           return;
         }
 
-        createWallet(password);
+        createWallet({
+          password,
+          additionalAction: setNextStep,
+        });
       }
     }
   };
@@ -256,7 +260,7 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
         placeholder={generatedSeedPhrase!}
         className={styles.loginTextArea}
         multiline
-        value={userSeedPhrase}
+        value={userSeedPhrase || generatedSeedPhrase}
         onChange={this.onChangeUserSeedPhrase}
       />
     </RegistrationBackground>

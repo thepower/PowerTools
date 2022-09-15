@@ -1,10 +1,15 @@
 import { put, select } from 'redux-saga/effects';
 import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
-import { LoginToWalletInputType, setLoginErrors, setSeedPhrase } from '../slice/registrationSlice';
+import {
+  LoginToWalletInputType,
+  setLoginErrors,
+  setSeedPhrase,
+} from '../slice/registrationSlice';
 import { CreateAccountStepsEnum } from '../typings/registrationTypes';
 import { NetworkAPI, WalletAPI } from '../../application/utils/applicationUtils';
 import { loginToWallet } from '../../account/slice/accountSlice';
-import { getGeneratedSeedPhrase } from '../selectors/registrationSelectors';
+import { getCurrentShardSelector, getGeneratedSeedPhrase } from '../selectors/registrationSelectors';
+import { AddActionType } from '../../typings/common';
 
 export function* generateSeedPhraseSaga() {
   const phrase: string = yield CryptoApi.generateSeedPhrase();
@@ -15,11 +20,17 @@ export function* generateSeedPhraseSaga() {
   }));
 }
 
-export function* createWalletSaga({ payload }: { payload: string }) {
-  console.log(payload);
+export function* createWalletSaga({ payload }: { payload: AddActionType<{ password: string }> }) {
+  const { password, additionalAction } = payload;
   const seedPhrase: string = yield select(getGeneratedSeedPhrase);
-  const walletData: string = yield WalletAPI.createNew('104', seedPhrase, '', true);
-  console.log(walletData);
+  const shard: string = yield select(getCurrentShardSelector);
+
+  const { privateKey, address } = yield WalletAPI.createNew(shard, seedPhrase, '', true);
+  const walletPrivateKey = CryptoApi.encryptWif(privateKey, password);
+
+  console.log(walletPrivateKey);
+  console.log(address);
+  additionalAction?.();
   // todo: redirect and rework login to wallet saga
 }
 

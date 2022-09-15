@@ -1,4 +1,5 @@
 import React from 'react';
+import { WizardComponentProps } from '../../common';
 
 export enum RegistrationTabsEnum {
   quickGuide = 'Quick guide',
@@ -29,4 +30,4 @@ export enum CreateAccountStepsEnum {
 export type RegistrationPageAdditionalProps = {
   onChangeTab: (_event: React.SyntheticEvent, value: LoginRegisterAccountTabs) => void;
   tab: LoginRegisterAccountTabs;
-};
+} & WizardComponentProps;

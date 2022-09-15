@@ -7,6 +7,7 @@ import { ApplicationState } from '../../../../application';
 import { LoginToAccount } from './LoginToAccount';
 import { getCurrentRegistrationTab } from '../../../selectors/registrationSelectors';
 import { ImportAccount } from './ImportAccount';
+import { WizardComponentProps } from '../../../../common';
 
 const mapStateToProps = (state: ApplicationState) => ({
   tab: getCurrentRegistrationTab(state),
@@ -17,7 +18,7 @@ const mapDispatchToProps = {
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-type LoginRegisterAccountProps = ConnectedProps<typeof connector>;
+type LoginRegisterAccountProps = ConnectedProps<typeof connector> & WizardComponentProps;
 
 interface LoginRegisterAccountState {}
 
@@ -32,14 +33,29 @@ class LoginRegisterAccountComponent extends React.PureComponent<LoginRegisterAcc
   };
 
   render() {
-    const { tab } = this.props;
+    const { tab, setNextStep, setPrevStep } = this.props;
     switch (tab) {
       case LoginRegisterAccountTabs.create:
-        return <CreateNewAccount tab={tab} onChangeTab={this.onChangeTab}/>;
+        return <CreateNewAccount
+          tab={tab}
+          onChangeTab={this.onChangeTab}
+          setNextStep={setNextStep}
+          setPrevStep={setPrevStep}
+        />;
       case LoginRegisterAccountTabs.login:
-        return <LoginToAccount tab={tab} onChangeTab={this.onChangeTab}/>;
+        return <LoginToAccount
+          tab={tab}
+          onChangeTab={this.onChangeTab}
+          setNextStep={setNextStep}
+          setPrevStep={setPrevStep}
+        />;
       case LoginRegisterAccountTabs.import:
-        return <ImportAccount tab={tab} onChangeTab={this.onChangeTab}/>;
+        return <ImportAccount
+          tab={tab}
+          onChangeTab={this.onChangeTab}
+          setNextStep={setNextStep}
+          setPrevStep={setPrevStep}
+        />;
       default:
         return null;
     }
