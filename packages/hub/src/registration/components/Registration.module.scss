@@ -104,7 +104,9 @@
   max-width: 70%;
 
   @media screen and (max-width: $tablet) {
-    padding: $unit * 13 $unit * 4;
+    padding: $unit * 5 $unit * 4;
+    max-width: 100%;
+    width: 100%;
   }
 }
 
@@ -130,7 +132,8 @@
   }
 
   @media screen and (max-width: $tablet) {
-    padding: $unit * 13 $unit * 4;
+    padding: $unit * 6 $unit * 2;
+    width: unset;
   }
 }
 
@@ -147,6 +150,10 @@
   color: #2997ff;
   text-shadow: 0 4px 4px rgb(0 0 0 / 25%);
   padding-bottom: $unit * 2;
+
+  @media screen and (max-width: $tablet) {
+    margin-bottom: 0 !important;
+  }
 }
 
 .registrationStatementDesc {
@@ -180,6 +187,12 @@
   @media screen and (max-width: $tablet) {
     margin-right: 0 !important;
     margin-left: 0 !important;
+    flex-direction: column;
+    align-items: center;
+
+    button:nth-child(2) {
+      margin-left: 0;
+    }
   }
 }
 
@@ -278,6 +291,12 @@
   display: flex;
   align-items: center;
   color: #f5f5f7;
+  width: 100%;
+  justify-content: flex-start;
+
+  @media screen and (max-width: $tablet) {
+    justify-content: center;
+  }
 }
 
 .loginTextArea {
@@ -286,6 +305,20 @@
   min-height: 64px;
   background: #252b35;
   border-radius: 20px;
+
+  @media screen and (max-width: $tablet) {
+    width: 100%;
+  }
+}
+
+.setSeedPhraseHolder {
+  width: 100%;
+
+  div:last-of-type {
+    @media screen and (max-width: $tablet) {
+      width: 100%;
+    }
+  }
 }
 
 .confirmSeedPhraseHolder {
@@ -295,6 +328,17 @@
   justify-content: center;
   width: 500px;
   margin: 132px auto 172px;
+
+  @media screen and (max-width: $tablet) {
+    width: 100%;
+    margin: 36px 0 72px;
+  }
+
+  div:last-of-type {
+    @media screen and (max-width: $tablet) {
+      width: 100%;
+    }
+  }
 }
 
 .confirmSeedPhraseTitle {
@@ -306,6 +350,12 @@
   align-items: center;
   color: #f5f5f7;
   margin-bottom: 20px;
+  width: 100%;
+
+  @media screen and (max-width: $tablet) {
+    font-size: 24px;
+    justify-content: center;
+  }
 }
 
 .confirmSeedPhraseError {
@@ -326,6 +376,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  @media screen and (max-width: $tablet) {
+    width: unset;
+    height: unset;
+    padding: 32px 20px;
+  }
 }
 
 .passwordInput {
@@ -333,6 +389,10 @@
   height: 48px;
   background: #1d242e;
   border-radius: 5px;
+
+  @media screen and (max-width: $tablet) {
+    width: 100%;
+  }
 }
 
 .importAccountFormHolder {

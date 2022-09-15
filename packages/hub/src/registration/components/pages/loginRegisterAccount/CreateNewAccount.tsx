@@ -253,16 +253,18 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
       <RegistrationStatement description={'If you specify your own seed phrase it is up to you to make sure it is valid'}/>
       <RegistrationStatement description={'Write down your seed phrase and store is somewhere safe'}/>
       <RegistrationStatement description={'Seed phrase is the only way to restore your private key'}/>
-      <div className={styles.seedPhraseTitle}>
-        {'Seed phrase'}
+      <div className={styles.setSeedPhraseHolder}>
+        <div className={styles.seedPhraseTitle}>
+          {'Seed phrase'}
+        </div>
+        <OutlinedInput
+          placeholder={generatedSeedPhrase!}
+          className={styles.loginTextArea}
+          multiline
+          value={userSeedPhrase || generatedSeedPhrase}
+          onChange={this.onChangeUserSeedPhrase}
+        />
       </div>
-      <OutlinedInput
-        placeholder={generatedSeedPhrase!}
-        className={styles.loginTextArea}
-        multiline
-        value={userSeedPhrase || generatedSeedPhrase}
-        onChange={this.onChangeUserSeedPhrase}
-      />
     </RegistrationBackground>
   };
 
@@ -289,6 +291,7 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
         value={confirmedSeedPhrase}
         onChange={this.onChangeConfirmedSeedPhrase}
         error={seedsNotEqual}
+        fullWidth
         errorMessage={'Oh:( the seed phrase is incorrect, please try again'}
       />
     </div>
