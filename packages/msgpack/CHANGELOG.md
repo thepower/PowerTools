@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/thepower/power_hub/compare/@thepowereco/msgpack@1.4.0...@thepowereco/msgpack@1.5.0) (2022-09-16)
+
+
+### Features
+
+* **thepowereco:** publish check ([fbebf43](https://github.com/thepower/power_hub/commit/fbebf4337bfffdba4960a4d78065ccf7f1ea88c4))
+
+
+
+
+
 # [1.4.0](https://github.com/thepower/power_hub/compare/@thepowereco/msgpack@1.3.0...@thepowereco/msgpack@1.4.0) (2022-09-16)
 
 
