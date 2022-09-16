@@ -1,7 +1,18 @@
-# Change Lo
+# Change Log
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [1.2.0](https://github.com/thepower/power_hub/compare/@thepowereco/jssdk@1.1.29...@thepowereco/jssdk@1.2.0) (2022-09-16)
+
+
+### Features
+
+* **buikd:** fix ([1092cc2](https://github.com/thepower/power_hub/commit/1092cc258f9361f86895ac4bf118e03ad6ce19f5))
+
+
+
+
 
 ## 1.1.29 (2022-08-07)
 

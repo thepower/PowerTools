@@ -1,7 +1,18 @@
-# Change Lo
+# Change Log
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [1.5.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.4.2...@thepowereco/tssdk@1.5.0) (2022-09-16)
+
+
+### Features
+
+* **buikd:** fix ([1092cc2](https://github.com/thepower/power_hub/commit/1092cc258f9361f86895ac4bf118e03ad6ce19f5))
+
+
+
+
 
 ## [1.4.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.4.1...@thepowereco/tssdk@1.4.2) (2022-09-16)
 
