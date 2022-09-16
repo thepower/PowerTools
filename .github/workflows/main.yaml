@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        run: git checkout HEAD^
 
       - name: Set Git User
         run: |
@@ -34,6 +35,17 @@ jobs:
 #          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
 #        env:
 #          NPM_TOKEN: ${{ secrets.NPMTOKEN }}
+
+      - uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          committer_name: GitHub Actions
+          message: 'commit lerna init changes'
+
+      - name: Checkout head
+        uses: actions/checkout@v2
+        run: git checkout HEAD^
+
 
       - name: Publish
         run: lerna publish --yes --no-verify-access
