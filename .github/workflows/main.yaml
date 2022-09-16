@@ -44,12 +44,6 @@ jobs:
           committer_name: GitHub Actions
           message: 'commit lerna init changes'
 
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
-      - run: git checkout HEAD^
-
-
       - name: Publish
         run: lerna publish --yes --no-verify-access
         env:
