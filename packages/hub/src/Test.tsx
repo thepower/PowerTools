@@ -9,6 +9,7 @@ export const Test = () => (
        title={'Power_wallet'}
        description={'Fast & Easy Payments'}
        buttonTitle={'Create'}
+
      />
    </Grid>
   </Page>
