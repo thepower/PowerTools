@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "lerna:init": "yarn install && lerna bootstrap",
-    "publish": "lerna exec --concurrency 1 -- semantic-release -e semantic-release-monorepo --tag-format='${LERNA_PACKAGE_NAME}-v\\${version}'",
     "lernapub": "lerna publish",
     "cl": "lerna clean",
     "cm": "git add -A && lint-staged && git-cz",
