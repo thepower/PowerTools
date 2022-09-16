@@ -10,7 +10,7 @@
     "cm": "git add -A && lint-staged && git-cz",
     "bootstrap": "npx lerna bootstrap",
     "publish:ci": "lerna publish from-package --yes",
-    "version:ci": "lerna version --yes --conventional-commits --create-release github --message 'chore(release): publish'"
+    "version:ci": "lerna version --yes --conventional-commits"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --fix",
