@@ -3,49 +3,33 @@ name: autodeploy
 on:
   push:
     branches: [master]
-  pull_request:
-    branches: [master]
-#
 
 jobs:
-  default:
+  publish-gpr:
+    name: Publish to GPR
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
         with:
-          fetch-depth: 2
-      - run: git checkout HEAD^
-
+          fetch-depth: 0
 
       - name: Set Git User
         run: |
-                git config --global user.name "The Power Ecosystem"
-                git config --global user.email "ext@thepower.io"
+          git config --global user.name "The Power Ecosystem"
+          git config --global user.email "ext@thepower.io"
 
       - uses: actions/setup-node@v3
         with:
           node-version: '14.x'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Init Lerna
-        run: yarn lerna:init
+      - name: Bootstrap lerna
+        run: yarn bootstrap
 
-#      - name: Authenticate
-#        run: |
-#          echo "@grandcore:registry=https://registry.npmjs.org/" > .npmrc
-#          echo "registry=https://registry.npmjs.org/" >> .npmrc
-#          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
-#        env:
-#          NPM_TOKEN: ${{ secrets.NPMTOKEN }}
-
-      - uses: EndBug/add-and-commit@v9
-        with:
-          default_author: github_actions
-          committer_name: GitHub Actions
-          message: 'commit lerna init changes'
-
-      - name: Publish
-        run: lerna publish --yes --no-verify-access
+      - name: Bump versions and publish packages
+        run: |
+          yarn version:ci
+          yarn publish:ci
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPMTOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
