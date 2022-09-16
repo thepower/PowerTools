@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.3.23...@thepowereco/tssdk@1.4.0) (2022-09-16)
+
+
+### Bug Fixes
+
+* **build:** try to github actions ([a6d2122](https://github.com/thepower/power_hub/commit/a6d2122604f30bba9a2400aeed40c8d1f50e5faa))
+* **tssdk:** chain cinfig url fix ([e5098ab](https://github.com/thepower/power_hub/commit/e5098ab0a8a961580134ba1adbdd6d4bf9d7053b))
+* **tssdk:** chain config use fix ([0ace299](https://github.com/thepower/power_hub/commit/0ace299e93aff225739d4fa1452d1f63ef4dc4e1))
+* **tssdk:** review fixes ([6026e85](https://github.com/thepower/power_hub/commit/6026e859ca2a4fcbc4031fc054b6e50b92fe42aa))
+* **tssdk:** sc set final ([91befde](https://github.com/thepower/power_hub/commit/91befdefa490cdf8556d72ef19e8d19c3057cab7))
+
+
+### Features
+
+* **ts sdk:** chain config json ([5f27b70](https://github.com/thepower/power_hub/commit/5f27b70983b2ed9765581330a61db5abb0490c12))
+* **tssdk:** abi integration ([eff3483](https://github.com/thepower/power_hub/commit/eff3483118579e90c0b4818776e7e5629ca3a8f2))
+* **tssdk:** refactored ([6655384](https://github.com/thepower/power_hub/commit/66553844327e4e7ab8195b4ec27d46f065d22498))
+
+
+
+
+
 ## 1.3.23 (2022-08-07)
 
 **Note:** Version bump only for package @thepowereco/tssdk
