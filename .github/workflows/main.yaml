@@ -11,9 +11,11 @@ jobs:
   default:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        run: git checkout HEAD^
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - run: git checkout HEAD^
+
 
       - name: Set Git User
         run: |
@@ -42,9 +44,10 @@ jobs:
           committer_name: GitHub Actions
           message: 'commit lerna init changes'
 
-      - name: Checkout head
-        uses: actions/checkout@v2
-        run: git checkout HEAD^
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - run: git checkout HEAD^
 
 
       - name: Publish
