@@ -88,7 +88,7 @@
   align-items: center;
   overflow-y: auto;
 
-  @media screen and (max-width: $tablet) {
+  @media screen and (max-width: $notebook) {
     padding: $unit * 6 $unit * 4;
   }
 }
@@ -96,17 +96,13 @@
 .registrationWizardHolder {
   background-color: #151516 !important;
   border-radius: $unit * 5;
-  width: 1000px;
   padding: 0 $unit * 26;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 70%;
 
-  @media screen and (max-width: $tablet) {
+  @media screen and (max-width: $notebook) {
     padding: $unit * 5 $unit * 4;
-    max-width: 100%;
-    width: 100%;
   }
 }
 
@@ -114,6 +110,10 @@
   background-color: transparent;
   margin-top: $unit * 5;
   height: 100%;
+
+  @media screen and (max-width: $notebook) {
+    margin-top: 0;
+  }
 }
 
 .registrationBackground {
@@ -124,14 +124,13 @@
   border-radius: $unit * 5;
   height: 100%;
   padding: $unit * 3 $unit * 21;
-  width: 800px;
   margin-bottom: $unit * 4;
 
   div:not(:last-of-type) {
     margin-bottom: $unit * 4;
   }
 
-  @media screen and (max-width: $tablet) {
+  @media screen and (max-width: $notebook) {
     padding: $unit * 6 $unit * 2;
     width: unset;
   }
@@ -254,6 +253,10 @@
   background: #151516;
   border-radius: 20px;
   padding: 20px 45px;
+
+  @media screen and (max-width: $tablet) {
+    padding: 20px;
+  }
 }
 
 .registrationFormHolder {

@@ -20,7 +20,6 @@ export const Backup: React.FC<BackupProps> = (props: BackupProps) => {
         className={classnames(styles.registrationNextButton, styles.registrationNextButton_outlined)}
         variant='outlined'
         size='large'
-        onClick={props.setPrevStep}
       >
         <span className={styles.registrationNextButtonText}>
           {'Skip'}

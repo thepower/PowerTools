@@ -47,6 +47,8 @@ export class Tabs extends React.PureComponent<TabsProps, TabsState> {
         value={value}
         onChange={onChange}
         classes={this.tabsClasses}
+        // variant="scrollable"
+        // scrollButtons="auto"
       >
         {Object.keys(tabs).map(this.renderTab)}
       </MUITabs>
