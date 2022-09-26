@@ -8,7 +8,7 @@ import { AccountKey } from '../typings';
 import { bnToHex } from '../helpers/bnHex.helper';
 import { encodeFunction, getAbiInputsOutputs } from '../helpers/abi.helper';
 
-export class EvmScLoader {
+export class EvmApi {
   private vm: VM;
 
   private defaultAddress = '0x0000000000000000000000000000000000000000';
@@ -28,7 +28,7 @@ export class EvmScLoader {
     this.abi = abi;
   }
 
-  public static async build(scAddress: string, chain: ChainNameEnum, abiJSON: any): Promise<EvmScLoader> {
+  public static async build(scAddress: string, chain: ChainNameEnum, abiJSON: any): Promise<EvmApi> {
     const network = new NetworkApi(chain);
     await network.bootstrap();
     const vm = await VM.create();
@@ -39,7 +39,7 @@ export class EvmScLoader {
       return Buffer.from(state);
     };
 
-    return new EvmScLoader(scAddress, vm, network, abiJSON);
+    return new EvmApi(scAddress, vm, network, abiJSON);
   }
 
   public async scGet(method: string, params: any[]) {

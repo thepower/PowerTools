@@ -1,4 +1,4 @@
-import { EvmScLoader } from '../../libs/evm-sc-loader';
+import { EvmApi } from '../../libs/evm-api';
 import { ChainNameEnum } from '../../config/chain.enum';
 import abiJson from './contractAbi.json';
 import { loadKey } from '../../helpers/key.helper';
@@ -7,7 +7,7 @@ async function testVm() {
   const scAddress = 'AA100000001677721810';
   const mapAddress = '0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c';
 
-  const sc = await EvmScLoader.build(scAddress, ChainNameEnum.first, abiJson.abi);
+  const sc = await EvmApi.build(scAddress, ChainNameEnum.first, abiJson.abi);
 
   const greeting = await sc.scGet('getGreeting', []);
   console.log('getGreeting:', greeting);
