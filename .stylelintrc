@@ -5,6 +5,12 @@
     "stylelint-config-idiomatic-order"
   ],
   "rules": {
+    "property-no-unknown": [true,
+      {
+        "ignoreProperties": ["text-fill-color"]
+      }
+    ],
+    "no-descending-specificity": null,
     "at-rule-no-unknown": null,
     "selector-class-pattern": null,
     "scss/at-import-partial-extension-blacklist": null,

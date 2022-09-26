@@ -1,7 +1,7 @@
 import { call, put, select } from 'redux-saga/effects';
 import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
 import { NullableUndef } from '../../typings/common';
-import { FileReaderType, getFileData, NavigationRoutesEnum, showNotification } from '../../common';
+import { FileReaderType, getFileData, showNotification } from '../../common';
 import { isPEM } from '../utils/accountUtils';
 import {
   setPasswordHint,
@@ -46,7 +46,7 @@ export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef
 
       const wif = data.slice(8 + offset);
       const binaryAddress = new Uint8Array(8);
-      for (let i = 0; i <= 7; i++) {
+      for (let i = 0; i <= 7; i += 1) {
         binaryAddress[i] = data.charCodeAt(i + offset);
       }
 
@@ -55,26 +55,12 @@ export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef
         wif,
       }));
     }
-    return ;
+    return;
   } catch (e) {
     yield put(showNotification({
       text: `Import error: ${e}`,
       type: 'error',
     }));
-  }
-}
-
-// @todo: cut
-export function* decryptWalletDataSaga({ payload }: { payload: string }) {
-  const walletData: string = yield select(getWalletBinaryData);
-  const decryptedData = CryptoApi.decryptWalletData(walletData, payload);
-
-  yield put(setImportWalletData(decryptedData));
-
-  if (!isPEM(decryptedData.wif)) {
-    yield put(toggleEncryptPasswordModal(true));
-  } else {
-    yield* loginToWalletSaga();
   }
 }
 
@@ -98,7 +84,7 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
       do {
         subChain = yield NetworkAPI.getAddressChain(address);
 
-        //Switch bootstrap when transitioning from testnet to 101-th chain
+        // Switch bootstrap when transitioning from testnet to 101-th chain
         if (subChain.chain === 101 && currentChain !== 101) {
           subChain = yield NetworkAPI.getAddressChain(address);
         }
@@ -136,8 +122,20 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
   }
 }
 
+export function* decryptWalletDataSaga({ payload }: { payload: string }) {
+  const walletData: string = yield select(getWalletBinaryData);
+  const decryptedData = CryptoApi.decryptWalletData(walletData, payload);
+
+  yield put(setImportWalletData(decryptedData));
+
+  if (!isPEM(decryptedData.wif)) {
+    yield put(toggleEncryptPasswordModal(true));
+  } else {
+    yield* loginToWalletSaga();
+  }
+}
+
 export function* resetAccountSaga() {
-  window.location.replace(NavigationRoutesEnum.Dapps);
   yield clearApplicationStorage();
   yield put(clearAccountData());
 }
