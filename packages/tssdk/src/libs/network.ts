@@ -89,7 +89,7 @@ export class NetworkApi {
   private async getChainInfo() {
     const baseURL = 'https://raw.githubusercontent.com/thepower/all_chains/main/config.json';
     const { data } = await axios.request({ baseURL });
-    return data;
+    return data.chains;
   }
 
   public bootstrap = async () => {
