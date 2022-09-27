@@ -1,7 +1,7 @@
 import { call, put, select } from 'redux-saga/effects';
 import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
+import { FileReaderType, getFileData, showNotification } from 'common';
 import { NullableUndef } from '../../typings/common';
-import { FileReaderType, getFileData, showNotification } from '../../common';
 import { isPEM } from '../utils/accountUtils';
 import {
   setPasswordHint,

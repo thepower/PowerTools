@@ -40,29 +40,29 @@ const routes = [
   },
 ];
 
-const ListItem = ({
-  route: {
-    name, link, Icon, disabled,
-  },
-}: { route: typeof routes[0] }) => (
-  <NavLink
-    aria-disabled={disabled}
-    exact
-    to={link}
-    className={styles.link}
-    activeClassName={styles.linkActive}
-  >
-    <Icon className={styles.icon} />
-    <span className={styles.text}>{name}</span>
-  </NavLink>
-);
-
-const NavList = () => (
+const NavList = React.memo(() => (
   <nav>
     <ul className={styles.list}>
-      {routes.map((route) => <ListItem key={route.name} route={route} />)}
+      {routes.map(({
+        disabled,
+        Icon,
+        link,
+        name,
+      }) => (
+        <NavLink
+          key={name}
+          aria-disabled={disabled}
+          exact
+          to={link}
+          className={styles.link}
+          activeClassName={styles.linkActive}
+        >
+          <Icon className={styles.icon} />
+          <span className={styles.text}>{name}</span>
+        </NavLink>
+      ))}
     </ul>
   </nav>
-);
+));
 
 export default NavList;
