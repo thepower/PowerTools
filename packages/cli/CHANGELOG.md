@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.5.0...@thepowereco/cli@1.6.0) (2022-09-27)
+
+
+### Features
+
+* **tssdk:** lib wasm ([132b6eb](https://github.com/thepower/power_hub/commit/132b6ebe2ed1ddb45c903caf72121c0354ed45d2))
+
+
+
+
+
 # [1.5.0](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.4.0...@thepowereco/cli@1.5.0) (2022-09-16)
 
 

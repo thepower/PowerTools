@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.7.2...@thepowereco/tssdk@1.8.0) (2022-09-27)
+
+
+### Features
+
+* **tssdk:** lib wasm ([132b6eb](https://github.com/thepower/power_hub/commit/132b6ebe2ed1ddb45c903caf72121c0354ed45d2))
+
+
+
+
+
 ## [1.7.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.7.1...@thepowereco/tssdk@1.7.2) (2022-09-27)
 
 
