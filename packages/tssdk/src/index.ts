@@ -1,13 +1,13 @@
 export {
   NetworkApi,
   AddressApi,
-  // instantiateSC,
+  instantiateSC,
   PaymentsApi,
   CryptoApi,
   TransactionsApi,
   EvmApi,
-  // SmartContractWrapper,
-  // loadScLocal
+  SmartContractWrapper,
+  loadScLocal,
 } from './libs';
 
 export { ChainAction } from './helpers/network.enum';
