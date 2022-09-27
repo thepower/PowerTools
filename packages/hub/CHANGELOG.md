@@ -3,6 +3,124 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.3](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.4.2...@thepowereco/hub@1.4.3) (2022-09-27)
+
+**Note:** Version bump only for package @thepowereco/hub
+
+
+
+
+
+## [1.4.2](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.4.1...@thepowereco/hub@1.4.2) (2022-09-27)
+
+
+### Bug Fixes
+
+* **hub:** build ([bd1a81f](https://github.com/thepower/power_hub/commit/bd1a81fd042ee35b0fa6dec74f2e7c483075c9dc))
+* **hub:** build ([e7d0cd1](https://github.com/thepower/power_hub/commit/e7d0cd17a37ef1ba459e8692402d68bb063f181b))
+
+
+
+
+
+## [1.4.1](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.4.0...@thepowereco/hub@1.4.1) (2022-09-16)
+
+**Note:** Version bump only for package @thepowereco/hub
+
+
+
+
+
+# [1.4.0](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.3.0...@thepowereco/hub@1.4.0) (2022-09-16)
+
+
+### Features
+
+* **up:** up ([03fdcb3](https://github.com/thepower/power_hub/commit/03fdcb38624b5d0df110d698cc33a0c54b430a08))
+
+
+
+
+
+# [1.3.0](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.2.0...@thepowereco/hub@1.3.0) (2022-09-16)
+
+
+### Features
+
+* **build:** fix ([cf21280](https://github.com/thepower/power_hub/commit/cf21280e9927d46355f48c432004d45f3e4b12cd))
+
+
+
+
+
+# [1.2.0](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.1.32...@thepowereco/hub@1.2.0) (2022-09-16)
+
+
+### Features
+
+* **buikd:** fix ([1092cc2](https://github.com/thepower/power_hub/commit/1092cc258f9361f86895ac4bf118e03ad6ce19f5))
+
+
+
+
+
+## [1.1.32](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.1.31...@thepowereco/hub@1.1.32) (2022-09-16)
+
+
+### Bug Fixes
+
+* **try:** to fix ([afd8fb1](https://github.com/thepower/power_hub/commit/afd8fb1cc8859579f147c798560d1a72392c3fad))
+
+
+
+
+
+## [1.1.31](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.1.30...@thepowereco/hub@1.1.31) (2022-09-16)
+
+**Note:** Version bump only for package @thepowereco/hub
+
+
+
+
+
+## [1.1.30](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.1.29...@thepowereco/hub@1.1.30) (2022-09-16)
+
+
+### Bug Fixes
+
+* **commit:** fix ([ab2c574](https://github.com/thepower/power_hub/commit/ab2c574372cfca9e64c079c09d9ba64183e1e49f))
+
+
+
+
+
+## 1.1.29 (2022-08-07)
+
+**Note:** Version bump only for package @thepowereco/hub
+
+
+
+
+
+## 1.1.28 (2022-08-05)
+
+
+### Bug Fixes
+
+* **small:** fix ([4cad7cc](https://github.com/thepower/power_hub/commit/4cad7cc9fab9d51f3cca1e92e7793872296d3e78))
+
+
+
+
+
+## 1.1.27 (2022-08-01)
+
+**Note:** Version bump only for package @thepowereco/hub
+
+
+
+
+
 ## 1.1.26 (2022-07-15)
 
 **Note:** Version bump only for package @thepowereco/hub

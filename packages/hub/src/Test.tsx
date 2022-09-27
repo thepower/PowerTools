@@ -8,7 +8,8 @@ export const Test = () => (
      <LinkBlock
        title={'Power_wallet'}
        description={'Fast & Easy Payments'}
-       buttonTitle={'Create'}
+       buttonTitle={'Creat'}
+
      />
    </Grid>
   </Page>

@@ -1,7 +1,7 @@
 import * as msgPack from '@thepowereco/msgpack';
 import * as lz4 from 'lz4js';
 import createHash from 'create-hash';
-import * as brutusin from 'brutusin-json-forms';
+// import * as brutusin from 'brutusin-json-forms';
 import { FileReaderType, getFileData } from '../utils/files';
 
 export class SmartContractWrapper {
@@ -11,7 +11,7 @@ export class SmartContractWrapper {
 
   private balance;
 
-  private forms;
+  // private forms;
 
   private hashes;
 
@@ -27,7 +27,7 @@ export class SmartContractWrapper {
     this.contract = needDecompress ? lz4.decompress(contract) :  contract;
     this.state = msgPack.decode(state);
     this.balance = balance;
-    this.forms = brutusin;
+    // this.forms = brutusin;
   }
 
   binToStr = (bin: Uint8Array) => bin.reduce((acc: string, item: number) => acc + String.fromCharCode(item), '');
@@ -165,11 +165,11 @@ export class SmartContractWrapper {
 
       let bf: any;
 
-      try {
-        bf = this.forms.create(JSON.parse(this.escapeAll(form[1].form.trim())));
-      } catch (e) {
-        bf = this.forms.create(JSON.parse(form[1].form.trim()));
-      }
+      // try {
+      //   bf = this.forms.create(JSON.parse(this.escapeAll(form[1].form.trim())));
+      // } catch (e) {
+      //   bf = this.forms.create(JSON.parse(form[1].form.trim()));
+      // }
 
       bf.render(container, defaultData);
 

@@ -3,6 +3,104 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/thepower/power_hub/compare/@thepowereco/msgpack@1.4.0...@thepowereco/msgpack@1.5.0) (2022-09-16)
+
+
+### Features
+
+* **thepowereco:** publish check ([fbebf43](https://github.com/thepower/power_hub/commit/fbebf4337bfffdba4960a4d78065ccf7f1ea88c4))
+
+
+
+
+
+# [1.4.0](https://github.com/thepower/power_hub/compare/@thepowereco/msgpack@1.3.0...@thepowereco/msgpack@1.4.0) (2022-09-16)
+
+
+### Features
+
+* **up:** up ([03fdcb3](https://github.com/thepower/power_hub/commit/03fdcb38624b5d0df110d698cc33a0c54b430a08))
+
+
+
+
+
+# [1.3.0](https://github.com/thepower/power_hub/compare/@thepowereco/msgpack@1.2.0...@thepowereco/msgpack@1.3.0) (2022-09-16)
+
+
+### Features
+
+* **build:** fix ([cf21280](https://github.com/thepower/power_hub/commit/cf21280e9927d46355f48c432004d45f3e4b12cd))
+
+
+
+
+
+# [1.2.0](https://github.com/thepower/power_hub/compare/@thepowereco/msgpack@1.1.27...@thepowereco/msgpack@1.2.0) (2022-09-16)
+
+
+### Features
+
+* **buikd:** fix ([1092cc2](https://github.com/thepower/power_hub/commit/1092cc258f9361f86895ac4bf118e03ad6ce19f5))
+
+
+
+
+
+## [1.1.27](https://github.com/thepower/power_hub/compare/@thepowereco/msgpack@1.1.26...@thepowereco/msgpack@1.1.27) (2022-09-16)
+
+**Note:** Version bump only for package @thepowereco/msgpack
+
+
+
+
+
+## [1.1.26](https://github.com/thepower/power_hub/compare/@thepowereco/msgpack@1.1.25...@thepowereco/msgpack@1.1.26) (2022-09-16)
+
+**Note:** Version bump only for package @thepowereco/msgpack
+
+
+
+
+
+## [1.1.25](https://github.com/thepower/power_hub/compare/@thepowereco/msgpack@1.1.24...@thepowereco/msgpack@1.1.25) (2022-09-16)
+
+
+### Bug Fixes
+
+* **build:** try to github actions ([a6d2122](https://github.com/thepower/power_hub/commit/a6d2122604f30bba9a2400aeed40c8d1f50e5faa))
+
+
+
+
+
+## 1.1.24 (2022-08-07)
+
+**Note:** Version bump only for package @thepowereco/msgpack
+
+
+
+
+
+## 1.1.23 (2022-08-05)
+
+
+### Bug Fixes
+
+* **small:** fix ([4cad7cc](https://github.com/thepower/power_hub/commit/4cad7cc9fab9d51f3cca1e92e7793872296d3e78))
+
+
+
+
+
+## 1.1.22 (2022-08-01)
+
+**Note:** Version bump only for package @thepowereco/msgpack
+
+
+
+
+
 ## 1.1.21 (2022-07-15)
 
 **Note:** Version bump only for package @thepowereco/msgpack

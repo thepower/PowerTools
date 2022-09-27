@@ -1,21 +1,22 @@
 import axios from 'axios';
 import createHash from 'create-hash';
-import { config as cfg, chainConfig } from '../config/chain.config';
+import { config as cfg } from '../config/chain.config';
 import { ChainNode } from '../typings';
-import { queueNodes, transformResponse } from '../helpers/network.helper';
+import { queueNodes, transformNodeList, transformResponse } from '../helpers/network.helper';
 import { ChainAction } from '../helpers/network.enum';
 import Debug from 'debug';
+import { ChainNameEnum } from '../config/chain.enum';
 const info = Debug('info');
 
 export class NetworkApi {
-  private currentChain: string = '';
+  private currentChain: ChainNameEnum;
 
   private currentNodes: ChainNode[] = [];
 
   private nodeIndex: number = 0;
 
-  constructor(chain: number) {
-    this.currentChain = chain.toString();
+  constructor(chain: ChainNameEnum) {
+    this.currentChain = chain;
   }
 
   private setCurrentConfig = async (newNodes: ChainNode[]) => {
@@ -72,21 +73,30 @@ export class NetworkApi {
     );
   };
 
+  public loadScStateByKey = async (address: string, key: string) => {
+    return new Uint8Array(
+      await this.askBlockchainTo(
+        ChainAction.GET_SC_STATE_BY_KEY,
+        { chain: this.currentChain, address, key },
+      ),
+    );
+  };
+
   private getChain() {
     return this.currentChain;
   }
 
-  // Mock. Info about all chains will store in some system chain, have not implemented yet
   private async getChainInfo() {
-    return Promise.resolve(chainConfig);
+    const baseURL = 'https://raw.githubusercontent.com/thepower/all_chains/main/config.json';
+    const { data } = await axios.request({ baseURL });
+    return data;
   }
 
   public bootstrap = async () => {
     const chainInfo = await this.getChainInfo();
 
     if (chainInfo[this.currentChain]) {
-
-      const fullNodes = chainInfo[this.currentChain];
+      const fullNodes = transformNodeList(chainInfo[this.currentChain]);
 
       if (!fullNodes.length) {
         throw new Error(`No nodes found for chain ${this.currentChain}`);
@@ -341,6 +351,12 @@ export class NetworkApi {
       case ChainAction.GET_SC_STATE:
         requestParams.responseType = 'arraybuffer';
         requestParams.url = parameters.address + '/state';
+        actionUrl = '/address';
+        break;
+
+      case ChainAction.GET_SC_STATE_BY_KEY:
+        requestParams.responseType = 'arraybuffer';
+        requestParams.url = parameters.address + '/state/0x' + parameters.key;
         actionUrl = '/address';
         break;
 

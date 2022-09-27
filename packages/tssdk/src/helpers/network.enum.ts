@@ -8,4 +8,5 @@ export enum ChainAction {
   GET_MY_CHAIN = 'GET_MY_CHAIN',
   GET_SC_CODE = 'GET_SC_CODE',
   GET_SC_STATE = 'GET_SC_STATE',
+  GET_SC_STATE_BY_KEY = 'GET_SC_STATE_BY_KEY',
 }

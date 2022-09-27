@@ -3,6 +3,77 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.5.0...@thepowereco/cli@1.6.0) (2022-09-27)
+
+
+### Features
+
+* **tssdk:** lib wasm ([132b6eb](https://github.com/thepower/power_hub/commit/132b6ebe2ed1ddb45c903caf72121c0354ed45d2))
+
+
+
+
+
+# [1.5.0](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.4.0...@thepowereco/cli@1.5.0) (2022-09-16)
+
+
+### Features
+
+* **up:** up ([03fdcb3](https://github.com/thepower/power_hub/commit/03fdcb38624b5d0df110d698cc33a0c54b430a08))
+
+
+
+
+
+# [1.4.0](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.3.0...@thepowereco/cli@1.4.0) (2022-09-16)
+
+
+### Features
+
+* **build:** fix ([cf21280](https://github.com/thepower/power_hub/commit/cf21280e9927d46355f48c432004d45f3e4b12cd))
+
+
+
+
+
+# [1.3.0](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.2.23...@thepowereco/cli@1.3.0) (2022-09-16)
+
+
+### Features
+
+* **buikd:** fix ([1092cc2](https://github.com/thepower/power_hub/commit/1092cc258f9361f86895ac4bf118e03ad6ce19f5))
+
+
+
+
+
+## 1.2.23 (2022-08-07)
+
+**Note:** Version bump only for package @thepowereco/cli
+
+
+
+
+
+## 1.2.22 (2022-08-05)
+
+
+### Bug Fixes
+
+* **small:** fix ([4cad7cc](https://github.com/thepower/power_hub/commit/4cad7cc9fab9d51f3cca1e92e7793872296d3e78))
+
+
+
+
+
+## 1.2.21 (2022-08-01)
+
+**Note:** Version bump only for package @thepowereco/cli
+
+
+
+
+
 ## 1.2.20 (2022-07-15)
 
 **Note:** Version bump only for package @thepowereco/cli

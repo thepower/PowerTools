@@ -3,7 +3,7 @@ import { Buffer } from 'safe-buffer';
 import * as msgPack from '@thepowereco/msgpack';
 const Bitcoin = require('bitcoinjs-lib');
 import { AddressApi } from './address';
-const sha512 = require('js-sha512').sha512;
+// const sha512 = require('js-sha512').sha512;
 
 const TAG_PUBLIC_KEY = 0x02;
 const TAG_SIGNATURE = 0xFF;
@@ -26,75 +26,74 @@ const KIND_LSTORE = 22;
 // const PURPOSE_DSTFEE = 0x02;
 // const KIND_BLOCK = 0x14;
 
-const POW_DIFFICULTY_THRESHOLD = 30;
+// const POW_DIFFICULTY_THRESHOLD = 30;
+// const blob = new Blob([ '(',
+//   function () {
+//     onmessage = function (e: MessageEvent) {
+//       // self.importScripts('https://store.thepower.io/sha512.min.js');
+//
+//       function validateHash(hash: any, difficulty: number) {
+//         var index = hash.findIndex((item: any) => item !== 0);
+//         var hashDifficulty = index !== -1 ? index * 8 + (8 - (hash[index].toString(2).length)) : hash.length * 8;
+//         return hashDifficulty >= difficulty;
+//       }
+//
+//       function numToArray(number: number) {
+//         if (number >= 0 && number <= 0x7F) {
+//           return [number];
+//         } else if (number <= 0xFF) {
+//           return [0xCC, number];
+//         } else if (number <= 0xFFFF) {
+//           return [0xCD, (number >> 8) & 255, number & 255];
+//         } else if (number <= 0xFFFFFFFF) {
+//           return [0xCE, (number >>> 24) & 255, (number >>> 16) & 255, (number >>> 8) & 255, number & 255];
+//         }
+//         throw new Error('Nonce generation error');
+//       }
+//
+//       function mergeTypedArrays(a: any, b: any, c: any) {
+//         var d = new a.constructor(a.length + b.length + c.length);
+//         d.set(a);
+//         d.set(b, a.length);
+//         d.set(c, a.length + b.length);
+//         return d;
+//       }
+//
+//       var nonce = 0, hash;
+//       var body = e.data[0];
+//       var offset = e.data[1];
+//       var difficulty = e.data[2];
+//       var part1 = body.slice(0, offset), part2 = body.slice(offset + 1);
+//       do {
+//         nonce++;
+//         let packedBody = mergeTypedArrays(part1, numToArray(nonce), part2);
+//         console.log(packedBody); // TODO: remove this
+//         hash = ''; //window.sha512.array(packedBody); // TODO: Property 'sha512' does not exist on type 'Window & typeof globalThis'.
+//       } while (!validateHash(hash, difficulty));
+//
+//       postMessage(nonce);
+//     };
+//   }.toString(),
+//   ')()'], { type: 'application/javascript' });
+// const blobURL = URL.createObjectURL(blob);
 
-const blobURL = URL.createObjectURL(new Blob(
-  [ '(',
-    function () {
-      onmessage = function (e: MessageEvent) {
-        self.importScripts('https://store.thepower.io/sha512.min.js');
-
-        function validateHash(hash: any, difficulty: number) {
-          var index = hash.findIndex((item: any) => item !== 0);
-          var hashDifficulty = index !== -1 ? index * 8 + (8 - (hash[index].toString(2).length)) : hash.length * 8;
-          return hashDifficulty >= difficulty;
-        }
-
-        function numToArray(number: number) {
-          if (number >= 0 && number <= 0x7F) {
-            return [number];
-          } else if (number <= 0xFF) {
-            return [0xCC, number];
-          } else if (number <= 0xFFFF) {
-            return [0xCD, (number >> 8) & 255, number & 255];
-          } else if (number <= 0xFFFFFFFF) {
-            return [0xCE, (number >>> 24) & 255, (number >>> 16) & 255, (number >>> 8) & 255, number & 255];
-          }
-          throw new Error('Nonce generation error');
-        }
-
-        function mergeTypedArrays(a: any, b: any, c: any) {
-          var d = new a.constructor(a.length + b.length + c.length);
-          d.set(a);
-          d.set(b, a.length);
-          d.set(c, a.length + b.length);
-          return d;
-        }
-
-        var nonce = 0, hash;
-        var body = e.data[0];
-        var offset = e.data[1];
-        var difficulty = e.data[2];
-        var part1 = body.slice(0, offset), part2 = body.slice(offset + 1);
-        do {
-          nonce++;
-          let packedBody = mergeTypedArrays(part1, numToArray(nonce), part2);
-          hash = sha512.array(packedBody);
-        } while (!validateHash(hash, difficulty));
-
-        postMessage(nonce);
-      };
-    }.toString(),
-    ')()'],
-  { type: 'application/javascript' },
-));
-
-const worker = new Worker(blobURL);
-URL.revokeObjectURL(blobURL);
+// const worker = new Worker(blobURL);
+// URL.revokeObjectURL(blobURL);
 
 const generateNonce = (body: Uint8Array, offset: number, powDifficulty: number) => {
-  if (powDifficulty > POW_DIFFICULTY_THRESHOLD) {
-    throw new Error('PoW difficulty is too high');
-  }
-  return new Promise((resolve, reject) => {
-    worker.onmessage = (event: MessageEvent) => {
-      resolve(event.data);
-    };
-    worker.onerror = (event: ErrorEvent) => {
-      reject(event);
-    };
-    worker.postMessage([body, offset, powDifficulty]);
-  });
+  // if (powDifficulty > POW_DIFFICULTY_THRESHOLD) {
+  //   throw new Error('PoW difficulty is too high');
+  // }
+  // return new Promise((resolve, reject) => {
+  //   worker.onmessage = (event: MessageEvent) => {
+  //     resolve(event.data);
+  //   };
+  //   worker.onerror = (event: ErrorEvent) => {
+  //     reject(event);
+  //   };
+  //   worker.postMessage([body, offset, powDifficulty]);
+  // });
+  return '0';
 };
 
 const getRegisterTxBody = async (chain: number, publicKey: string, timestamp: number, referrer: string, powDifficulty = 16) => {
@@ -351,7 +350,7 @@ export const TransactionsApi = {
   composeSCMethodCallTX(
     address: string,
     sc: string,
-    toCall: string,
+    toCall: [ string, [ any ] ],
     gasToken: string,
     gasValue: number,
     wif: string,

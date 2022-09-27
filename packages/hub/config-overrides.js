@@ -5,6 +5,8 @@ module.exports = function override(config, env) {
     "crypto": require.resolve('crypto-browserify'),
     "stream": require.resolve('stream-browserify'),
     "util": require.resolve('util'),
+    "fs": false,
+    "path": false
   };
   config.plugins.push(
     new webpack.ProvidePlugin({

@@ -3,6 +3,135 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.7.2...@thepowereco/tssdk@1.8.0) (2022-09-27)
+
+
+### Features
+
+* **tssdk:** lib wasm ([132b6eb](https://github.com/thepower/power_hub/commit/132b6ebe2ed1ddb45c903caf72121c0354ed45d2))
+
+
+
+
+
+## [1.7.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.7.1...@thepowereco/tssdk@1.7.2) (2022-09-27)
+
+
+### Bug Fixes
+
+* **tassdk:** evm api exports ([c8eadd9](https://github.com/thepower/power_hub/commit/c8eadd9904dabc0cf19923f4f2b1e23f98b53a99))
+* **tssdk:** small fix ([2db9ce7](https://github.com/thepower/power_hub/commit/2db9ce79d09094fbd047cbe468c1aad30f537154))
+
+
+
+
+
+## [1.7.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.7.0...@thepowereco/tssdk@1.7.1) (2022-09-16)
+
+**Note:** Version bump only for package @thepowereco/tssdk
+
+
+
+
+
+# [1.7.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.6.0...@thepowereco/tssdk@1.7.0) (2022-09-16)
+
+
+### Features
+
+* **up:** up ([03fdcb3](https://github.com/thepower/power_hub/commit/03fdcb38624b5d0df110d698cc33a0c54b430a08))
+
+
+
+
+
+# [1.6.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.5.0...@thepowereco/tssdk@1.6.0) (2022-09-16)
+
+
+### Features
+
+* **build:** fix ([cf21280](https://github.com/thepower/power_hub/commit/cf21280e9927d46355f48c432004d45f3e4b12cd))
+
+
+
+
+
+# [1.5.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.4.2...@thepowereco/tssdk@1.5.0) (2022-09-16)
+
+
+### Features
+
+* **buikd:** fix ([1092cc2](https://github.com/thepower/power_hub/commit/1092cc258f9361f86895ac4bf118e03ad6ce19f5))
+
+
+
+
+
+## [1.4.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.4.1...@thepowereco/tssdk@1.4.2) (2022-09-16)
+
+**Note:** Version bump only for package @thepowereco/tssdk
+
+
+
+
+
+## [1.4.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.4.0...@thepowereco/tssdk@1.4.1) (2022-09-16)
+
+**Note:** Version bump only for package @thepowereco/tssdk
+
+
+
+
+
+# [1.4.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.3.23...@thepowereco/tssdk@1.4.0) (2022-09-16)
+
+
+### Bug Fixes
+
+* **build:** try to github actions ([a6d2122](https://github.com/thepower/power_hub/commit/a6d2122604f30bba9a2400aeed40c8d1f50e5faa))
+* **tssdk:** chain cinfig url fix ([e5098ab](https://github.com/thepower/power_hub/commit/e5098ab0a8a961580134ba1adbdd6d4bf9d7053b))
+* **tssdk:** chain config use fix ([0ace299](https://github.com/thepower/power_hub/commit/0ace299e93aff225739d4fa1452d1f63ef4dc4e1))
+* **tssdk:** review fixes ([6026e85](https://github.com/thepower/power_hub/commit/6026e859ca2a4fcbc4031fc054b6e50b92fe42aa))
+* **tssdk:** sc set final ([91befde](https://github.com/thepower/power_hub/commit/91befdefa490cdf8556d72ef19e8d19c3057cab7))
+
+
+### Features
+
+* **ts sdk:** chain config json ([5f27b70](https://github.com/thepower/power_hub/commit/5f27b70983b2ed9765581330a61db5abb0490c12))
+* **tssdk:** abi integration ([eff3483](https://github.com/thepower/power_hub/commit/eff3483118579e90c0b4818776e7e5629ca3a8f2))
+* **tssdk:** refactored ([6655384](https://github.com/thepower/power_hub/commit/66553844327e4e7ab8195b4ec27d46f065d22498))
+
+
+
+
+
+## 1.3.23 (2022-08-07)
+
+**Note:** Version bump only for package @thepowereco/tssdk
+
+
+
+
+
+## 1.3.22 (2022-08-05)
+
+
+### Bug Fixes
+
+* **small:** fix ([4cad7cc](https://github.com/thepower/power_hub/commit/4cad7cc9fab9d51f3cca1e92e7793872296d3e78))
+
+
+
+
+
+## 1.3.21 (2022-08-01)
+
+**Note:** Version bump only for package @thepowereco/tssdk
+
+
+
+
+
 ## 1.3.20 (2022-07-15)
 
 **Note:** Version bump only for package @thepowereco/tssdk

@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "lerna:init": "yarn install && lerna bootstrap",
-    "publish": "lerna exec --concurrency 1 -- semantic-release -e semantic-release-monorepo --tag-format='${LERNA_PACKAGE_NAME}-v\\${version}'",
     "lernapub": "lerna publish",
     "cl": "lerna clean",
-    "cm": "git add -A && lint-staged && git-cz"
+    "cm": "git add -A && lint-staged && git-cz",
+    "bootstrap": "npx lerna bootstrap",
+    "publish:ci": "lerna publish from-package --yes",
+    "version:ci": "lerna version --yes --conventional-commits"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --fix",

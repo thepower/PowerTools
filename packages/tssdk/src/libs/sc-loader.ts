@@ -1,8 +1,9 @@
 import { SmartContractWrapper } from './sc-interface';
 import * as msgPack from '@thepowereco/msgpack';
 import { NetworkApi } from '../libs';
+import { ChainNameEnum } from '../config/chain.enum';
 
-export const instantiateSC = async (address: string, chain: number = 8) => {
+export const instantiateSC = async (address: string, chain: ChainNameEnum = ChainNameEnum.eight) => {
   let loadedSC: any = {};
   const network = new NetworkApi(chain);
   await network.bootstrap();
