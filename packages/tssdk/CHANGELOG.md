@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.8.1...@thepowereco/tssdk@1.8.2) (2022-09-27)
+
+
+### Bug Fixes
+
+* **tssdk:** exports fix ([71949f9](https://github.com/thepower/power_hub/commit/71949f952348fceb1bdb6ac47cc18132b1c2863e))
+
+
+
+
+
 ## [1.8.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.8.0...@thepowereco/tssdk@1.8.1) (2022-09-27)
 
 
