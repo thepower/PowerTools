@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.7.1...@thepowereco/tssdk@1.7.2) (2022-09-27)
+
+
+### Bug Fixes
+
+* **tassdk:** evm api exports ([c8eadd9](https://github.com/thepower/power_hub/commit/c8eadd9904dabc0cf19923f4f2b1e23f98b53a99))
+* **tssdk:** small fix ([2db9ce7](https://github.com/thepower/power_hub/commit/2db9ce79d09094fbd047cbe468c1aad30f537154))
+
+
+
+
+
 ## [1.7.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.7.0...@thepowereco/tssdk@1.7.1) (2022-09-16)
 
 **Note:** Version bump only for package @thepowereco/tssdk
