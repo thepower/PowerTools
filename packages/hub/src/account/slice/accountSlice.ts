@@ -15,7 +15,7 @@ export interface AccountState {
   walletData: WalletData;
   subChain: Maybe<number>;
   logged: boolean;
-};
+}
 
 const SLICE_NAME = 'account';
 
@@ -80,7 +80,7 @@ const {
     setImportWalletData,
     setAccountDataAfterLogin,
     clearAccountData,
-  }
+  },
 } = accountSlice;
 
 export {

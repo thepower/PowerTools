@@ -1,6 +1,4 @@
 // components
-
-export { Navigation } from './navigation/components/Navigation'
 export { Page } from './page/Page';
 export { LinkBlock } from './linkBlock/LinkBlock';
 export { Modal } from './modal/Modal';
@@ -12,15 +10,11 @@ export { Tabs } from './tabs/Tabs';
 export { OutlinedInput } from './input/OulinedInput';
 
 // types
-export type { NavigationItemType } from './navigation/typings/navigationTypings';
 export type { UnknownFunctionType } from './typings/common';
 export type { NotificationType } from './notification/typings/notificationTypings';
 export type { BreadcrumbsDataType } from './breadcrumbs/typings/breadcrumbsTypings';
 export { BreadcrumbsTypeEnum } from './breadcrumbs/typings/breadcrumbsTypings';
 export type { WizardComponentProps } from './wizard/Wizard';
-
-// enums
-export { NavigationRoutesEnum } from './navigation/utils/navigationUtils'
 
 // utils
 export { branchCallFunction } from './utils/common';
@@ -34,4 +28,3 @@ export { PELogo } from './icons/PELogo';
 export { ClosedEyeIcon } from './icons/ClosedEyeIcon';
 export { EyeIcon } from './icons/EyeIcon';
 export { AttachIcon } from './icons/AttachIcon';
-

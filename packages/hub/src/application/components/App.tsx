@@ -7,6 +7,7 @@ import { CssBaseline } from '@mui/material';
 import store from '../store/rootStore';
 import { AppRoutes } from './AppRoutes';
 import MUITheme from '../utils/MUITheme';
+import { ReactComponent as InitGradientsSvg } from './initGradientsSvg.svg';
 
 export const App = () => (
   <Provider store={store}>
@@ -14,7 +15,8 @@ export const App = () => (
       <StyledEngineProvider injectFirst>
         <MuiThemeProvider theme={MUITheme}>
           <CssBaseline>
-            <AppRoutes/>
+            <InitGradientsSvg className="initSvgClass" />
+            <AppRoutes />
           </CssBaseline>
         </MuiThemeProvider>
       </StyledEngineProvider>
