@@ -2,7 +2,7 @@
 @import '../../styles/mixins';
 
 .selectedTab {
-  @include the-power-color-text;
+  @include text-gradient($the-power-gradient);
 
   @media screen and (max-width: $tablet) {
     width: 60% !important;

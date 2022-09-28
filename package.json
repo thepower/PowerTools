@@ -9,7 +9,7 @@
     "cm": "git add . && git commit",
     "bootstrap": "npx lerna bootstrap",
     "publish:ci": "lerna publish from-package --yes",
-    "version:ci": "lerna version --yes --conventional-commits"
+    "version:ci": "lerna version --yes --conventional-commits",
     "prepare": "husky install"
   },
   "lint-staged": {

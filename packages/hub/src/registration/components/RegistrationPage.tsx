@@ -55,42 +55,42 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
     this.setState({ enterButtonPressed: true });
   };
 
-  renderWelcome = () => {
-    return <>
+  renderWelcome = () => (
+    <>
       <div className={styles.registrationTitle}>{'Power Hub'}</div>
       <div className={styles.registrationDesc}>{'home for everyone and every dapp'}</div>
       <Button
         className={styles.registrationButton}
-        variant='outlined'
-        size='large'
+        variant="outlined"
+        size="large"
         onClick={this.handleProceedToRegistration}
       >
         {'Join to Web3'}
       </Button>
     </>
-  };
+  );
 
-  renderRegistration = () => {
-    return <div className={styles.registrationWizardComponent}>
-      <PELogo className={styles.registrationPageIcon}/>
+  renderRegistration = () => (
+    <div className={styles.registrationWizardComponent}>
+      <PELogo className={styles.registrationPageIcon} />
       <div className={styles.registrationWizardHolder}>
         <Wizard
           className={styles.registrationWizard}
           breadcrumbs={this.registrationBreadcrumbs}
           type={BreadcrumbsTypeEnum.direction}
-          breadCrumbHasBorder={true}
+          breadCrumbHasBorder
         />
       </div>
-    </div>;
-  };
+    </div>
+  );
 
   render() {
     const { enterButtonPressed } = this.state;
 
     return <div className={styles.registrationPage}>
-      <div className={styles.registrationPageCover}/>
+      <div className={styles.registrationPageCover} />
       {!enterButtonPressed ? this.renderRegistration() : this.renderWelcome()}
-    </div>
+    </div>;
   }
 }
 

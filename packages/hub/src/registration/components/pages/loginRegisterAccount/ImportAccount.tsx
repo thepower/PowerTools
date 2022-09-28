@@ -1,5 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import classnames from 'classnames';
+import { Button } from '@mui/material';
 import {
   LoginRegisterAccountTabs,
   LoginRegisterAccountTabsLabels,
@@ -10,8 +12,6 @@ import styles from '../../Registration.module.scss';
 import { Tabs, AttachIcon } from '../../../../common';
 import { Maybe } from '../../../../typings/common';
 import { importAccountFromFile } from '../../../slice/registrationSlice';
-import classnames from 'classnames';
-import { Button } from '@mui/material';
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = {
@@ -21,16 +21,8 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 type ImportAccountProps = ConnectedProps<typeof connector> & RegistrationPageAdditionalProps;
 
-interface ImportAccountState {
-}
-
-class ImportAccountComponent extends React.PureComponent<ImportAccountProps, ImportAccountState> {
+class ImportAccountComponent extends React.PureComponent<ImportAccountProps, never> {
   private importAccountInput: Maybe<HTMLInputElement> = null;
-
-  constructor(props: ImportAccountProps) {
-    super(props);
-    this.state = {};
-  }
 
   setImportAccountRef = (el: HTMLInputElement) => this.importAccountInput = el;
 
@@ -65,22 +57,22 @@ class ImportAccountComponent extends React.PureComponent<ImportAccountProps, Imp
             ref={this.setImportAccountRef}
             className={styles.importAccountInput}
             onChange={this.handleImportAccount}
-            type='file'
+            type="file"
           />
           <Button
             className={classnames(styles.registrationNextButton, styles.registrationNextButton_outlined, styles.importAccountButton)}
-            variant='outlined'
-            size='large'
+            variant="outlined"
+            size="large"
             onClick={this.handleOpenImportFile}
           >
-            <AttachIcon/>
+            <AttachIcon />
             <span className={styles.importAccountButtonLabel}>
               {'Choose file'}
             </span>
           </Button>
         </div>
       </div>
-    </RegistrationBackground>
+    </RegistrationBackground>;
   }
 }
 

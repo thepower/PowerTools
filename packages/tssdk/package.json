@@ -3,9 +3,7 @@
   "version": "1.8.0",
   "main": "dist/index.js",
   "files": [
-    "dist/index.d.ts",
-    "dist/index.js",
-    "dist/libs/"
+    "dist/*"
   ],
   "description": "thepower tssdk",
   "author": "thepower",
@@ -26,7 +24,7 @@
     "@thepowereco/msgpack": "^1.5.0",
     "@types/bitcoinjs-lib": "^5.0.0",
     "axios": "^0.27.2",
-    "bip32": "^3.0.1",
+    "bip32": "1.0.2",
     "bip39": "^3.0.4",
     "bitcoinjs-lib": "3.3.2",
     "bn.js": "^5.2.1",
