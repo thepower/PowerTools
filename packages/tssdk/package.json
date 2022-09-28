@@ -4,6 +4,9 @@
   "main": "dist/index.js",
   "description": "thepower tssdk",
   "author": "thepower",
+  "files": [
+    "dist/*"
+  ],
   "scripts": {
     "build": "tsc",
     "lint": "eslint src/* --ext .ts",
