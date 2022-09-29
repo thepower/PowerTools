@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import styles from '../../Registration.module.scss';
 import {
   Select,
   MenuItem,
   Button,
 } from '@mui/material';
-import { Tabs, OutlinedInput } from '../../../../common'
+import { SelectChangeEvent } from '@mui/material/Select/SelectInput';
+import classnames from 'classnames';
+import styles from '../../Registration.module.scss';
+import { Tabs, OutlinedInput } from '../../../../common';
 import {
   setCreatingCurrentShard,
   generateSeedPhrase,
@@ -15,12 +17,12 @@ import {
   createWallet,
   setCurrentRegisterCreateAccountTab,
 } from '../../../slice/registrationSlice';
-import { CreateAccountStepsEnum, LoginRegisterAccountTabs, LoginRegisterAccountTabsLabels, RegistrationPageAdditionalProps } from '../../../typings/registrationTypes';
+import {
+  CreateAccountStepsEnum, LoginRegisterAccountTabs, LoginRegisterAccountTabsLabels, RegistrationPageAdditionalProps,
+} from '../../../typings/registrationTypes';
 import { getCurrentCreatingStep, getCurrentShardSelector, getGeneratedSeedPhrase } from '../../../selectors/registrationSelectors';
 import { ApplicationState } from '../../../../application';
-import { SelectChangeEvent } from '@mui/material/Select/SelectInput';
 import { RegistrationBackground } from '../../common/RegistrationBackground';
-import classnames from 'classnames';
 import { RegistrationStatement } from '../../common/RegistrationStatement';
 
 const mapStateToProps = (state: ApplicationState) => ({
@@ -130,15 +132,15 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
           additionalAction: setNextStep,
         });
       }
+      default:
     }
   };
-
 
   handleBackClick = () => {
     const { creatingStep, setCreatingStep } = this.props;
 
     switch (creatingStep) {
-      case CreateAccountStepsEnum.setSeedPhrase : {
+      case CreateAccountStepsEnum.setSeedPhrase: {
         setCreatingStep(CreateAccountStepsEnum.selectSubChain);
         return;
       }
@@ -150,17 +152,15 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
         });
         return;
       }
-      case CreateAccountStepsEnum.encryptPrivateKey : {
+      case CreateAccountStepsEnum.encryptPrivateKey: {
         setCreatingStep(CreateAccountStepsEnum.confirmSeedPhrase);
         this.setState({
           password: '',
           confirmedPassword: '',
           passwordsNotEqual: false,
         });
-        return;
       }
       default:
-        return;
     }
   };
 
@@ -249,10 +249,10 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
       <div className={styles.loginRegisterAccountTitle}>
         {'Remember'}
       </div>
-      <RegistrationStatement description={'Enter a seed phrase or use the one we provide'}/>
-      <RegistrationStatement description={'If you specify your own seed phrase it is up to you to make sure it is valid'}/>
-      <RegistrationStatement description={'Write down your seed phrase and store is somewhere safe'}/>
-      <RegistrationStatement description={'Seed phrase is the only way to restore your private key'}/>
+      <RegistrationStatement description={'Enter a seed phrase or use the one we provide'} />
+      <RegistrationStatement description={'If you specify your own seed phrase it is up to you to make sure it is valid'} />
+      <RegistrationStatement description={'Write down your seed phrase and store is somewhere safe'} />
+      <RegistrationStatement description={'Seed phrase is the only way to restore your private key'} />
       <div className={styles.setSeedPhraseHolder}>
         <div className={styles.seedPhraseTitle}>
           {'Seed phrase'}
@@ -265,16 +265,14 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
           onChange={this.onChangeUserSeedPhrase}
         />
       </div>
-    </RegistrationBackground>
+    </RegistrationBackground>;
   };
 
   compareSeedPhrase = (generatedSeed: string, confirmedSeed: string) => (
-    generatedSeed.trim().replace(/ +(?= )/g,'') === confirmedSeed.trim().replace(/ +(?= )/g,'')
+    generatedSeed.trim().replace(/ +(?= )/g, '') === confirmedSeed.trim().replace(/ +(?= )/g, '')
   );
 
-  comparePassword = (password: string, passwordConfirm: string) => {
-    return password !== '' && password === passwordConfirm;
-  };
+  comparePassword = (password: string, passwordConfirm: string) => password !== '' && password === passwordConfirm;
 
   renderConfirmSeedPhrase = () => {
     const { generatedSeedPhrase } = this.props;
@@ -294,7 +292,7 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
         fullWidth
         errorMessage={'Oh:( the seed phrase is incorrect, please try again'}
       />
-    </div>
+    </div>;
   };
 
   renderEncryptPrivateKey = () => {
@@ -319,7 +317,7 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
           onChange={this.onChangeConfirmedPassword}
           type={'password'}
           error={passwordsNotEqual}
-          errorMessage={"oops, passwords didn't match, try again"}
+          errorMessage={'oops, passwords didn\'t match, try again'}
         />
       </div>
     </RegistrationBackground>;
@@ -344,12 +342,11 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
         return !password || !confirmedPassword || passwordsNotEqual;
       default:
         return false;
-
     }
   };
 
   render() {
-    const { creatingStep} = this.props;
+    const { creatingStep } = this.props;
 
     return <>
       {this.renderContent()}
@@ -358,8 +355,8 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
           creatingStep !== CreateAccountStepsEnum.selectSubChain &&
           <Button
             className={classnames(styles.registrationNextButton, styles.registrationNextButton_outlined)}
-            variant='outlined'
-            size='large'
+            variant="outlined"
+            size="large"
             onClick={this.handleBackClick}
           >
             <span className={styles.registrationNextButtonText}>
@@ -369,15 +366,15 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
         }
         <Button
           className={styles.registrationNextButton}
-          variant='contained'
-          size='large'
+          variant="contained"
+          size="large"
           onClick={this.submitForm}
           disabled={this.getSubmitButtonDisabled()}
         >
           {'Next'}
         </Button>
       </div>
-    </>
+    </>;
   }
 }
 

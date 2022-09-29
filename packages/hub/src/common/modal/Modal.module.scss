@@ -19,3 +19,14 @@
 .modalButton {
   text-transform: none;
 }
+
+.modalRoot {
+  z-index: 13000;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

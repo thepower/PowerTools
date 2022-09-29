@@ -2,16 +2,17 @@ import React from 'react';
 import {
   DialogProps,
   Dialog,
-  DialogTitle,
+  DialogContent,
 } from '@mui/material';
+import classnames from 'classnames';
 import styles from './Modal.module.scss';
+import { PELogo } from '../icons/PELogo';
 
 export interface ModalProps extends DialogProps {
   children?: JSX.Element | JSX.Element[];
   onClose: (data?: any) => void;
-  disableCloseButton?: boolean;
   className?: string;
-  titleClassName?: string;
+  contentClassName?: string;
 }
 
 const dialogClasses = {
@@ -24,22 +25,18 @@ export const Modal: React.FC<ModalProps> = (props: ModalProps) => {
     onClose,
     children,
     className,
-    title,
-    titleClassName,
+    contentClassName,
   } = props;
 
   return <Dialog
     open={open}
     onClose={onClose}
-    className={className}
+    className={classnames(styles.modalRoot, className)}
     classes={dialogClasses}
   >
-    {
-      title &&
-      <DialogTitle className={titleClassName}>
-        {title}
-      </DialogTitle>
-    }
-    {children}
+    <DialogContent className={classnames(contentClassName, styles.modalContent)}>
+      <PELogo />
+      {children}
+    </DialogContent>
   </Dialog>;
 };

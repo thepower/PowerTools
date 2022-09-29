@@ -25,6 +25,7 @@ export { showNotification, clearNotificationLog, hideNotification } from './noti
 
 // svg
 export { PELogo } from './icons/PELogo';
+export { PELogoWithTitle } from './icons/PELogoWithTitle';
 export { ClosedEyeIcon } from './icons/ClosedEyeIcon';
 export { EyeIcon } from './icons/EyeIcon';
 export { AttachIcon } from './icons/AttachIcon';

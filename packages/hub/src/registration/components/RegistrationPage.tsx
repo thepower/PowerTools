@@ -5,7 +5,7 @@ import styles from './Registration.module.scss';
 import {
   BreadcrumbsDataType,
   BreadcrumbsTypeEnum,
-  PELogo,
+  PELogoWithTitle,
   Wizard,
 } from '../../common';
 import { RegistrationTabsEnum } from '../typings/registrationTypes';
@@ -27,10 +27,6 @@ interface RegistrationPageState {
 class RegistrationComponent extends React.PureComponent<RegistrationPageProps, RegistrationPageState> {
   private registrationBreadcrumbs: BreadcrumbsDataType[] = [
     {
-      label: RegistrationTabsEnum.backup,
-      component: Backup,
-    },
-    {
       label: RegistrationTabsEnum.quickGuide,
       component: QuickGuide,
     },
@@ -41,6 +37,10 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
     {
       label: RegistrationTabsEnum.loginRegister,
       component: RegisterPage,
+    },
+    {
+      label: RegistrationTabsEnum.backup,
+      component: Backup,
     },
   ];
 
@@ -72,7 +72,7 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
 
   renderRegistration = () => (
     <div className={styles.registrationWizardComponent}>
-      <PELogo className={styles.registrationPageIcon} />
+      <PELogoWithTitle className={styles.registrationPageIcon} />
       <div className={styles.registrationWizardHolder}>
         <Wizard
           className={styles.registrationWizard}

@@ -436,3 +436,33 @@
   font-size: 16px;
   line-height: 20px;
 }
+
+.exportModalTitleHolder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.exportModal {
+  max-width: 600px !important;
+
+  @media screen and (max-width: $tablet) {
+    max-width: 300px !important;
+  }
+}
+
+.exportModalTitle {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: 0.04em;
+  color: #fff;
+
+  &:not(:last-of-type) {
+    margin-bottom: 12px;
+  }
+}
