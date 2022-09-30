@@ -7,13 +7,11 @@ import {
   setPasswordHint,
   toggleAccountPasswordModal,
   setImportWalletBinaryData,
-  setImportWalletData,
+  setWalletData,
   toggleEncryptPasswordModal,
-  WalletData,
-  setAccountDataAfterLogin,
-  clearAccountData,
+  clearAccountData, setLoggedToAccount,
 } from '../slice/accountSlice';
-import { getWalletBinaryData, getWalletData } from '../selectors/accountSelectors';
+import { getWalletBinaryData } from '../selectors/accountSelectors';
 import { GetChainResultType, LoginToWalletSagaInput } from '../typings/accountTypings';
 import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
 import { NetworkAPI } from '../../application/utils/applicationUtils';
@@ -50,7 +48,7 @@ export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef
         binaryAddress[i] = data.charCodeAt(i + offset);
       }
 
-      yield put(setImportWalletData({
+      yield put(setWalletData({
         address: AddressApi.encodeAddress(binaryAddress).txt,
         wif,
       }));
@@ -65,55 +63,38 @@ export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef
 }
 
 export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInput } = {}) {
-  const walletData: WalletData = yield select(getWalletData);
-  const password = payload?.password;
-  const forceChain = payload?.forceChain;
-  const address = payload?.address || walletData.address;
-  let wif = payload?.wif || walletData.wif;
-
-  if (password) {
-    wif = CryptoApi.encryptWif(wif, password);
-  }
+  const { address, wif } = payload!;
 
   try {
-    if (!forceChain) {
-      let subChain: GetChainResultType;
-      let currentChain = 8;
-      let prevChain = null;
+    let subChain: GetChainResultType;
+    let currentChain = 8;
+    let prevChain = null;
 
-      do {
-        subChain = yield NetworkAPI.getAddressChain(address);
+    do {
+      subChain = yield NetworkAPI.getAddressChain(address!);
 
-        // Switch bootstrap when transitioning from testnet to 101-th chain
-        if (subChain.chain === 101 && currentChain !== 101) {
-          subChain = yield NetworkAPI.getAddressChain(address);
+      // Switch bootstrap when transitioning from testnet to 101-th chain
+      if (subChain.chain === 101 && currentChain !== 101) {
+        subChain = yield NetworkAPI.getAddressChain(address!);
+      }
+
+      if (subChain.result === 'other_chain') {
+        if (prevChain === subChain.chain) {
+          yield put(showNotification({
+            text: 'Portation in progress. Try again in a few minutes.',
+            type: 'error',
+          }));
+          return;
         }
 
-        if (subChain.result === 'other_chain') {
-          if (prevChain === subChain.chain) {
-            yield put(showNotification({
-              text: 'Portation in progress. Try again in a few minutes.',
-              type: 'error',
-            }));
-            return;
-          }
+        prevChain = currentChain;
+        currentChain = subChain.chain;
+      }
+    } while (subChain.result !== 'found');
 
-          prevChain = currentChain;
-          currentChain = subChain.chain;
-        }
-      } while (subChain.result !== 'found');
-
-      yield put(setAccountDataAfterLogin({
-        walletData: {
-          address,
-          wif,
-        },
-        subChain: subChain.chain,
-      }));
-
-      yield setKeyToApplicationStorage('address', address);
-      yield setKeyToApplicationStorage('wif', wif);
-    }
+    yield setKeyToApplicationStorage('address', address);
+    yield setKeyToApplicationStorage('wif', wif);
+    yield put(setLoggedToAccount(true));
   } catch (e) {
     yield put(showNotification({
       text: 'Login error',
@@ -126,7 +107,7 @@ export function* decryptWalletDataSaga({ payload }: { payload: string }) {
   const walletData: string = yield select(getWalletBinaryData);
   const decryptedData = CryptoApi.decryptWalletData(walletData, payload);
 
-  yield put(setImportWalletData(decryptedData));
+  yield put(setWalletData(decryptedData));
 
   if (!isPEM(decryptedData.wif)) {
     yield put(toggleEncryptPasswordModal(true));

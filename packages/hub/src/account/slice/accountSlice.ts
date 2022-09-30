@@ -53,18 +53,14 @@ const accountSlice = createSlice({
     setImportWalletBinaryData: (state: AccountState, action: PayloadAction<string>) => {
       state.walletBinaryData = action.payload;
     },
-    setImportWalletData: (state: AccountState, action: PayloadAction<WalletData & { logged?: boolean; }>) => {
+    setWalletData: (state: AccountState, action: PayloadAction<WalletData & { logged?: boolean; }>) => {
       state.walletData = {
         ...state.walletData,
         ...action.payload,
       };
     },
-    setAccountDataAfterLogin: (state: AccountState, action: PayloadAction<Partial<AccountState>>) => {
-      state.walletData = action.payload.walletData!;
-      state.subChain = action.payload.subChain!;
-      state.walletBinaryData = initialState.walletBinaryData;
-      state.passwordHint = initialState.passwordHint;
-      state.logged = true;
+    setLoggedToAccount: (state: AccountState, action: PayloadAction<boolean>) => {
+      state.logged = action.payload;
     },
     clearAccountData: () => initialState,
   },
@@ -77,8 +73,8 @@ const {
     toggleEncryptPasswordModal,
     setPasswordHint,
     setImportWalletBinaryData,
-    setImportWalletData,
-    setAccountDataAfterLogin,
+    setWalletData,
+    setLoggedToAccount,
     clearAccountData,
   },
 } = accountSlice;
@@ -91,9 +87,9 @@ export {
   setPasswordHint,
   setImportWalletBinaryData,
   decryptWalletData,
-  setImportWalletData,
+  setWalletData,
   loginToWallet,
-  setAccountDataAfterLogin,
+  setLoggedToAccount,
   resetAccount,
   clearAccountData,
 };

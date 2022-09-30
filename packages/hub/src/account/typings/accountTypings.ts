@@ -8,8 +8,6 @@ export type GetChainResultType = {
 };
 
 export type LoginToWalletSagaInput = {
-  password?: string;
-  forceChain?: boolean;
   address?: string;
   wif?: string;
-}
+};

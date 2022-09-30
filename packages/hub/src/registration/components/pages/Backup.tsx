@@ -1,12 +1,20 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import classnames from 'classnames';
-import { Modal, WizardComponentProps } from 'common';
+import { connect, ConnectedProps } from 'react-redux';
+import { Modal } from 'common';
 import { RegistrationBackground } from '../common/RegistrationBackground';
 import { RegistrationStatement } from '../common/RegistrationStatement';
 import styles from '../Registration.module.scss';
+import { proceedToHub } from '../../slice/registrationSlice';
 
-type BackupProps = WizardComponentProps;
+const mapStateToProps = () => ({});
+const mapDispatchToProps = {
+  proceedToHub,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type BackupProps = ConnectedProps<typeof connector>;
 
 interface BackupState {
   openedPasswordModal: boolean;
@@ -16,12 +24,12 @@ interface BackupState {
   hint?: string;
 }
 
-export class Backup extends React.PureComponent<BackupProps, BackupState> {
+class BackupComponent extends React.PureComponent<BackupProps, BackupState> {
   constructor(props: BackupProps) {
     super(props);
 
     this.state = {
-      openedPasswordModal: true,
+      openedPasswordModal: false,
       // password: '',
       // confirmedPassword: '',
       // hint: '',
@@ -35,6 +43,10 @@ export class Backup extends React.PureComponent<BackupProps, BackupState> {
 
   closePasswordModal = () => {
     this.setState({ openedPasswordModal: false });
+  };
+
+  handleProceedToHub = () => {
+    this.props.proceedToHub();
   };
 
   render() {
@@ -67,7 +79,7 @@ export class Backup extends React.PureComponent<BackupProps, BackupState> {
           className={classnames(styles.registrationNextButton, styles.registrationNextButton_outlined)}
           variant="outlined"
           size="large"
-          onClick={this.props.setPrevStep}
+          onClick={this.handleProceedToHub}
         >
           <span className={styles.registrationNextButtonText}>
             {'Skip'}
@@ -85,3 +97,5 @@ export class Backup extends React.PureComponent<BackupProps, BackupState> {
     </>;
   }
 }
+
+export const Backup = connector(BackupComponent);

@@ -8,6 +8,7 @@ const generateSeedPhrase = createAction(`${SLICE_NAME}/generateSeedPhrase`);
 const createWallet = createAction<AddActionType<{ password: string }>>(`${SLICE_NAME}/createWallet`);
 const loginToWalletFromRegistration = createAction<LoginToWalletInputType>(`${SLICE_NAME}/loginToWallet`);
 const importAccountFromFile = createAction<NullableUndef<File>>(`${SLICE_NAME}/importAccount`);
+const proceedToHub = createAction(`${SLICE_NAME}/proceedToHub`);
 
 export type RegistrationState = {
   tab: LoginRegisterAccountTabs;
@@ -31,7 +32,7 @@ const initialState: RegistrationState = {
 export type SetSeedPhraseInput = {
   seedPhrase: string;
   nextStep: CreateAccountStepsEnum;
-}
+};
 
 export type LoginToWalletInputType = {
   address: string;
@@ -91,4 +92,5 @@ export {
   loginToWalletFromRegistration,
   setLoginErrors,
   importAccountFromFile,
+  proceedToHub,
 };

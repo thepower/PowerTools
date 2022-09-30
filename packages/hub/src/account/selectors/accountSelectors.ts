@@ -11,7 +11,7 @@ export const getAccountPageProps = createSelector(
     showEncryptPasswordModal: accountData.showEncryptPasswordModal,
     hint: accountData.passwordHint,
     address: accountData.walletData.address,
-    notLogged: !Boolean(accountData?.walletData?.address),
+    notLogged: !accountData?.walletData?.address,
   }),
 );
 
@@ -24,4 +24,3 @@ export const getWalletData = createSelector(
   getAccountState,
   (accountData: AccountState) => accountData.walletData,
 );
-

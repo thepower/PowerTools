@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, BrowserRouter, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { initApplication } from '../slice/applicationSlice';
 import { RegistrationPage } from '../../registration/components/RegistrationPage';
@@ -19,20 +19,18 @@ class AppRoutesComponent extends React.PureComponent<AppRoutesProps> {
 
   render() {
     return (
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/discover" />
-          <Route exact path="/my-place" />
-          <Route exact path="/build" />
-          <Route exact path="/contribute" />
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/signup">
-            <RegistrationPage />
-          </Route>
-        </Switch>
-      </BrowserRouter>
+      <Switch>
+        <Route exact path="/discover" />
+        <Route exact path="/my-place" />
+        <Route exact path="/build" />
+        <Route exact path="/contribute" />
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route path="/signup">
+          <RegistrationPage />
+        </Route>
+      </Switch>
     );
   }
 }

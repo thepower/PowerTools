@@ -84,9 +84,9 @@ class AccountPageComponent extends React.PureComponent<AccountPageProps, Account
   };
 
   handleConfirmEncryptPassword = () => {
-    this.props.loginToWallet({
-      password: this.state.password,
-    });
+    // this.props.loginToWallet({
+    //   password: this.state.password,
+    // });
     this.closeEncryptPasswordModal();
   };
 

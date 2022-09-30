@@ -1,15 +1,17 @@
 import { put, select } from 'redux-saga/effects';
 import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
+import { push } from 'connected-react-router';
 import {
   LoginToWalletInputType,
   setLoginErrors,
   setSeedPhrase,
 } from '../slice/registrationSlice';
 import { CreateAccountStepsEnum } from '../typings/registrationTypes';
-import { NetworkAPI, WalletAPI } from '../../application/utils/applicationUtils';
-import { loginToWallet } from '../../account/slice/accountSlice';
+import { WalletAPI } from '../../application/utils/applicationUtils';
+import { loginToWallet, setWalletData } from '../../account/slice/accountSlice';
 import { getCurrentShardSelector, getGeneratedSeedPhrase } from '../selectors/registrationSelectors';
 import { AddActionType } from '../../typings/common';
+import { getWalletData } from '../../account/selectors/accountSelectors';
 
 export function* generateSeedPhraseSaga() {
   const phrase: string = yield CryptoApi.generateSeedPhrase();
@@ -28,25 +30,21 @@ export function* createWalletSaga({ payload }: { payload: AddActionType<{ passwo
   const { privateKey, address } = yield WalletAPI.createNew(shard, seedPhrase, '', true);
   const walletPrivateKey = CryptoApi.encryptWif(privateKey, password);
 
-  console.log(walletPrivateKey);
-  console.log(address);
-  additionalAction?.();
-  // todo: redirect and rework login to wallet saga
-}
+  yield put(setWalletData({
+    address,
+    wif: walletPrivateKey,
+  }));
 
+  additionalAction?.();
+}
 
 export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputType }) {
   const { address, seedOrPassword } = payload;
   // AA100000172805350082
   // adult often ecology half spend matter cargo laundry text casual baby embrace
 
-  console.log(seedOrPassword);
-
   try {
     yield AddressApi.parseTextAddress(address);
-    if (false) { // tmp before clarify
-      yield NetworkAPI.getWallet(address);
-    }
   } catch (e: any) {
     yield put(setLoginErrors({ addressError: e.message as string }));
     return;
@@ -59,33 +57,17 @@ export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputTyp
     // @ts-ignore
     const keyPair = yield CryptoApi.generateKeyPairFromSeedPhraseAndAddress(seedOrPassword, address);
     wif = keyPair.toWIF();
-    console.log(keyPair)
   } else {
     wif = seedOrPassword;
   }
-  yield put(loginToWallet({ address, wif, }));
 
-  // todo: redirect and rework login to wallet saga
+  yield put(loginToWallet({ address, wif }));
+  yield put(push('/'));
 }
 
-// export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef<File> }) {
-//   if (!payload) {
-//     yield put(showNotification({
-//       text: 'Please select a file',
-//       type: 'error',
-//     }));
-//     return;
-//   }
-//
-//   try {
-//     const data: string = yield call(getFileData, payload, FileReaderType.binary);
-//     const { wif, address  }  = yield WalletAPI.parseExportData(data);
-//     yield put(loginToWallet({ address, wif, }));
-//     // todo: redirect and rework login to wallet saga
-//   } catch (e) {
-//     yield put(showNotification({
-//       text: `Import error: ${e}`,
-//       type: 'error',
-//     }));
-//   }
-// }
+export function* proceedToHubSaga() {
+  const { wif, address } = yield select(getWalletData);
+
+  yield put(loginToWallet({ address, wif }));
+  yield put(push('/'));
+}
