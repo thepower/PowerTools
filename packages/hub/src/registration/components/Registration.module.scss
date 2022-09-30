@@ -398,6 +398,10 @@
   }
 }
 
+.passwordInputPadded {
+  margin-bottom: 16px;
+}
+
 .importAccountFormHolder {
   display: flex;
   flex-direction: column;
@@ -445,8 +449,11 @@
   margin: 24px 0;
 }
 
-.exportModal {
+.exportModalContent {
   max-width: 600px !important;
+  background: #121923;
+  padding-top: 42px;
+  padding-bottom: 42px;
 
   @media screen and (max-width: $tablet) {
     max-width: 300px !important;
@@ -464,5 +471,29 @@
 
   &:not(:last-of-type) {
     margin-bottom: 12px;
+  }
+}
+
+.exportModalHintDesc {
+  margin-top: 28px;
+  margin-bottom: 20px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+
+.exportModalHintTextArea {
+  width: 280px;
+  min-height: 48px;
+  background: #1d242e;
+  border-radius: 5px;
+  margin-bottom: 32px;
+
+  @media screen and (max-width: $tablet) {
+    width: 100%;
   }
 }

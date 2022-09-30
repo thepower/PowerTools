@@ -24,6 +24,7 @@ import { getCurrentCreatingStep, getCurrentShardSelector, getGeneratedSeedPhrase
 import { ApplicationState } from '../../../../application';
 import { RegistrationBackground } from '../../common/RegistrationBackground';
 import { RegistrationStatement } from '../../common/RegistrationStatement';
+import { compareTwoStrings } from '../../../utils/registrationUtils';
 
 const mapStateToProps = (state: ApplicationState) => ({
   currentShard: getCurrentShardSelector(state),
@@ -118,7 +119,7 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
         return;
       }
       case CreateAccountStepsEnum.encryptPrivateKey: {
-        const passwordsNotEqual = !this.comparePassword(password, confirmedPassword);
+        const passwordsNotEqual = !compareTwoStrings(password, confirmedPassword);
 
         if (passwordsNotEqual) {
           this.setState({
@@ -271,8 +272,6 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
   compareSeedPhrase = (generatedSeed: string, confirmedSeed: string) => (
     generatedSeed.trim().replace(/ +(?= )/g, '') === confirmedSeed.trim().replace(/ +(?= )/g, '')
   );
-
-  comparePassword = (password: string, passwordConfirm: string) => password !== '' && password === passwordConfirm;
 
   renderConfirmSeedPhrase = () => {
     const { generatedSeedPhrase } = this.props;

@@ -20,14 +20,7 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 type LoginRegisterAccountProps = ConnectedProps<typeof connector> & WizardComponentProps;
 
-interface LoginRegisterAccountState {}
-
-class LoginRegisterAccountComponent extends React.PureComponent<LoginRegisterAccountProps, LoginRegisterAccountState> {
-  constructor(props: LoginRegisterAccountProps) {
-    super(props);
-    this.state = {};
-  }
-
+class LoginRegisterAccountComponent extends React.PureComponent<LoginRegisterAccountProps, never> {
   onChangeTab = (_event: React.SyntheticEvent, value: LoginRegisterAccountTabs) => {
     this.props.setCurrentRegisterCreateAccountTab(value);
   };
