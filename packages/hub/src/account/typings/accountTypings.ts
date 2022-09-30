@@ -11,3 +11,8 @@ export type LoginToWalletSagaInput = {
   address?: string;
   wif?: string;
 };
+
+export type ExportAccountInputType = {
+  password: string;
+  hint?: string;
+};

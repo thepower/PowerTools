@@ -1,6 +1,8 @@
 import { call, put, select } from 'redux-saga/effects';
 import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
+import fileSaver from 'file-saver';
 import { FileReaderType, getFileData, showNotification } from 'common';
+import { push } from 'connected-react-router';
 import { NullableUndef } from '../../typings/common';
 import { isPEM } from '../utils/accountUtils';
 import {
@@ -11,10 +13,10 @@ import {
   toggleEncryptPasswordModal,
   clearAccountData, setLoggedToAccount,
 } from '../slice/accountSlice';
-import { getWalletBinaryData } from '../selectors/accountSelectors';
-import { GetChainResultType, LoginToWalletSagaInput } from '../typings/accountTypings';
+import { getWalletBinaryData, getWalletData } from '../selectors/accountSelectors';
+import { ExportAccountInputType, GetChainResultType, LoginToWalletSagaInput } from '../typings/accountTypings';
 import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
-import { NetworkAPI } from '../../application/utils/applicationUtils';
+import { NetworkAPI, WalletAPI } from '../../application/utils/applicationUtils';
 
 // @todo: cut
 export function* importAccountFromFileSaga({ payload }: { payload: NullableUndef<File> }) {
@@ -119,4 +121,17 @@ export function* decryptWalletDataSaga({ payload }: { payload: string }) {
 export function* resetAccountSaga() {
   yield clearApplicationStorage();
   yield put(clearAccountData());
+}
+
+export function* exportAccountSaga({ payload }: { payload: ExportAccountInputType }) {
+  const { wif, address } = yield select(getWalletData);
+  const { password, hint } = payload;
+  const decryptedWif: string = yield CryptoApi.decryptWif(wif, password);
+
+  const exportedData: string = yield WalletAPI.getExportData(decryptedWif, address, password, hint);
+
+  const blob: Blob = yield new Blob([exportedData], { type: 'octet-stream' });
+  yield fileSaver.saveAs(blob, 'power_wallet.pem', true);
+
+  yield put(push('/'));
 }

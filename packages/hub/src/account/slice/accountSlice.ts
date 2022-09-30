@@ -1,6 +1,6 @@
 import { createSlice, createAction, PayloadAction } from '@reduxjs/toolkit';
 import { NullableUndef, Maybe } from '../../typings/common';
-import { LoginToWalletSagaInput } from '../typings/accountTypings';
+import { ExportAccountInputType, LoginToWalletSagaInput } from '../typings/accountTypings';
 
 export type WalletData = {
   address: string;
@@ -23,6 +23,7 @@ const importAccountFromFile = createAction<NullableUndef<File>>(`${SLICE_NAME}/i
 const decryptWalletData = createAction<string>(`${SLICE_NAME}/decryptWalletData`);
 const loginToWallet = createAction<LoginToWalletSagaInput>(`${SLICE_NAME}/loginToWallet`);
 const resetAccount = createAction(`${SLICE_NAME}/resetAccount`);
+const exportAccount = createAction<ExportAccountInputType>(`${SLICE_NAME}/exportAccount`);
 
 const initialState: AccountState = {
   showAccountPasswordModal: false,
@@ -92,4 +93,5 @@ export {
   setLoggedToAccount,
   resetAccount,
   clearAccountData,
+  exportAccount,
 };

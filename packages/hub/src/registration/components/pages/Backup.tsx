@@ -8,10 +8,12 @@ import { RegistrationStatement } from '../common/RegistrationStatement';
 import styles from '../Registration.module.scss';
 import { proceedToHub } from '../../slice/registrationSlice';
 import { compareTwoStrings } from '../../utils/registrationUtils';
+import { exportAccount } from '../../../account/slice/accountSlice';
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = {
   proceedToHub,
+  exportAccount,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -71,12 +73,20 @@ class BackupComponent extends React.PureComponent<BackupProps, BackupState> {
   };
 
   handleExportWallet = () => {
-    const { password, confirmedPassword } = this.state;
+    const { password, confirmedPassword, hint } = this.state;
+    const { exportAccount } = this.props;
+
     const passwordsNotEqual = !compareTwoStrings(password!, confirmedPassword!);
 
     if (passwordsNotEqual) {
       this.setState({ passwordsNotEqual });
+      return;
     }
+
+    exportAccount({
+      password: password!,
+      hint,
+    });
   };
 
   renderExportModal = () => {

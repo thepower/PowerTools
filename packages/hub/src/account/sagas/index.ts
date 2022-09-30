@@ -4,12 +4,14 @@ import {
   decryptWalletData,
   loginToWallet,
   resetAccount,
+  exportAccount,
 } from '../slice/accountSlice';
 import {
   importAccountFromFileSaga,
   decryptWalletDataSaga,
   loginToWalletSaga,
   resetAccountSaga,
+  exportAccountSaga,
 } from './accountSaga';
 
 export default function* accountSaga() {
@@ -17,4 +19,5 @@ export default function* accountSaga() {
   yield takeLatest(decryptWalletData, decryptWalletDataSaga);
   yield takeLatest(loginToWallet, loginToWalletSaga);
   yield takeLatest(resetAccount, resetAccountSaga);
+  yield takeLatest(exportAccount, exportAccountSaga);
 }
