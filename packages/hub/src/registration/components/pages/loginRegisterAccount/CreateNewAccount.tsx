@@ -95,73 +95,72 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
       confirmedPassword,
     } = this.state;
 
-    switch (creatingStep) {
-      case CreateAccountStepsEnum.selectSubChain: {
-        generateSeedPhrase();
-        return;
-      }
-      case CreateAccountStepsEnum.setSeedPhrase: {
-        setSeedPhrase({
-          seedPhrase: (userSeedPhrase || generatedSeedPhrase)!,
-          nextStep: CreateAccountStepsEnum.confirmSeedPhrase,
+    if (creatingStep === CreateAccountStepsEnum.selectSubChain) {
+      generateSeedPhrase();
+      return;
+    }
+
+    if (creatingStep === CreateAccountStepsEnum.setSeedPhrase) {
+      setSeedPhrase({
+        seedPhrase: (userSeedPhrase || generatedSeedPhrase)!,
+        nextStep: CreateAccountStepsEnum.confirmSeedPhrase,
+      });
+      return;
+    }
+
+    if (creatingStep === CreateAccountStepsEnum.confirmSeedPhrase) {
+      const seedsNotEqual = !this.compareSeedPhrase(generatedSeedPhrase!, confirmedSeedPhrase);
+      if (seedsNotEqual) {
+        this.setState({
+          seedsNotEqual,
         });
         return;
       }
-      case CreateAccountStepsEnum.confirmSeedPhrase: {
-        const seedsNotEqual = !this.compareSeedPhrase(generatedSeedPhrase!, confirmedSeedPhrase);
-        if (seedsNotEqual) {
-          this.setState({
-            seedsNotEqual,
-          });
-          return;
-        }
-        setCreatingStep(CreateAccountStepsEnum.encryptPrivateKey);
+      setCreatingStep(CreateAccountStepsEnum.encryptPrivateKey);
+      return;
+    }
+
+    if (creatingStep === CreateAccountStepsEnum.encryptPrivateKey) {
+      const passwordsNotEqual = !compareTwoStrings(password, confirmedPassword);
+
+      if (passwordsNotEqual) {
+        this.setState({
+          passwordsNotEqual: true,
+        });
         return;
       }
-      case CreateAccountStepsEnum.encryptPrivateKey: {
-        const passwordsNotEqual = !compareTwoStrings(password, confirmedPassword);
 
-        if (passwordsNotEqual) {
-          this.setState({
-            passwordsNotEqual: true,
-          });
-          return;
-        }
-
-        createWallet({
-          password,
-          additionalAction: setNextStep,
-        });
-      }
-      default:
+      createWallet({
+        password,
+        additionalAction: setNextStep,
+      });
     }
   };
 
   handleBackClick = () => {
     const { creatingStep, setCreatingStep } = this.props;
 
-    switch (creatingStep) {
-      case CreateAccountStepsEnum.setSeedPhrase: {
-        setCreatingStep(CreateAccountStepsEnum.selectSubChain);
-        return;
-      }
-      case CreateAccountStepsEnum.confirmSeedPhrase: {
-        setCreatingStep(CreateAccountStepsEnum.setSeedPhrase);
-        this.setState({
-          seedsNotEqual: false,
-          confirmedSeedPhrase: '',
-        });
-        return;
-      }
-      case CreateAccountStepsEnum.encryptPrivateKey: {
-        setCreatingStep(CreateAccountStepsEnum.confirmSeedPhrase);
-        this.setState({
-          password: '',
-          confirmedPassword: '',
-          passwordsNotEqual: false,
-        });
-      }
-      default:
+    if (creatingStep === CreateAccountStepsEnum.setSeedPhrase) {
+      setCreatingStep(CreateAccountStepsEnum.selectSubChain);
+      return;
+    }
+
+    if (creatingStep === CreateAccountStepsEnum.confirmSeedPhrase) {
+      setCreatingStep(CreateAccountStepsEnum.setSeedPhrase);
+      this.setState({
+        seedsNotEqual: false,
+        confirmedSeedPhrase: '',
+      });
+      return;
+    }
+
+    if (creatingStep === CreateAccountStepsEnum.encryptPrivateKey) {
+      setCreatingStep(CreateAccountStepsEnum.confirmSeedPhrase);
+      this.setState({
+        password: '',
+        confirmedPassword: '',
+        passwordsNotEqual: false,
+      });
     }
   };
 
