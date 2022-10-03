@@ -20,6 +20,11 @@ export class NetworkApi {
     this.currentChain = chain;
   }
 
+  public async changeChain(chain: ChainNameEnum) {
+    this.currentChain = chain;
+    await this.bootstrap();
+  }
+
   private setCurrentConfig = async (newNodes: ChainNode[]) => {
     this.currentNodes = await queueNodes(newNodes);
     this.nodeIndex = 0;
@@ -82,7 +87,7 @@ export class NetworkApi {
   private async getChainInfo() {
     const baseURL = 'https://raw.githubusercontent.com/thepower/all_chains/main/config.json';
     const { data } = await axios.request({ baseURL });
-    return data;
+    return data.chains;
   }
 
   public bootstrap = async () => {

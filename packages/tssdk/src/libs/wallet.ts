@@ -4,16 +4,14 @@ import { TransactionsApi } from './transactions';
 import { CryptoApi } from './crypto';
 import { correctAmount, correctAmountsObject } from '../utils/numbers';
 import { Maybe } from '../typings';
-import { ChainNameEnum } from '../config/chain.enum';
 
 export class WalletApi {
   private networkApi;
 
   private blocksPerPage = 8;
 
-  constructor(chain: ChainNameEnum) {
-    this.networkApi = new NetworkApi(chain);
-    this.networkApi.bootstrap();
+  constructor(network: NetworkApi) {
+    this.networkApi = network;
   }
 
   private prettifyTx(inputTx: any, block: any) {

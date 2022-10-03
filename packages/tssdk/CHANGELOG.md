@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.4](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.8.3...@thepowereco/tssdk@1.8.4) (2022-09-28)
+
+
+### Bug Fixes
+
+* **tssdk package fix:** fix ([8aa12ce](https://github.com/thepower/power_hub/commit/8aa12ceb034fe8e9208cc5ee6dea13c310519ec9))
+
+
+
+
+
+## [1.8.3](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.8.2...@thepowereco/tssdk@1.8.3) (2022-09-28)
+
+
+### Bug Fixes
+
+* **tssdk:** package fix ([f531489](https://github.com/thepower/power_hub/commit/f531489cbb677ebf6f6f3dac46b8b21453e51c6c))
+
+
+
+
+
+## [1.8.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.8.1...@thepowereco/tssdk@1.8.2) (2022-09-27)
+
+
+### Bug Fixes
+
+* **tssdk:** exports fix ([71949f9](https://github.com/thepower/power_hub/commit/71949f952348fceb1bdb6ac47cc18132b1c2863e))
+
+
+
+
+
+## [1.8.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.8.0...@thepowereco/tssdk@1.8.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* **tssdk:** chain config changes ([a81706d](https://github.com/thepower/power_hub/commit/a81706d006fb22e006e447154e60a00bba8e25b9))
+
+
+
+
+
 # [1.8.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.7.2...@thepowereco/tssdk@1.8.0) (2022-09-27)
 
 
