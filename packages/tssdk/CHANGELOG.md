@@ -1,7 +1,29 @@
-# Change Lo
+# Change Log
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [1.9.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.8.4...@thepowereco/tssdk@1.9.0) (2022-10-03)
+
+
+### Bug Fixes
+
+* **hub:** fixes after merge ([75798bf](https://github.com/thepower/power_hub/commit/75798bf0a438936e04e59d89cecb14825f682a30))
+* **template:** add sidePanel, header, template ([beab0d8](https://github.com/thepower/power_hub/commit/beab0d81dab59052d3bd87de0cae054e6dfb22bb))
+* **tssdk:** wallet api lib ([dffd544](https://github.com/thepower/power_hub/commit/dffd544df6061c149ccc447e60535d480b6e5926))
+* **up:** up ([0f1d0a6](https://github.com/thepower/power_hub/commit/0f1d0a6f4421952fd8194d0fec352fd5cc34e542))
+
+
+### Features
+
+* **hub:** create account ([4e87715](https://github.com/thepower/power_hub/commit/4e87715bce0d53bb6efde921d40ba80a722f8ba2))
+* **hub:** create wallet ([a7299f7](https://github.com/thepower/power_hub/commit/a7299f7b535c7be98bad16d84709beff5f2338c7))
+* **hub:** login saga ([6f75c30](https://github.com/thepower/power_hub/commit/6f75c30915443285e838b049f8e4f1cc0028f989))
+* **hub:** login to accotun ([1134753](https://github.com/thepower/power_hub/commit/113475305f872f68a2c969b310c063f60d210447))
+
+
+
+
 
 ## [1.8.4](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.8.3...@thepowereco/tssdk@1.8.4) (2022-09-28)
 

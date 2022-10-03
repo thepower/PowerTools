@@ -1,7 +1,45 @@
-# Change Lo
+# Change Log
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [1.5.0](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.4.7...@thepowereco/hub@1.5.0) (2022-10-03)
+
+
+### Bug Fixes
+
+* **hub:** auth ([57f5f27](https://github.com/thepower/power_hub/commit/57f5f27836d81705a4bd6249233700690545fcdf))
+* **hub:** build fix ([2ffa09d](https://github.com/thepower/power_hub/commit/2ffa09d79bacbfeee859eff98c5cbcd9d06d1282))
+* **hub:** fixes after merge ([75798bf](https://github.com/thepower/power_hub/commit/75798bf0a438936e04e59d89cecb14825f682a30))
+* **template:** add sidePanel, header, template ([beab0d8](https://github.com/thepower/power_hub/commit/beab0d81dab59052d3bd87de0cae054e6dfb22bb))
+* **template:** fix review ([587b29c](https://github.com/thepower/power_hub/commit/587b29cb55b5f5c17f812d0fd5ee2145c2f809be))
+* **tssdk:** wallet api lib ([dffd544](https://github.com/thepower/power_hub/commit/dffd544df6061c149ccc447e60535d480b6e5926))
+* **up:** up ([0f1d0a6](https://github.com/thepower/power_hub/commit/0f1d0a6f4421952fd8194d0fec352fd5cc34e542))
+
+
+### Features
+
+* **hub:** breadcrumbs component ([c960705](https://github.com/thepower/power_hub/commit/c96070501e23f0993bafd5b62abe24408d0c7103))
+* **hub:** create account ([4e87715](https://github.com/thepower/power_hub/commit/4e87715bce0d53bb6efde921d40ba80a722f8ba2))
+* **hub:** create wallet ([a7299f7](https://github.com/thepower/power_hub/commit/a7299f7b535c7be98bad16d84709beff5f2338c7))
+* **hub:** export acc ([ee45869](https://github.com/thepower/power_hub/commit/ee45869f86a723f98e555302f7a150d07027274d))
+* **hub:** export modal ([0ab1ec6](https://github.com/thepower/power_hub/commit/0ab1ec666a2631a3cc5d1d45f9629c50b7fd96d5))
+* **hub:** import account modal ([7a8143f](https://github.com/thepower/power_hub/commit/7a8143f36a44704e49ee83844340c00150441293))
+* **hub:** import modal ([1ee2ca4](https://github.com/thepower/power_hub/commit/1ee2ca414184a384aeb97b670d69d45273dbba7a))
+* **hub:** login saga ([6f75c30](https://github.com/thepower/power_hub/commit/6f75c30915443285e838b049f8e4f1cc0028f989))
+* **hub:** login to accotun ([1134753](https://github.com/thepower/power_hub/commit/113475305f872f68a2c969b310c063f60d210447))
+* **hub:** mobile view ([f2cdd12](https://github.com/thepower/power_hub/commit/f2cdd12186a6944ae102fbd8820f28aede617671))
+* **hub:** mobile view fixes ([631d49b](https://github.com/thepower/power_hub/commit/631d49bd63148d9c12d68ca0a68788d9656fa68d))
+* **hub:** modal ([f897756](https://github.com/thepower/power_hub/commit/f89775691d01467ec94fa827792f97fd63f69b67))
+* **hub:** new reg page ([74bb198](https://github.com/thepower/power_hub/commit/74bb198b92f30d5f974d44e588f00c63fb5d7498))
+* **hub:** new regitration ([5621069](https://github.com/thepower/power_hub/commit/56210690b948cad4f662c50d7aae6715ed28118e))
+* **hub:** outlined button fix ([10ec924](https://github.com/thepower/power_hub/commit/10ec92410c7ac6453bfbb83f8b89d33fde203868))
+* **hub:** registration fixes ([ff4fe72](https://github.com/thepower/power_hub/commit/ff4fe720f9aa87974c6317d9d6407081ee7ae4f5))
+* **hub:** registration page ([9d1da4c](https://github.com/thepower/power_hub/commit/9d1da4cce2bf4265176b78d4c718c97dc57e7113))
+
+
+
+
 
 ## [1.4.7](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.4.6...@thepowereco/hub@1.4.7) (2022-09-28)
 
