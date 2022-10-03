@@ -20,6 +20,11 @@ export class NetworkApi {
     this.currentChain = chain;
   }
 
+  public async changeChain(chain: ChainNameEnum) {
+    this.currentChain = chain;
+    await this.bootstrap();
+  }
+
   private setCurrentConfig = async (newNodes: ChainNode[]) => {
     this.currentNodes = await queueNodes(newNodes);
     this.nodeIndex = 0;

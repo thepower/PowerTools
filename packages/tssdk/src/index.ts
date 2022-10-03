@@ -6,8 +6,8 @@ export {
   CryptoApi,
   TransactionsApi,
   EvmApi,
-  SmartContractWrapper,
   WalletApi,
+  SmartContractWrapper,
   loadScLocal,
 } from './libs';
 
