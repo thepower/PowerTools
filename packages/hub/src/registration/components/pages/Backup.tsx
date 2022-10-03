@@ -120,6 +120,7 @@ class BackupComponent extends React.PureComponent<BackupProps, BackupState> {
         value={password}
         onChange={this.onChangePassword}
         type={'password'}
+        autoFocus
       />
       <OutlinedInput
         placeholder={'Repeated password'}

@@ -456,7 +456,9 @@
   padding-bottom: 42px;
 
   @media screen and (max-width: $tablet) {
-    max-width: 300px !important;
+    padding-left: 20px;
+    padding-right: 20px;
+    max-width: unset !important;
   }
 }
 
@@ -496,4 +498,20 @@
   @media screen and (max-width: $tablet) {
     width: 100%;
   }
+}
+
+.importModalContent {
+  max-width: 384px !important;
+  background: #121923;
+  padding: 64px 50px 56px;
+
+  @media screen and (max-width: $tablet) {
+    padding: 42px 20px;
+    max-width: unset !important;
+  }
+}
+
+.importModalPasswordInput {
+  margin-top: 36px;
+  margin-bottom: 90px;
 }

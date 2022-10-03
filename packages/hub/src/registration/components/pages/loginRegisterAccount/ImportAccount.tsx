@@ -9,7 +9,9 @@ import {
 } from '../../../typings/registrationTypes';
 import { RegistrationBackground } from '../../common/RegistrationBackground';
 import styles from '../../Registration.module.scss';
-import { Tabs, AttachIcon } from '../../../../common';
+import {
+  Tabs, AttachIcon, OutlinedInput, Modal,
+} from '../../../../common';
 import { Maybe } from '../../../../typings/common';
 import { importAccountFromFile } from '../../../slice/registrationSlice';
 
@@ -18,11 +20,26 @@ const mapDispatchToProps = {
   importAccountFromFile,
 };
 
+interface ImportAccountState {
+  password: string;
+  openedPasswordModal: boolean;
+  accountFile: Maybe<File>;
+}
 const connector = connect(mapStateToProps, mapDispatchToProps);
 type ImportAccountProps = ConnectedProps<typeof connector> & RegistrationPageAdditionalProps;
 
-class ImportAccountComponent extends React.PureComponent<ImportAccountProps, never> {
+class ImportAccountComponent extends React.PureComponent<ImportAccountProps, ImportAccountState> {
   private importAccountInput: Maybe<HTMLInputElement> = null;
+
+  constructor(props: ImportAccountProps) {
+    super(props);
+
+    this.state = {
+      password: '',
+      openedPasswordModal: false,
+      accountFile: null,
+    };
+  }
 
   setImportAccountRef = (el: HTMLInputElement) => this.importAccountInput = el;
 
@@ -30,15 +47,75 @@ class ImportAccountComponent extends React.PureComponent<ImportAccountProps, nev
     this.importAccountInput?.click();
   };
 
-  handleImportAccount = (event: ChangeEvent<HTMLInputElement>) => {
+  setAccountFile = (event: ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      accountFile: event?.target?.files?.[0]!,
+      openedPasswordModal: true,
+    });
+  };
+
+  onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      password: event.target.value,
+    });
+  };
+
+  closePasswordModal = () => {
+    this.setState({ openedPasswordModal: false });
+  };
+
+  handleImportAccount = () => {
     const { importAccountFromFile } = this.props;
-    importAccountFromFile(event.target?.files?.[0]);
+    const { accountFile, password } = this.state;
+
+    importAccountFromFile({
+      password,
+      accountFile: accountFile!,
+    });
+  };
+
+  renderImportModal = () => {
+    const { openedPasswordModal, password } = this.state;
+
+    return <Modal
+      contentClassName={styles.importModalContent}
+      onClose={this.closePasswordModal}
+      open={!openedPasswordModal}
+    >
+      <div className={styles.exportModalTitleHolder}>
+        <div className={styles.exportModalTitle}>
+          {'Import account'}
+        </div>
+        <div className={styles.exportModalTitle}>
+          {'Please enter your password and your account will be loaded'}
+        </div>
+      </div>
+      <OutlinedInput
+        placeholder={'Password'}
+        className={classnames(styles.passwordInput, styles.importModalPasswordInput)}
+        value={password}
+        onChange={this.onChangePassword}
+        type={'password'}
+        autoFocus
+      />
+      <Button
+        className={classnames(styles.registrationNextButton, styles.registrationNextButton_outlined)}
+        variant="outlined"
+        size="large"
+        onClick={this.handleImportAccount}
+      >
+        <span className={styles.registrationNextButtonText}>
+          {'Next'}
+        </span>
+      </Button>
+    </Modal>;
   };
 
   render() {
     const { tab, onChangeTab } = this.props;
 
     return <RegistrationBackground>
+      {this.renderImportModal()}
       <div className={styles.loginRegisterAccountTitle}>
         {'Create, login or import an account'}
       </div>
@@ -56,7 +133,7 @@ class ImportAccountComponent extends React.PureComponent<ImportAccountProps, nev
           <input
             ref={this.setImportAccountRef}
             className={styles.importAccountInput}
-            onChange={this.handleImportAccount}
+            onChange={this.setAccountFile}
             type="file"
           />
           <Button

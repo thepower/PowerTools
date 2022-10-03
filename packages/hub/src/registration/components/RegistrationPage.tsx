@@ -27,6 +27,10 @@ interface RegistrationPageState {
 class RegistrationComponent extends React.PureComponent<RegistrationPageProps, RegistrationPageState> {
   private registrationBreadcrumbs: BreadcrumbsDataType[] = [
     {
+      label: RegistrationTabsEnum.loginRegister,
+      component: RegisterPage,
+    },
+    {
       label: RegistrationTabsEnum.backup,
       component: Backup,
     },
@@ -37,10 +41,6 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
     {
       label: RegistrationTabsEnum.beAware,
       component: BeAware,
-    },
-    {
-      label: RegistrationTabsEnum.loginRegister,
-      component: RegisterPage,
     },
   ];
 

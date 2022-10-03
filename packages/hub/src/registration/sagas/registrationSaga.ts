@@ -2,11 +2,10 @@ import { put, select } from 'redux-saga/effects';
 import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
 import { push } from 'connected-react-router';
 import {
-  LoginToWalletInputType,
   setLoginErrors,
   setSeedPhrase,
 } from '../slice/registrationSlice';
-import { CreateAccountStepsEnum } from '../typings/registrationTypes';
+import { CreateAccountStepsEnum, LoginToWalletInputType } from '../typings/registrationTypes';
 import { WalletAPI } from '../../application/utils/applicationUtils';
 import { loginToWallet, setWalletData } from '../../account/slice/accountSlice';
 import { getCurrentShardSelector, getGeneratedSeedPhrase } from '../selectors/registrationSelectors';

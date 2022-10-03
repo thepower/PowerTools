@@ -6,7 +6,7 @@ export enum RegistrationTabsEnum {
   beAware = 'Be aware',
   loginRegister = 'Login / Register',
   backup = 'Backup',
-};
+}
 
 export enum LoginRegisterAccountTabs {
   create = 'create',
@@ -31,3 +31,23 @@ export type RegistrationPageAdditionalProps = {
   onChangeTab: (_event: React.SyntheticEvent, value: LoginRegisterAccountTabs) => void;
   tab: LoginRegisterAccountTabs;
 } & WizardComponentProps;
+
+export type SetSeedPhraseInput = {
+  seedPhrase: string;
+  nextStep: CreateAccountStepsEnum;
+};
+
+export type LoginToWalletInputType = {
+  address: string;
+  seedOrPassword: string;
+};
+
+export type LoginErrorsType = {
+  addressError: string;
+  seedOrPasswordError: string;
+};
+
+export type ImportAccountInputType = {
+  accountFile: File;
+  password: string;
+};

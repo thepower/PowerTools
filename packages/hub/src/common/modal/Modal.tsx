@@ -35,7 +35,9 @@ export const Modal: React.FC<ModalProps> = (props: ModalProps) => {
     classes={dialogClasses}
   >
     <DialogContent className={classnames(contentClassName, styles.modalContent)}>
-      <PELogo />
+      <div>
+        <PELogo />
+      </div>
       {children}
     </DialogContent>
   </Dialog>;
