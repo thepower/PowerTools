@@ -3,7 +3,7 @@ import { Buffer } from 'safe-buffer';
 import * as msgPack from '@thepowereco/msgpack';
 const Bitcoin = require('bitcoinjs-lib');
 import { AddressApi } from './address';
-// import { Blob } from 'node:buffer';
+// const sha512 = require('js-sha512').sha512;
 
 const TAG_PUBLIC_KEY = 0x02;
 const TAG_SIGNATURE = 0xFF;

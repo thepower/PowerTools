@@ -8,8 +8,16 @@ export type GetChainResultType = {
 };
 
 export type LoginToWalletSagaInput = {
-  password?: string;
-  forceChain?: boolean;
   address?: string;
   wif?: string;
-}
+};
+
+export type ExportAccountInputType = {
+  password: string;
+  hint?: string;
+};
+
+export type ImportAccountInputType = {
+  accountFile: File;
+  password: string;
+};

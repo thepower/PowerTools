@@ -1,0 +1,24 @@
+@import '../../styles/mixins';
+
+.button {
+  width: 48px;
+  height: 48px;
+  background: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background: #252b35;
+  }
+
+  &:focus {
+    background: #2e353d;
+  }
+
+  &:disabled {
+    cursor: default;
+    background: #202b3d;
+  }
+}
+
+@include icon-colors('.button');

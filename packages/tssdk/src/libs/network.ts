@@ -1,11 +1,12 @@
 import axios from 'axios';
 import createHash from 'create-hash';
+import Debug from 'debug';
 import { config as cfg } from '../config/chain.config';
 import { ChainNode } from '../typings';
 import { queueNodes, transformNodeList, transformResponse } from '../helpers/network.helper';
 import { ChainAction } from '../helpers/network.enum';
-import Debug from 'debug';
 import { ChainNameEnum } from '../config/chain.enum';
+
 const info = Debug('info');
 
 export class NetworkApi {
@@ -13,10 +14,15 @@ export class NetworkApi {
 
   private currentNodes: ChainNode[] = [];
 
-  private nodeIndex: number = 0;
+  private nodeIndex = 0;
 
   constructor(chain: ChainNameEnum) {
     this.currentChain = chain;
+  }
+
+  public async changeChain(chain: ChainNameEnum) {
+    this.currentChain = chain;
+    await this.bootstrap();
   }
 
   private setCurrentConfig = async (newNodes: ChainNode[]) => {
@@ -30,9 +36,11 @@ export class NetworkApi {
     return new Promise((resolve, reject) => {
       this.sendPreparedTX(
         tx,
-        (success: boolean, message: string) => success ?
+        (success: boolean, message: string) => (success ?
           resolve(message)
-          : reject(message), timeout);
+          : reject(message)),
+        timeout,
+      );
     });
   }
 
@@ -41,46 +49,36 @@ export class NetworkApi {
     return this.calculateFeeSettings(settings);
   }
 
-  public getBlock = async (hash = 'last') => {
-    return this.askBlockchainTo(
-      ChainAction.GET_BLOCK,
-      { chain: this.currentChain, hash })
-    ;
-  };
+  public getBlock = async (hash = 'last') => this.askBlockchainTo(
+    ChainAction.GET_BLOCK,
+    { chain: this.currentChain, hash },
+  );
 
-  public getWallet = async (address: string) => {
-    return this.askBlockchainTo(
-      ChainAction.GET_WALLET,
+  public getWallet = async (address: string) => this.askBlockchainTo(
+    ChainAction.GET_WALLET,
+    { chain: this.currentChain, address },
+  );
+
+  public loadScCode = async (address: string) => new Uint8Array(
+    await this.askBlockchainTo(
+      ChainAction.GET_SC_CODE,
       { chain: this.currentChain, address },
-    );
-  };
+    ),
+  );
 
-  public loadScCode = async (address: string) => {
-    return new Uint8Array(
-      await this.askBlockchainTo(
-        ChainAction.GET_SC_CODE,
-        { chain: this.currentChain, address },
-      ),
-    );
-  };
+  public loadScState = async (address: string) => new Uint8Array(
+    await this.askBlockchainTo(
+      ChainAction.GET_SC_STATE,
+      { chain: this.currentChain, address },
+    ),
+  );
 
-  public loadScState = async (address: string) => {
-    return new Uint8Array(
-      await this.askBlockchainTo(
-        ChainAction.GET_SC_STATE,
-        { chain: this.currentChain, address },
-      ),
-    );
-  };
-
-  public loadScStateByKey = async (address: string, key: string) => {
-    return new Uint8Array(
-      await this.askBlockchainTo(
-        ChainAction.GET_SC_STATE_BY_KEY,
-        { chain: this.currentChain, address, key },
-      ),
-    );
-  };
+  public loadScStateByKey = async (address: string, key: string) => new Uint8Array(
+    await this.askBlockchainTo(
+      ChainAction.GET_SC_STATE_BY_KEY,
+      { chain: this.currentChain, address, key },
+    ),
+  );
 
   private getChain() {
     return this.currentChain;
@@ -95,8 +93,10 @@ export class NetworkApi {
   public bootstrap = async () => {
     const chainInfo = await this.getChainInfo();
 
-    if (chainInfo[this.currentChain]) {
-      const fullNodes = transformNodeList(chainInfo[this.currentChain]);
+    const chainData = chainInfo.chains[this.currentChain];
+
+    if (chainData) {
+      const fullNodes = transformNodeList(chainData);
 
       if (!fullNodes.length) {
         throw new Error(`No nodes found for chain ${this.currentChain}`);
@@ -143,15 +143,13 @@ export class NetworkApi {
     throw new Error(`Unknown chain ${this.currentChain}`);
   };
 
-
-
   private async loadRemoteSCInterface(interfaceData: any[]) {
-    const [ hashData, urlData] = interfaceData;
-    const [ hashAlg, hashValue ] = hashData.split(':');
+    const [hashData, urlData] = interfaceData;
+    const [hashAlg, hashValue] = hashData.split(':');
 
     const baseURL = urlData.includes('ipfs') ?
       `https://ipfs.io/ipfs/${urlData.split('://')[1]}` // TODO: what url is it? move to const (config)
-      : urlData + `?${+new Date()}`;
+      : `${urlData}?${+new Date()}`;
 
     const { data } = await axios.request({ baseURL, responseType: 'arraybuffer' });
     const binaryCode = new Uint8Array(data);
@@ -164,7 +162,7 @@ export class NetworkApi {
     return binaryCode;
   }
 
-  public async sendPreparedTX(tx: any, callback: Function, timeout: number = 1000, vm: 'wasm' | 'evm' = 'evm' ) {
+  public async sendPreparedTX(tx: any, callback: Function, timeout = 1000, vm: 'wasm' | 'evm' = 'evm') {
     // await this.setChain(chain);
     const response = await this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data: { tx } });
     if (callback) {
@@ -211,14 +209,14 @@ export class NetworkApi {
     if (status) {
       callback(!status.error, `${txId}: ${status.res}`);
     } else if (count < timeout) {
-      setTimeout(() => this.checkTransaction(txId, callback, timeout, ++finalCount), cfg.callbackCallDelay);
+      setTimeout(() => this.checkTransaction(txId, callback, timeout, finalCount += 1), cfg.callbackCallDelay);
     } else {
       callback(false, `${txId}: Transaction status lost`);
     }
   };
 
   private incrementNodeIndex = async () => {
-    this.nodeIndex++;
+    this.nodeIndex += 1;
     if (this.nodeIndex >= this.currentNodes.length || this.currentNodes[this.nodeIndex].time === cfg.maxNodeResponseTime) {
       this.currentNodes = await queueNodes(this.currentNodes);
       this.nodeIndex = 0;
@@ -240,7 +238,7 @@ export class NetworkApi {
     }
 
     while (!success) {
-      i++;
+      i += 1;
       parameters.baseURL = `${this.currentNodes[this.nodeIndex].address}/api${actionUrl}`;
       try {
         result = await axios.request(parameters);
@@ -254,7 +252,7 @@ export class NetworkApi {
             throw new Error('Too many attempts.');
           }
         } else {
-          //Server responded with error
+          // Server responded with error
           throw new Error(e.response.data.msg);
         }
       }
@@ -279,10 +277,29 @@ export class NetworkApi {
     return this.askBlockchainTo(ChainAction.GET_MY_CHAIN, { address });
   }
 
+  public async getChainNodes(chain: string, remoteChain: string) {
+    return this.askBlockchainTo(ChainAction.GET_CHAIN_NODES, {
+      chain,
+      remoteChain,
+    });
+  }
+
+  public async getNodeSettings() {
+    return this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {});
+  }
+
+  public async createTransaction(data: { tx: string }) {
+    return this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data });
+  }
+
+  public async getTransactionStatus(txId: string) {
+    return this.askBlockchainTo(ChainAction.GET_TRANSACTION_STATUS, { txId });
+  }
+
   private async askBlockchainTo(kind: ChainAction, parameters: any) {
     let actionUrl;
 
-    let requestParams: any = {
+    const requestParams: any = {
       timeout: cfg.chainRequestTimeout,
       method: 'get',
     };
@@ -325,19 +342,19 @@ export class NetworkApi {
 
       case ChainAction.GET_SC_CODE:
         requestParams.responseType = 'arraybuffer';
-        requestParams.url = parameters.address + '/code';
+        requestParams.url = `${parameters.address}/code`;
         actionUrl = '/address';
         break;
 
       case ChainAction.GET_SC_STATE:
         requestParams.responseType = 'arraybuffer';
-        requestParams.url = parameters.address + '/state';
+        requestParams.url = `${parameters.address}/state`;
         actionUrl = '/address';
         break;
 
       case ChainAction.GET_SC_STATE_BY_KEY:
         requestParams.responseType = 'arraybuffer';
-        requestParams.url = parameters.address + '/state/0x' + parameters.key;
+        requestParams.url = `${parameters.address}/state/0x${parameters.key}`;
         actionUrl = '/address';
         break;
 
@@ -353,4 +370,3 @@ export class NetworkApi {
     return response;
   }
 }
-

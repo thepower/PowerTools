@@ -1,0 +1,517 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.registrationPage {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: $black;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.registrationPageIcon {
+  margin-top: $unit * 4;
+  margin-bottom: $unit * 4;
+  flex-shrink: 0;
+}
+
+.registrationPageCover {
+  height: 100vh;
+  width: 60vw;
+  position: absolute;
+  background: url('../../common/imgs/RegistraionBackground.png');
+  background-size: contain;
+}
+
+.registrationTitle {
+  @include the-power-color-text;
+
+  font-weight: 700;
+  font-size: $unit * 20;
+  line-height: $unit * 16;
+
+  @media screen and (max-width: $tablet) {
+    font-size: $unit * 12;
+    line-height: $unit * 10;
+  }
+}
+
+.registrationDesc {
+  @include the-power-color-text;
+
+  margin-top: $unit * 8;
+  font-weight: 700;
+  font-size: $unit * 7;
+  line-height: $unit * 8;
+
+  @media screen and (max-width: $tablet) {
+    margin-top: $unit * 5;
+    font-size: $unit * 4;
+    line-height: $unit * 8;
+  }
+}
+
+.registrationNextButtonText {
+  @include text-gradient($the-power-gradient);
+}
+
+.registrationButton {
+  @include the-power-color;
+
+  border-radius: 5px;
+  margin-top: $unit * 15;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  color: #f5f5f7;
+  text-transform: unset;
+  width: 312px;
+  height: 56px;
+
+  @media screen and (max-width: $tablet) {
+    margin-top: $unit * 47;
+    width: 280px;
+    height: 48px;
+  }
+}
+
+.registrationWizardComponent {
+  width: 100%;
+  height: 100%;
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+
+  @media screen and (max-width: $notebook) {
+    padding: $unit * 6 $unit * 4;
+  }
+}
+
+.registrationWizardHolder {
+  background-color: #151516 !important;
+  border-radius: $unit * 5;
+  padding: 0 $unit * 26;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media screen and (max-width: $notebook) {
+    padding: $unit * 5 $unit * 4;
+  }
+}
+
+.registrationWizard {
+  background-color: transparent;
+  margin-top: $unit * 5;
+  height: 100%;
+
+  @media screen and (max-width: $notebook) {
+    margin-top: 0;
+  }
+}
+
+.registrationBackground {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: linear-gradient(90deg, #1768e5 50.44%, #00f0ff 129.31%);
+  border-radius: $unit * 5;
+  height: 100%;
+  padding: $unit * 3 $unit * 21;
+  margin-bottom: $unit * 4;
+
+  div:not(:last-of-type) {
+    margin-bottom: $unit * 4;
+  }
+
+  @media screen and (max-width: $notebook) {
+    padding: $unit * 6 $unit * 2;
+    width: unset;
+  }
+}
+
+.registrationStatement {
+  padding: $unit * 3 $unit * 5 $unit * 4;
+  background: #151516;
+  border-radius: $unit * 5;
+}
+
+.registrationStatementTitle {
+  font-weight: 500;
+  font-size: $unit * 4.5;
+  line-height: $unit * 6;
+  color: #2997ff;
+  text-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+  padding-bottom: $unit * 2;
+
+  @media screen and (max-width: $tablet) {
+    margin-bottom: 0 !important;
+  }
+}
+
+.registrationStatementDesc {
+  font-weight: 400;
+  font-size: $unit * 3.5;
+  line-height: $unit * 4;
+  color: #f5f5f7;
+  text-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+}
+
+.registrationPageTitle {
+  font-weight: 700;
+  font-size: $unit * 6;
+  line-height: $unit * 7;
+  color: #f5f5f7;
+  margin-bottom: $unit * 4;
+  margin-left: $unit * 5;
+}
+
+.registrationButtonsHolder {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  button:nth-child(2) {
+    margin-left: $unit * 3;
+  }
+
+  @media screen and (max-width: $tablet) {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    flex-direction: column;
+    align-items: center;
+
+    button:nth-child(2) {
+      margin-left: 0;
+    }
+  }
+}
+
+.registrationNextButton {
+  @include the-power-color;
+
+  margin-top: $unit * 4;
+  margin-bottom: $unit * 5;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  border-radius: 5px;
+  color: #f5f5f7;
+  text-transform: unset;
+  width: 178px;
+  height: 48px;
+
+  &_outlined {
+    @include the-power-color-outlined;
+
+    padding: 0 !important;
+  }
+}
+
+.loginRegisterAccountTitle {
+  font-weight: 700;
+  font-size: $unit * 6;
+  line-height: $unit * 7;
+  color: #f5f5f7;
+  width: 100%;
+  text-align: center;
+}
+
+.loginRegisterAccountBreadCrumb {
+  @include the-power-color-text;
+
+  border-bottom: 2px #2e3642 solid !important;
+  margin: 0 !important;
+  width: 100%;
+  height: 34px !important;
+}
+
+.loginRegisterAccountWizard {
+  background: #151516;
+  border-radius: $unit * 5;
+  padding: $unit * 5 $unit * 16;
+  height: 100%;
+}
+
+.loginRegisterAccountHolder {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 370px;
+  background: #151516;
+  border-radius: 20px;
+  padding: 20px 45px;
+
+  @media screen and (max-width: $tablet) {
+    padding: 20px;
+  }
+}
+
+.registrationFormHolder {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.registrationFormDesc {
+  font-weight: 400;
+  font-size: $unit * 3.3;
+  line-height: $unit * 4;
+  display: flex;
+  align-items: center;
+  color: #f5f5f7;
+  white-space: pre-line;
+  margin-top: 48px;
+}
+
+.loginRegisterAccountCreateSelect {
+  width: 168px;
+  height: 34px;
+}
+
+.loginRegisterAccountCreateSelectMenu {
+  z-index: 15000;
+}
+
+.seedPhraseTitle {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  color: #f5f5f7;
+  width: 100%;
+  justify-content: flex-start;
+
+  @media screen and (max-width: $tablet) {
+    justify-content: center;
+  }
+}
+
+.loginTextArea {
+  gap: 10px;
+  width: 502px;
+  min-height: 64px;
+  background: #252b35;
+  border-radius: 20px;
+
+  @media screen and (max-width: $tablet) {
+    width: 100%;
+  }
+}
+
+.setSeedPhraseHolder {
+  width: 100%;
+
+  div:last-of-type {
+    @media screen and (max-width: $tablet) {
+      width: 100%;
+    }
+  }
+}
+
+.confirmSeedPhraseHolder {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 500px;
+  margin: 132px auto 172px;
+
+  @media screen and (max-width: $tablet) {
+    width: 100%;
+    margin: 36px 0 72px;
+  }
+
+  div:last-of-type {
+    @media screen and (max-width: $tablet) {
+      width: 100%;
+    }
+  }
+}
+
+.confirmSeedPhraseTitle {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  color: #f5f5f7;
+  margin-bottom: 20px;
+  width: 100%;
+
+  @media screen and (max-width: $tablet) {
+    font-size: 24px;
+    justify-content: center;
+  }
+}
+
+.confirmSeedPhraseError {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  color: #ac2d2d;
+}
+
+.encryptKeyHolder {
+  width: 451px;
+  height: 305px;
+  background: #151516;
+  border-radius: 20px;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media screen and (max-width: $tablet) {
+    width: unset;
+    height: unset;
+    padding: 32px 20px;
+  }
+}
+
+.passwordInput {
+  width: 280px;
+  height: 48px;
+  background: #1d242e;
+  border-radius: 5px;
+
+  @media screen and (max-width: $tablet) {
+    width: 100%;
+  }
+}
+
+.passwordInputPadded {
+  margin-bottom: 16px;
+}
+
+.importAccountFormHolder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.importAccountInput {
+  height: 1px;
+  width: 1px;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.importAccountButton {
+  background: #151516;
+  margin-top: 32px;
+}
+
+.importAccountButtonLabel {
+  @include text-gradient($the-power-gradient);
+
+  margin-left: 16px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.importAccountFormDesc {
+  display: flex;
+  align-items: center;
+  color: #f5f5f7;
+  white-space: pre-line;
+  margin-top: 48px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.exportModalTitleHolder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.exportModalContent {
+  max-width: 600px !important;
+  background: #121923;
+  padding-top: 42px;
+  padding-bottom: 42px;
+
+  @media screen and (max-width: $tablet) {
+    padding-left: 20px;
+    padding-right: 20px;
+    max-width: unset !important;
+  }
+}
+
+.exportModalTitle {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: 0.04em;
+  color: #fff;
+
+  &:not(:last-of-type) {
+    margin-bottom: 12px;
+  }
+}
+
+.exportModalHintDesc {
+  margin-top: 28px;
+  margin-bottom: 20px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+
+.exportModalHintTextArea {
+  width: 280px;
+  min-height: 48px;
+  background: #1d242e;
+  border-radius: 5px;
+  margin-bottom: 32px;
+
+  @media screen and (max-width: $tablet) {
+    width: 100%;
+  }
+}
+
+.importModalContent {
+  max-width: 384px !important;
+  background: #121923;
+  padding: 64px 50px 56px;
+
+  @media screen and (max-width: $tablet) {
+    padding: 42px 20px;
+    max-width: unset !important;
+  }
+}
+
+.importModalPasswordInput {
+  margin-top: 36px;
+  margin-bottom: 90px;
+}

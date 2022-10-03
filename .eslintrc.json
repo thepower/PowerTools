@@ -1,13 +1,12 @@
 {
     "root": true,
     "parser": "@typescript-eslint/parser",
-    "plugins": [
-        "@typescript-eslint",
-        "oclif"
-    ],
+    "plugins": ["@typescript-eslint"],
     "extends": [
+        "airbnb",
         "airbnb-typescript",
-        "airbnb/hooks"
+        "airbnb/hooks",
+        "plugin:@typescript-eslint/recommended"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -15,10 +14,10 @@
         },
         "sourceType": "module",
         "project": [
-            "packages/hub/tsconfig.json",
-            "packages/cli/tsconfig.json",
-            "packages/tssdk/tsconfig.json",
-            "packages/uploader/tsconfig.json"
+            "./packages/hub/tsconfig.json",
+            "./packages/cli/tsconfig.json",
+            "./packages/tssdk/tsconfig.json",
+            "./packages/uploader/tsconfig.json"
         ]
     },
     "env": {
@@ -27,13 +26,14 @@
         "es6": true
     },
     "rules": {
+        "react/function-component-definition": [2, {
+            "namedComponents": "arrow-function"
+        }],
         "no-console": 1,
         "no-unused-vars": 0,
         "no-empty":1,
         "react-hooks/rules-of-hooks": 2,
         "react-hooks/exhaustive-deps": 1,
-        "import/extensions": 0,
-        "func-names": 0,
         "quotes": ["error", "single"],
         "comma-dangle": ["error", "always-multiline"],
         "no-shadow": 0,
@@ -54,7 +54,6 @@
         "react/jsx-props-no-spreading": 0,
         "react/jsx-wrap-multilines": 0,
         "import/prefer-default-export": 0,
-        "react/jsx-closing-tag-location": 0,
         "react/prop-types": 0,
         "import/no-unresolved": 0,
         "react/destructuring-assignment": 0,
@@ -77,15 +76,17 @@
         "react/no-this-in-sfc": 0,
         "react/no-find-dom-node": 0,
         "curly": 1,
-        "react/jsx-filename-extension": 0,
         "import/no-extraneous-dependencies": 0,
-        "import/no-anonymous-default-export": 0
-    },
-    "globals": {
-        "describe": "writable",
-        "test": "writable",
-        "expect": "writable",
-        "beforeEach": "writable",
-        "beforeAll": "writable"
+        "import/no-anonymous-default-export": 0,
+        "react/jsx-closing-tag-location": 0,
+        "no-return-assign": 0,
+        "@typescript-eslint/ban-ts-comment": 0,
+        "@typescript-eslint/no-var-requires": 0,
+        "prefer-destructuring": 0,
+        "@typescript-eslint/no-non-null-assertion": 0,
+        "@typescript-eslint/no-non-null-asserted-optional-chain": 0,
+        "@typescript-eslint/ban-types": 0,
+        "no-promise-executor-return": 0,
+        "no-fallthrough": 1
     }
 }

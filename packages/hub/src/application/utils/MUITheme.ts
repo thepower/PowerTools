@@ -13,6 +13,7 @@ const MUITheme = createTheme({
     primary: {
       main: '#2997ff',
     },
+    mode: 'dark',
   },
   spacing: 4,
   transitions: {

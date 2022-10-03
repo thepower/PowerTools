@@ -6,8 +6,10 @@ export {
   CryptoApi,
   TransactionsApi,
   EvmApi,
+  WalletApi,
   SmartContractWrapper,
   loadScLocal,
 } from './libs';
 
 export { ChainAction } from './helpers/network.enum';
+export { ChainNameEnum } from './config/chain.enum';

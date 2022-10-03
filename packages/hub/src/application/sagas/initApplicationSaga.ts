@@ -1,14 +1,15 @@
 import { put } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
 import { setTestnetAvailable } from '../slice/applicationSlice';
 import { getIsProductionOnlyDomains } from '../utils/applicationUtils';
 import { getKeyFromApplicationStorage } from '../utils/localStorageUtils';
 import { loginToWalletSaga } from '../../account/sagas/accountSaga';
-import { setImportWalletData } from '../../account/slice/accountSlice';
+import { setWalletData } from '../../account/slice/accountSlice';
 
 export function* initApplicationSaga() {
   // let subChain = -1;
-  let address: string = '';
-  let wif: string = '';
+  let address = '';
+  let wif = '';
   // let hashParams = null;
 
   if (process.env.NODE_ENV !== 'test' && getIsProductionOnlyDomains()) {
@@ -18,7 +19,7 @@ export function* initApplicationSaga() {
   // hashParams = parseHash();
 
   address = yield getKeyFromApplicationStorage('address');
-  wif = yield getKeyFromApplicationStorage('wif')
+  wif = yield getKeyFromApplicationStorage('wif');
   const sCAPPs: string = yield getKeyFromApplicationStorage('scapps');
 
   if (sCAPPs) {
@@ -30,12 +31,15 @@ export function* initApplicationSaga() {
       payload: {
         address,
         wif,
-      }
+      },
     });
 
-    yield put(setImportWalletData({
+    yield put(setWalletData({
       address,
       wif,
+      logged: true,
     }));
+  } else {
+    yield put(push('/signup'));
   }
 }

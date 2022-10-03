@@ -1,11 +1,16 @@
-@import '../../application/styles/variables';
+@import '../../styles/variables';
 
 .modal {
   border-radius: $unit * 2.5;
-  min-width: $unit * 100;
-  min-height: $unit * 50;
-  padding: $unit * 6;
   max-width: unset;
+
+  @media screen and (max-width: $tablet) {
+    height: 100vh;
+    width: 100vw;
+    margin: 0 !important;
+    max-height: unset;
+    min-width: unset;
+  }
 }
 
 .confirmModalActions {
@@ -18,4 +23,15 @@
 
 .modalButton {
   text-transform: none;
+}
+
+.modalRoot {
+  z-index: 13000;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
