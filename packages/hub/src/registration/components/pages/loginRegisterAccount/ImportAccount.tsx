@@ -13,7 +13,7 @@ import {
   Tabs, AttachIcon, OutlinedInput, Modal,
 } from '../../../../common';
 import { Maybe } from '../../../../typings/common';
-import { importAccountFromFile } from '../../../slice/registrationSlice';
+import { importAccountFromFile } from '../../../../account/slice/accountSlice';
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = {
@@ -44,7 +44,9 @@ class ImportAccountComponent extends React.PureComponent<ImportAccountProps, Imp
   setImportAccountRef = (el: HTMLInputElement) => this.importAccountInput = el;
 
   handleOpenImportFile = () => {
-    this.importAccountInput?.click();
+    if (this.importAccountInput) {
+      this.importAccountInput.click();
+    }
   };
 
   setAccountFile = (event: ChangeEvent<HTMLInputElement>) => {
@@ -72,6 +74,8 @@ class ImportAccountComponent extends React.PureComponent<ImportAccountProps, Imp
       password,
       accountFile: accountFile!,
     });
+
+    this.closePasswordModal();
   };
 
   renderImportModal = () => {
@@ -80,7 +84,7 @@ class ImportAccountComponent extends React.PureComponent<ImportAccountProps, Imp
     return <Modal
       contentClassName={styles.importModalContent}
       onClose={this.closePasswordModal}
-      open={!openedPasswordModal}
+      open={openedPasswordModal}
     >
       <div className={styles.exportModalTitleHolder}>
         <div className={styles.exportModalTitle}>

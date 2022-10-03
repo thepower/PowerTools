@@ -46,8 +46,3 @@ export type LoginErrorsType = {
   addressError: string;
   seedOrPasswordError: string;
 };
-
-export type ImportAccountInputType = {
-  accountFile: File;
-  password: string;
-};
