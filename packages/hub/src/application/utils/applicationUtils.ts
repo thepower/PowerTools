@@ -23,4 +23,4 @@ export const getNetworkApi = async (chain: ChainNameEnum = ChainNameEnum.first) 
 
 // @ts-ignore
 export const NetworkAPI = await getNetworkApi(ChainNameEnum.hundredAndThree);
-export const WalletAPI = new WalletApi(ChainNameEnum.hundredAndThree);
+export const WalletAPI = new WalletApi(NetworkAPI);
