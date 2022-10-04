@@ -8,7 +8,7 @@
     "cl": "lerna clean",
     "cm": "git add . && git commit",
     "bootstrap": "npx lerna bootstrap",
-    "publish:ci": "lerna publish from-package --yes",
+    "publish:ci": "lerna publish from-package --yes --no-verify-access",
     "version:ci": "lerna version --yes --conventional-commits",
     "prepare": "husky install"
   },
