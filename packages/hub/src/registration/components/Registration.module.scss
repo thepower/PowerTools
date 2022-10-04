@@ -28,7 +28,7 @@
 }
 
 .registrationTitle {
-  @include the-power-color-text;
+  @include text-gradient($the-power-gradient);
 
   font-weight: 700;
   font-size: $unit * 20;
@@ -41,7 +41,7 @@
 }
 
 .registrationDesc {
-  @include the-power-color-text;
+  @include text-gradient($the-power-gradient);
 
   margin-top: $unit * 8;
   font-weight: 700;
@@ -100,9 +100,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 1000px;
 
   @media screen and (max-width: $notebook) {
     padding: $unit * 5 $unit * 4;
+    max-width: unset;
   }
 }
 

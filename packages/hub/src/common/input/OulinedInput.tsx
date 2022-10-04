@@ -39,8 +39,8 @@ export class OutlinedInput extends React.PureComponent<OutlinedInputProps, Outli
         className={styles.passwordAdornment}
         onClick={this.toggleShowPassword}
       >
-        { showPassword ? <ClosedEyeIcon/> : <EyeIcon/> }
-      </div>
+        { showPassword ? <ClosedEyeIcon /> : <EyeIcon /> }
+      </div>;
     }
 
     return null;
@@ -68,7 +68,7 @@ export class OutlinedInput extends React.PureComponent<OutlinedInputProps, Outli
       ...otherProps
     } = this.props;
 
-    return <FormControl>
+    return <FormControl className={styles.formControl}>
       <MUIOutlinedInput
         placeholder={placeholder}
         className={className}
