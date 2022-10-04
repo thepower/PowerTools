@@ -93,7 +93,7 @@ export class NetworkApi {
   public bootstrap = async () => {
     const chainInfo = await this.getChainInfo();
 
-    const chainData = chainInfo.chains[this.currentChain];
+    const chainData = chainInfo[this.currentChain];
 
     if (chainData) {
       const fullNodes = transformNodeList(chainData);
