@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.1](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.5.0...@thepowereco/hub@1.5.1) (2022-10-04)
+
+
+### Bug Fixes
+
+* **ts sdk:** chains fix ([f8d5d44](https://github.com/thepower/power_hub/commit/f8d5d445e9bc3dddd9841663dceaccb4ebc857c4))
+
+
+
+
+
 # [1.5.0](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.4.7...@thepowereco/hub@1.5.0) (2022-10-03)
 
 
