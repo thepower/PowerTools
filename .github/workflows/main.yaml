@@ -27,7 +27,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Bootstrap lerna
-        run: lerna:init
+        run: yarn lerna:init
 
       - name: Bump versions and publish packages
         run: |
