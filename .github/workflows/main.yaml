@@ -4,6 +4,9 @@ on:
   push:
     branches: [master]
 
+env:
+  CI: true
+
 jobs:
   publish-gpr:
     name: Publish to GPR
@@ -24,7 +27,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Bootstrap lerna
-        run: yarn bootstrap
+        run: lerna:init
 
       - name: Bump versions and publish packages
         run: |
