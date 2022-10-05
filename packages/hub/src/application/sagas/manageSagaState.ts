@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { put } from 'typed-redux-saga';
-import { startAction, stopAction } from '../slice/networkSlice';
+import { startAction, stopAction } from '../../common/network/slices/networkSlice';
 import { showNotification, NotificationTypeEnum } from '../../common';
 
 export default (saga: any) => (function* manageSagaState(action: PayloadAction<any>) {

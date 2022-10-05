@@ -5,7 +5,7 @@ import { accountReducer } from '../../account/slice/accountSlice';
 import { applicationDataReducer } from '../slice/applicationSlice';
 import { notificationReducer } from '../../common/notification/slice/notificationSlice';
 import { registrationReducer } from '../../registration/slice/registrationSlice';
-import { networkReducer } from '../slice/networkSlice';
+import { networkReducer } from '../../common/network/slices/networkSlice';
 
 const rootReducer = combineReducers({
   router: connectRouter(history),
