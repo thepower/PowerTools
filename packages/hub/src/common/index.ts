@@ -8,10 +8,12 @@ export { Breadcrumbs } from './breadcrumbs/components/Breadcrumbs';
 export { Wizard } from './wizard/Wizard';
 export { Tabs } from './tabs/Tabs';
 export { OutlinedInput } from './input/OulinedInput';
+export { Loader } from './loader/Loader';
 
 // types
 export type { UnknownFunctionType } from './typings/common';
 export type { NotificationType } from './notification/typings/notificationTypings';
+export { NotificationTypeEnum } from './notification/typings/notificationTypings';
 export type { BreadcrumbsDataType } from './breadcrumbs/typings/breadcrumbsTypings';
 export { BreadcrumbsTypeEnum } from './breadcrumbs/typings/breadcrumbsTypings';
 export type { WizardComponentProps } from './wizard/Wizard';
