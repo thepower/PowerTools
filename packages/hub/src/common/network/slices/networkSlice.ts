@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import isEqual from 'lodash/isEqual';
 import remove from 'lodash/remove';
 
-interface Action { name: string, params?: any }
+interface Action { name: string; params?: any; }
 
 export interface NetworkState {
   actions: Action[],

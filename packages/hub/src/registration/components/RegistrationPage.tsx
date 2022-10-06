@@ -5,7 +5,6 @@ import styles from './Registration.module.scss';
 import {
   BreadcrumbsDataType,
   BreadcrumbsTypeEnum,
-  Loader,
   PELogoWithTitle,
   Wizard,
 } from '../../common';
@@ -89,9 +88,8 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
     const { enterButtonPressed } = this.state;
 
     return <div className={styles.registrationPage}>
-      <Loader />
       <div className={styles.registrationPageCover} />
-      {enterButtonPressed ? this.renderRegistration() : this.renderWelcome()}
+      {!enterButtonPressed ? this.renderRegistration() : this.renderWelcome()}
     </div>;
   }
 }

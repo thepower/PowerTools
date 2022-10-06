@@ -8,7 +8,12 @@ import {
 import { SelectChangeEvent } from '@mui/material/Select/SelectInput';
 import classnames from 'classnames';
 import styles from '../../Registration.module.scss';
-import { Tabs, OutlinedInput } from '../../../../common';
+import {
+  Tabs,
+  OutlinedInput,
+  checkIfLoading,
+  ModalLoader,
+} from '../../../../common';
 import {
   setCreatingCurrentShard,
   generateSeedPhrase,
@@ -30,6 +35,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   currentShard: getCurrentShardSelector(state),
   creatingStep: getCurrentCreatingStep(state),
   generatedSeedPhrase: getGeneratedSeedPhrase(state),
+  loading: checkIfLoading(state, createWallet.type),
 });
 
 const mapDispatchToProps = {
@@ -344,9 +350,13 @@ class CreateNewAccountComponent extends React.PureComponent<CreateNewAccountProp
   };
 
   render() {
-    const { creatingStep } = this.props;
-
+    const { creatingStep, loading } = this.props;
     return <>
+      <ModalLoader
+        loadingTitle={'Processing\nvery soon everything will happen'}
+        open={loading}
+        hideIcon
+      />
       {this.renderContent()}
       <div className={styles.registrationButtonsHolder}>
         {

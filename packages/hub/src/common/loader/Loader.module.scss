@@ -1,11 +1,10 @@
 @import '../../styles/mixins';
 
 .loader {
-  position: absolute;
   top: calc(50% - 32px);
   left: calc(50% - 32px);
-  width: 64px;
-  height: 64px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   perspective: 800px;
 }
