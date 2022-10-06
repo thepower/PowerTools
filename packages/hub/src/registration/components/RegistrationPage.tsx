@@ -89,7 +89,7 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
 
     return <div className={styles.registrationPage}>
       <div className={styles.registrationPageCover} />
-      {!enterButtonPressed ? this.renderRegistration() : this.renderWelcome()}
+      {enterButtonPressed ? this.renderRegistration() : this.renderWelcome()}
     </div>;
   }
 }

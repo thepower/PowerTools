@@ -23,7 +23,10 @@ import {
   setCurrentRegisterCreateAccountTab,
 } from '../../../slice/registrationSlice';
 import {
-  CreateAccountStepsEnum, LoginRegisterAccountTabs, LoginRegisterAccountTabsLabels, RegistrationPageAdditionalProps,
+  CreateAccountStepsEnum,
+  LoginRegisterAccountTabs,
+  LoginRegisterAccountTabsLabels,
+  RegistrationPageAdditionalProps,
 } from '../../../typings/registrationTypes';
 import { getCurrentCreatingStep, getCurrentShardSelector, getGeneratedSeedPhrase } from '../../../selectors/registrationSelectors';
 import { ApplicationState } from '../../../../application';
