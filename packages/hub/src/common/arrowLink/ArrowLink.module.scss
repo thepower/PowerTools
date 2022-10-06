@@ -13,10 +13,10 @@
 @include icon-colors('.lilac');
 
 .button {
-  cursor: pointer;
-  background: transparent;
   display: inline-flex;
   align-items: center;
+  background: transparent;
+  cursor: pointer;
   letter-spacing: -0.2px;
   text-decoration: none;
 
@@ -48,20 +48,20 @@
 }
 
 .small {
-  font-weight: 500;
   font-size: 16px;
+  font-weight: 500;
   line-height: 18px;
 }
 
 .medium {
-  font-weight: 500;
   font-size: 20px;
+  font-weight: 500;
   line-height: 23px;
 }
 
 .large {
-  font-weight: 700;
   font-size: 24px;
+  font-weight: 700;
   line-height: 28px;
 }
 

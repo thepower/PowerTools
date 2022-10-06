@@ -8,7 +8,11 @@ export { Breadcrumbs } from './breadcrumbs/components/Breadcrumbs';
 export { Wizard } from './wizard/Wizard';
 export { Tabs } from './tabs/Tabs';
 export { OutlinedInput } from './input/OulinedInput';
-
+export { default as ArrowLink } from './arrowLink/ArrowLink';
+export { default as CardLink } from './cardLink/CardLink';
+export { default as IconButton } from './iconButton/IconButton';
+export { default as AccountInfo } from './accountInfo/AccountInfo';
+export { default as TopBar } from './topBar/TopBar';
 // types
 export type { UnknownFunctionType } from './typings/common';
 export type { NotificationType } from './notification/typings/notificationTypings';
