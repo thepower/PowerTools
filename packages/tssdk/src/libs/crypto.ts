@@ -5,8 +5,11 @@ import Crypto, {
 } from 'crypto';
 import { Buffer as SafeBuffer } from 'safe-buffer';
 import createHash, { algorithm } from 'create-hash';
+import { promises } from 'fs';
 import { AddressApi } from './address';
-import { PKCS5PEMInfoType, Maybe, MaybeUndef } from '../typings';
+import {
+  PKCS5PEMInfoType, Maybe, MaybeUndef, AccountKey,
+} from '../typings';
 
 const bip32 = require('bip32');
 const Bitcoin = require('bitcoinjs-lib');
@@ -157,6 +160,14 @@ export const CryptoApi = {
 
   generateKeyPairFromWIF(wif: string) {
     return Bitcoin.ECPair.fromWIF(wif);
+  },
+
+  async loadKey(fileName: string, password: string): Promise<AccountKey> {
+    const keySignature = '-----BEGIN EC PRIVATE KEY-----';
+    const data: any = await promises.readFile(fileName, {});
+    const file:string = data.toString();
+    const key = file.substr(file.indexOf(keySignature));
+    return CryptoApi.decryptWalletData(key, password);
   },
 
   generateKeyPairFromSeedPhraseAndAddress(seedPhrase: string, address: string) {
