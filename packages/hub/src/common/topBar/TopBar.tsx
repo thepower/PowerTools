@@ -4,7 +4,7 @@ import styles from './TopBar.module.scss';
 import IconButton from '../iconButton/IconButton';
 import { ReactComponent as BellIcon } from './bell.svg';
 import AccountInfo from '../accountInfo/AccountInfo';
-import LinkButton from '../linkButton/LinkButton';
+import ArrowLink from '../arrowLink/ArrowLink';
 
 interface TopBarProps {
   type: 'inside' | 'outside';
@@ -20,7 +20,7 @@ const TopBar: React.FC<TopBarProps> = ({
   <>
     <header className={cn(styles.bar, styles[type])}>
       {type === 'inside' && backUrl && (
-      <LinkButton
+      <ArrowLink
         to={backUrl}
         direction="left"
         hideTextOnMobile
@@ -28,7 +28,7 @@ const TopBar: React.FC<TopBarProps> = ({
         defaultColor="lilac"
       >
         Back
-      </LinkButton>
+      </ArrowLink>
       )}
       {type === 'outside' && (
       <div className={styles.accountHolder}>

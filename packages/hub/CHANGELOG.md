@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.5.1...@thepowereco/hub@1.6.0) (2022-10-06)
+
+
+### Features
+
+* **home-page:** add card links ([86dc14e](https://github.com/thepower/power_hub/commit/86dc14edde061b42870691a790c4faf7a29146c2))
+
+
+
+
+
 ## [1.5.1](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.5.0...@thepowereco/hub@1.5.1) (2022-10-04)
 
 
