@@ -63,9 +63,9 @@
   @include the-power-color;
   width: 312px;
   height: 56px;
+  margin-top: $unit * 15;
 
   border-radius: 5px;
-  margin-top: $unit * 15;
   color: #f5f5f7;
   font-size: 20px;
   font-weight: 500;
@@ -99,8 +99,8 @@
   flex-direction: column;
   align-items: center;
   padding: 0 $unit * 26;
-  border-radius: $unit * 5;
   background-color: #151516 !important;
+  border-radius: $unit * 5;
 
   @media screen and (max-width: $notebook) {
     max-width: unset;
@@ -124,9 +124,9 @@
   flex-direction: column;
   align-items: flex-start;
   padding: $unit * 3 $unit * 21;
-  border-radius: $unit * 5;
   margin-bottom: $unit * 4;
   background: linear-gradient(90deg, #1768e5 50.44%, #00f0ff 129.31%);
+  border-radius: $unit * 5;
 
   div:not(:last-of-type) {
     margin-bottom: $unit * 4;
@@ -140,8 +140,8 @@
 
 .registrationStatement {
   padding: $unit * 3 $unit * 5 $unit * 4;
-  border-radius: $unit * 5;
   background: #151516;
+  border-radius: $unit * 5;
 }
 
 .registrationStatementTitle {
@@ -201,11 +201,11 @@
   @include the-power-color;
   width: 178px;
   height: 48px;
-  border-radius: 5px;
 
   margin-top: $unit * 4;
   margin-bottom: $unit * 5;
   background: #121923;
+  border-radius: 5px;
   color: #f5f5f7;
   font-size: 20px;
   font-weight: 500;
@@ -240,8 +240,8 @@
 .loginRegisterAccountWizard {
   height: 100%;
   padding: $unit * 5 $unit * 16;
-  border-radius: $unit * 5;
   background: #151516;
+  border-radius: $unit * 5;
 }
 
 .loginRegisterAccountHolder {
@@ -252,10 +252,10 @@
   align-items: center;
   justify-content: flex-start;
   padding: 20px 45px;
-  border-radius: 20px;
   margin-right: auto;
   margin-left: auto;
   background: #151516;
+  border-radius: 20px;
 
   @media screen and (max-width: $tablet) {
     padding: 20px;
@@ -308,8 +308,8 @@
 .loginTextArea {
   width: 502px;
   min-height: 64px;
-  border-radius: 20px;
   background: #252b35;
+  border-radius: 20px;
   gap: 10px;
 
   @media screen and (max-width: $tablet) {
@@ -378,10 +378,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 20px;
   margin-right: auto;
   margin-left: auto;
   background: #151516;
+  border-radius: 20px;
 
   @media screen and (max-width: $tablet) {
     width: unset;
@@ -393,8 +393,8 @@
 .passwordInput {
   width: 280px;
   height: 48px;
-  border-radius: 5px;
   background: #1d242e;
+  border-radius: 5px;
 
   @media screen and (max-width: $tablet) {
     width: 100%;
@@ -494,9 +494,9 @@
 .exportModalHintTextArea {
   width: 280px;
   min-height: 48px;
-  border-radius: 5px;
   margin-bottom: 32px;
   background: #1d242e;
+  border-radius: 5px;
 
   @media screen and (max-width: $tablet) {
     width: 100%;

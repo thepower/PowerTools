@@ -10,9 +10,10 @@ import { PELogo } from '../icons/PELogo';
 
 export interface ModalProps extends DialogProps {
   children?: JSX.Element | JSX.Element[];
-  onClose: (data?: any) => void;
+  onClose?: (data?: any) => void;
   className?: string;
   contentClassName?: string;
+  hideIcon?: boolean;
 }
 
 const dialogClasses = {
@@ -26,6 +27,7 @@ export const Modal: React.FC<ModalProps> = (props: ModalProps) => {
     children,
     className,
     contentClassName,
+    hideIcon = false,
   } = props;
 
   return <Dialog
@@ -36,7 +38,7 @@ export const Modal: React.FC<ModalProps> = (props: ModalProps) => {
   >
     <DialogContent className={classnames(contentClassName, styles.modalContent)}>
       <div>
-        <PELogo />
+        { !hideIcon && <PELogo /> }
       </div>
       {children}
     </DialogContent>

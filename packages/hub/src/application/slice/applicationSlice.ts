@@ -2,14 +2,14 @@ import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ApplicationDataState {
   testnetAvailable: boolean;
-};
+}
 
 const SLICE_NAME = 'applicationData';
 
 const initApplication = createAction(`${SLICE_NAME}/initApplication`);
 
 const initialState: ApplicationDataState = {
- testnetAvailable: false,
+  testnetAvailable: false,
 };
 
 const applicationDataSlice = createSlice({
@@ -26,7 +26,7 @@ const {
   reducer: applicationDataReducer,
   actions: {
     setTestnetAvailable,
-  }
+  },
 } = applicationDataSlice;
 
 export {

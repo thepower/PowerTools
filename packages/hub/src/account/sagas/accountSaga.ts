@@ -1,7 +1,9 @@
 import { call, put, select } from 'redux-saga/effects';
 import { CryptoApi } from '@thepowereco/tssdk';
 import fileSaver from 'file-saver';
-import { FileReaderType, getFileData, showNotification } from 'common';
+import {
+  FileReaderType, getFileData, showNotification,
+} from 'common';
 import { push } from 'connected-react-router';
 import {
   clearAccountData,

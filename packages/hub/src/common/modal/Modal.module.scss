@@ -35,3 +35,19 @@
   align-items: center;
   justify-content: center;
 }
+
+.modalLoaderText {
+  white-space: pre-line;
+  text-align: center;
+  margin-top: 80px;
+}
+
+.modalLoader {
+  min-width: 384px;
+  min-height: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(255 255 255 / 2%);
+  padding: 32px;
+}

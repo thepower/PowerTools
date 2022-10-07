@@ -10,7 +10,10 @@ import {
 import { RegistrationBackground } from '../../common/RegistrationBackground';
 import styles from '../../Registration.module.scss';
 import {
-  Tabs, AttachIcon, OutlinedInput, Modal,
+  Tabs,
+  AttachIcon,
+  OutlinedInput,
+  Modal,
 } from '../../../../common';
 import { Maybe } from '../../../../typings/common';
 import { importAccountFromFile } from '../../../../account/slice/accountSlice';
