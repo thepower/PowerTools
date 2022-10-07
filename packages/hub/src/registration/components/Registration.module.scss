@@ -204,7 +204,6 @@
 
   margin-top: $unit * 4;
   margin-bottom: $unit * 5;
-  background: #121923;
   border-radius: 5px;
   color: #f5f5f7;
   font-size: 20px;
@@ -214,8 +213,8 @@
 
   &_outlined {
     @include the-power-color-outlined;
-
     padding: 0 !important;
+    background: #121923;
   }
 }
 
