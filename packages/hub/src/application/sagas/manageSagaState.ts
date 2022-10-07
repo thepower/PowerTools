@@ -1,7 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { put } from 'typed-redux-saga';
-import { startAction, stopAction } from '../../common/network/slices/networkSlice';
-import { showNotification, NotificationTypeEnum } from '../../common';
+import { startAction, stopAction, showNotification } from '../../common';
 
 export default (saga: any) => (function* manageSagaState(action: PayloadAction<any>) {
   try {
@@ -11,11 +10,11 @@ export default (saga: any) => (function* manageSagaState(action: PayloadAction<a
     if (err.networkError) {
       yield* put(showNotification({
         text: 'Ошибка сети',
-        type: NotificationTypeEnum.plain,
+        type: 'info',
       }));
     } else {
       console.error(err);
-      yield* put(showNotification({ text: err.message, type: NotificationTypeEnum.error }));
+      yield* put(showNotification({ text: err.message, type: 'error' }));
     }
   } finally {
     yield* put(stopAction({ name: action.type, params: action.payload }));

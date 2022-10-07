@@ -1,14 +1,8 @@
-export enum NotificationTypeEnum {
-  info = 'info',
-  warning = 'warning',
-  success = 'success',
-  error = 'error',
-  plain = 'plain',
-}
+import { AlertColor } from '@mui/material/Alert/Alert';
 
 export type NotificationType = {
   text?: string;
-  type: NotificationTypeEnum;
+  type: AlertColor;
   autoHideDuration?: number | null;
   date?: string;
 };

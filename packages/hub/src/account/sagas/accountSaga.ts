@@ -2,7 +2,7 @@ import { call, put, select } from 'redux-saga/effects';
 import { CryptoApi } from '@thepowereco/tssdk';
 import fileSaver from 'file-saver';
 import {
-  FileReaderType, getFileData, NotificationTypeEnum, showNotification,
+  FileReaderType, getFileData, showNotification,
 } from 'common';
 import { push } from 'connected-react-router';
 import {
@@ -39,7 +39,7 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
         if (prevChain === subChain.chain) {
           yield put(showNotification({
             text: 'Portation in progress. Try again in a few minutes.',
-            type: NotificationTypeEnum.error,
+            type: 'error',
           }));
           return;
         }

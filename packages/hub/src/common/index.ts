@@ -14,7 +14,6 @@ export { ModalLoader } from './modal/ModalLoader';
 // types
 export type { UnknownFunctionType } from './typings/common';
 export type { NotificationType } from './notification/typings/notificationTypings';
-export { NotificationTypeEnum } from './notification/typings/notificationTypings';
 export type { BreadcrumbsDataType } from './breadcrumbs/typings/breadcrumbsTypings';
 export { BreadcrumbsTypeEnum } from './breadcrumbs/typings/breadcrumbsTypings';
 export type { WizardComponentProps } from './wizard/Wizard';
