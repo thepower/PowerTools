@@ -164,8 +164,8 @@ export const CryptoApi = {
 
   async loadKey(fileName: string, password: string): Promise<AccountKey> {
     const keySignature = '-----BEGIN EC PRIVATE KEY-----';
-    const data: any = await promises.readFile(fileName, {});
-    const file:string = data.toString();
+    const data: Buffer = await promises.readFile(fileName);
+    const file: string = data.toString();
     const key = file.substr(file.indexOf(keySignature));
     return CryptoApi.decryptWalletData(key, password);
   },
