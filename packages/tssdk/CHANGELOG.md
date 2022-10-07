@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.9.1...@thepowereco/tssdk@1.10.0) (2022-10-07)
+
+
+### Bug Fixes
+
+* **review:** fixes ([4dfdfab](https://github.com/thepower/power_hub/commit/4dfdfab5329dce33240e579ab6524a00f5448d30))
+
+
+### Features
+
+* **tssdk:** import key crypto lib ([54ec556](https://github.com/thepower/power_hub/commit/54ec556a00fd893035c9cb028f8ebc0857eb2e0c))
+
+
+
+
+
 ## [1.9.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.9.0...@thepowereco/tssdk@1.9.1) (2022-10-04)
 
 
