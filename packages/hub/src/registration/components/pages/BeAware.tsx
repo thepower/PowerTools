@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import classnames from 'classnames';
+import { WizardComponentProps } from 'common';
 import { RegistrationBackground } from '../common/RegistrationBackground';
 import { RegistrationStatement } from '../common/RegistrationStatement';
-import { WizardComponentProps } from '../../../common';
 import styles from '../Registration.module.scss';
 
 type BeAwareProps = WizardComponentProps;

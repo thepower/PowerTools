@@ -3,21 +3,21 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  list-style: none;
-  font-weight: 500;
+  padding: 64px 16px 64px 32px;
   font-size: 18px;
+  font-weight: 500;
+  gap: 28px;
   line-height: 21px;
-  padding: 40px 20px;
+  list-style: none;
 
   @include mobile {
     flex-direction: row;
     justify-content: space-around;
-    gap: 4px;
     padding: 8px 12px 0;
     font-size: 10px;
-    line-height: 12px;
+    gap: 4px;
     letter-spacing: 0.01em;
+    line-height: 12px;
   }
 }
 
@@ -26,24 +26,19 @@
 }
 
 .link {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 8px 14px;
   border-radius: 5px;
   text-decoration: none;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 8px 14px;
 
   @include mobile {
     display: flex;
+    width: 56px;
     flex-direction: column;
     align-items: center;
-    width: 56px;
     padding: 5px 2px;
-
-    .icon {
-      margin-bottom: 2px;
-      margin-right: 0;
-    }
   }
 
   &:hover {
@@ -54,18 +49,23 @@
     }
   }
 
-  .icon {
-    margin-right: 18px;
-  }
-
   &[aria-disabled='true'] {
-    cursor: default;
     background: none;
+    cursor: default;
     pointer-events: none;
 
     .text {
       color: #79789d;
     }
+  }
+}
+
+.icon {
+  margin-right: 18px;
+
+  @include mobile {
+    margin-right: 0;
+    margin-bottom: 2px;
   }
 }
 

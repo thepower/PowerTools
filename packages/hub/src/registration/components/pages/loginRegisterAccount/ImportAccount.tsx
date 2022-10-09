@@ -3,18 +3,18 @@ import { connect, ConnectedProps } from 'react-redux';
 import classnames from 'classnames';
 import { Button } from '@mui/material';
 import {
+  Tabs,
+  AttachIcon,
+  OutlinedInput,
+  Modal,
+} from 'common';
+import {
   LoginRegisterAccountTabs,
   LoginRegisterAccountTabsLabels,
   RegistrationPageAdditionalProps,
 } from '../../../typings/registrationTypes';
 import { RegistrationBackground } from '../../common/RegistrationBackground';
 import styles from '../../Registration.module.scss';
-import {
-  Tabs,
-  AttachIcon,
-  OutlinedInput,
-  Modal,
-} from '../../../../common';
 import { Maybe } from '../../../../typings/common';
 import { importAccountFromFile } from '../../../../account/slice/accountSlice';
 

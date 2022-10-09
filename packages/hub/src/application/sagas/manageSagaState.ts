@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { put } from 'typed-redux-saga';
-import { startAction, stopAction, showNotification } from '../../common';
+import { startAction, stopAction, showNotification } from 'common';
 
 export default (saga: any) => (function* manageSagaState(action: PayloadAction<any>) {
   try {

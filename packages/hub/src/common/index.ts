@@ -15,6 +15,9 @@ export { default as CardLink } from './cardLink/CardLink';
 export { default as IconButton } from './iconButton/IconButton';
 export { default as AccountInfo } from './accountInfo/AccountInfo';
 export { default as TopBar } from './topBar/TopBar';
+export { default as ShallowPageTemplate } from './shallowPageTemplate/ShallowPageTemplate';
+export { default as Divider } from './divider/Divider';
+export { default as DeepPageTemplate } from './deepPageTemplate/DeepPageTemplate';
 // types
 export type { UnknownFunctionType } from './typings/common';
 export type { NotificationType } from './notification/typings/notificationTypings';
