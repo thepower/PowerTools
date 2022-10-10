@@ -12,14 +12,15 @@
   flex: 0 1 384px;
   flex-direction: column;
   padding: 28px 36px 20px 44px;
+  border-radius: 5px;
   backdrop-filter: blur(65px);
   background: linear-gradient(106.36deg, rgb(23 104 229 / 50%) -1.83%, rgb(23 104 229 / 0%) 115.25%);
-  border-radius: 5px;
   box-shadow: inset 5px 5px 10px rgb(23 104 229 / 10%), inset -5px -5px 10px rgb(23 104 229 / 10%);
   filter: drop-shadow(20px 30px 110px rgb(0 0 0 / 12%));
 
   @include mobile {
     flex-grow: 1;
+    padding: 20px 20px 10px 32px;
   }
 }
 
@@ -29,6 +30,11 @@
   font-size: 18px;
   font-weight: 400;
   line-height: 24px;
+
+  @include mobile {
+    font-size: 14.1848px;
+    line-height: 19px;
+  }
 }
 
 .total {
@@ -39,10 +45,21 @@
   font-size: 32px;
   font-weight: 500;
   line-height: 36px;
+
+  @include mobile {
+    margin-bottom: 8px;
+    font-size: 24px;
+    line-height: 28px;
+  }
 }
 
 .icon {
   margin-right: 12px;
+
+  @include mobile {
+    width: 26px;
+    height: 26px;
+  }
 }
 
 .addressButton {
@@ -54,6 +71,11 @@
   font-size: 20px;
   letter-spacing: 0.002em;
   line-height: 24px;
+
+  @include mobile {
+    font-size: 16px;
+    line-height: 20px;
+  }
 
   &:hover {
     @include text-gradient(linear-gradient(90deg, #1768E5 0%, #00F0FF 100%));
@@ -68,13 +90,17 @@
 
 .copyIcon {
   margin-left: 24px;
+
+  @include mobile {
+    margin-left: 4px;
+  }
 }
 
 .cards {
   display: grid;
-  flex: 0 1 184px;
+  flex: 0 1 284px;
   grid-gap: 16px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 84px 84px;
 
   @include mobile {
@@ -82,7 +108,7 @@
   }
 
   > :first-child {
-    grid-column: span 2;
+    grid-column: span 3;
   }
 
   > * {

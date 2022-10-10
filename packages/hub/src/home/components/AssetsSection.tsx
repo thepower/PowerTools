@@ -1,12 +1,14 @@
 import React, { useCallback, useRef } from 'react';
-import ArrowLink from '../../common/arrowLink/ArrowLink';
-import { ReactComponent as LogoIcon } from './logo.svg';
-import { ReactComponent as CopySvg } from './copy.svg';
-import { ReactComponent as WalletsSvg } from './wallets.svg';
-import { ReactComponent as SendSvg } from './send.svg';
-import { ReactComponent as FaucetSvg } from './faucet.svg';
+import {
+  BuySvg,
+  CopySvg,
+  FaucetSvg,
+  LogoIcon,
+  SendSvg,
+  WalletsSvg,
+} from 'common/icons';
+import { ArrowLink, CardLink } from 'common';
 import styles from './AssetsSection.module.scss';
-import CardLink from '../../common/cardLink/CardLink';
 
 const AssetsSection = () => {
   const ref = useRef<HTMLButtonElement>(null);
@@ -37,7 +39,7 @@ const AssetsSection = () => {
           </button>
         </div>
         <div className={styles.cards}>
-          <CardLink to="/wallets" label="Wallets">
+          <CardLink to="/my-assets" label="Wallets">
             <WalletsSvg />
           </CardLink>
           <CardLink to="/faucet" label="Faucet">
@@ -45,6 +47,9 @@ const AssetsSection = () => {
           </CardLink>
           <CardLink to="/send" label="Send">
             <SendSvg />
+          </CardLink>
+          <CardLink to="/buy" label="Buy">
+            <BuySvg />
           </CardLink>
         </div>
       </div>

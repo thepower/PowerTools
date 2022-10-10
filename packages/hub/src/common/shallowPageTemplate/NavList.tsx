@@ -1,11 +1,13 @@
+import {
+  BuildIcon,
+  ContributeIcon,
+  DiscoverIcon,
+  HomeIcon,
+  MyPlaceIcon,
+} from 'common/icons';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './NavList.module.scss';
-import { ReactComponent as ContributeIcon } from './icons/contribute.svg';
-import { ReactComponent as HomeIcon } from './icons/home.svg';
-import { ReactComponent as BuildIcon } from './icons/build.svg';
-import { ReactComponent as DiscoverIcon } from './icons/discover.svg';
-import { ReactComponent as MyPlaceIcon } from './icons/my-place.svg';
 
 const routes = [
   {

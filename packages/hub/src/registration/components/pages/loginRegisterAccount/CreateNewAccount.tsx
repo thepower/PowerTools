@@ -7,13 +7,13 @@ import {
 } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select/SelectInput';
 import classnames from 'classnames';
-import styles from '../../Registration.module.scss';
 import {
   Tabs,
   OutlinedInput,
   checkIfLoading,
   ModalLoader,
-} from '../../../../common';
+} from 'common';
+import styles from '../../Registration.module.scss';
 import {
   setCreatingCurrentShard,
   generateSeedPhrase,
