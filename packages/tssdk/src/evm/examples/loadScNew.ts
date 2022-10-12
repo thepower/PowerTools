@@ -1,4 +1,5 @@
-import { EvmApi } from '../../libs/evm-api';
+import path from 'path';
+import { EvmApi } from '../../libs';
 import { ChainNameEnum } from '../../config/chain.enum';
 import abiJson from './contractAbi.json';
 import { loadKey } from '../../helpers/key.helper';
@@ -30,8 +31,8 @@ async function testVm() {
   const getHelloMapArrEl = await sc.scGet('getHelloMapArrEl', [0]);
   console.log('getHelloMapArrEl:', getHelloMapArrEl);
 
-  //set
-  const key = await loadKey('./AA100000001677722039.pem', '1');
+  // set
+  const key = await loadKey(path.join(__dirname, 'AA100000001677722039.pem'), '1');
 
   console.log('setGreeting:');
   await sc.scSet(key, 'setGreeting', ['VALERA']);

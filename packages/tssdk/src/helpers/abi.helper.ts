@@ -1,7 +1,7 @@
 import { defaultAbiCoder as AbiCoder } from '@ethersproject/abi/lib/abi-coder';
 import { Interface } from '@ethersproject/abi';
 
-export const getAbiInputsOutputs = (abi: any, method: string) => {
+export const getAbiInputsOutputsType = (abi: any, method: string) => {
   const abiItem = abi.find((item: any) => item.name === method);
   if (!abiItem) {
     throw new Error('ABI not found');
@@ -10,6 +10,18 @@ export const getAbiInputsOutputs = (abi: any, method: string) => {
   return {
     inputs: abiItem.inputs.map((input: any) => input.type),
     outputs: abiItem.outputs.map((output: any) => output.type),
+  };
+};
+
+export const getAbiInputsOutputs = (abi: any, method: string) => {
+  const abiItem = abi.find((item: any) => item.name === method);
+  if (!abiItem) {
+    throw new Error('ABI not found');
+  }
+
+  return {
+    inputs: abiItem.inputs,
+    outputs: abiItem.outputs,
   };
 };
 
