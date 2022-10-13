@@ -25,7 +25,7 @@ class AppRoutesComponent extends React.PureComponent<AppRoutesProps> {
         <Route exact path={RoutesEnum.myPlace} />
         <Route exact path={RoutesEnum.build} />
         <Route exact path={RoutesEnum.contribute} />
-        <Route exact path="/">
+        <Route exact path={RoutesEnum.root}>
           <Home />
         </Route>
         <Route path={RoutesEnum.signup}>

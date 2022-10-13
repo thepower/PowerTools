@@ -3,4 +3,3 @@ export type { AppDispatch } from './store/rootStore';
 export { App } from './components/App';
 export { default as scssVariables } from '../styles/variables.scss';
 export { default as manageSagaState } from './sagas/manageSagaState';
-export { RoutesEnum } from './typings/routes';

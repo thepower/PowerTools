@@ -6,6 +6,7 @@ import globus from './globus.jpg';
 import styles from './AccountInfo.module.scss';
 import { getWalletAddress } from '../../account/selectors/accountSelectors';
 import { ApplicationState } from '../../application';
+import { RoutesEnum } from '../../application/typings/routes';
 
 const mapStateToProps = (state: ApplicationState) => ({
   walletAddress: getWalletAddress(state),
@@ -16,7 +17,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type AccountInfoProps = ConnectedProps<typeof connector> & { className?: string };
 
 const AccountInfo: React.FC<AccountInfoProps> = ({ className, walletAddress }) => (
-  <Link to={'/account'}>
+  <Link to={RoutesEnum.account}>
     <div className={cn(styles.account, className)}>
       <img className={styles.img} src={globus} alt="Аватар" />
       <div className={styles.accountText}>

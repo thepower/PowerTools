@@ -7,7 +7,7 @@ import {
 } from 'common/icons';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { RoutesEnum } from '../../application';
+import { RoutesEnum } from '../../application/typings/routes';
 import styles from './NavList.module.scss';
 
 const routes = [

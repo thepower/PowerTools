@@ -18,7 +18,7 @@ import {
 } from '../typings/accountTypings';
 import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
 import { NetworkAPI, WalletAPI } from '../../application/utils/applicationUtils';
-import { RoutesEnum } from '../../application';
+import { RoutesEnum } from '../../application/typings/routes';
 
 export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInput } = {}) {
   const { address, wif } = payload!;

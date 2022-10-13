@@ -11,7 +11,7 @@ import { loginToWallet, setWalletData } from '../../account/slice/accountSlice';
 import { getCurrentShardSelector, getGeneratedSeedPhrase } from '../selectors/registrationSelectors';
 import { AddActionType } from '../../typings/common';
 import { getWalletData } from '../../account/selectors/accountSelectors';
-import { RoutesEnum } from '../../application';
+import { RoutesEnum } from '../../application/typings/routes';
 
 export function* generateSeedPhraseSaga() {
   const phrase: string = yield CryptoApi.generateSeedPhrase();
