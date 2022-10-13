@@ -1,7 +1,7 @@
 import * as tpSdk from 'the_power_sdk_js';
 
 export class BlockChainService {
-  private shard: number = 104;
+  private shard = 104; // TODO: с каким чейном должне работать cli?
 
   private storageScAddress = 'AA030000174483055698';
 
@@ -10,7 +10,7 @@ export class BlockChainService {
       .composeSCMethodCallTX(
         login,
         this.storageScAddress,
-        [ func, params ],
+        [func, params],
         'SK',
         20000,
         wif,
@@ -25,7 +25,6 @@ export class BlockChainService {
 
     return res;
   }
-
 
   async registerStorageProject(
     login: string,
@@ -50,23 +49,18 @@ export class BlockChainService {
   }
 
   transformNodeList(rawNodes: any) {
-    let nodesList: any[] = [];
+    const nodesList: any[] = [];
     const nodeIds = Object.keys(rawNodes);
 
     nodeIds.forEach((nodeId) => {
-      rawNodes[nodeId].ip.forEach((address: string) =>
-        nodesList.push({ address, nodeId }),
-      );
-      rawNodes[nodeId].host.forEach((address: string) =>
-        nodesList.push({ address, nodeId }),
-      );
+      rawNodes[nodeId].ip.forEach((address: string) => nodesList.push({ address, nodeId }));
+      rawNodes[nodeId].host.forEach((address: string) => nodesList.push({ address, nodeId }));
     });
 
     return nodesList.reduce(
-      (acc, { address, nodeId }) =>
-        acc.some((item: any) => item.address === address && item.nodeId === nodeId)
-          ? acc
-          : [...acc, { address, nodeId }],
+      (acc, { address, nodeId }) => (acc.some((item: any) => item.address === address && item.nodeId === nodeId)
+        ? acc
+        : [...acc, { address, nodeId }]),
       [],
     );
   }
@@ -102,9 +96,9 @@ export class BlockChainService {
 
   // TODO: fix it
   async registerProvider(
-    login: string = 'AA030000174483048139',
-    wif: string = 'KwYbZogSKLu94LXUGDEoJnj6nWA5UMipSyiP7WabLWBczU6BFaCd',
-    scAddress: string = 'AA030000174483055698',
+    login = 'AA030000174483048139',
+    wif = 'KwYbZogSKLu94LXUGDEoJnj6nWA5UMipSyiP7WabLWBczU6BFaCd',
+    scAddress = 'AA030000174483055698',
   ) {
     const tx = await tpSdk.transactionsLib
       .composeSCMethodCallTX(

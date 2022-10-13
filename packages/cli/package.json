@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@oclif/core": "^1",
+    "@thepowereco/tssdk": "^1.10.0",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.0.1",
     "archiver": "^5.3.0",

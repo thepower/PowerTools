@@ -1,18 +1,19 @@
 import { Command } from '@oclif/core';
+import { AddressApi, ChainNameEnum, EvmApi } from '@thepowereco/tssdk';
 import ux from 'cli-ux';
 import { promises, statSync } from 'fs';
+import { resolve } from 'path';
+import { Config } from '@oclif/core/lib/config';
 import { getFileHash, getHash } from '../../helpers/calcHash.helper';
 import { File } from '../../types/file.type';
-import { resolve } from 'path';
 import { BlockChainService } from '../../services/blockshain.service';
-import { Config } from '@oclif/core/lib/config';
 import { UploaderApi } from '../../api/uploader.api';
 import { archiveDir } from '../../helpers/archiver.helper';
 import { getConfig, setConfig } from '../../helpers/config.helper';
 import { CliConfig } from '../../types/cliConfig.type';
+import * as abiJson from '../../config/scStorageAbi.json';
 
 export default class Upload extends Command {
-
   private blockChainService: BlockChainService;
 
   private api: UploaderApi;
@@ -64,6 +65,11 @@ export default class Upload extends Command {
     return result;
   }
 
+  addressToBn(address: string) {
+    const hexAddress = AddressApi.textAddressToHex(address);
+    return `0x000000000000000000000000${hexAddress}`;
+  }
+
   async run(): Promise<void> {
     let config: CliConfig = await getConfig();
 
@@ -78,16 +84,26 @@ export default class Upload extends Command {
 
       const wif = await ux.prompt('Please, enter your account private key (wif)', { type: 'hide' });
 
-      config = { source, projectId, address, wif };
+      config = {
+        source, projectId, address, wif,
+      };
       await setConfig(config);
     }
 
     this.log(JSON.stringify(config, null, 2));
 
-    const { source, projectId, address, wif } = config;
+    const {
+      source, projectId, address, wif,
+    } = config;
     const dir = resolve(source);
 
-    await this.blockChainService.prepareShard();
+    const storageSc = await EvmApi.build('AA100000001677723663', ChainNameEnum.first, abiJson.abi);
+    const ex = await storageSc.scGet('isTaskExist', [this.addressToBn(address), projectId]);
+
+    console.log(ex);
+
+    return;
+    // await this.blockChainService.prepareShard();
     this.log('upload process started...');
     const files = await this.scanDir(dir, dir);
     const manifestHash = getHash(JSON.stringify(files));
@@ -104,14 +120,16 @@ export default class Upload extends Command {
       2000, // TODO: how to calculate it?
     ];
 
-    if (existedProject) {
-      this.log('Project data:', JSON.parse(existedProject));
-      const updateResp = await this.blockChainService.updaterStorageProject.apply(this.blockChainService, storageData);
-      this.log('updateResp = ', updateResp);
-    } else {
-      const regResp = await this.blockChainService.registerStorageProject.apply(this.blockChainService, storageData);
-      this.log('regResp = ', regResp);
-    }
+    // if (existedProject) {
+    //   this.log('Project data:', JSON.parse(existedProject));
+    //   const updateResp = await this.blockChainService.updaterStorageProject.apply(this.blockChainService, storageData);
+    //   this.log('updateResp = ', updateResp);
+    // } else {
+    //   const regResp = await this.blockChainService.registerStorageProject.apply(this.blockChainService, storageData);
+    //   this.log('regResp = ', regResp);
+    // }
+
+    console.log(existedProject, storageData);
 
     await this.api.login(address, wif);
 
