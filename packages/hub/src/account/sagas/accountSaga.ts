@@ -18,6 +18,7 @@ import {
 } from '../typings/accountTypings';
 import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
 import { NetworkAPI, WalletAPI } from '../../application/utils/applicationUtils';
+import { RoutesEnum } from '../../application';
 
 export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInput } = {}) {
   const { address, wif } = payload!;
@@ -66,7 +67,7 @@ export function* importAccountFromFileSaga({ payload }: { payload:ImportAccountI
     const wif: string = yield CryptoApi.encryptWif(walletData.wif!, password);
 
     yield* loginToWalletSaga({ payload: { address: walletData.address, wif } });
-    yield put(push('/'));
+    yield put(push(RoutesEnum.root));
   } catch (e) {
     // handle error in notifications
   }
@@ -83,7 +84,7 @@ export function* exportAccountSaga({ payload }: { payload: ExportAccountInputTyp
   yield fileSaver.saveAs(blob, 'power_wallet.pem', true);
 
   yield* loginToWalletSaga({ payload: { address, wif } });
-  yield put(push('/'));
+  yield put(push(RoutesEnum.root));
 }
 
 export function* resetAccountSaga() {

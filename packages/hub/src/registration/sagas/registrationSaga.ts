@@ -11,6 +11,7 @@ import { loginToWallet, setWalletData } from '../../account/slice/accountSlice';
 import { getCurrentShardSelector, getGeneratedSeedPhrase } from '../selectors/registrationSelectors';
 import { AddActionType } from '../../typings/common';
 import { getWalletData } from '../../account/selectors/accountSelectors';
+import { RoutesEnum } from '../../application';
 
 export function* generateSeedPhraseSaga() {
   const phrase: string = yield CryptoApi.generateSeedPhrase();
@@ -61,12 +62,12 @@ export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputTyp
   }
 
   yield put(loginToWallet({ address, wif }));
-  yield put(push('/'));
+  yield put(push(RoutesEnum.root));
 }
 
 export function* proceedToHubSaga() {
   const { wif, address } = yield select(getWalletData);
 
   yield put(loginToWallet({ address, wif }));
-  yield put(push('/'));
+  yield put(push(RoutesEnum.root));
 }

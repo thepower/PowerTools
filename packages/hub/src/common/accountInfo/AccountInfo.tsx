@@ -1,20 +1,29 @@
 import React from 'react';
 import cn from 'classnames';
+import { connect, ConnectedProps } from 'react-redux';
+import { Link } from 'react-router-dom';
 import globus from './globus.jpg';
 import styles from './AccountInfo.module.scss';
+import { getWalletAddress } from '../../account/selectors/accountSelectors';
+import { ApplicationState } from '../../application';
 
-interface AccountInfoProps {
-  className?: string;
-}
+const mapStateToProps = (state: ApplicationState) => ({
+  walletAddress: getWalletAddress(state),
+});
+const mapDispatchToProps = {};
 
-const AccountInfo: React.FC<AccountInfoProps> = ({ className }) => (
-  <div className={cn(styles.account, className)}>
-    <img className={styles.img} src={globus} alt="Аватар" />
-    <div className={styles.accountText}>
-      <p>{'therollingstones.pio'}</p>
-      <p>{'AA030000174483054062'}</p>
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type AccountInfoProps = ConnectedProps<typeof connector> & { className?: string };
+
+const AccountInfo: React.FC<AccountInfoProps> = ({ className, walletAddress }) => (
+  <Link to={'/account'}>
+    <div className={cn(styles.account, className)}>
+      <img className={styles.img} src={globus} alt="Аватар" />
+      <div className={styles.accountText}>
+        <p>{walletAddress}</p>
+      </div>
     </div>
-  </div>
+  </Link>
 );
 
-export default AccountInfo;
+export default connector(AccountInfo);
