@@ -1,8 +1,8 @@
 import VM from '@ethereumjs/vm';
 import { Address } from 'ethereumjs-util';
 import { defaultAbiCoder as AbiCoder } from '@ethersproject/abi';
-import { NetworkApi } from '../libs';
-import { TransactionsApi } from '../libs';
+import { NetworkApi, TransactionsApi } from '.';
+
 import { ChainNameEnum } from '../config/chain.enum';
 import { AccountKey } from '../typings';
 import { bnToHex } from '../helpers/bnHex.helper';
@@ -34,7 +34,7 @@ export class EvmApi {
     const vm = await VM.create();
 
     vm.stateManager.getContractStorage = async (address: Address, key: Buffer) => {
-      const val = bnToHex('0x' + key.toString('hex'));
+      const val = bnToHex(`0x${key.toString('hex')}`);
       const state = await network.loadScStateByKey(scAddress, val);
       return Buffer.from(state);
     };
@@ -65,7 +65,7 @@ export class EvmApi {
     }
 
     const results = AbiCoder.decode(io.outputs, greetResult.execResult.returnValue);
-    return results[0];
+    return results;
   }
 
   // Send trx to chain
