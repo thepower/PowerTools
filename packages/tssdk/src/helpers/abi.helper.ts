@@ -10,6 +10,9 @@ export const getAbiInputsOutputs = (abi: any, method: string) => {
   return {
     inputs: abiItem.inputs.map((input: any) => input.type),
     outputs: abiItem.outputs.map((output: any) => output.type),
+    outputNames: abiItem.outputs
+      .filter((output: any) => !!output.name)
+      .map((output: any) => output.name),
   };
 };
 
