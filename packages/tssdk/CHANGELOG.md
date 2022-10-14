@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.3](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.10.2...@thepowereco/tssdk@1.10.3) (2022-10-14)
+
+
+### Bug Fixes
+
+* **tssdk:** abi helper fix ([0e7ee0a](https://github.com/thepower/power_hub/commit/0e7ee0ac887128e82e70ebe3c0d9086ba3f3873b))
+
+
+
+
+
 ## [1.10.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.10.1...@thepowereco/tssdk@1.10.2) (2022-10-13)
 
 
