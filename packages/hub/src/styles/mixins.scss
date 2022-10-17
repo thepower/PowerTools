@@ -4,10 +4,21 @@
   background: $the-power-gradient;
 }
 
-@mixin the-power-color-outlined {
-  background-image: linear-gradient(#000, #000), $the-power-gradient;
-  background-origin: border-box;
-  background-clip: content-box, border-box;
+@mixin the-power-color-outlined($gradient: $the-power-gradient) {
+  position: relative;
+
+  &::before {
+    position: absolute;
+    padding: 1px;
+    background: $gradient;
+    border-radius: 5px;
+    content: '';
+    inset: 0;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+  }
 }
 
 @mixin the-power-color-text {

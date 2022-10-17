@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.1](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.7.0...@thepowereco/hub@1.7.1) (2022-10-10)
+
+
+### Bug Fixes
+
+* **design:** fix code after updating design ([3612e7a](https://github.com/thepower/power_hub/commit/3612e7a205adc7df84685d2835e59381de8e14dd))
+
+
+
+
+
+# [1.7.0](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.6.0...@thepowereco/hub@1.7.0) (2022-10-07)
+
+
+### Bug Fixes
+
+* **hub:** refactoring code ([be15427](https://github.com/thepower/power_hub/commit/be15427cb4d6ae17e372d7bfbb610947d63ff371))
+* **hub:** registration styles fix ([9c4a4c4](https://github.com/thepower/power_hub/commit/9c4a4c489eac99c490448edd3b5f915ddf977e03))
+* **hub:** review ([cd9f2cf](https://github.com/thepower/power_hub/commit/cd9f2cf7aaf73ece01194bd16cc4077c32b39ae7))
+
+
+### Features
+
+* **hub:** manage loading ([b4cd199](https://github.com/thepower/power_hub/commit/b4cd199d257e58c701e3a0ac417afb0878c5b340))
+* **hub:** modal loader ([54ee7ad](https://github.com/thepower/power_hub/commit/54ee7ad80e4c796b2326dffc4d4d0abbe5a86cd7))
+* **hub:** modal loader ([567577f](https://github.com/thepower/power_hub/commit/567577f3e25995f68dbea5e49bf0ae7775ecf79b))
+* **tssdk:** import key crypto lib ([54ec556](https://github.com/thepower/power_hub/commit/54ec556a00fd893035c9cb028f8ebc0857eb2e0c))
+
+
+
+
+
+# [1.6.0](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.5.1...@thepowereco/hub@1.6.0) (2022-10-06)
+
+
+### Features
+
+* **home-page:** add card links ([86dc14e](https://github.com/thepower/power_hub/commit/86dc14edde061b42870691a790c4faf7a29146c2))
+
+
+
+
+
 ## [1.5.1](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.5.0...@thepowereco/hub@1.5.1) (2022-10-04)
 
 

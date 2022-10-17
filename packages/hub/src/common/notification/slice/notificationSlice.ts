@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { format } from "date-fns";
+import { format } from 'date-fns';
 import { NotificationType } from '../typings/notificationTypings';
 import { Maybe } from '../../../typings/common';
 
 export interface NotificationState {
   currentNotification: Maybe<NotificationType>;
   notificationsLog: NotificationType[];
-};
+}
 
 const SLICE_NAME = 'notification';
 
@@ -23,8 +23,8 @@ const accountSlice = createSlice({
       const notification = {
         ...action.payload,
         autoHideDuration: action.payload.autoHideDuration || 4000,
-        date: format(new Date(), "hh:mm a")
-      }
+        date: format(new Date(), 'hh:mm a'),
+      };
       state.currentNotification = notification;
       state.notificationsLog.push(notification);
     },
@@ -41,7 +41,7 @@ const {
     showNotification,
     hideNotification,
     clearNotificationLog,
-  }
+  },
 } = accountSlice;
 
 export {

@@ -1,7 +1,13 @@
 import React, { useCallback, useRef } from 'react';
-import LinkButton from '../../common/linkButton/LinkButton';
-import { ReactComponent as LogoIcon } from './logo.svg';
-import { ReactComponent as CopySvg } from './copy.svg';
+import {
+  BuySvg,
+  CopySvg,
+  FaucetSvg,
+  LogoIcon,
+  SendSvg,
+  WalletsSvg,
+} from 'common/icons';
+import { ArrowLink, CardLink } from 'common';
 import styles from './AssetsSection.module.scss';
 
 const AssetsSection = () => {
@@ -15,9 +21,9 @@ const AssetsSection = () => {
 
   return (
     <div>
-      <LinkButton size="large" direction="right" to="my-assets">
+      <ArrowLink size="large" direction="right" to="my-assets">
         {'My assets'}
-      </LinkButton>
+      </ArrowLink>
       <div className={styles.box}>
         <div className={styles.majorWallet}>
           <p className={styles.info}>
@@ -31,6 +37,20 @@ const AssetsSection = () => {
             {'AA030000174483054062'}
             <CopySvg className={styles.copyIcon} />
           </button>
+        </div>
+        <div className={styles.cards}>
+          <CardLink to="/my-assets" label="Wallets">
+            <WalletsSvg />
+          </CardLink>
+          <CardLink to="/faucet" label="Faucet">
+            <FaucetSvg />
+          </CardLink>
+          <CardLink to="/send" label="Send">
+            <SendSvg />
+          </CardLink>
+          <CardLink to="/buy" label="Buy">
+            <BuySvg />
+          </CardLink>
         </div>
       </div>
     </div>

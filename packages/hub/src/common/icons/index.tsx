@@ -1,0 +1,13 @@
+export { ReactComponent as ChevronLeftIcon } from './chevron_left.svg';
+export { ReactComponent as BellIcon } from './bell.svg';
+export { ReactComponent as ContributeIcon } from './contribute.svg';
+export { ReactComponent as HomeIcon } from './home.svg';
+export { ReactComponent as BuildIcon } from './build.svg';
+export { ReactComponent as DiscoverIcon } from './discover.svg';
+export { ReactComponent as MyPlaceIcon } from './my-place.svg';
+export { ReactComponent as LogoIcon } from './logo.svg';
+export { ReactComponent as CopySvg } from './copy.svg';
+export { ReactComponent as WalletsSvg } from './wallets.svg';
+export { ReactComponent as SendSvg } from './send.svg';
+export { ReactComponent as FaucetSvg } from './faucet.svg';
+export { ReactComponent as BuySvg } from './buy.svg';

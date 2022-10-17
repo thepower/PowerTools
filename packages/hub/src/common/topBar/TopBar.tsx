@@ -2,12 +2,12 @@ import React from 'react';
 import cn from 'classnames';
 import styles from './TopBar.module.scss';
 import IconButton from '../iconButton/IconButton';
-import { ReactComponent as BellIcon } from './bell.svg';
 import AccountInfo from '../accountInfo/AccountInfo';
-import LinkButton from '../linkButton/LinkButton';
+import ArrowLink from '../arrowLink/ArrowLink';
+import { BellIcon } from '../icons';
 
 interface TopBarProps {
-  type: 'inside' | 'outside';
+  type: 'deep' | 'shallow';
   backUrl?: string;
   children?: React.ReactNode;
 }
@@ -19,8 +19,8 @@ const TopBar: React.FC<TopBarProps> = ({
 }) => (
   <>
     <header className={cn(styles.bar, styles[type])}>
-      {type === 'inside' && backUrl && (
-      <LinkButton
+      {type === 'deep' && backUrl && (
+      <ArrowLink
         to={backUrl}
         direction="left"
         hideTextOnMobile
@@ -28,28 +28,31 @@ const TopBar: React.FC<TopBarProps> = ({
         defaultColor="lilac"
       >
         Back
-      </LinkButton>
+      </ArrowLink>
       )}
-      {type === 'outside' && (
+      {type === 'shallow' && (
       <div className={styles.accountHolder}>
         <AccountInfo />
       </div>
       )}
-      {type === 'outside' && children && (
+      {type === 'shallow' && children && (
       <div className={styles.childrenInsideBar}>
         {children}
       </div>
       )}
-      {type === 'inside' && children && (
+      {type === 'deep' && children && (
       <div className={styles.title}>
         {children}
       </div>
       )}
-      <IconButton className={cn(!children && styles.bell)} onClick={() => {}}>
+      <IconButton
+        className={cn(!children && styles.bell)}
+        onClick={() => {}}
+      >
         <BellIcon />
       </IconButton>
     </header>
-    {type === 'outside' && children && (
+    {type === 'shallow' && children && (
     <div className={styles.childrenOutsideBar}>
       {children}
     </div>

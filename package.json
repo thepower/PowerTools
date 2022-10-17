@@ -50,9 +50,8 @@
     "semantic-release": "^19.0.2",
     "semantic-release-monorepo": "^7.0.5",
     "stylelint": "^14.6.1",
-    "stylelint-config-idiomatic-order": "^8.1.0",
+    "stylelint-config-idiomatic-order": "^9.0.0",
     "stylelint-config-sass-guidelines": "^9.0.1",
-    "stylelint-config-standard": "^25.0.0",
     "typescript": "^4.6.3"
   },
   "config": {
@@ -61,3 +60,8 @@
     }
   }
 }
+
+
+
+
+

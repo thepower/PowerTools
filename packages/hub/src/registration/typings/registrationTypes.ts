@@ -1,5 +1,5 @@
 import React from 'react';
-import { WizardComponentProps } from '../../common';
+import { WizardComponentProps } from 'common';
 
 export enum RegistrationTabsEnum {
   quickGuide = 'Quick guide',

@@ -1,16 +1,15 @@
 import React from 'react';
-import Template from '../../common/template/Template';
-import TopBar from '../../common/topBar/TopBar';
+import { ShallowPageTemplate, TopBar } from 'common';
 import styles from './Home.module.scss';
 import AssetsSection from './AssetsSection';
 
 const Home = () => (
-  <Template>
-    <TopBar type="outside" />
+  <ShallowPageTemplate>
+    <TopBar type="shallow" />
     <div className={styles.content}>
       <AssetsSection />
     </div>
-  </Template>
+  </ShallowPageTemplate>
 );
 
 export default Home;

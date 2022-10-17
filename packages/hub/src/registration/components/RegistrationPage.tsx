@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Button } from '@mui/material';
-import styles from './Registration.module.scss';
 import {
   BreadcrumbsDataType,
   BreadcrumbsTypeEnum,
   PELogoWithTitle,
   Wizard,
-} from '../../common';
+} from 'common';
+import styles from './Registration.module.scss';
 import { RegistrationTabsEnum } from '../typings/registrationTypes';
 import { QuickGuide } from './pages/QuickGuide';
 import { BeAware } from './pages/BeAware';

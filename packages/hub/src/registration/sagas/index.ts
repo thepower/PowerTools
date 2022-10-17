@@ -1,4 +1,5 @@
 import { takeLatest } from 'redux-saga/effects';
+import { manageSagaState } from '../../application';
 import {
   generateSeedPhrase,
   loginToWalletFromRegistration,
@@ -13,8 +14,8 @@ import {
 } from './registrationSaga';
 
 export default function* registrationSaga() {
-  yield takeLatest(generateSeedPhrase, generateSeedPhraseSaga);
-  yield takeLatest(loginToWalletFromRegistration, loginToWalletSaga);
-  yield takeLatest(createWallet, createWalletSaga);
-  yield takeLatest(proceedToHub, proceedToHubSaga);
+  yield takeLatest(generateSeedPhrase, manageSagaState(generateSeedPhraseSaga));
+  yield takeLatest(loginToWalletFromRegistration, manageSagaState(loginToWalletSaga));
+  yield takeLatest(createWallet, manageSagaState(createWalletSaga));
+  yield takeLatest(proceedToHub, manageSagaState(proceedToHubSaga));
 }

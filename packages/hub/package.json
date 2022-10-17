@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/hub",
-  "version": "1.5.1",
+  "version": "1.7.1",
   "description": "thepower hub",
   "author": "thepower",
   "license": "ISC",
@@ -12,7 +12,7 @@
     "@mui/material": "^5.6.2",
     "@mui/styles": "^5.6.2",
     "@reduxjs/toolkit": "^1.8.1",
-    "@thepowereco/tssdk": "^1.9.1",
+    "@thepowereco/tssdk": "^1.10.0",
     "@types/bip32": "^2.0.0",
     "@types/classnames": "^2.3.1",
     "@types/create-hash": "^1.2.2",
@@ -59,6 +59,7 @@
     "sass-loader": "^12.6.0",
     "serve": "^14.0.1",
     "tiny-secp256k1": "^2.2.1",
+    "typed-redux-saga": "^1.5.0",
     "typescript": "^4.6.3"
   },
   "devDependencies": {

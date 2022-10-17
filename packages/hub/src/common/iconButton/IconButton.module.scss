@@ -11,13 +11,13 @@
     background: #252b35;
   }
 
-  &:focus {
+  &:active {
     background: #2e353d;
   }
 
   &:disabled {
-    cursor: default;
     background: #202b3d;
+    cursor: default;
   }
 }
 

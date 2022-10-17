@@ -7,9 +7,12 @@ declare module '@mui/styles/defaultTheme' {
 
 const MUITheme = createTheme({
   typography: {
-    fontFamily: 'Ubuntu',
+    fontFamily: 'Ubuntu, sans-serif',
   },
   palette: {
+    background: {
+      default: '#121923',
+    },
     primary: {
       main: '#2997ff',
     },

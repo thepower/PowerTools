@@ -2,58 +2,86 @@
 
 .box {
   display: flex;
+  flex-wrap: wrap;
   margin-top: 20px;
+  grid-gap: 32px;
 }
 
 .majorWallet {
   display: flex;
+  flex: 0 1 384px;
   flex-direction: column;
-  width: 384px;
-  padding: 28px 46px 20px 44px;
+  padding: 28px 36px 20px 44px;
+  backdrop-filter: blur(65px);
   background: linear-gradient(106.36deg, rgb(23 104 229 / 50%) -1.83%, rgb(23 104 229 / 0%) 115.25%);
+  border-radius: 5px;
   box-shadow: inset 5px 5px 10px rgb(23 104 229 / 10%), inset -5px -5px 10px rgb(23 104 229 / 10%);
   filter: drop-shadow(20px 30px 110px rgb(0 0 0 / 12%));
-  backdrop-filter: blur(65px);
-  border-radius: 5px;
+
+  @include mobile {
+    flex-grow: 1;
+    padding: 20px 20px 10px 32px;
+  }
 }
 
 .info {
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 24px;
-  color: #f5f5f7;
   margin-bottom: 12px;
+  color: #f5f5f7;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24px;
+
+  @include mobile {
+    font-size: 14.1848px;
+    line-height: 19px;
+  }
 }
 
 .total {
   display: flex;
   align-items: center;
-  font-weight: 500;
-  font-size: 32px;
-  line-height: 36px;
-  color: #f5f5f7;
   margin-bottom: 16px;
+  color: #f5f5f7;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 36px;
+
+  @include mobile {
+    margin-bottom: 8px;
+    font-size: 24px;
+    line-height: 28px;
+  }
 }
 
 .icon {
   margin-right: 12px;
+
+  @include mobile {
+    width: 26px;
+    height: 26px;
+  }
 }
 
 .addressButton {
   display: flex;
   align-items: center;
-  font-size: 20px;
-  line-height: 24px;
-  letter-spacing: 0.002em;
-  color: #6b798f;
   background: none;
+  color: #6b798f;
   cursor: pointer;
+  font-size: 20px;
+  letter-spacing: 0.002em;
+  line-height: 24px;
+
+  @include mobile {
+    font-size: 16px;
+    line-height: 20px;
+  }
 
   &:hover {
     @include text-gradient(linear-gradient(90deg, #1768E5 0%, #00F0FF 100%));
   }
 
-  :active {
+  &:active {
     @include text-gradient(linear-gradient(90deg, rgba(23, 104, 229, 0.8) 50.44%, rgba(0, 240, 255, 0.8) 129.31%));
   }
 }
@@ -62,4 +90,28 @@
 
 .copyIcon {
   margin-left: 24px;
+
+  @include mobile {
+    margin-left: 4px;
+  }
+}
+
+.cards {
+  display: grid;
+  flex: 0 1 284px;
+  grid-gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 84px 84px;
+
+  @include mobile {
+    flex-grow: 1;
+  }
+
+  > :first-child {
+    grid-column: span 3;
+  }
+
+  > * {
+    grid-column: span 1;
+  }
 }

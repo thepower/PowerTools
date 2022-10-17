@@ -34,7 +34,6 @@ export const getGeneratedSeedPhrase = createSelector(
   ),
 );
 
-
 export const getLoginErrors = createSelector(
   getRegistrationState,
   (registrationState: RegistrationState) => (
