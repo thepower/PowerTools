@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/tssdk",
-  "version": "1.10.3",
+  "version": "1.11.0",
   "main": "dist/index.js",
   "description": "thepower tssdk",
   "author": "thepower",
@@ -22,7 +22,7 @@
     "@ethereumjs/tx": "^3.5.2",
     "@ethereumjs/vm": "^5.9.2",
     "@ethersproject/abi": "^5.6.3",
-    "@thepowereco/msgpack": "^1.5.1",
+    "@thepowereco/msgpack": "^1.5.2",
     "@types/bitcoinjs-lib": "^5.0.0",
     "axios": "^0.27.2",
     "bignumber.js": "^9.1.0",

@@ -1,7 +1,18 @@
-# Change Lo
+# Change Log
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [1.7.5](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.7.4...@thepowereco/hub@1.7.5) (2022-10-17)
+
+
+### Bug Fixes
+
+* **up:** up ([5663b91](https://github.com/thepower/power_hub/commit/5663b913ac8f35654ecf2eedd62b05670aa75403))
+
+
+
+
 
 ## [1.7.4](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.7.3...@thepowereco/hub@1.7.4) (2022-10-14)
 

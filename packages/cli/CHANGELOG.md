@@ -1,7 +1,18 @@
-# Change Lo
+# Change Log
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [1.6.3](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.6.2...@thepowereco/cli@1.6.3) (2022-10-17)
+
+
+### Bug Fixes
+
+* **up:** up ([5663b91](https://github.com/thepower/power_hub/commit/5663b913ac8f35654ecf2eedd62b05670aa75403))
+
+
+
+
 
 ## [1.6.2](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.6.1...@thepowereco/cli@1.6.2) (2022-10-03)
 
