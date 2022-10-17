@@ -10,8 +10,8 @@
   &::before {
     position: absolute;
     padding: 1px;
-    border-radius: 5px;
     background: $gradient;
+    border-radius: 5px;
     content: '';
     inset: 0;
     mask:

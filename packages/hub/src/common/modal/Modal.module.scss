@@ -1,24 +1,24 @@
 @import '../../styles/variables';
 
 .modal {
-  border-radius: $unit * 2.5;
   max-width: unset;
+  border-radius: $unit * 2.5;
 
   @media screen and (max-width: $tablet) {
-    height: 100vh;
     width: 100vw;
-    margin: 0 !important;
-    max-height: unset;
     min-width: unset;
+    height: 100vh;
+    max-height: unset;
+    margin: 0 !important;
   }
 }
 
 .confirmModalActions {
   display: flex;
   justify-content: flex-end;
-  gap: $unit * 2;
-  margin-top: auto;
   padding: 0 !important;
+  margin-top: auto;
+  gap: $unit * 2;
 }
 
 .modalButton {
@@ -37,17 +37,17 @@
 }
 
 .modalLoaderText {
-  white-space: pre-line;
-  text-align: center;
   margin-top: 80px;
+  text-align: center;
+  white-space: pre-line;
 }
 
 .modalLoader {
+  display: flex;
   min-width: 384px;
   min-height: 440px;
-  display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(255 255 255 / 2%);
   padding: 32px;
+  background: rgb(255 255 255 / 2%);
 }
