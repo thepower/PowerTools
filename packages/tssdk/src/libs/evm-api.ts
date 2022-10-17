@@ -65,7 +65,16 @@ export class EvmApi {
     }
 
     const results = AbiCoder.decode(io.outputs, greetResult.execResult.returnValue);
-    return results[0];
+    let returnValue: any = results;
+
+    if (io.outputNames.length === results.length) {
+      returnValue = results.reduce((aggr, item, key) => {
+        aggr[io.outputNames[key]] = item;
+        return aggr;
+      }, {});
+    }
+
+    return returnValue;
   }
 
   // Send trx to chain
