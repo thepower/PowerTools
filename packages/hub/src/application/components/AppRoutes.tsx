@@ -5,6 +5,7 @@ import { RoutesEnum } from '../typings/routes';
 import { initApplication } from '../slice/applicationSlice';
 import { RegistrationPage } from '../../registration/components/RegistrationPage';
 import Home from '../../home/components/Home';
+import { AccountPage } from '../../account/components/AccountPage';
 
 const mapDispatchToProps = {
   initApplication,
@@ -27,6 +28,9 @@ class AppRoutesComponent extends React.PureComponent<AppRoutesProps> {
         <Route exact path={RoutesEnum.contribute} />
         <Route exact path={RoutesEnum.root}>
           <Home />
+        </Route>
+        <Route exact path={RoutesEnum.account}>
+          <AccountPage />
         </Route>
         <Route path={RoutesEnum.signup}>
           <RegistrationPage />

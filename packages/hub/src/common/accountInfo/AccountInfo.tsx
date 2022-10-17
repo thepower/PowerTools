@@ -17,7 +17,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type AccountInfoProps = ConnectedProps<typeof connector> & { className?: string };
 
 const AccountInfo: React.FC<AccountInfoProps> = ({ className, walletAddress }) => (
-  <Link to={RoutesEnum.account}>
+  <Link className={styles.accountLink} to={RoutesEnum.account}>
     <div className={cn(styles.account, className)}>
       <img className={styles.img} src={globus} alt="Аватар" />
       <div className={styles.accountText}>
