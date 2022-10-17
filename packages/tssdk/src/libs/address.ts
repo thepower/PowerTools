@@ -179,6 +179,11 @@ export const AddressApi = {
     return result;
   },
 
+  textAddressToEvmAddress(textAddress: string) {
+    const hexAddress = AddressApi.textAddressToHex(textAddress);
+    return `0x000000000000000000000000${hexAddress}`;
+  },
+
   isTextAddressValid(textAddress: string) {
     try {
       this.parseTextAddress(textAddress);
