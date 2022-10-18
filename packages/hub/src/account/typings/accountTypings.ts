@@ -1,3 +1,5 @@
+import { MouseEventHandler } from 'react';
+
 export type GetChainResultType = {
   address: string;
   chain: number;
@@ -20,4 +22,10 @@ export type ExportAccountInputType = {
 export type ImportAccountInputType = {
   accountFile: File;
   password: string;
+};
+
+export type AccountActionType = {
+  title: string;
+  action: MouseEventHandler<HTMLDivElement>;
+  Icon: any;
 };

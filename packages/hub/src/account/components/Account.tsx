@@ -1,6 +1,13 @@
 import React from 'react';
 import cn from 'classnames';
-import { SupportIcon, CopySvg } from 'common/icons';
+import {
+  SupportIcon,
+  CopySvg,
+  CreateIcon,
+  ExportIcon,
+  ImportIcon,
+  ResetIcon,
+} from 'common/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { Drawer } from '@mui/material';
 import { ApplicationState } from '../../application';
@@ -9,6 +16,7 @@ import styles from './Account.module.scss';
 import globe from './globe.jpg';
 import { Maybe } from '../../typings/common';
 import { AccountActionsList } from './AccountActionsList';
+import { AccountActionType } from '../typings/accountTypings';
 
 const mapStateToProps = (state: ApplicationState) => ({
   walletAddress: getWalletAddress(state),
@@ -20,29 +28,94 @@ type AccountProps = ConnectedProps<typeof connector> & { className?: string };
 
 interface AccountState {
   openedAccountMenu: boolean;
+  drawerAnchor: 'top' | 'left';
 }
 
 class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
   private drawerPaperClasses = {
     paper: styles.drawerPaper,
-    root: styles.qwe,
+    root: styles.drawerModalRoot,
   };
 
-  copyWalletRef: Maybe<HTMLDivElement> = null;
+  private drawerModalProps = {
+    componentsProps: {
+      backdrop: {
+        className: styles.drawerBackdrop,
+      },
+    },
+  };
+
+  private mobileWidth = 768;
+
+  private copyWalletRef: Maybe<HTMLDivElement> = null;
 
   constructor(props: AccountProps) {
     super(props);
     this.state = {
       openedAccountMenu: false,
+      drawerAnchor: this.getDrawerAnchor(),
     };
   }
 
-  openAccountMenu = () => {
-    this.setState({ openedAccountMenu: true });
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  getDrawerAnchor = () => (
+    window?.innerWidth < this.mobileWidth ? 'top' : 'left'
+  );
+
+  handleResize = () => {
+    this.setState({ drawerAnchor: this.getDrawerAnchor() });
   };
 
-  closeAccountMenu = () => {
-    this.setState({ openedAccountMenu: false });
+  handleCreateAccount = () => {
+    console.log('create account');
+  };
+
+  handleExportAccount = () => {
+    console.log('export account');
+  };
+
+  handleImportAccount = () => {
+    console.log('import account');
+  };
+
+  handleResetAccount = () => {
+    console.log('reset account');
+  };
+
+  // eslint-disable-next-line react/sort-comp
+  private accountActionsData: AccountActionType[] = [
+    {
+      title: 'Create new account',
+      action: this.handleCreateAccount,
+      Icon: CreateIcon,
+    },
+    {
+      title: 'Export account',
+      action: this.handleExportAccount,
+      Icon: ExportIcon,
+    },
+    {
+      title: 'Import account',
+      action: this.handleImportAccount,
+      Icon: ImportIcon,
+    },
+    {
+      title: 'Reset account',
+      action: this.handleResetAccount,
+      Icon: ResetIcon,
+    },
+  ];
+
+  toggleAccountMenu = () => {
+    const { openedAccountMenu } = this.state;
+    this.setState({ openedAccountMenu: !openedAccountMenu });
   };
 
   setWalletRef = (el: HTMLDivElement) => {
@@ -57,16 +130,18 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
 
   render() {
     const { walletAddress, className } = this.props;
-    const { openedAccountMenu } = this.state;
+    const { openedAccountMenu, drawerAnchor } = this.state;
 
     return <div
       className={cn(styles.account, className)}
-      onClick={this.openAccountMenu}
+      onClick={this.toggleAccountMenu}
     >
       <Drawer
+        anchor={drawerAnchor}
         open={openedAccountMenu}
-        onClose={this.closeAccountMenu}
+        onClose={this.toggleAccountMenu}
         elevation={0}
+        ModalProps={this.drawerModalProps}
         classes={this.drawerPaperClasses}
       >
         <div className={styles.accountTitle}>
@@ -80,7 +155,7 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
           {walletAddress}
           <CopySvg className={styles.copyIcon} />
         </div>
-        <AccountActionsList />
+        <AccountActionsList actions={this.accountActionsData} />
         <a
           className={styles.supportLink}
           rel={'noreferrer'}
