@@ -5,18 +5,17 @@ import { Button } from '@mui/material';
 import {
   Tabs,
   AttachIcon,
-  OutlinedInput,
-  Modal,
 } from 'common';
 import {
   LoginRegisterAccountTabs,
   LoginRegisterAccountTabsLabels,
   RegistrationPageAdditionalProps,
-} from '../../../typings/registrationTypes';
-import { RegistrationBackground } from '../../common/RegistrationBackground';
-import styles from '../../Registration.module.scss';
-import { Maybe } from '../../../../typings/common';
-import { importAccountFromFile } from '../../../../account/slice/accountSlice';
+} from '../../../../typings/registrationTypes';
+import { RegistrationBackground } from '../../../common/RegistrationBackground';
+import styles from '../../../Registration.module.scss';
+import { Maybe } from '../../../../../typings/common';
+import { importAccountFromFile } from '../../../../../account/slice/accountSlice';
+import { ImportAccountModal } from './ImportAccountModal';
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = {
@@ -24,7 +23,6 @@ const mapDispatchToProps = {
 };
 
 interface ImportAccountState {
-  password: string;
   openedPasswordModal: boolean;
   accountFile: Maybe<File>;
 }
@@ -38,7 +36,6 @@ class ImportAccountComponent extends React.PureComponent<ImportAccountProps, Imp
     super(props);
 
     this.state = {
-      password: '',
       openedPasswordModal: false,
       accountFile: null,
     };
@@ -59,19 +56,13 @@ class ImportAccountComponent extends React.PureComponent<ImportAccountProps, Imp
     });
   };
 
-  onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      password: event.target.value,
-    });
-  };
-
   closePasswordModal = () => {
     this.setState({ openedPasswordModal: false });
   };
 
-  handleImportAccount = () => {
+  handleImportAccount = (password: string) => {
     const { importAccountFromFile } = this.props;
-    const { accountFile, password } = this.state;
+    const { accountFile } = this.state;
 
     importAccountFromFile({
       password,
@@ -81,48 +72,16 @@ class ImportAccountComponent extends React.PureComponent<ImportAccountProps, Imp
     this.closePasswordModal();
   };
 
-  renderImportModal = () => {
-    const { openedPasswordModal, password } = this.state;
-
-    return <Modal
-      contentClassName={styles.importModalContent}
-      onClose={this.closePasswordModal}
-      open={openedPasswordModal}
-    >
-      <div className={styles.exportModalTitleHolder}>
-        <div className={styles.exportModalTitle}>
-          {'Import account'}
-        </div>
-        <div className={styles.exportModalTitle}>
-          {'Please enter your password and your account will be loaded'}
-        </div>
-      </div>
-      <OutlinedInput
-        placeholder={'Password'}
-        className={classnames(styles.passwordInput, styles.importModalPasswordInput)}
-        value={password}
-        onChange={this.onChangePassword}
-        type={'password'}
-        autoFocus
-      />
-      <Button
-        className={classnames(styles.registrationNextButton, styles.registrationNextButton_outlined)}
-        variant="outlined"
-        size="large"
-        onClick={this.handleImportAccount}
-      >
-        <span className={styles.registrationNextButtonText}>
-          {'Next'}
-        </span>
-      </Button>
-    </Modal>;
-  };
-
   render() {
     const { tab, onChangeTab } = this.props;
+    const { openedPasswordModal } = this.state;
 
     return <RegistrationBackground>
-      {this.renderImportModal()}
+      <ImportAccountModal
+        open={openedPasswordModal}
+        onClose={this.closePasswordModal}
+        onSubmit={this.handleImportAccount}
+      />
       <div className={styles.loginRegisterAccountTitle}>
         {'Create, login or import an account'}
       </div>
