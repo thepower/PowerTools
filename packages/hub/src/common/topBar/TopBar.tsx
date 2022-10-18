@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 import styles from './TopBar.module.scss';
 import IconButton from '../iconButton/IconButton';
-import AccountInfo from '../accountInfo/AccountInfo';
+import { Account } from '../../account/components/Account';
 import ArrowLink from '../arrowLink/ArrowLink';
 import { BellIcon } from '../icons';
 
@@ -32,7 +32,7 @@ const TopBar: React.FC<TopBarProps> = ({
       )}
       {type === 'shallow' && (
       <div className={styles.accountHolder}>
-        <AccountInfo />
+        <Account />
       </div>
       )}
       {type === 'shallow' && children && (

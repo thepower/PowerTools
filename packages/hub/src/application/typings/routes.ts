@@ -5,5 +5,4 @@ export enum RoutesEnum {
   contribute = '/contribute',
   signup = '/signup',
   root = '/',
-  account = '/account',
 }

@@ -11,3 +11,8 @@ export { ReactComponent as WalletsSvg } from './wallets.svg';
 export { ReactComponent as SendSvg } from './send.svg';
 export { ReactComponent as FaucetSvg } from './faucet.svg';
 export { ReactComponent as BuySvg } from './buy.svg';
+export { ReactComponent as CreateIcon } from './create.svg';
+export { ReactComponent as ExportIcon } from './export.svg';
+export { ReactComponent as ImportIcon } from './import.svg';
+export { ReactComponent as ResetIcon } from './reset.svg';
+export { ReactComponent as SupportIcon } from './support.svg';
