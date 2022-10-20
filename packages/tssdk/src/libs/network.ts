@@ -242,6 +242,8 @@ export class NetworkApi {
       parameters.baseURL = `${this.currentNodes[this.nodeIndex].address}/api${actionUrl}`;
       try {
         result = await axios.request(parameters);
+        console.log('parameters = ', parameters);
+        // console.log(result);
         success = true;
       } catch (e: any) {
         if (e.response === undefined) {
@@ -366,7 +368,7 @@ export class NetworkApi {
     this.checkResponseValidity(response);
 
     response = transformResponse(response, kind);
-
+    // const res: any = await response;
     return response;
   }
 }

@@ -11,5 +11,7 @@ export const getFileHash = async (filePath: string) => {
 export const getHash = (jsonString: string) => {
   const hashSum = createHash('sha256');
   hashSum.update(jsonString);
-  return hashSum.digest('hex');
+  const hexHash = hashSum.digest('hex');
+  const intHash = BigInt(`0x${hexHash}`).toString(10);
+  return intHash;
 };

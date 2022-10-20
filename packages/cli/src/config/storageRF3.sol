@@ -73,8 +73,13 @@ contract StorageRF3 {
     emit providerRegister(storageNodesCount);
     return storageNodesCount;
   }
+function deleteProvider() public returns (bool _deleted){
+    require(storageNodesId[msg.sender]!=0, "Id nodes dosent exist");
+    delete(storageNodesId[msg.sender]); 
 
-  function updateProvider(uint _id, string memory _uploadUrl, string memory _baseUrls) public {
+    return true;
+  }
+  function updateProvider(uint256 _id, string memory _uploadUrl, string memory _baseUrls) public {
 
     require(storageNodes[_id].id==_id, "Id nodes dosent exist");
     require(storageNodes[_id].owner==msg.sender, "Not owner of this node");
@@ -112,7 +117,7 @@ contract StorageRF3 {
 
   function addTask(string memory _name, uint256 _hash, uint _expire, uint _size) public payable returns (uint256 taskId){
     require(msg.value>0, "need more token");
-    require(!isTaskExist(msg.sender,_name), "task allready exist");
+    require(taskIdByName(msg.sender,_name)==0, "task allready exist");
     
 //TODO calculate that tokens enouth for storage 
 
@@ -140,7 +145,7 @@ contract StorageRF3 {
     return storageTasksCount;
   }
 
-  function updateTask(uint _id, uint256 _hash, uint _expire, uint _size) public payable {
+  function updateTask(uint256 _id, uint256 _hash, uint _expire, uint _size) public payable {
     require(msg.value>0, "need more token");
     require(msg.sender==storageTasks[_id].owner, "not your task");
     require(storageTasks[_id].status==TasksStatus.AllnodeSync, "first fullsync task");
@@ -170,11 +175,11 @@ contract StorageRF3 {
 
   }
 
- function increaseTaskBalance(uint _id) public payable {
+ function increaseTaskBalance(uint256 _id) public payable {
     tasksBalance[_id]+=msg.value;
   }
 
- function increaseTaskStorageTime(uint _id, uint _expire) public payable {
+ function increaseTaskStorageTime(uint256 _id, uint _expire) public payable {
     tasksBalance[_id]+=msg.value;
     require(_expire>storageTasks[_id].expire, "new storage time must biger");
     ///TODO calculate if tasksBalance[_id] enouth for new storage time 
@@ -196,7 +201,7 @@ contract StorageRF3 {
         }
   }
 
-  function uploadComplete(uint _id) public {
+  function uploadComplete(uint256 _id) public {
 
     uint uploader_id=findStrorageNode(msg.sender);
     require(uploader_id>0, "Not storage node owner");
@@ -221,30 +226,36 @@ contract StorageRF3 {
     return ( storageNodes[_id].owner, storageNodes[_id].baseUrls, storageNodes[_id].uploadUrl);
 
   }
-  function getTask(uint _id) public view returns(address owner, string memory name, uint256 hash, uint256 size, uint256 taskTime, uint256 expire, uint256 uploader, uint256 status) {
-    StorageTask memory ret=storageTasks[_id];
-    return ( ret.owner, ret.name, ret.hash, ret.size, ret.time, ret.expire, ret.uploader, uint(ret.status));
+  function getTask(uint256 _id) public view returns(address owner, string memory name, uint256 hash, uint256 size,  uint256 expire, uint256 uploader, uint256 status) {
+    
+    return ( storageTasks[_id].owner, storageTasks[_id].name, storageTasks[_id].hash, storageTasks[_id].size,  storageTasks[_id].expire, storageTasks[_id].uploader, uint(storageTasks[_id].status));
+
+  }
+
+  function getTaskStruct(uint256 _id) public view returns (StorageTask memory _storageTasks) {
+    
+    return ( storageTasks[_id]);
 
   }
 
 
-  function getTaskHistory(uint _id) public view returns(uint taskHistoryId) {
+  function getTaskHistory(uint _id) public view returns(uint256 taskId) {
 
     return ( tasksHistory[_id]);
 
   }
 
-  function getTaskBalance(uint _id) public view returns(uint taskBalance) {
+  function getTaskBalance(uint256 _id) public view returns(uint taskBalance) {
 
     return ( tasksBalance[_id]);
 
   }
 
-  function isTaskExist(address _account, string memory  _name) public view returns(bool _taskExist) {
-    if (taskByName[_account][_name]==0) {return (false);}
-    return true;
+  function taskIdByName(address _account, string memory  _name) public view returns(uint256 taskID) {
+    return (taskByName[_account][_name]);
 
   }
+
 
   function getProviderBalance(uint _id) public view returns(uint providesBalance) {
 
