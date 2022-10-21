@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import cn from 'classnames';
 import {
   SupportIcon,
@@ -17,11 +17,15 @@ import globe from './globe.jpg';
 import { Maybe } from '../../typings/common';
 import { AccountActionsList } from './AccountActionsList';
 import { AccountActionType } from '../typings/accountTypings';
+import { ImportAccountModal } from '../../registration/components/pages/loginRegisterAccount/import/ImportAccountModal';
+import { importAccountFromFile } from '../slice/accountSlice';
 
 const mapStateToProps = (state: ApplicationState) => ({
   walletAddress: getWalletAddress(state),
 });
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  importAccountFromFile,
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 type AccountProps = ConnectedProps<typeof connector> & { className?: string };
@@ -29,6 +33,8 @@ type AccountProps = ConnectedProps<typeof connector> & { className?: string };
 interface AccountState {
   openedAccountMenu: boolean;
   drawerAnchor: 'top' | 'left';
+  openedImportModal: boolean;
+  accountFile: Maybe<File>;
 }
 
 class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
@@ -49,11 +55,15 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
 
   private copyWalletRef: Maybe<HTMLDivElement> = null;
 
+  private importAccountInput: Maybe<HTMLInputElement> = null;
+
   constructor(props: AccountProps) {
     super(props);
     this.state = {
       openedAccountMenu: false,
       drawerAnchor: this.getDrawerAnchor(),
+      openedImportModal: false,
+      accountFile: null,
     };
   }
 
@@ -81,8 +91,39 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
     console.log('export account');
   };
 
-  handleImportAccount = () => {
-    console.log('import account');
+  toggleImportModal = (e: MouseEvent) => {
+    e.stopPropagation();
+    const { openedImportModal } = this.state;
+
+    this.setState({ openedImportModal: !openedImportModal });
+  };
+
+  setImportAccountRef = (el: HTMLInputElement) => this.importAccountInput = el;
+
+  handleOpenImportFile = () => {
+    if (this.importAccountInput) {
+      this.importAccountInput.click();
+    }
+  };
+
+  handleImportAccount = (password: string) => {
+    const { importAccountFromFile } = this.props;
+    const { accountFile } = this.state;
+
+    importAccountFromFile({
+      password,
+      accountFile: accountFile!,
+    });
+
+    this.setState({ openedImportModal: false });
+  };
+
+  setAccountFile = (event: ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      accountFile: event?.target?.files?.[0]!,
+      openedImportModal: true,
+      openedAccountMenu: false,
+    });
   };
 
   handleResetAccount = () => {
@@ -103,7 +144,7 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
     },
     {
       title: 'Import account',
-      action: this.handleImportAccount,
+      action: this.handleOpenImportFile,
       Icon: ImportIcon,
     },
     {
@@ -113,9 +154,12 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
     },
   ];
 
-  toggleAccountMenu = () => {
-    const { openedAccountMenu } = this.state;
-    this.setState({ openedAccountMenu: !openedAccountMenu });
+  openAccountMenu = () => {
+    this.setState({ openedAccountMenu: true });
+  };
+
+  closeAccountMenu = () => {
+    this.setState({ openedAccountMenu: false });
   };
 
   setWalletRef = (el: HTMLDivElement) => {
@@ -130,16 +174,23 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
 
   render() {
     const { walletAddress, className } = this.props;
-    const { openedAccountMenu, drawerAnchor } = this.state;
+    const {
+      openedAccountMenu,
+      drawerAnchor,
+      openedImportModal,
+    } = this.state;
 
-    return <div
-      className={cn(styles.account, className)}
-      onClick={this.toggleAccountMenu}
-    >
+    return <div className={cn(styles.account, className)}>
+      <input
+        ref={this.setImportAccountRef}
+        className={styles.importAccountInput}
+        onChange={this.setAccountFile}
+        type="file"
+      />
       <Drawer
         anchor={drawerAnchor}
         open={openedAccountMenu}
-        onClose={this.toggleAccountMenu}
+        onClose={this.closeAccountMenu}
         elevation={0}
         ModalProps={this.drawerModalProps}
         classes={this.drawerPaperClasses}
@@ -165,8 +216,16 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
           <SupportIcon />
         </a>
       </Drawer>
+      <ImportAccountModal
+        open={openedImportModal}
+        onClose={this.toggleImportModal}
+        onSubmit={this.handleImportAccount}
+      />
       <img className={styles.img} src={globe} alt="Avatar" />
-      <div className={styles.accountText}>
+      <div
+        className={styles.accountText}
+        onClick={this.openAccountMenu}
+      >
         <p>{walletAddress}</p>
       </div>
     </div>;

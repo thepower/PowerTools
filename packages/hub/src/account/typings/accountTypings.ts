@@ -1,5 +1,3 @@
-import { MouseEventHandler } from 'react';
-
 export type GetChainResultType = {
   address: string;
   chain: number;
@@ -26,6 +24,6 @@ export type ImportAccountInputType = {
 
 export type AccountActionType = {
   title: string;
-  action: MouseEventHandler<HTMLDivElement>;
+  action: (data?: any) => void;
   Icon: any;
 };

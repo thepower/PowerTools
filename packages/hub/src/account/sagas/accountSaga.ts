@@ -7,7 +7,7 @@ import {
 import { push } from 'connected-react-router';
 import {
   clearAccountData,
-  setLoggedToAccount,
+  setWalletData,
 } from '../slice/accountSlice';
 import { getWalletData } from '../selectors/accountSelectors';
 import {
@@ -52,7 +52,11 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
 
     yield setKeyToApplicationStorage('address', address);
     yield setKeyToApplicationStorage('wif', wif);
-    yield put(setLoggedToAccount(true));
+    yield put(setWalletData({
+      address: payload?.address!,
+      wif: payload?.wif!,
+      logged: true,
+    }));
   } catch (e) {
     // handle error in notifications
   }

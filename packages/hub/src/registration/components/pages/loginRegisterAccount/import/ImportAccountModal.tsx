@@ -34,6 +34,7 @@ export class ImportAccountModal extends React.PureComponent<ImportAccountModalPr
     const { password } = this.state;
 
     onSubmit(password);
+    this.setState({ password: '' });
   };
 
   render() {
