@@ -11,7 +11,7 @@ import { RegistrationTabsEnum } from '../typings/registrationTypes';
 import { QuickGuide } from './pages/QuickGuide';
 import { BeAware } from './pages/BeAware';
 import { RegisterPage } from './pages/loginRegisterAccount/RegisterPage';
-import { Backup } from './pages/Backup';
+import { Backup } from './pages/backup/Backup';
 
 interface RegistrationPageState {
   enterButtonPressed: boolean;
