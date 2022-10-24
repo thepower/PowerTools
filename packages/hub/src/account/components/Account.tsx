@@ -19,6 +19,7 @@ import { AccountActionsList } from './AccountActionsList';
 import { AccountActionType } from '../typings/accountTypings';
 import { ImportAccountModal } from '../../registration/components/pages/loginRegisterAccount/import/ImportAccountModal';
 import { importAccountFromFile } from '../slice/accountSlice';
+import { ExportAccountModal } from '../../registration/components/pages/backup/ExportAccountModal';
 
 const mapStateToProps = (state: ApplicationState) => ({
   walletAddress: getWalletAddress(state),
@@ -33,8 +34,9 @@ type AccountProps = ConnectedProps<typeof connector> & { className?: string };
 interface AccountState {
   openedAccountMenu: boolean;
   drawerAnchor: 'top' | 'left';
-  openedImportModal: boolean;
   accountFile: Maybe<File>;
+  openedImportAccountModal: boolean;
+  openedExportAccountModal: boolean;
 }
 
 class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
@@ -62,8 +64,9 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
     this.state = {
       openedAccountMenu: false,
       drawerAnchor: this.getDrawerAnchor(),
-      openedImportModal: false,
       accountFile: null,
+      openedImportAccountModal: false,
+      openedExportAccountModal: false,
     };
   }
 
@@ -88,14 +91,11 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
   };
 
   handleExportAccount = () => {
-    console.log('export account');
+    this.setState({ openedExportAccountModal: true });
   };
 
-  toggleImportModal = (e: MouseEvent) => {
-    e.stopPropagation();
-    const { openedImportModal } = this.state;
-
-    this.setState({ openedImportModal: !openedImportModal });
+  closeImportAccountModal = () => {
+    this.setState({ openedImportAccountModal: false });
   };
 
   setImportAccountRef = (el: HTMLInputElement) => this.importAccountInput = el;
@@ -115,15 +115,19 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
       accountFile: accountFile!,
     });
 
-    this.setState({ openedImportModal: false });
+    this.setState({ openedImportAccountModal: false });
   };
 
   setAccountFile = (event: ChangeEvent<HTMLInputElement>) => {
     this.setState({
       accountFile: event?.target?.files?.[0]!,
-      openedImportModal: true,
+      openedImportAccountModal: true,
       openedAccountMenu: false,
     });
+  };
+
+  closeExportAccountModal = () => {
+    this.setState({ openedExportAccountModal: false });
   };
 
   handleResetAccount = () => {
@@ -177,7 +181,8 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
     const {
       openedAccountMenu,
       drawerAnchor,
-      openedImportModal,
+      openedImportAccountModal,
+      openedExportAccountModal,
     } = this.state;
 
     return <div className={cn(styles.account, className)}>
@@ -217,9 +222,13 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
         </a>
       </Drawer>
       <ImportAccountModal
-        open={openedImportModal}
-        onClose={this.toggleImportModal}
+        open={openedImportAccountModal}
+        onClose={this.closeImportAccountModal}
         onSubmit={this.handleImportAccount}
+      />
+      <ExportAccountModal
+        open={openedExportAccountModal}
+        onClose={this.closeExportAccountModal}
       />
       <img className={styles.img} src={globe} alt="Avatar" />
       <div

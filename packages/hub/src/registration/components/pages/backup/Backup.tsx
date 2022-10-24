@@ -6,13 +6,11 @@ import { RegistrationBackground } from '../../common/RegistrationBackground';
 import { RegistrationStatement } from '../../common/RegistrationStatement';
 import styles from '../../Registration.module.scss';
 import { proceedToHub } from '../../../slice/registrationSlice';
-import { exportAccount } from '../../../../account/slice/accountSlice';
 import { ExportAccountModal } from './ExportAccountModal';
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = {
   proceedToHub,
-  exportAccount,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -43,15 +41,6 @@ class BackupComponent extends React.PureComponent<BackupProps, BackupState> {
     this.props.proceedToHub();
   };
 
-  handleExportWallet = (password: string, hint: string) => {
-    const { exportAccount } = this.props;
-
-    exportAccount({
-      password: password!,
-      hint,
-    });
-  };
-
   render() {
     const { openedPasswordModal } = this.state;
 
@@ -59,7 +48,6 @@ class BackupComponent extends React.PureComponent<BackupProps, BackupState> {
       <ExportAccountModal
         open={openedPasswordModal}
         onClose={this.closePasswordModal}
-        onSubmit={this.handleExportWallet}
       />
       <RegistrationBackground>
         <div className={styles.registrationPageTitle}>{'Important rules!'}</div>

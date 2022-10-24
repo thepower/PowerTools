@@ -1,15 +1,21 @@
 import React from 'react';
 import classnames from 'classnames';
 import { Button } from '@mui/material';
+import { connect, ConnectedProps } from 'react-redux';
 import { Modal, OutlinedInput } from '../../../../common';
 import styles from '../../Registration.module.scss';
 import { compareTwoStrings } from '../../../utils/registrationUtils';
+import { exportAccount } from '../../../../account/slice/accountSlice';
 
-interface ExportAccountModalProps {
+const mapDispatchToProps = {
+  exportAccount,
+};
+
+const connector = connect(null, mapDispatchToProps);
+type ExportAccountModalProps = ConnectedProps<typeof connector> & {
   open: boolean;
   onClose: () => void;
-  onSubmit: (password: string, hint: string) => void;
-}
+};
 
 interface ExportAccountModalState {
   password: string;
@@ -18,7 +24,7 @@ interface ExportAccountModalState {
   passwordsNotEqual: boolean;
 }
 
-export class ExportAccountModal extends React.PureComponent<ExportAccountModalProps, ExportAccountModalState> {
+class ExportAccountModalComponent extends React.PureComponent<ExportAccountModalProps, ExportAccountModalState> {
   private initialState = {
     password: '',
     confirmedPassword: '',
@@ -53,8 +59,8 @@ export class ExportAccountModal extends React.PureComponent<ExportAccountModalPr
   };
 
   handleSubmitExportModal = () => {
-    const { onSubmit } = this.props;
     const { password, confirmedPassword, hint } = this.state;
+    const { exportAccount, onClose } = this.props;
 
     const passwordsNotEqual = !compareTwoStrings(password!, confirmedPassword!);
 
@@ -63,9 +69,11 @@ export class ExportAccountModal extends React.PureComponent<ExportAccountModalPr
       return;
     }
 
-    onSubmit(password, hint);
+    exportAccount({ password, hint });
 
     this.setState({ ...this.initialState });
+
+    onClose();
   };
 
   render() {
@@ -137,3 +145,5 @@ export class ExportAccountModal extends React.PureComponent<ExportAccountModalPr
     </Modal>;
   }
 }
+
+export const ExportAccountModal = connector(ExportAccountModalComponent);
