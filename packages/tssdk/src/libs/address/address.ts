@@ -1,4 +1,6 @@
-import { AddressScopeEnum } from '../typings';
+import { AddressScopeEnum } from '../../typings';
+import { BadAddressException } from './exceptions/bad-address.exception';
+import { InvalidChecksumException } from './exceptions/invalid-checksum.exception';
 
 let globalCrcTable: number[] = [];
 
@@ -87,7 +89,7 @@ export const AddressApi = {
     // 100GGGGG GGGGGGGG GGGBBBBB BBBBBBBB BBBBBBBB AAAAAAAA AAAAAAAA AAAAAAAA
     // 101BBBBB BBBBBBBB BBBBBBBB BBBBBBBB BBBBBBBB AAAAAAAA AAAAAAAA AAAAAAAA
     if (address[0] < 128 || address[0] > 191) {
-      throw new Error('Bad address');
+      throw new BadAddressException('Bad address');
     }
 
     const wallet = address[7] | (address[6] << 8) | (address[5] << 16);
@@ -159,8 +161,9 @@ export const AddressApi = {
     }
 
     if (checksum !== addrChecksum) {
-      throw new Error('Invalid address checksum');
+      throw new InvalidChecksumException(textAddress);
     }
+
     return binaryAddress;
   },
 

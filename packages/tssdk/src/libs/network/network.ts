@@ -1,11 +1,16 @@
 import axios from 'axios';
 import createHash from 'create-hash';
 import Debug from 'debug';
-import { config as cfg } from '../config/chain.config';
-import { ChainNode } from '../typings';
-import { queueNodes, transformNodeList, transformResponse } from '../helpers/network.helper';
-import { ChainAction } from '../helpers/network.enum';
-import { ChainNameEnum } from '../config/chain.enum';
+import { config as cfg } from '../../config/chain.config';
+import { ChainNode } from '../../typings';
+import { queueNodes, transformNodeList, transformResponse } from '../../helpers/network.helper';
+import { ChainAction } from '../../helpers/network.enum';
+import { ChainNameEnum } from '../../config/chain.enum';
+import { NoNodesFoundException } from './eceptions/no-nodes-found.exception';
+import { UnknownChainException } from './eceptions/unknown-chain.exception';
+import { HashMismatchException } from './eceptions/hash-mismatch.exception';
+import { ChainUnavailableException } from './eceptions/chain-unavailable.exception';
+import { NoNodesToQueryException } from './eceptions/no-nodes-to-query.exception';
 
 const info = Debug('info');
 
@@ -85,6 +90,9 @@ export class NetworkApi {
   }
 
   private async getChainInfo() {
+    /**
+     * @todo move to env param
+     */
     const baseURL = 'https://raw.githubusercontent.com/thepower/all_chains/main/config.json';
     const { data } = await axios.request({ baseURL });
     return data.chains;
@@ -99,7 +107,7 @@ export class NetworkApi {
       const fullNodes = transformNodeList(chainData);
 
       if (!fullNodes.length) {
-        throw new Error(`No nodes found for chain ${this.currentChain}`);
+        throw new NoNodesFoundException(this.currentChain);
       }
 
       await this.setCurrentConfig(fullNodes);
@@ -140,7 +148,7 @@ export class NetworkApi {
     //   }
     // }
 
-    throw new Error(`Unknown chain ${this.currentChain}`);
+    throw new UnknownChainException(this.currentChain);
   };
 
   private async loadRemoteSCInterface(interfaceData: any[]) {
@@ -156,7 +164,7 @@ export class NetworkApi {
     const actualHash = createHash(hashAlg).update(binaryCode).digest().toString('hex');
 
     if (actualHash !== hashValue) {
-      throw new Error('Hash mismatch');
+      throw new HashMismatchException();
     }
 
     return binaryCode;
@@ -222,7 +230,7 @@ export class NetworkApi {
       this.nodeIndex = 0;
 
       if (this.nodeIndex >= this.currentNodes.length || this.currentNodes[this.nodeIndex].time === cfg.maxNodeResponseTime) {
-        throw new Error('Chain unavailable.');
+        throw new ChainUnavailableException();
       }
     }
   };
@@ -234,11 +242,14 @@ export class NetworkApi {
     let i = 0;
 
     if (!this.currentNodes.length) {
-      throw new Error('No nodes to query, probably need to call bootstrap()');
+      throw new NoNodesToQueryException();
     }
 
     while (!success) {
       i += 1;
+      /**
+       * @todo move to env
+       */
       parameters.baseURL = `${this.currentNodes[this.nodeIndex].address}/api${actionUrl}`;
       try {
         result = await axios.request(parameters);

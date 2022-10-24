@@ -1,8 +1,9 @@
 import createHash from 'create-hash';
 import { Buffer } from 'safe-buffer';
 import * as msgPack from '@thepowereco/msgpack';
+import { AddressApi } from './address/address';
+
 const Bitcoin = require('bitcoinjs-lib');
-import { AddressApi } from './address';
 // const sha512 = require('js-sha512').sha512;
 
 const TAG_PUBLIC_KEY = 0x02;
@@ -80,23 +81,24 @@ const KIND_LSTORE = 22;
 // const worker = new Worker(blobURL);
 // URL.revokeObjectURL(blobURL);
 
-const generateNonce = (body: Uint8Array, offset: number, powDifficulty: number) => {
-  // if (powDifficulty > POW_DIFFICULTY_THRESHOLD) {
-  //   throw new Error('PoW difficulty is too high');
-  // }
-  // return new Promise((resolve, reject) => {
-  //   worker.onmessage = (event: MessageEvent) => {
-  //     resolve(event.data);
-  //   };
-  //   worker.onerror = (event: ErrorEvent) => {
-  //     reject(event);
-  //   };
-  //   worker.postMessage([body, offset, powDifficulty]);
-  // });
-  return '0';
-};
+const generateNonce = (body: Uint8Array, offset: number, powDifficulty: number) => '0';
+// if (powDifficulty > POW_DIFFICULTY_THRESHOLD) {
+//   throw new Error('PoW difficulty is too high');
+// }
+// return new Promise((resolve, reject) => {
+//   worker.onmessage = (event: MessageEvent) => {
+//     resolve(event.data);
+//   };
+//   worker.onerror = (event: ErrorEvent) => {
+//     reject(event);
+//   };
+//   worker.postMessage([body, offset, powDifficulty]);
+// });
 
 const getRegisterTxBody = async (chain: number, publicKey: string, timestamp: number, referrer: string, powDifficulty = 16) => {
+  /**
+   * @todo move to env/const
+   */
   const clid = `power_wallet_${process.env.GIT_HEAD_HASH}`;
 
   let body = {
@@ -112,7 +114,8 @@ const getRegisterTxBody = async (chain: number, publicKey: string, timestamp: nu
     body = { ...body, e: { ...body.e, referrer } };
   }
 
-  const pckd = msgPack.encode(body), arr = new Uint8Array(pckd), offset = pckd.indexOf('A56E6F6E636500', 0, 'hex') + 6;
+  const pckd = msgPack.encode(body); const arr = new Uint8Array(pckd); const
+    offset = pckd.indexOf('A56E6F6E636500', 0, 'hex') + 6;
   try {
     body.nonce = await generateNonce(arr, offset, powDifficulty) as string;
   } catch (e: any) {
@@ -147,11 +150,11 @@ const getSimpleTransferTxBody = (
   seq: string,
   feeSettings: any,
 ) => {
-  let body = {
+  const body = {
     k: KIND_GENERIC,
     t: timestamp,
     f: from,
-    to: to,
+    to,
     s: seq,
     p: token && amount ? [[PURPOSE_TRANSFER, token, amount]] : [],
     e: msg ? { msg } : {},
@@ -161,35 +164,34 @@ const getSimpleTransferTxBody = (
 };
 
 const wrapAndSignPayload = (payload: any, keyPair: any, publicKey: string) => {
-  let extraData = new Uint8Array(publicKey.length + 2);
+  const extraData = new Uint8Array(publicKey.length + 2);
   extraData.set([TAG_PUBLIC_KEY]);
   extraData.set([publicKey.length], 1);
   // @ts-ignore
   extraData.set(publicKey, 2);
 
-  let toSign = new Uint8Array(extraData.length + payload.length);
+  const toSign = new Uint8Array(extraData.length + payload.length);
   toSign.set(extraData);
   toSign.set(payload, extraData.length);
 
   const signature = keyPair.sign(createHash('sha256').update(toSign).digest()).toDER();
 
-  let sig = new Uint8Array(signature.length + 2);
+  const sig = new Uint8Array(signature.length + 2);
   sig.set([TAG_SIGNATURE]);
   sig.set([signature.length], 1);
   sig.set(signature, 2);
 
-  let bsig = new Uint8Array(sig.length + extraData.length);
+  const bsig = new Uint8Array(sig.length + extraData.length);
   bsig.set(sig);
   bsig.set(extraData, sig.length);
   const bbsig = Buffer.from(bsig);
 
   return {
     body: payload,
-    sig:  [bbsig],
-    ver:  2,
+    sig: [bbsig],
+    ver: 2,
   };
 };
-
 
 export const TransactionsApi = {
   isSingleSignatureValid(data: any, bsig: any) {
@@ -200,7 +202,7 @@ export const TransactionsApi = {
 
     const extraData = bsig.subarray(signature.length + 2);
 
-    let dataToHash = new Uint8Array(extraData.length + data.length);
+    const dataToHash = new Uint8Array(extraData.length + data.length);
     dataToHash.set(extraData);
     dataToHash.set(data, extraData.length);
     const hash = createHash('sha256').update(dataToHash).digest();
@@ -273,7 +275,7 @@ export const TransactionsApi = {
   ) {
     const timestamp = +new Date();
     const bufferAddress = Buffer.from(AddressApi.parseTextAddress(address));
-    //sc = Buffer.from(AddressApi.parseTextAddress(sc));
+    // sc = Buffer.from(AddressApi.parseTextAddress(sc));
 
     const actual = scData.k !== KIND_PATCH ? {
       t: timestamp,
@@ -296,9 +298,7 @@ export const TransactionsApi = {
   ) {
     const selfInitParams = [Buffer.from(AddressApi.parseTextAddress(address))];
     const scCode = vm === 'evm'
-      ? new Uint8Array(code.match(/[\da-f]{2}/gi).map(function (h: string) {
-        return parseInt(h, 16);
-      }))
+      ? new Uint8Array(code.match(/[\da-f]{2}/gi).map((h: string) => parseInt(h, 16)))
       : new Uint8Array(code);
 
     const body = {
@@ -309,8 +309,8 @@ export const TransactionsApi = {
       s: +new Date(),
       p: [[PURPOSE_GAS, gasToken, gasValue]],
       c: ['init', selfInitParams],
-      //"e": {'code': Buffer.from(new Uint8Array(code)), "vm": "wasm", "view": ["sha1:2b4ccea0d1de703012832f374e30effeff98fe4d", "/questions.wasm"]}
-      e: { 'code': Buffer.from(scCode), 'vm': vm, 'view': [] },
+      // "e": {'code': Buffer.from(new Uint8Array(code)), "vm": "wasm", "view": ["sha1:2b4ccea0d1de703012832f374e30effeff98fe4d", "/questions.wasm"]}
+      e: { code: Buffer.from(scCode), vm, view: [] },
     };
     return TransactionsApi.packAndSignTX(computeFee(body, feeSettings), wif);
   },
@@ -318,7 +318,7 @@ export const TransactionsApi = {
   decodeTx(tx: any) {
     let selfTx = tx;
     if (!Buffer.isBuffer(selfTx)) {
-      selfTx = new Buffer(selfTx, 'base64');
+      selfTx = Buffer.from(selfTx, 'base64');
     }
     selfTx = msgPack.decode(selfTx);
     tx.body = msgPack.decode(tx.body);
@@ -328,10 +328,10 @@ export const TransactionsApi = {
   listValidTxSignatures(tx: any) {
     let selfTx = tx;
     if (!Buffer.isBuffer(selfTx)) {
-      selfTx = new Buffer(selfTx, 'base64');
+      selfTx = Buffer.from(selfTx, 'base64');
     }
     selfTx = msgPack.decode(selfTx);
-    let { body, sig } = selfTx;
+    const { body, sig } = selfTx;
 
     const validSignatures = sig.filter((signature: any) => this.isSingleSignatureValid(body, signature));
     const invalidSignaturesCount = sig.length - validSignatures.length;
@@ -362,7 +362,7 @@ export const TransactionsApi = {
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       to: Buffer.from(AddressApi.parseTextAddress(sc)),
       s: +new Date(),
-      p: [/*[PURPOSE_GAS, gasToken, gasValue]*/],
+      p: [/* [PURPOSE_GAS, gasToken, gasValue] */],
       c: toCall,
     };
 
@@ -374,7 +374,7 @@ export const TransactionsApi = {
       k: KIND_LSTORE,
       t: +new Date(),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
-      //to: Buffer.from(AddressAPI.parseTextAddress(sc)),
+      // to: Buffer.from(AddressAPI.parseTextAddress(sc)),
       s: +new Date(),
       p: [],
       pa: msgPack.encode(patches.map((i: any) => msgPack.encode(i))),
