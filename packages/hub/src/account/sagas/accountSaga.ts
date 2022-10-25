@@ -91,9 +91,15 @@ export function* exportAccountSaga({ payload }: { payload: ExportAccountInputTyp
   yield put(push(RoutesEnum.root));
 }
 
-export function* resetAccountSaga() {
-  yield clearApplicationStorage();
-  yield put(clearAccountData());
+export function* resetAccountSaga({ payload }: { payload: string }) {
+  const { wif } = yield select(getWalletData);
+  try {
+    yield CryptoApi.decryptWif(wif, payload);
 
-  yield put(push(RoutesEnum.signup));
+    yield clearApplicationStorage();
+    yield put(clearAccountData());
+    yield put(push(RoutesEnum.signup));
+  } catch (e) {
+    console.log(e);
+  }
 }
