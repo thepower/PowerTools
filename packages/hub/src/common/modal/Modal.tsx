@@ -3,7 +3,9 @@ import {
   DialogProps,
   Dialog,
   DialogContent,
+  IconButton,
 } from '@mui/material';
+import { Close } from '@mui/icons-material';
 import classnames from 'classnames';
 import styles from './Modal.module.scss';
 import { PELogo } from '../icons/PELogo';
@@ -37,6 +39,9 @@ export const Modal: React.FC<ModalProps> = (props: ModalProps) => {
     classes={dialogClasses}
   >
     <DialogContent className={classnames(contentClassName, styles.modalContent)}>
+      <IconButton className={styles.closeIcon} onClick={onClose}>
+        <Close />
+      </IconButton>
       <div>
         { !hideIcon && <PELogo /> }
       </div>
