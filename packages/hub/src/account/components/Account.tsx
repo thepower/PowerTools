@@ -20,6 +20,7 @@ import { AccountActionType } from '../typings/accountTypings';
 import { ImportAccountModal } from '../../registration/components/pages/loginRegisterAccount/import/ImportAccountModal';
 import { importAccountFromFile } from '../slice/accountSlice';
 import { ExportAccountModal } from '../../registration/components/pages/backup/ExportAccountModal';
+import { ResetAccountModal } from './ResetAccountModal';
 
 const mapStateToProps = (state: ApplicationState) => ({
   walletAddress: getWalletAddress(state),
@@ -37,6 +38,7 @@ interface AccountState {
   accountFile: Maybe<File>;
   openedImportAccountModal: boolean;
   openedExportAccountModal: boolean;
+  openedResetAccountModal: boolean;
 }
 
 class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
@@ -67,6 +69,7 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
       accountFile: null,
       openedImportAccountModal: false,
       openedExportAccountModal: false,
+      openedResetAccountModal: false,
     };
   }
 
@@ -131,7 +134,11 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
   };
 
   handleResetAccount = () => {
-    console.log('reset account');
+    this.setState({ openedResetAccountModal: true });
+  };
+
+  closeResetAccountModal = () => {
+    this.setState({ openedResetAccountModal: false });
   };
 
   // eslint-disable-next-line react/sort-comp
@@ -183,6 +190,7 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
       drawerAnchor,
       openedImportAccountModal,
       openedExportAccountModal,
+      openedResetAccountModal,
     } = this.state;
 
     return <div className={cn(styles.account, className)}>
@@ -229,6 +237,10 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
       <ExportAccountModal
         open={openedExportAccountModal}
         onClose={this.closeExportAccountModal}
+      />
+      <ResetAccountModal
+        open={openedResetAccountModal}
+        onClose={this.closeResetAccountModal}
       />
       <img className={styles.img} src={globe} alt="Avatar" />
       <div

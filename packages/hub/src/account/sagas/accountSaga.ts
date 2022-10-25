@@ -94,4 +94,6 @@ export function* exportAccountSaga({ payload }: { payload: ExportAccountInputTyp
 export function* resetAccountSaga() {
   yield clearApplicationStorage();
   yield put(clearAccountData());
+
+  yield put(push(RoutesEnum.signup));
 }
