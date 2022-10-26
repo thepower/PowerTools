@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.7.6...@thepowereco/hub@1.8.0) (2022-10-26)
+
+
+### Features
+
+* **hub:** account drawer ([5398de1](https://github.com/thepower/power_hub/commit/5398de130cec3bd0b35694c767c57db441c49e11))
+* **hub:** account in progress ([3087d15](https://github.com/thepower/power_hub/commit/3087d15fad57486dc6508690a3080923be118394))
+* **hub:** account: mobile styles ([1059c0d](https://github.com/thepower/power_hub/commit/1059c0daa77f98560e29d6dcca918be401dcd6fd))
+* **hub:** close modal icon ([428e58e](https://github.com/thepower/power_hub/commit/428e58e683b1aa0f6e46e10857ae72f2b6aaa909))
+* **hub:** export acc ([d20ce0f](https://github.com/thepower/power_hub/commit/d20ce0fcb76e58723184e464f0883c00e74e1140))
+* **hub:** fix cur dep ([49b4800](https://github.com/thepower/power_hub/commit/49b48009accd47b6d0088210f0c5e0694145cc28))
+* **hub:** import account ([d7e0a80](https://github.com/thepower/power_hub/commit/d7e0a80a67a8252be84b17b9ee48e5ab7185de01))
+* **hub:** move export account modal to separate file ([7fd22cb](https://github.com/thepower/power_hub/commit/7fd22cb64288ba5370b43d9f8adec961119412f0))
+* **hub:** move import modal to separate file ([d9b1a27](https://github.com/thepower/power_hub/commit/d9b1a271028383149f758d33592298b831bb6f4d))
+* **hub:** refactoring ([9ee4723](https://github.com/thepower/power_hub/commit/9ee472370355abc74c4fdcd3dd570e8777a4538e))
+* **hub:** reset account ([6c51293](https://github.com/thepower/power_hub/commit/6c51293f0d81ee2cf9c99be529f78063e02034ba))
+* **hub:** reset modal fix ([ef27889](https://github.com/thepower/power_hub/commit/ef27889fcd266da8d7f08edabe0b7e91fdc82a18))
+
+
+
+
+
 ## [1.7.6](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.7.5...@thepowereco/hub@1.7.6) (2022-10-26)
 
 **Note:** Version bump only for package @thepowereco/hub
