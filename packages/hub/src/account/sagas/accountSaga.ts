@@ -7,7 +7,7 @@ import {
 import { push } from 'connected-react-router';
 import {
   clearAccountData,
-  setLoggedToAccount,
+  setWalletData,
 } from '../slice/accountSlice';
 import { getWalletData } from '../selectors/accountSelectors';
 import {
@@ -18,6 +18,7 @@ import {
 } from '../typings/accountTypings';
 import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
 import { NetworkAPI, WalletAPI } from '../../application/utils/applicationUtils';
+import { RoutesEnum } from '../../application/typings/routes';
 
 export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInput } = {}) {
   const { address, wif } = payload!;
@@ -51,7 +52,11 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
 
     yield setKeyToApplicationStorage('address', address);
     yield setKeyToApplicationStorage('wif', wif);
-    yield put(setLoggedToAccount(true));
+    yield put(setWalletData({
+      address: payload?.address!,
+      wif: payload?.wif!,
+      logged: true,
+    }));
   } catch (e) {
     // handle error in notifications
   }
@@ -66,7 +71,7 @@ export function* importAccountFromFileSaga({ payload }: { payload:ImportAccountI
     const wif: string = yield CryptoApi.encryptWif(walletData.wif!, password);
 
     yield* loginToWalletSaga({ payload: { address: walletData.address, wif } });
-    yield put(push('/'));
+    yield put(push(RoutesEnum.root));
   } catch (e) {
     // handle error in notifications
   }
@@ -83,10 +88,18 @@ export function* exportAccountSaga({ payload }: { payload: ExportAccountInputTyp
   yield fileSaver.saveAs(blob, 'power_wallet.pem', true);
 
   yield* loginToWalletSaga({ payload: { address, wif } });
-  yield put(push('/'));
+  yield put(push(RoutesEnum.root));
 }
 
-export function* resetAccountSaga() {
-  yield clearApplicationStorage();
-  yield put(clearAccountData());
+export function* resetAccountSaga({ payload }: { payload: string }) {
+  const { wif } = yield select(getWalletData);
+  try {
+    yield CryptoApi.decryptWif(wif, payload);
+
+    yield clearApplicationStorage();
+    yield put(clearAccountData());
+    yield put(push(RoutesEnum.signup));
+  } catch (e) {
+    console.log(e);
+  }
 }

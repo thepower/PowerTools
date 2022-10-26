@@ -8,3 +8,8 @@ export const getWalletData = createSelector(
   getAccountState,
   (accountData: AccountState) => accountData.walletData,
 );
+
+export const getWalletAddress = createSelector(
+  getWalletData,
+  (walletData) => walletData.address,
+);

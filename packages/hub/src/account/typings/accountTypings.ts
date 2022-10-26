@@ -21,3 +21,9 @@ export type ImportAccountInputType = {
   accountFile: File;
   password: string;
 };
+
+export type AccountActionType = {
+  title: string;
+  action: (data?: any) => void;
+  Icon: any;
+};

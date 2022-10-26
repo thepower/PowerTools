@@ -7,36 +7,37 @@ import {
 } from 'common/icons';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { RoutesEnum } from '../../application/typings/routes';
 import styles from './NavList.module.scss';
 
 const routes = [
   {
     name: 'Home',
-    link: '/',
+    link: RoutesEnum.root,
     Icon: HomeIcon,
     disabled: false,
   },
   {
     name: 'Discover',
-    link: '/discover',
+    link: RoutesEnum.discover,
     Icon: DiscoverIcon,
     disabled: true,
   },
   {
     name: 'MyPlace',
-    link: '/my-place',
+    link: RoutesEnum.myPlace,
     Icon: MyPlaceIcon,
     disabled: true,
   },
   {
     name: 'Build',
-    link: '/build',
+    link: RoutesEnum.build,
     Icon: BuildIcon,
     disabled: true,
   },
   {
     name: 'Contribute',
-    link: '/contribute',
+    link: RoutesEnum.contribute,
     Icon: ContributeIcon,
     disabled: true,
   },

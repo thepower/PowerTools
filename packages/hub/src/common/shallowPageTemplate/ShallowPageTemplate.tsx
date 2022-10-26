@@ -1,14 +1,14 @@
 import React from 'react';
 import styles from './ShallowPageTemplate.module.scss';
 import NavList from './NavList';
-import AccountInfo from '../accountInfo/AccountInfo';
+import { Account } from '../../account/components/Account';
 
 const ShallowPageTemplate: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className={styles.template}>
     <aside className={styles.aside}>
       <header className={styles.header}>
         <p className={styles.logo}>{'Power Hub'}</p>
-        <AccountInfo />
+        <Account />
       </header>
       <NavList />
     </aside>
