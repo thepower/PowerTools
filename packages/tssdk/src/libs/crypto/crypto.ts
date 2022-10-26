@@ -1,15 +1,18 @@
 import wif from 'wif';
 import { mnemonicToSeed, generateMnemonic, validateMnemonic } from 'bip39';
-import Crypto, {
-  BinaryLike, CipherGCM, CipherGCMTypes, CipherKey,
-} from 'crypto';
 import { Buffer as SafeBuffer } from 'safe-buffer';
 import createHash, { algorithm } from 'create-hash';
 import { promises } from 'fs';
-import { AddressApi } from './address';
+import Crypto, {
+  BinaryLike, CipherGCM, CipherGCMTypes, CipherKey,
+} from 'crypto';
+import { AddressApi } from '../address/address';
 import {
   PKCS5PEMInfoType, Maybe, MaybeUndef, AccountKey,
-} from '../typings';
+} from '../../typings';
+import { UnknownCurveException } from './exceptions/unknown-curve.exception';
+import { ParseWholePemException } from './exceptions/parse-whole-pem.exception';
+import { FileIsCorruptException } from './exceptions/file-is-corrupt.exception';
 
 const bip32 = require('bip32');
 const Bitcoin = require('bitcoinjs-lib');
@@ -92,7 +95,7 @@ const decryptPrivateKey = (encrypted: any, password: string, iv: string, algorit
   const key = passwordToKey(password, hexedIv.slice(0, 8));
   const decrypted = decrypt(selfEncrypted, key, hexedIv as unknown as BinaryLike, algorithm);
   if (decrypted.slice(18, 23).toString('hex').toUpperCase() !== '2B8104000A') {
-    throw new Error('Unknown curve');
+    throw new UnknownCurveException();
   }
   return decrypted.slice(-32).toString('hex');
 };
@@ -140,9 +143,15 @@ function parsePKCS5PEM(sPKCS5PEM: string): PKCS5PEMInfoType {
   return info;
 }
 
-const parseWholePem = (pem: string) => (
-  pem.match(/(^-----BEGIN[\s\S]+?^-----END.+$){1}?/gm)?.map(parsePKCS5PEM)
-);
+const parseWholePem = (pem: string) => {
+  const result = pem.match(/(^-----BEGIN[\s\S]+?^-----END.+$){1}?/gm);
+
+  if (!result) {
+    throw new ParseWholePemException();
+  }
+
+  return result.map(parsePKCS5PEM);
+};
 
 export const CryptoApi = {
   generateSeedPhrase() {
@@ -183,8 +192,8 @@ export const CryptoApi = {
   decryptWalletData(encrypted: string, password: string) {
     const sections = parseWholePem(encrypted);
 
-    if (sections?.length !== 2) {
-      throw new Error('File is corrupt!');
+    if (sections.length !== 2) {
+      throw new FileIsCorruptException();
     }
 
     const addressData = sections.find((item) => item.type === undefined);

@@ -2,7 +2,8 @@ import * as msgPack from '@thepowereco/msgpack';
 import * as lz4 from 'lz4js';
 import createHash from 'create-hash';
 // import * as brutusin from 'brutusin-json-forms';
-import { FileReaderType, getFileData } from '../utils/files';
+import { FileReaderType, getFileData } from '../../utils/files';
+import { BodyIsMandatoryException } from './exceptions/body-is-mandatory.exception';
 
 export class SmartContractWrapper {
   private contract;
@@ -17,14 +18,14 @@ export class SmartContractWrapper {
 
   constructor(contract: Uint8Array, state = {}, balance = {}) {
     if (!contract) {
-      throw new Error('SC body is mandatory');
+      throw new BodyIsMandatoryException();
     }
 
     this.hashes = new Map();
 
     const needDecompress = contract.subarray(0, 4).toString() === [0x04, 0x22, 0x4D, 0x18].toString();
 
-    this.contract = needDecompress ? lz4.decompress(contract) :  contract;
+    this.contract = needDecompress ? lz4.decompress(contract) : contract;
     this.state = msgPack.decode(state);
     this.balance = balance;
     // this.forms = brutusin;
@@ -33,11 +34,14 @@ export class SmartContractWrapper {
   binToStr = (bin: Uint8Array) => bin.reduce((acc: string, item: number) => acc + String.fromCharCode(item), '');
 
   executeMethod = async (method: any, params: any[] = []) => {
-    let returnValue, txs: any[] = [], debugData = '';
+    let returnValue;
+    let txs: any[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let debugData = '';
 
     const smartContract = await WebAssembly.instantiate(this.contract, {
       env: {
-        storage_reset:() => {
+        storage_reset: () => {
           throw new Error('storage_reset method is called via interface');
         },
         storage_read: (keySize: number, keyOffset: number, valueSize: number, valueOffset: number) => {
@@ -66,33 +70,25 @@ export class SmartContractWrapper {
         debug: (size: number, offset: number) => {
           // @ts-ignore
           const data = new Uint8Array(smartContract.instance.exports.memory.buffer, offset, size);
-          debugData = debugData + this.binToStr(data);
+          debugData += this.binToStr(data);
         },
         flush: () => {
           debugData = '';
         },
 
-        get_tx_raw_size: () => {
-          return 0;
-        },
-        get_tx_raw: () => {
-          return 0;
-        },
+        get_tx_raw_size: () => 0,
+        get_tx_raw: () => 0,
 
-        get_args_raw_size: () => {
-          return msgPack.encode(params/*, {codec}*/).length;
-        },
+        get_args_raw_size: () => msgPack.encode(params/* , {codec} */).length,
         get_args_raw: (offset: number) => {
-          const packedParams = msgPack.encode(params/*, {codec}*/);
+          const packedParams = msgPack.encode(params/* , {codec} */);
           // @ts-ignore
           const buffer = new Uint8Array(smartContract.instance.exports.memory.buffer, offset, packedParams.length);
 
           packedParams.forEach((item: any, index: number) => buffer[index] = item);
         },
 
-        get_balance_raw_size: () => {
-          return msgPack.encode(this.balance).length;
-        },
+        get_balance_raw_size: () => msgPack.encode(this.balance).length,
 
         get_balance_raw: (offset: number) => {
           const packedParams = msgPack.encode(this.balance);
@@ -104,7 +100,7 @@ export class SmartContractWrapper {
         set_return: (size: number, offset: number) => {
           // @ts-ignore
           const ret = new Uint8Array(smartContract.instance.exports.memory.buffer.slice(offset, offset + size));
-          returnValue = msgPack.decode(ret/*, {codec}*/);
+          returnValue = msgPack.decode(ret/* , {codec} */);
         },
 
         emit_tx: (size: number, offset: number) => {
@@ -122,6 +118,9 @@ export class SmartContractWrapper {
           hash.forEach((item: any, index: number) => buffer[index] = item);
         },
 
+        /**
+         * @todo magic number
+         */
         time: () => +new Date() / 1000,
       },
     });
@@ -153,11 +152,11 @@ export class SmartContractWrapper {
 
     const result = await this.executeMethod(`${method}_wrapper`, params);
 
-    const form = result?.find(item => item[0] === 'form');
-    const txPart = result?.filter(item => item[0] === 'tx');
+    const form = result?.find((item) => item[0] === 'form');
+    const txPart = result?.filter((item) => item[0] === 'tx');
 
     if (txPart) {
-      txPart.forEach(item => txCallback(item[1]));
+      txPart.forEach((item) => txCallback(item[1]));
     }
 
     if (form) {
@@ -174,7 +173,7 @@ export class SmartContractWrapper {
       bf.render(container, defaultData);
 
       const nodes = container.querySelectorAll('input[type=file]');
-      nodes.forEach((item => item.addEventListener('change', async (event: any) => {
+      nodes.forEach(((item) => item.addEventListener('change', async (event: any) => {
         const file: File = event.target?.files?.[0];
         const data = await getFileData(file, FileReaderType.binary);
         // @ts-ignore
@@ -216,13 +215,9 @@ export class SmartContractWrapper {
     }
   };
 
-  getName = async () => {
-    return this.executeMethod('get_name_wrapper');
-  };
+  getName = async () => this.executeMethod('get_name_wrapper');
 
-  getDescription = async () => {
-    return this.executeMethod('get_description_wrapper');
-  };
+  getDescription = async () => this.executeMethod('get_description_wrapper');
 
   getIcon = async () => {
     // @ts-ignore
@@ -245,5 +240,4 @@ export class SmartContractWrapper {
 
     return `data:image/${imgType};base64, ${iconBinary.toString()}`;
   };
-
 }
