@@ -1,12 +1,17 @@
 import VM from '@ethereumjs/vm';
 import { Address } from 'ethereumjs-util';
 import { defaultAbiCoder as AbiCoder } from '@ethersproject/abi';
-import { NetworkApi, TransactionsApi } from '.';
+import { NetworkApi, TransactionsApi } from '../index';
 
-import { ChainNameEnum } from '../config/chain.enum';
-import { AccountKey } from '../typings';
-import { bnToHex } from '../helpers/bnHex.helper';
-import { encodeFunction, getAbiInputsOutputs } from '../helpers/abi.helper';
+import { ChainNameEnum } from '../../config/chain.enum';
+import { AccountKey } from '../../typings';
+import { bnToHex } from '../../helpers/bnHex.helper';
+import { encodeFunction, getAbiInputsOutputs, getAbiInputsOutputsType } from '../../helpers/abi.helper';
+import { MethodDoesNotExistException } from './exceptions/method-does-not-exist.exception';
+import { WrongParamsPassedToMethodException } from './exceptions/wrong-params-passed-to-method.exception';
+import { WrongAmountOfArgumentsException } from './exceptions/wrong-amount-of-arguments.exception';
+import { isValid } from './validators/is-valid';
+import { WrongParamTypeException } from './exceptions/wrong-param-type.exception';
 
 export class EvmApi {
   private vm: VM;
@@ -43,7 +48,15 @@ export class EvmApi {
   }
 
   public async scGet(method: string, params: any[]) {
-    const io = getAbiInputsOutputs(this.abi, method);
+    if (!this.isMethodExist(method)) {
+      throw new MethodDoesNotExistException();
+    }
+
+    if (!this.isValidParamsPassedToMethod(method, params)) {
+      throw new WrongParamsPassedToMethodException();
+    }
+
+    const io = getAbiInputsOutputsType(this.abi, method);
     const encodedFunction = encodeFunction(method, params, io.inputs);
 
     if (!this.cache.has(this.scAddress)) {
@@ -65,12 +78,30 @@ export class EvmApi {
     }
 
     const results = AbiCoder.decode(io.outputs, greetResult.execResult.returnValue);
-    return results.length === 1 ? results[0] : results;
+
+    let returnValue: any = results;
+
+    if (io.outputNames.length === results.length) {
+      returnValue = results.reduce((aggr, item, key) => {
+        aggr[io.outputNames[key]] = item;
+        return aggr;
+      }, {});
+    }
+
+    return returnValue;
   }
 
   // Send trx to chain
   public async scSet(key: AccountKey, method: string, params?: string[]) {
-    const io = getAbiInputsOutputs(this.abi, method);
+    if (!this.isMethodExist(method)) {
+      throw new MethodDoesNotExistException();
+    }
+
+    if (!this.isValidParamsPassedToMethod(method, params)) {
+      throw new WrongParamsPassedToMethodException();
+    }
+
+    const io = getAbiInputsOutputsType(this.abi, method);
     const encodedFunction = encodeFunction(method, params, io.inputs);
     const data = Buffer.from(encodedFunction, 'hex');
     const feeSettings = await this.network.getFeeSettings();
@@ -87,5 +118,28 @@ export class EvmApi {
 
     const res = await this.network.sendTxAndWaitForResponse(tx);
     console.log('Transaction result:', res);
+  }
+
+  private isMethodExist(method: string): boolean {
+    return !!this.abi.find((item: any) => item.name === method);
+  }
+
+  private isValidParamsPassedToMethod(method: string, params: string[] = []): boolean {
+    const { inputs } = getAbiInputsOutputs(this.abi, method);
+
+    if (params.length !== inputs.length) {
+      throw new WrongAmountOfArgumentsException(method, inputs.length, params.length);
+    }
+
+    for (let i = 0; i < inputs.length; i += 1) {
+      const input = inputs[i];
+      const param = params[i];
+
+      if (!isValid(param, input.type, input.components)) {
+        throw new WrongParamTypeException(method, input.name);
+      }
+    }
+
+    return true;
   }
 }
