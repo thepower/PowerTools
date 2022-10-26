@@ -1,6 +1,7 @@
 import { put, select } from 'redux-saga/effects';
 import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
 import { push } from 'connected-react-router';
+import { toast } from 'react-toastify';
 import {
   setLoginErrors,
   setSeedPhrase,
@@ -27,21 +28,23 @@ export function* createWalletSaga({ payload }: { payload: AddActionType<{ passwo
   const seedPhrase: string = yield select(getGeneratedSeedPhrase);
   const shard: string = yield select(getCurrentShardSelector);
 
-  const { privateKey, address } = yield WalletAPI.createNew(shard, seedPhrase, '', true);
-  const walletPrivateKey = CryptoApi.encryptWif(privateKey, password);
+  try {
+    const { privateKey, address } = yield WalletAPI.createNew(shard, seedPhrase, '', true);
+    const walletPrivateKey = CryptoApi.encryptWif(privateKey, password);
 
-  yield put(setWalletData({
-    address,
-    wif: walletPrivateKey,
-  }));
+    yield put(setWalletData({
+      address,
+      wif: walletPrivateKey,
+    }));
 
-  additionalAction?.();
+    additionalAction?.();
+  } catch (e) {
+    toast.error('Create account error');
+  }
 }
 
 export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputType }) {
   const { address, seedOrPassword } = payload;
-  // AA100000172805350082
-  // adult often ecology half spend matter cargo laundry text casual baby embrace
 
   try {
     yield AddressApi.parseTextAddress(address);
@@ -50,19 +53,23 @@ export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputTyp
     return;
   }
 
-  const isSeed: boolean = yield CryptoApi.validateMnemonic(seedOrPassword);
-  let wif = '';
+  try {
+    const isSeed: boolean = yield CryptoApi.validateMnemonic(seedOrPassword);
+    let wif = '';
 
-  if (isSeed) {
-    // @ts-ignore
-    const keyPair = yield CryptoApi.generateKeyPairFromSeedPhraseAndAddress(seedOrPassword, address);
-    wif = keyPair.toWIF();
-  } else {
-    wif = seedOrPassword;
+    if (isSeed) {
+      // @ts-ignore
+      const keyPair = yield CryptoApi.generateKeyPairFromSeedPhraseAndAddress(seedOrPassword, address);
+      wif = keyPair.toWIF();
+    } else {
+      wif = seedOrPassword;
+    }
+
+    yield put(loginToWallet({ address, wif }));
+    yield put(push(RoutesEnum.root));
+  } catch (e) {
+    toast.error('Login error');
   }
-
-  yield put(loginToWallet({ address, wif }));
-  yield put(push(RoutesEnum.root));
 }
 
 export function* proceedToHubSaga() {

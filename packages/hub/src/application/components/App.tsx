@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
+import { ToastContainer } from 'react-toastify';
 
 import { ThemeProvider as MuiThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import { StylesProvider } from '@mui/styles';
@@ -19,6 +20,7 @@ export const App = () => (
           <MuiThemeProvider theme={MUITheme}>
             <CssBaseline>
               <InitGradientsSvg className="initSvgClass" />
+              <ToastContainer theme={'dark'} limit={1} />
               <AppRoutes />
             </CssBaseline>
           </MuiThemeProvider>
