@@ -1,6 +1,3 @@
-// @ts-nocheck
-import { NetworkApi, WalletApi, ChainNameEnum } from '@thepowereco/tssdk';
-
 export const getIsProductionOnlyDomains = () => (
   [
     'wallet.thepower.io',
@@ -14,13 +11,3 @@ export const parseHash = () => (
     .split('&')
     .map((item) => item.split('='))
 );
-
-export const getNetworkApi = async (chain: ChainNameEnum = ChainNameEnum.first) => {
-  const api = new NetworkApi(chain);
-  await api.bootstrap();
-  return api;
-};
-
-// @ts-ignore
-export const NetworkAPI = await getNetworkApi(ChainNameEnum.hundredAndThree);
-export const WalletAPI = new WalletApi(NetworkAPI);

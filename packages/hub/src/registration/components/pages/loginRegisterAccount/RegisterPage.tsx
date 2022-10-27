@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { WizardComponentProps } from 'common';
+import { RootState } from 'application/store';
 import { LoginRegisterAccountTabs } from '../../../typings/registrationTypes';
 import { CreateNewAccount } from './CreateNewAccount';
 import { setCurrentRegisterCreateAccountTab } from '../../../slice/registrationSlice';
-import { ApplicationState } from '../../../../application';
 import { LoginToAccount } from './LoginToAccount';
 import { getCurrentRegistrationTab } from '../../../selectors/registrationSelectors';
 import { ImportAccount } from './import/ImportAccount';
 
-const mapStateToProps = (state: ApplicationState) => ({
+const mapStateToProps = (state: RootState) => ({
   tab: getCurrentRegistrationTab(state),
 });
 

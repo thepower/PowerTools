@@ -1,14 +1,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-
 import { ThemeProvider as MuiThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import { StylesProvider } from '@mui/styles';
 import { CssBaseline } from '@mui/material';
-import history from '../utils/history';
-import store from '../store/rootStore';
-import { AppRoutes } from './AppRoutes';
 import MUITheme from '../utils/MUITheme';
+import store from '../store';
+import history from '../utils/history';
+import { AppRoutes } from './AppRoutes';
 import { ReactComponent as InitGradientsSvg } from './initGradientsSvg.svg';
 
 export const App = () => (

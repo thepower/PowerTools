@@ -7,12 +7,13 @@ import {
 } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select/SelectInput';
 import classnames from 'classnames';
+import { RootState } from 'application/store';
 import {
   Tabs,
   OutlinedInput,
-  checkIfLoading,
   ModalLoader,
 } from 'common';
+import { checkIfLoading } from 'network/selectors';
 import styles from '../../Registration.module.scss';
 import {
   setCreatingCurrentShard,
@@ -29,12 +30,11 @@ import {
   RegistrationPageAdditionalProps,
 } from '../../../typings/registrationTypes';
 import { getCurrentCreatingStep, getCurrentShardSelector, getGeneratedSeedPhrase } from '../../../selectors/registrationSelectors';
-import { ApplicationState } from '../../../../application';
 import { RegistrationBackground } from '../../common/RegistrationBackground';
 import { RegistrationStatement } from '../../common/RegistrationStatement';
 import { compareTwoStrings } from '../../../utils/registrationUtils';
 
-const mapStateToProps = (state: ApplicationState) => ({
+const mapStateToProps = (state: RootState) => ({
   currentShard: getCurrentShardSelector(state),
   creatingStep: getCurrentCreatingStep(state),
   generatedSeedPhrase: getGeneratedSeedPhrase(state),

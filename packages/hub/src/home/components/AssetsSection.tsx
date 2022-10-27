@@ -10,10 +10,10 @@ import {
 } from 'common/icons';
 import { ArrowLink, CardLink } from 'common';
 import styles from './AssetsSection.module.scss';
-import { ApplicationState } from '../../application';
 import { getWalletAddress } from '../../account/selectors/accountSelectors';
+import { RootState } from '../../application/store';
 
-const mapStateToProps = (state: ApplicationState) => ({
+const mapStateToProps = (state: RootState) => ({
   walletAddress: getWalletAddress(state),
 });
 const mapDispatchToProps = {};

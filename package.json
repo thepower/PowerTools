@@ -29,7 +29,6 @@
     ]
   },
   "dependencies": {
-    "@thepowereco/tssdk": "^1.7.1",
     "concurrency": "^0.1.4"
   },
   "devDependencies": {
@@ -52,7 +51,7 @@
     "stylelint": "^14.6.1",
     "stylelint-config-idiomatic-order": "^9.0.0",
     "stylelint-config-sass-guidelines": "^9.0.1",
-    "typescript": "^4.6.3"
+    "typescript": "^4.8.4"
   },
   "config": {
     "commitizen": {

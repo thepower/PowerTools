@@ -1,4 +1,4 @@
-import { put, select } from 'redux-saga/effects';
+import { put, select } from 'typed-redux-saga';
 import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
 import { push } from 'connected-react-router';
 import {
@@ -6,17 +6,17 @@ import {
   setSeedPhrase,
 } from '../slice/registrationSlice';
 import { CreateAccountStepsEnum, LoginToWalletInputType } from '../typings/registrationTypes';
-import { WalletAPI } from '../../application/utils/applicationUtils';
 import { loginToWallet, setWalletData } from '../../account/slice/accountSlice';
 import { getCurrentShardSelector, getGeneratedSeedPhrase } from '../selectors/registrationSelectors';
 import { AddActionType } from '../../typings/common';
 import { getWalletData } from '../../account/selectors/accountSelectors';
+import { getWalletApi } from '../../application/selectors';
 import { RoutesEnum } from '../../application/typings/routes';
 
 export function* generateSeedPhraseSaga() {
   const phrase: string = yield CryptoApi.generateSeedPhrase();
 
-  yield put(setSeedPhrase({
+  yield* put(setSeedPhrase({
     seedPhrase: phrase,
     nextStep: CreateAccountStepsEnum.setSeedPhrase,
   }));
@@ -24,13 +24,14 @@ export function* generateSeedPhraseSaga() {
 
 export function* createWalletSaga({ payload }: { payload: AddActionType<{ password: string }> }) {
   const { password, additionalAction } = payload;
-  const seedPhrase: string = yield select(getGeneratedSeedPhrase);
-  const shard: string = yield select(getCurrentShardSelector);
+  const seedPhrase = yield* select(getGeneratedSeedPhrase);
+  const shard = yield* select(getCurrentShardSelector);
+  const WalletAPI = (yield* select(getWalletApi))!;
 
-  const { privateKey, address } = yield WalletAPI.createNew(shard, seedPhrase, '', true);
+  const { privateKey, address } = yield WalletAPI.createNew(shard!.toString(), seedPhrase!, '', true);
   const walletPrivateKey = CryptoApi.encryptWif(privateKey, password);
 
-  yield put(setWalletData({
+  yield* put(setWalletData({
     address,
     wif: walletPrivateKey,
   }));
@@ -46,7 +47,7 @@ export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputTyp
   try {
     yield AddressApi.parseTextAddress(address);
   } catch (e: any) {
-    yield put(setLoginErrors({ addressError: e.message as string }));
+    yield* put(setLoginErrors({ addressError: e.message as string }));
     return;
   }
 
@@ -61,13 +62,13 @@ export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputTyp
     wif = seedOrPassword;
   }
 
-  yield put(loginToWallet({ address, wif }));
-  yield put(push(RoutesEnum.root));
+  yield* put(loginToWallet({ address, wif }));
+  yield* put(push(RoutesEnum.root));
 }
 
 export function* proceedToHubSaga() {
-  const { wif, address } = yield select(getWalletData);
+  const { wif, address } = yield* select(getWalletData);
 
-  yield put(loginToWallet({ address, wif }));
-  yield put(push(RoutesEnum.root));
+  yield* put(loginToWallet({ address, wif }));
+  yield* put(push(RoutesEnum.root));
 }

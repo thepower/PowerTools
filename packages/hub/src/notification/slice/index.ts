@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { format } from 'date-fns';
-import { NotificationType } from '../typings/notificationTypings';
-import { Maybe } from '../../../typings/common';
+import { NotificationType } from '../typings';
+import { Maybe } from '../../typings/common';
 
 export interface NotificationState {
   currentNotification: Maybe<NotificationType>;

@@ -10,7 +10,6 @@ import {
 } from 'common/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { Drawer } from '@mui/material';
-import { ApplicationState } from '../../application';
 import { getWalletAddress } from '../selectors/accountSelectors';
 import styles from './Account.module.scss';
 import globe from './globe.jpg';
@@ -21,8 +20,9 @@ import { ImportAccountModal } from '../../registration/components/pages/loginReg
 import { importAccountFromFile } from '../slice/accountSlice';
 import { ExportAccountModal } from '../../registration/components/pages/backup/ExportAccountModal';
 import { ResetAccountModal } from './ResetAccountModal';
+import { RootState } from '../../application/store';
 
-const mapStateToProps = (state: ApplicationState) => ({
+const mapStateToProps = (state: RootState) => ({
   walletAddress: getWalletAddress(state),
 });
 const mapDispatchToProps = {
