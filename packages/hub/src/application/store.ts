@@ -10,6 +10,8 @@ import { applicationDataReducer } from './slice/applicationSlice';
 import { notificationReducer } from '../notification/slice';
 import { registrationReducer } from '../registration/slice/registrationSlice';
 import { networkReducer } from '../network/slice';
+import { walletReducer } from '../myAssets/slices/walletSlice';
+import { transactionsReducer } from '../myAssets/slices/transactionsSlice';
 
 const loggerMiddleware = createLogger();
 const routeMiddleware = routerMiddleware(history);
@@ -21,7 +23,9 @@ const reducer = {
   applicationData: applicationDataReducer,
   notification: notificationReducer,
   registration: registrationReducer,
+  wallet: walletReducer,
   network: networkReducer,
+  transactions: transactionsReducer,
 };
 
 const store = configureStore({
@@ -29,10 +33,7 @@ const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) => (
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['applicationData/setDynamicApis'],
-        ignoredPaths: ['applicationData.networkApi', 'applicationData.walletApi'],
-      },
+      serializableCheck: false,
     }).concat([loggerMiddleware, routeMiddleware, sagaMiddleware])
   ),
 });

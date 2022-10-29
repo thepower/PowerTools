@@ -2233,10 +2233,10 @@
     int64-buffer "^0.1.9"
     isarray "^1.0.0"
 
-"@thepowereco/tssdk@^1.11.0":
-  version "1.11.0"
-  resolved "https://npm.vmassive.ru/@thepowereco%2ftssdk/-/tssdk-1.11.0.tgz#21ef3a0c0033f9e22e7c01e212cbd772e8931806"
-  integrity sha512-7EKwERtCztOxG69xuCMKDGhJztZq8fjyfrm68S+aVH1cnCTCJentr7GuXV1+lcWWiFx4ssMi9HIeyM8IyNpuCg==
+"@thepowereco/tssdk@*":
+  version "1.12.0"
+  resolved "https://npm.vmassive.ru/@thepowereco%2ftssdk/-/tssdk-1.12.0.tgz#01d7e10b06a2e161c076a3a70298b80c3347c526"
+  integrity sha512-mfmWKbnOXcOoA5BIBDQXqa+C+/Bs9AyjeGL6QME8t5bWVXbmqoblbCbEcXpB1NZorsX2STvYAZGyiWtdaqGEwg==
   dependencies:
     "@ethereumjs/common" "^2.6.4"
     "@ethereumjs/tx" "^3.5.2"
@@ -9109,6 +9109,11 @@ react-error-overlay@^6.0.11:
   version "6.0.11"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.11.tgz#92835de5841c5cf08ba00ddd2d677b6d17ff9adb"
   integrity sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==
+
+react-intersection-observer@^9.4.0:
+  version "9.4.0"
+  resolved "https://npm.vmassive.ru/react-intersection-observer/-/react-intersection-observer-9.4.0.tgz#f6b6e616e625f9bf255857c5cba9dbf7b1825ec7"
+  integrity sha512-v0403CmomOVlzhqFXlzOxg0ziLcVq8mfbP0AwAcEQWgZmR2OulOT79Ikznw4UlB3N+jlUYqLMe4SDHUOyp0t2A==
 
 react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0:
   version "16.13.1"

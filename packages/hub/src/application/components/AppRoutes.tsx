@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { FullScreenLoader } from 'common';
 import { RoutesEnum } from '../typings/routes';
 import { initApplication } from '../slice/applicationSlice';
-import { RegistrationPage } from '../../registration/components/RegistrationPage';
 import Home from '../../home/components/Home';
+import { RegistrationPage } from '../../registration/components/RegistrationPage';
 import { useAppDispatch, useAppSelector } from '../store';
 import { checkIfLoading } from '../../network/selectors';
 
@@ -19,7 +20,9 @@ const AppRoutesComponent: React.FC = () => {
   }, [dispatch]);
 
   if (!walletApi || !networkApi || loading) {
-    return null;
+    return (
+      <FullScreenLoader />
+    );
   }
 
   return (
@@ -28,11 +31,11 @@ const AppRoutesComponent: React.FC = () => {
       <Route exact path={RoutesEnum.myPlace} />
       <Route exact path={RoutesEnum.build} />
       <Route exact path={RoutesEnum.contribute} />
-      <Route exact path={RoutesEnum.root}>
-        <Home />
-      </Route>
       <Route path={RoutesEnum.signup}>
         <RegistrationPage />
+      </Route>
+      <Route path={RoutesEnum.root}>
+        <Home />
       </Route>
     </Switch>
   );

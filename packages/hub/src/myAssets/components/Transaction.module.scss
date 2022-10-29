@@ -1,0 +1,154 @@
+@import 'src/styles/utils';
+
+.transaction {
+  margin-top: 52px;
+}
+
+.divider {
+  margin-top: 32px;
+}
+
+.shortInfoButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  color: #f5f5f7;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+
+  @include mobile {
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+
+.date {
+  margin-top: 8px;
+  color: #6b798f;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.compactDate {
+  display: none;
+
+  @include mobile {
+    display: inline;
+  }
+}
+
+.fullDate {
+  display: inline;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.amount {
+  margin-left: auto;
+  color: #f5f5f7;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24px;
+
+  @include mobile {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+}
+
+.icon {
+  display: flex;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  margin-right: 12px;
+  background: #252b35;
+}
+
+.sendIcon {
+  :global .stroke {
+    stroke: #93178e;
+  }
+
+  :global .fill {
+    fill: #93178e;
+  }
+}
+
+.receiveIcon {
+  :global .stroke {
+    stroke: #1768e5;
+  }
+
+  :global .fill {
+    fill: #1768e5;
+  }
+}
+
+.content {
+  padding-top: 38px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.title {
+  color: #f5f5f7;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.minimizedIcon {;
+  transform: rotate(180deg);
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+
+.expandMinimizedIcon {
+  transform: rotate(0);
+}
+
+.grid {
+  display: grid;
+  align-items: flex-start;
+  margin: 32px 0 12px;
+  font-size: 14px;
+  font-weight: 500;
+  grid-auto-rows: auto;
+  grid-gap: 20px 12px;
+  grid-template-columns: auto auto 1fr;
+  line-height: 16px;
+
+  > * {
+    grid-column: 1 span;
+  }
+}
+
+.key {
+  color: #f5f5f7;
+}
+
+.value {
+  color: #6b798f;
+  word-break: break-word;
+}

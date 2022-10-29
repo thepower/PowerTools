@@ -1,6 +1,6 @@
 export const getIsProductionOnlyDomains = () => (
   [
-    'wallet.thepower.io',
+    'wallet.ts.thepower.io',
     'rc.dev.thepower.io',
     '127.0.0.1:9005',
   ].includes(window.location.host)

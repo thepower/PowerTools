@@ -2,6 +2,7 @@
   "name": "@thepower/power-hub",
   "version": "0.1.0",
   "private": true,
+  "workspaces": ["packages/*"],
   "scripts": {
     "lerna:init": "yarn install && lerna bootstrap",
     "lernapub": "lerna publish",
@@ -44,7 +45,7 @@
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.4.0",
     "husky": "^8.0.0",
-    "lerna": "^4.0.0",
+    "lerna": "^6.0.1",
     "lint-staged": "^12.3.7",
     "semantic-release": "^19.0.2",
     "semantic-release-monorepo": "^7.0.5",
@@ -59,8 +60,3 @@
     }
   }
 }
-
-
-
-
-

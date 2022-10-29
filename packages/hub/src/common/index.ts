@@ -1,4 +1,5 @@
 // components
+export { default as CopyButton } from './copyButton/CopyButton';
 export { Page } from './page/Page';
 export { LinkBlock } from './linkBlock/LinkBlock';
 export { Modal } from './modal/Modal';
@@ -9,6 +10,7 @@ export { Wizard } from './wizard/Wizard';
 export { Tabs } from './tabs/Tabs';
 export { OutlinedInput } from './input/OulinedInput';
 export { Loader } from './loader/Loader';
+export { default as FullScreenLoader } from './loader/FullScreenLoader';
 export { ModalLoader } from './modal/ModalLoader';
 export { default as ArrowLink } from './arrowLink/ArrowLink';
 export { default as CardLink } from './cardLink/CardLink';
