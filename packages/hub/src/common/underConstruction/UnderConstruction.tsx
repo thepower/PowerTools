@@ -40,6 +40,8 @@ const UnderConstructionComponent: React.FC<UnderConstructionProps> = (props: Und
     contentClassName={styles.underConstructionContent}
     onClose={handleCloseModal}
     open={showUnderConstruction}
+    className={styles.underConstruction}
+    alwaysShowCloseIcon
   >
     <div className={styles.underConstructionTitleHolder}>
       <div className={styles.underConstructionTitle}>

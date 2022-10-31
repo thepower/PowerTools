@@ -10,6 +10,7 @@ import store from '../store/rootStore';
 import { AppRoutes } from './AppRoutes';
 import MUITheme from '../utils/MUITheme';
 import { ReactComponent as InitGradientsSvg } from './initGradientsSvg.svg';
+import { UnderConstruction } from '../../common';
 
 export const App = () => (
   <Provider store={store}>
@@ -19,6 +20,7 @@ export const App = () => (
           <MuiThemeProvider theme={MUITheme}>
             <CssBaseline>
               <InitGradientsSvg className="initSvgClass" />
+              <UnderConstruction />
               <AppRoutes />
             </CssBaseline>
           </MuiThemeProvider>

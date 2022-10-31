@@ -12,16 +12,19 @@ import { ArrowLink, CardLink } from 'common';
 import styles from './AssetsSection.module.scss';
 import { ApplicationState } from '../../application';
 import { getWalletAddress } from '../../account/selectors/accountSelectors';
+import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
 
 const mapStateToProps = (state: ApplicationState) => ({
   walletAddress: getWalletAddress(state),
 });
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  setShowUnderConstruction,
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 type AssetsSectionProps = ConnectedProps<typeof connector>;
 
-const AssetsSection = ({ walletAddress }: AssetsSectionProps) => {
+const AssetsSection = ({ walletAddress, setShowUnderConstruction }: AssetsSectionProps) => {
   const ref = useRef<HTMLButtonElement>(null);
 
   const handleClick = useCallback(() => {
@@ -29,6 +32,12 @@ const AssetsSection = ({ walletAddress }: AssetsSectionProps) => {
       navigator.clipboard.writeText(ref.current.textContent || '');
     }
   }, []);
+
+  const handleShowUnderConstruction = React.useCallback((event: React.MouseEvent) => {
+    event.preventDefault();
+
+    setShowUnderConstruction(true);
+  }, [setShowUnderConstruction]);
 
   return (
     <div>
@@ -56,7 +65,7 @@ const AssetsSection = ({ walletAddress }: AssetsSectionProps) => {
           <CardLink to="/send" label="Send">
             <SendSvg />
           </CardLink>
-          <CardLink to="/buy" label="Buy">
+          <CardLink to="/buy" label="Buy" onClick={handleShowUnderConstruction}>
             <BuySvg />
           </CardLink>
         </div>

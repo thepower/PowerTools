@@ -5,10 +5,19 @@ import {
   HomeIcon,
   MyPlaceIcon,
 } from 'common/icons';
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { NavLink } from 'react-router-dom';
+import { connect, ConnectedProps } from 'react-redux';
 import { RoutesEnum } from '../../application/typings/routes';
 import styles from './NavList.module.scss';
+import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
+
+const mapDispatchToProps = {
+  setShowUnderConstruction,
+};
+
+const connector = connect(null, mapDispatchToProps);
+type NavListProps = ConnectedProps<typeof connector>;
 
 const routes = [
   {
@@ -43,8 +52,13 @@ const routes = [
   },
 ];
 
-const NavList = React.memo(() => (
-  <nav>
+const NavList = React.memo(({ setShowUnderConstruction }: NavListProps) => {
+  const handleShowUnderConstruction = React.useCallback((event: MouseEvent) => {
+    event.preventDefault();
+    setShowUnderConstruction(true);
+  }, [setShowUnderConstruction]);
+
+  return <nav>
     <ul className={styles.list}>
       {routes.map(({
         disabled,
@@ -54,18 +68,18 @@ const NavList = React.memo(() => (
       }) => (
         <NavLink
           key={name}
-          aria-disabled={disabled}
           exact
           to={link}
           className={styles.link}
           activeClassName={styles.linkActive}
+          onClick={disabled ? handleShowUnderConstruction : undefined}
         >
           <Icon className={styles.icon} />
           <span className={styles.text}>{name}</span>
         </NavLink>
       ))}
     </ul>
-  </nav>
-));
+  </nav>;
+});
 
-export default NavList;
+export default connector(NavList);
