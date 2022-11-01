@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@oclif/core": "^1",
+    "listr": "^0.14.3",
     "@thepowereco/tssdk": "^1.10.0",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.0.1",
@@ -40,7 +41,6 @@
     "oclif": "^2",
     "reflect-metadata": "^0.1.13",
     "shx": "^0.3.3",
-    "the_power_sdk_js": "^1.0.2",
     "typedi": "^0.10.0"
   },
   "devDependencies": {

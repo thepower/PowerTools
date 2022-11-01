@@ -77,12 +77,7 @@ export class EvmApi {
       throw greetResult.execResult.exceptionError;
     }
 
-    console.log(encodedFunction);
-    console.log(Buffer.from(encodedFunction, 'hex'));
-    console.log(greetResult.execResult.returnValue);
-
     const results = AbiCoder.decode(io.outputs, greetResult.execResult.returnValue);
-
     let returnValue: any = results;
 
     if (io.outputNames.length === results.length) {

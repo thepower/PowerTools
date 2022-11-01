@@ -237,13 +237,13 @@ export class NetworkApi {
       throw new Error('No nodes to query, probably need to call bootstrap()');
     }
 
+    // console.log(parameters);
+
     while (!success) {
       i += 1;
       parameters.baseURL = `${this.currentNodes[this.nodeIndex].address}/api${actionUrl}`;
       try {
         result = await axios.request(parameters);
-        console.log('parameters = ', parameters);
-        // console.log(result);
         success = true;
       } catch (e: any) {
         if (e.response === undefined) {
@@ -366,9 +366,7 @@ export class NetworkApi {
 
     let response = await this.httpRequest(actionUrl, requestParams);
     this.checkResponseValidity(response);
-
     response = transformResponse(response, kind);
-    // const res: any = await response;
     return response;
   }
 }

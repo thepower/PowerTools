@@ -1,39 +1,26 @@
 import { Command } from '@oclif/core';
 import {
-  // AddressApi,
+  AddressApi,
   ChainNameEnum,
   EvmApi,
 } from '@thepowereco/tssdk';
 
-// import ux from 'cli-ux';
+import ux from 'cli-ux';
+import * as Listr from 'listr';
 import { promises, statSync } from 'fs';
-// import { resolve } from 'path';
-import { Config } from '@oclif/core/lib/config';
-
+import { resolve } from 'path';
+import * as FormData from 'form-data';
+import axios from 'axios';
 import {
   getFileHash,
-  // getHash
+  getHash,
 } from '../../helpers/calcHash.helper';
-
 import { File } from '../../types/file.type';
-import { BlockChainService } from '../../services/blockshain.service';
-import { UploaderApi } from '../../api/uploader.api';
-// import { archiveDir } from '../../helpers/archiver.helper';
-// import { getConfig, setConfig } from '../../helpers/config.helper';
-// import { CliConfig } from '../../types/cliConfig.type';
+import { getConfig, saveManifest, setConfig } from '../../helpers/config.helper';
+import { CliConfig } from '../../types/cliConfig.type';
 import * as abiJson from '../../config/scStorageAbi.json';
 
 export default class Upload extends Command {
-  private blockChainService: BlockChainService;
-
-  private api: UploaderApi;
-
-  constructor(argv: string[], config: Config) {
-    super(argv, config);
-    this.blockChainService = new BlockChainService();
-    this.api = new UploaderApi();
-  }
-
   static description = 'Upload application files to storage';
 
   static examples = [
@@ -60,10 +47,11 @@ export default class Upload extends Command {
         await this.scanDir(root, fullPath, result);
       } else {
         const hash = await getFileHash(fullPath);
-
+        const pathWithFile = fullPath.replace(`${root}/`, '');
+        const path = pathWithFile.replace(file, '');
         const fileData: File = {
           name: file,
-          path: fullPath.replace(root, ''),
+          path: path || '.',
           hash,
           size: stat.size,
         };
@@ -75,109 +63,108 @@ export default class Upload extends Command {
     return result;
   }
 
+  async timeout(milisecs: number) {
+    return new Promise((resolve: Function) => setTimeout(resolve, milisecs));
+  }
+
+  async uploadTaskFile(storageUrl: string, taskId: string, path: string, name: string) {
+    const form = new FormData();
+    const fullPath = `${path}/${name}`;
+    const manifestData = await promises.readFile(fullPath);
+
+    form.append('file', manifestData);
+
+    await axios.put(
+      `${storageUrl}/${taskId}/${name}`,
+      manifestData,
+      {
+        maxContentLength: 100000000,
+        maxBodyLength: 1000000000,
+      },
+    );
+  }
+
   async run(): Promise<void> {
-    // let config: CliConfig = await getConfig();
-    //
-    // if (!config) {
-    //   const source = await ux.prompt('Please, enter the source path of your project, ex. "./dist")');
-    //   await ux.confirm(`Source path = "${resolve(source)}". Continue? (yes/no)`);
-    //
-    //   const projectId = await ux.prompt('Please, enter your project id (must be unique in list of your projects)');
-    //   const address = await ux.prompt('Please, enter your account address, ex. "AA030000174483048139"');
-    //   // TODO: check address is valid
-    //   const wif = await ux.prompt('Please, enter your account private key (wif)', { type: 'hide' });
-    //
-    //   config = {
-    //     source, projectId, address, wif,
-    //   };
-    //   await setConfig(config);
-    // }
+    let config: CliConfig = await getConfig();
 
-    // this.log(JSON.stringify(config, null, 2));
-    //
-    // const {
-    //   source, projectId, address, wif,
-    // } = config;
-    //
-    // const dir = resolve(source);
+    if (!config) {
+      const source = await ux.prompt('Please, enter the source path of your project, ex. "./dist")');
+      await ux.confirm(`Source path = "${resolve(source)}". Continue? (yes/no)`);
+
+      const projectId = await ux.prompt('Please, enter your project id (must be unique in list of your projects)');
+      const address = await ux.prompt('Please, enter your account address, ex. "AA030000174483048139"');
+      const wif = await ux.prompt('Please, enter your account private key (wif)', { type: 'hide' });
+
+      config = {
+        source, projectId, address, wif,
+      };
+      await setConfig(config);
+    }
+
+    this.log(JSON.stringify(config, null, 2));
+
+    const {
+      source, projectId, address, wif,
+    } = config;
+
+    const dir = resolve(source);
     const storageSc = await EvmApi.build('AA100000001677723663', ChainNameEnum.first, abiJson.abi);
-    // let taskId = await storageSc.scGet(
-    //   'taskIdByName',
-    //   [AddressApi.textAddressToEvmAddress(address), projectId],
-    // );
+    let taskId = await storageSc.scGet(
+      'taskIdByName',
+      [AddressApi.textAddressToEvmAddress(address), projectId],
+    );
 
-    // console.log(taskResp);
-    //
-    // let taskId = BigInt(taskResp._hex).toString(10);
+    const files = await this.scanDir(dir, dir);
+    const manifestJsonString = JSON.stringify(files, null, 2);
+    await saveManifest(manifestJsonString);
 
-    // if (true) {
-    //   const files = await this.scanDir(dir, dir);
-    //   const manifestHash = getHash(JSON.stringify(files));
-    //   const totalSize = files.reduce((size, file) => file.size + size, 0);
-    //   this.log('totalSize =', totalSize);
-    //
-    //   const expire = 60 * 60 * 24 * 30; // one month
-    //   await storageSc.scSet(
-    //     { address, wif },
-    //     'addTask',
-    //     [projectId, manifestHash, expire, totalSize],
-    //     1, // TODO: change to normal amount
-    //   );
-    //
-    //   taskId = await storageSc.scGet(
-    //     'taskIdByName',
-    //     [AddressApi.textAddressToEvmAddress(address), projectId],
-    //   );
-    //
-    //   console.log('new task:', taskId);
-    //   //
-    //   // taskId = BigInt(taskResp._hex).toString(10);
-    // }
+    if (taskId.toString() === '0') {
+      const manifestHash = getHash(manifestJsonString);
+      const totalSize = files.reduce((size, file) => file.size + size, 0);
+      this.log('totalSize =', totalSize);
 
-    // console.log(taskId.toString());
+      const expire = 60 * 60 * 24 * 30; // one month
+
+      await storageSc.scSet(
+        { address, wif },
+        'addTask',
+        [projectId, manifestHash, expire, totalSize],
+        1, // TODO: change to normal amount
+      );
+
+      taskId = await storageSc.scGet(
+        'taskIdByName',
+        [AddressApi.textAddressToEvmAddress(address), projectId],
+      );
+    }
 
     const taskInfo = await storageSc.scGet(
       'getTask',
-      [2],
+      [taskId.toString()],
     );
 
-    console.log('taskInfo', taskInfo);
-    //
-    // console.log(ex);
-    //
-    // const { _hex: task } = await storageSc.scGet(
-    //   'isTaskExist',
-    //   [AddressApi.textAddressToEvmAddress(address), projectId],
-    // );
+    const { uploadUrl, baseUrls } = await storageSc.scGet(
+      'getProvider',
+      [taskInfo.uploader.toString()],
+    );
 
-    // await this.blockChainService.prepareShard();
-    // this.log('upload process started...');
-    //
-    // const existedProject = await this.blockChainService.getProject(address, projectId);
-    //
-    // const storageData = [
-    //   address,
-    //   wif,
-    //   projectId,
-    //   manifestHash,
-    //   totalSize,
-    //   2000, // TODO: how to calculate it?
-    // ];
+    // upload manifest
+    await this.uploadTaskFile(uploadUrl, taskId.toString(), '.', 'manifest.json');
 
-    // if (existedProject) {
-    //   this.log('Project data:', JSON.parse(existedProject));
-    //   const updateResp = await this.blockChainService.updaterStorageProject.apply(this.blockChainService, storageData);
-    //   this.log('updateResp = ', updateResp);
-    // } else {
-    //   const regResp = await this.blockChainService.registerStorageProject.apply(this.blockChainService, storageData);
-    //   this.log('regResp = ', regResp);
-    // }
+    // upload project files
+    const uploadTasks = new Listr(
+      files.map((file) => (
+        {
+          title: `Uploading ${file.name}, size: ${file.size} bytes`,
+          task: async () => {
+            await this.uploadTaskFile(uploadUrl, taskId.toString(), `${source}/${file.path}`, file.name);
+          },
+        }
+      )),
+    );
 
-    // console.log(existedProject, storageData);
-    //
-    // await this.api.login(address, wif);
-    //
-    // const archivePath = await archiveDir(dir);
-    // await this.api.uploadProject(projectId, archivePath, JSON.stringify(files));
+    await uploadTasks.run();
+
+    this.log(`Upload completed, please visit ${baseUrls}${address}/${projectId} to check it.`);
   }
 }
