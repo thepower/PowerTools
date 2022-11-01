@@ -1,5 +1,5 @@
 import { call, put, select } from 'typed-redux-saga';
-import { CryptoApi } from '@thepowereco/tssdk';
+import { ChainNameEnum, CryptoApi } from '@thepowereco/tssdk';
 import fileSaver from 'file-saver';
 import { FileReaderType, getFileData } from 'common';
 import { push } from 'connected-react-router';
@@ -18,26 +18,26 @@ import { clearApplicationStorage, setKeyToApplicationStorage } from '../../appli
 import { getNetworkApi, getWalletApi } from '../../application/selectors';
 import { RoutesEnum } from '../../application/typings/routes';
 import { showNotification } from '../../notification/slice';
+import { reInitApis } from '../../application/sagas/initApplicationSaga';
+import { setCurrentChain } from '../../application/slice/applicationSlice';
 
 export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInput } = {}) {
   const { address, wif } = payload!;
-  const NetworkAPI = (yield* select(getNetworkApi))!;
+  let NetworkAPI = (yield* select(getNetworkApi))!;
 
   try {
     let subChain: GetChainResultType;
-    let currentChain = 8;
-    let prevChain = null;
 
     do {
       subChain = yield NetworkAPI.getAddressChain(address!);
 
       // Switch bootstrap when transitioning from testnet to 101-th chain
-      if (subChain.chain === 101 && currentChain !== 101) {
+      if (subChain.chain === 101) {
         subChain = yield NetworkAPI.getAddressChain(address!);
       }
 
       if (subChain.result === 'other_chain') {
-        if (prevChain === subChain.chain) {
+        if (subChain.chain === null) {
           yield* put(showNotification({
             text: 'Portation in progress. Try again in a few minutes.',
             type: 'error',
@@ -45,8 +45,10 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
           return;
         }
 
-        prevChain = currentChain;
-        currentChain = subChain.chain;
+        const currentChainValue = subChain.chain.toString() as ChainNameEnum;
+        const { NetworkApi } = yield* reInitApis({ payload: currentChainValue });
+        NetworkAPI = NetworkApi;
+        yield setCurrentChain(currentChainValue);
       }
     } while (subChain.result !== 'found');
 

@@ -25,7 +25,7 @@ const walletSlice = createSlice({
       prepare: ({ amount, ...otherData }: LoadBalancePayloadType) => ({
         payload: {
           ...otherData,
-          amount: Object.values(amount)[0].toFixed(2),
+          amount: Object.values(amount)[0]?.toFixed(2) || '0',
         },
       }),
     },
