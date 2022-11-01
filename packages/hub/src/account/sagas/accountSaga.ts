@@ -27,6 +27,7 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
 
   try {
     let subChain: GetChainResultType;
+    let currentChainValue = ChainNameEnum.hundredAndThree;
 
     do {
       subChain = yield NetworkAPI.getAddressChain(address!);
@@ -45,11 +46,11 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
           return;
         }
 
-        const currentChainValue = subChain.chain.toString() as ChainNameEnum;
+        currentChainValue = subChain.chain.toString() as ChainNameEnum;
         const { NetworkApi } = yield* reInitApis({ payload: currentChainValue });
         NetworkAPI = NetworkApi;
-        yield setCurrentChain(currentChainValue);
       }
+      yield setCurrentChain(currentChainValue);
     } while (subChain.result !== 'found');
 
     yield setKeyToApplicationStorage('address', address);

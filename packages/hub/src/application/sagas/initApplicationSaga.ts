@@ -1,7 +1,7 @@
 import { put } from 'typed-redux-saga';
 import { push } from 'connected-react-router';
 import { ChainNameEnum, NetworkApi, WalletApi } from '@thepowereco/tssdk';
-import { setDynamicApis, setTestnetAvailable, setCurrentChain } from '../slice/applicationSlice';
+import { setDynamicApis, setTestnetAvailable } from '../slice/applicationSlice';
 import { getIsProductionOnlyDomains } from '../utils/applicationUtils';
 import { getKeyFromApplicationStorage } from '../utils/localStorageUtils';
 import { loginToWalletSaga } from '../../account/sagas/accountSaga';
@@ -20,7 +20,7 @@ export function* reInitApis({ payload }: { payload: ChainNameEnum }) {
 }
 
 export function* initApplicationSaga() {
-  const { NetworkApi } = yield* reInitApis({ payload: ChainNameEnum.hundredAndThree });
+  yield* reInitApis({ payload: ChainNameEnum.hundredAndThree });
   // let subChain = -1;
   let address = '';
   let wif = '';
@@ -41,9 +41,6 @@ export function* initApplicationSaga() {
   }
 
   if (address && wif) {
-    const { chain }: { chain: ChainNameEnum } = yield NetworkApi.getAddressChain(address);
-
-    yield put(setCurrentChain(chain));
     yield loginToWalletSaga({
       payload: {
         address,
