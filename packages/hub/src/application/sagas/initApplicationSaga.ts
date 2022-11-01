@@ -9,13 +9,12 @@ import { setWalletData } from '../../account/slice/accountSlice';
 import { RoutesEnum } from '../typings/routes';
 
 export function* initApplicationSaga() {
-  const networkApi = new NetworkApi(ChainNameEnum.hundredAndThree);
+  const networkApi = new NetworkApi(ChainNameEnum.hundredAndTwo);
   yield networkApi.bootstrap();
 
   const walletApi = new WalletApi(networkApi);
 
   yield* put(setDynamicApis({ networkApi, walletApi }));
-
   // let subChain = -1;
   let address = '';
   let wif = '';

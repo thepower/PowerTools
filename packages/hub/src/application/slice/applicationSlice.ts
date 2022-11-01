@@ -1,8 +1,8 @@
 import {
   createAction,
   createSlice,
-  PayloadAction,
   Draft,
+  PayloadAction,
 } from '@reduxjs/toolkit';
 import { NetworkApi, WalletApi } from '@thepowereco/tssdk';
 
