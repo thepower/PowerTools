@@ -1,34 +1,20 @@
-import React, { useCallback, useRef } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React from 'react';
 import {
   BuySvg,
-  CopySvg,
   FaucetSvg,
   LogoIcon,
   SendSvg,
   WalletsSvg,
 } from 'common/icons';
-import { ArrowLink, CardLink } from 'common';
-import styles from './AssetsSection.module.scss';
-import { ApplicationState } from '../../application';
+import { ArrowLink, CardLink, CopyButton } from 'common';
 import { getWalletAddress } from '../../account/selectors/accountSelectors';
+import { useAppSelector } from '../../application/store';
+import { getWalletAmount } from '../../myAssets/selectors/walletSelectors';
+import styles from './AssetsSection.module.scss';
 
-const mapStateToProps = (state: ApplicationState) => ({
-  walletAddress: getWalletAddress(state),
-});
-const mapDispatchToProps = {};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type AssetsSectionProps = ConnectedProps<typeof connector>;
-
-const AssetsSection = ({ walletAddress }: AssetsSectionProps) => {
-  const ref = useRef<HTMLButtonElement>(null);
-
-  const handleClick = useCallback(() => {
-    if (ref.current) {
-      navigator.clipboard.writeText(ref.current.textContent || '');
-    }
-  }, []);
+const AssetsSection = () => {
+  const amount = useAppSelector(getWalletAmount);
+  const walletAddress = useAppSelector(getWalletAddress);
 
   return (
     <div>
@@ -37,26 +23,30 @@ const AssetsSection = ({ walletAddress }: AssetsSectionProps) => {
       </ArrowLink>
       <div className={styles.box}>
         <div className={styles.majorWallet}>
+          <p className={styles.info}>
+            How much is the fish
+          </p>
           <p className={styles.total}>
             <LogoIcon className={styles.icon} />
-            {'47 002.007'}
+            {amount}
           </p>
-          <button type="button" className={styles.addressButton} ref={ref} onClick={handleClick}>
-            {walletAddress}
-            <CopySvg className={styles.copyIcon} />
-          </button>
+          <CopyButton
+            textButton={walletAddress}
+            className={styles.addressButton}
+            iconClassName={styles.copyIcon}
+          />
         </div>
         <div className={styles.cards}>
           <CardLink to="/my-assets" label="Wallets">
             <WalletsSvg />
           </CardLink>
-          <CardLink to="/faucet" label="Faucet">
+          <CardLink label="Faucet" isAnchor to="https://faucet.thepower.io/" target="_blank" rel="noreferrer">
             <FaucetSvg />
           </CardLink>
           <CardLink to="/send" label="Send">
             <SendSvg />
           </CardLink>
-          <CardLink to="/buy" label="Buy">
+          <CardLink disabled to="/buy" label="Buy">
             <BuySvg />
           </CardLink>
         </div>
@@ -65,4 +55,4 @@ const AssetsSection = ({ walletAddress }: AssetsSectionProps) => {
   );
 };
 
-export default connector(AssetsSection);
+export default AssetsSection;

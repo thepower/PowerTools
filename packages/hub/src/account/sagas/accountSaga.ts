@@ -1,9 +1,7 @@
-import { call, put, select } from 'redux-saga/effects';
+import { call, put, select } from 'typed-redux-saga';
 import { CryptoApi } from '@thepowereco/tssdk';
 import fileSaver from 'file-saver';
-import {
-  FileReaderType, getFileData, showNotification,
-} from 'common';
+import { FileReaderType, getFileData } from 'common';
 import { push } from 'connected-react-router';
 import {
   clearAccountData,
@@ -17,11 +15,13 @@ import {
   ImportAccountInputType,
 } from '../typings/accountTypings';
 import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
-import { NetworkAPI, WalletAPI } from '../../application/utils/applicationUtils';
+import { getNetworkApi, getWalletApi } from '../../application/selectors';
 import { RoutesEnum } from '../../application/typings/routes';
+import { showNotification } from '../../notification/slice';
 
 export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInput } = {}) {
   const { address, wif } = payload!;
+  const NetworkAPI = (yield* select(getNetworkApi))!;
 
   try {
     let subChain: GetChainResultType;
@@ -38,7 +38,7 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
 
       if (subChain.result === 'other_chain') {
         if (prevChain === subChain.chain) {
-          yield put(showNotification({
+          yield* put(showNotification({
             text: 'Portation in progress. Try again in a few minutes.',
             type: 'error',
           }));
@@ -52,7 +52,7 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
 
     yield setKeyToApplicationStorage('address', address);
     yield setKeyToApplicationStorage('wif', wif);
-    yield put(setWalletData({
+    yield* put(setWalletData({
       address: payload?.address!,
       wif: payload?.wif!,
       logged: true,
@@ -64,22 +64,24 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
 
 export function* importAccountFromFileSaga({ payload }: { payload:ImportAccountInputType }) {
   const { accountFile, password } = payload;
+  const WalletAPI = (yield* select(getWalletApi))!;
 
   try {
-    const data: string = yield call(getFileData, accountFile, FileReaderType.binary);
-    const walletData: LoginToWalletSagaInput = yield WalletAPI.parseExportData(data, password);
-    const wif: string = yield CryptoApi.encryptWif(walletData.wif!, password);
+    const data = yield* call(getFileData, accountFile, FileReaderType.binary);
+    const walletData: LoginToWalletSagaInput = yield WalletAPI.parseExportData(data!, password);
+    const wif = yield* call(CryptoApi.encryptWif, walletData.wif!, password);
 
     yield* loginToWalletSaga({ payload: { address: walletData.address, wif } });
-    yield put(push(RoutesEnum.root));
+    yield* put(push(RoutesEnum.root));
   } catch (e) {
     // handle error in notifications
   }
 }
 
 export function* exportAccountSaga({ payload }: { payload: ExportAccountInputType }) {
-  const { wif, address } = yield select(getWalletData);
+  const { wif, address } = yield* select(getWalletData);
   const { password, hint } = payload;
+  const WalletAPI = (yield* select(getWalletApi))!;
 
   const decryptedWif: string = yield CryptoApi.decryptWif(wif, password);
   const exportedData: string = yield WalletAPI.getExportData(decryptedWif, address, password, hint);
@@ -88,18 +90,14 @@ export function* exportAccountSaga({ payload }: { payload: ExportAccountInputTyp
   yield fileSaver.saveAs(blob, 'power_wallet.pem', true);
 
   yield* loginToWalletSaga({ payload: { address, wif } });
-  yield put(push(RoutesEnum.root));
+  yield* put(push(RoutesEnum.root));
 }
 
 export function* resetAccountSaga({ payload }: { payload: string }) {
-  const { wif } = yield select(getWalletData);
-  try {
-    yield CryptoApi.decryptWif(wif, payload);
+  const { wif } = yield* select(getWalletData);
+  yield CryptoApi.decryptWif(wif, payload);
 
-    yield clearApplicationStorage();
-    yield put(clearAccountData());
-    yield put(push(RoutesEnum.signup));
-  } catch (e) {
-    console.log(e);
-  }
+  yield clearApplicationStorage();
+  yield* put(clearAccountData());
+  yield* put(push(RoutesEnum.signup));
 }

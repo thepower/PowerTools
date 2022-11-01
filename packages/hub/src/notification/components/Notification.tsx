@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import { RootState } from 'application/store';
 import Alert from '@mui/material/Alert';
 import { AlertColor } from '@mui/material/Alert/Alert';
-import { hideNotification } from '../slice/notificationSlice';
+import { hideNotification } from '../slice';
 import styles from './Notification.module.scss';
-import { ApplicationState } from '../../../application';
 
-const mapStateToProps = (state: ApplicationState) => ({
+const mapStateToProps = (state: RootState) => ({
   notification: state.notification.currentNotification,
 });
 

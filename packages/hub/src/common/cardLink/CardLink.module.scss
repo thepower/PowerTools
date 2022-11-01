@@ -35,6 +35,7 @@
   &[aria-disabled='true'] {
     border: 1px solid #79789d;
     background: #26354d;
+    pointer-events: none;
 
     .text {
       color: #79789d;

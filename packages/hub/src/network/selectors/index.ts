@@ -1,22 +1,22 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { ApplicationState } from '../../../application';
+import { RootState } from 'application/store';
 
-export const getUiActions = (state: ApplicationState) => state.network.actions;
+export const getUiActions = (state: RootState) => state.network.actions;
 
 // Хотя бы один action из списка в состоянии загруки
-export const checkIfLoading = (state: ApplicationState, ...actionsToCheck: string[]) => (
+export const checkIfLoading = (state: RootState, ...actionsToCheck: string[]) => (
   state.network.actions.some((a) => actionsToCheck.includes(a.name))
 );
 
 // Action с переданным id в payload в состоянии загрузки
 export const checkIfLoadingItemById = createSelector(
-  [getUiActions, (_: ApplicationState, props: { id: string | number, actionToCheck: string }) => props],
+  [getUiActions, (_: RootState, props: { id: string | number, actionToCheck: string }) => props],
   (actions, { actionToCheck, id }) => actions.some((a) => a.name === actionToCheck && a.params?.id === id),
 );
 
 // Id всех сущностей одного action в состоянии загрузки
 export const getUpdatingItemIds = createSelector(
-  [getUiActions, (_: ApplicationState, actionToCheck: string) => actionToCheck],
+  [getUiActions, (_: RootState, actionToCheck: string) => actionToCheck],
   (actions, actionToCheck) => (
     actions
       .reduce((acc, action) => {

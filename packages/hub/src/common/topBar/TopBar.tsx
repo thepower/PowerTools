@@ -1,10 +1,10 @@
 import React from 'react';
 import cn from 'classnames';
-import styles from './TopBar.module.scss';
 import IconButton from '../iconButton/IconButton';
 import { Account } from '../../account/components/Account';
 import ArrowLink from '../arrowLink/ArrowLink';
 import { BellIcon } from '../icons';
+import styles from './TopBar.module.scss';
 
 interface TopBarProps {
   type: 'deep' | 'shallow';

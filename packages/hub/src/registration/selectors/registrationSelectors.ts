@@ -1,8 +1,8 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { ApplicationState } from '../../application';
+import { RootState } from 'application/store';
 import { RegistrationState } from '../slice/registrationSlice';
 
-export const getRegistrationState = (state: ApplicationState) => (
+export const getRegistrationState = (state: RootState) => (
   state.registration
 );
 

@@ -1,8 +1,9 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { put } from 'typed-redux-saga';
-import { startAction, stopAction, showNotification } from 'common';
+import { showNotification } from 'notification/slice';
+import { startAction, stopAction } from 'network/slice';
 
-export default (saga: any) => (function* manageSagaState(action: PayloadAction<any>) {
+const manageSagaState = (saga: any) => (function* (action: PayloadAction<any>) {
   try {
     yield* put(startAction({ name: action.type, params: action.payload }));
     yield* saga(action);
@@ -20,3 +21,5 @@ export default (saga: any) => (function* manageSagaState(action: PayloadAction<a
     yield* put(stopAction({ name: action.type, params: action.payload }));
   }
 });
+
+export default manageSagaState;
