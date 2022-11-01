@@ -8,6 +8,7 @@ import { NetworkApi, WalletApi } from '@thepowereco/tssdk';
 
 interface ApplicationDataState {
   testnetAvailable: boolean;
+  showUnderConstruction: boolean;
   networkApi: Draft<NetworkApi> | null;
   walletApi: Draft<WalletApi> | null;
 }
@@ -16,6 +17,7 @@ const SLICE_NAME = 'applicationData';
 
 const initialState: ApplicationDataState = {
   testnetAvailable: false,
+  showUnderConstruction: false,
   networkApi: null,
   walletApi: null,
 };
@@ -31,6 +33,9 @@ const applicationDataSlice = createSlice({
     setTestnetAvailable: (state: ApplicationDataState, { payload }: PayloadAction<boolean>) => {
       state.testnetAvailable = payload;
     },
+    setShowUnderConstruction: (state: ApplicationDataState, action: PayloadAction<boolean>) => {
+      state.showUnderConstruction = action.payload;
+    },
   },
 });
 
@@ -41,5 +46,6 @@ export const {
   actions: {
     setDynamicApis,
     setTestnetAvailable,
+    setShowUnderConstruction,
   },
 } = applicationDataSlice;

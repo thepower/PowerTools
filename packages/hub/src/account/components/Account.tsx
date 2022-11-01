@@ -19,6 +19,7 @@ import { ImportAccountModal } from '../../registration/components/pages/loginReg
 import { importAccountFromFile } from '../slice/accountSlice';
 import { ExportAccountModal } from '../../registration/components/pages/backup/ExportAccountModal';
 import { ResetAccountModal } from './ResetAccountModal';
+import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
 import { RootState } from '../../application/store';
 import styles from './Account.module.scss';
 
@@ -27,6 +28,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 const mapDispatchToProps = {
   importAccountFromFile,
+  setShowUnderConstruction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -88,7 +90,7 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
   };
 
   handleCreateAccount = () => {
-    console.log('create account');
+    this.props.setShowUnderConstruction(true);
   };
 
   handleExportAccount = () => {

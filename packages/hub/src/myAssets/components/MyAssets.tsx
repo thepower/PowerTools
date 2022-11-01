@@ -21,6 +21,7 @@ import Transaction from './Transaction';
 import { getGroupedWalletTransactions } from '../selectors/transactionsSelectors';
 import styles from './MyAssets.module.scss';
 import { TransactionType } from '../slices/transactionsSlice';
+import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
 
 const connector = connect(
   (state: RootState) => ({
@@ -30,6 +31,7 @@ const connector = connect(
   }),
   {
     loadTransactionsTrigger,
+    setShowUnderConstruction,
   },
 );
 
@@ -59,6 +61,11 @@ class MyAssets extends React.PureComponent<MyAssetsProps> {
     </li>
   );
 
+  handleShowUnderConstruction = (event: React.MouseEvent) => {
+    event.preventDefault();
+    this.props.setShowUnderConstruction(true);
+  };
+
   render() {
     const { amount, loading, transactions } = this.props;
 
@@ -85,7 +92,7 @@ class MyAssets extends React.PureComponent<MyAssetsProps> {
             <CardLink to="/send" label="Send">
               <SendSvg />
             </CardLink>
-            <CardLink disabled to="/buy" label="Buy">
+            <CardLink onClick={this.handleShowUnderConstruction} to="/buy" label="Buy">
               <BuySvg />
             </CardLink>
           </div>

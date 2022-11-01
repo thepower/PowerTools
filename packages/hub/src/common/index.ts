@@ -19,6 +19,7 @@ export { default as TopBar } from './topBar/TopBar';
 export { default as ShallowPageTemplate } from './shallowPageTemplate/ShallowPageTemplate';
 export { default as Divider } from './divider/Divider';
 export { default as DeepPageTemplate } from './deepPageTemplate/DeepPageTemplate';
+export { UnderConstruction } from './underConstruction/UnderConstruction';
 
 // types
 export type { UnknownFunctionType } from './typings/common';

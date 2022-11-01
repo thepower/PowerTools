@@ -6,15 +6,31 @@ import {
   SendSvg,
   WalletsSvg,
 } from 'common/icons';
+import { connect, ConnectedProps } from 'react-redux';
 import { ArrowLink, CardLink, CopyButton } from 'common';
 import { getWalletAddress } from '../../account/selectors/accountSelectors';
-import { useAppSelector } from '../../application/store';
 import { getWalletAmount } from '../../myAssets/selectors/walletSelectors';
+import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
+import { RootState } from '../../application/store';
 import styles from './AssetsSection.module.scss';
 
-const AssetsSection = () => {
-  const amount = useAppSelector(getWalletAmount);
-  const walletAddress = useAppSelector(getWalletAddress);
+const mapStateToProps = (state: RootState) => ({
+  walletAddress: getWalletAddress(state),
+  amount: getWalletAmount(state),
+});
+const mapDispatchToProps = {
+  setShowUnderConstruction,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type AssetsSectionProps = ConnectedProps<typeof connector>;
+
+const AssetsSection = ({ walletAddress, setShowUnderConstruction, amount }: AssetsSectionProps) => {
+  const handleShowUnderConstruction = React.useCallback((event: React.MouseEvent) => {
+    event.preventDefault();
+
+    setShowUnderConstruction(true);
+  }, [setShowUnderConstruction]);
 
   return (
     <div>
@@ -46,7 +62,7 @@ const AssetsSection = () => {
           <CardLink to="/send" label="Send">
             <SendSvg />
           </CardLink>
-          <CardLink disabled to="/buy" label="Buy">
+          <CardLink to="/buy" label="Buy" onClick={handleShowUnderConstruction}>
             <BuySvg />
           </CardLink>
         </div>
@@ -55,4 +71,4 @@ const AssetsSection = () => {
   );
 };
 
-export default AssetsSection;
+export default connector(AssetsSection);
