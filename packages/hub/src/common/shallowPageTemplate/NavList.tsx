@@ -7,17 +7,10 @@ import {
 } from 'common/icons';
 import React, { MouseEvent } from 'react';
 import { NavLink } from 'react-router-dom';
-import { connect, ConnectedProps } from 'react-redux';
 import { RoutesEnum } from '../../application/typings/routes';
 import styles from './NavList.module.scss';
 import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
-
-const mapDispatchToProps = {
-  setShowUnderConstruction,
-};
-
-const connector = connect(null, mapDispatchToProps);
-type NavListProps = ConnectedProps<typeof connector>;
+import { useAppDispatch } from '../../application/store';
 
 const routes = [
   {
@@ -52,11 +45,12 @@ const routes = [
   },
 ];
 
-const NavList = React.memo(({ setShowUnderConstruction }: NavListProps) => {
+export const NavList = React.memo(() => {
+  const dispatch = useAppDispatch();
   const handleShowUnderConstruction = React.useCallback((event: MouseEvent) => {
     event.preventDefault();
-    setShowUnderConstruction(true);
-  }, [setShowUnderConstruction]);
+    dispatch(setShowUnderConstruction(true));
+  }, [dispatch]);
 
   return <nav>
     <ul className={styles.list}>
@@ -82,4 +76,4 @@ const NavList = React.memo(({ setShowUnderConstruction }: NavListProps) => {
   </nav>;
 });
 
-export default connector(NavList);
+export default NavList;

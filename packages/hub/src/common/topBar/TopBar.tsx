@@ -1,19 +1,14 @@
 import React from 'react';
 import cn from 'classnames';
-import { connect, ConnectedProps } from 'react-redux';
 import IconButton from '../iconButton/IconButton';
 import { Account } from '../../account/components/Account';
 import ArrowLink from '../arrowLink/ArrowLink';
 import { BellIcon } from '../icons';
 import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
 import styles from './TopBar.module.scss';
+import { useAppDispatch } from '../../application/store';
 
-const mapDispatchToProps = {
-  setShowUnderConstruction,
-};
-
-const connector = connect(null, mapDispatchToProps);
-type TopBarProps = ConnectedProps<typeof connector> & {
+type TopBarProps = {
   type: 'deep' | 'shallow';
   backUrl?: string;
   children?: React.ReactNode;
@@ -23,11 +18,11 @@ const TopBar: React.FC<TopBarProps> = ({
   children,
   type,
   backUrl,
-  setShowUnderConstruction,
 }) => {
+  const dispatch = useAppDispatch();
   const handleShowUnderConstruction = React.useCallback(() => {
-    setShowUnderConstruction(true);
-  }, [setShowUnderConstruction]);
+    dispatch(setShowUnderConstruction(true));
+  }, [dispatch]);
 
   return <>
     <header className={cn(styles.bar, styles[type])}>
@@ -72,4 +67,4 @@ const TopBar: React.FC<TopBarProps> = ({
   </>;
 };
 
-export default connector(TopBar);
+export default TopBar;

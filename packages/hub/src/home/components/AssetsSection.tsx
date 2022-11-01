@@ -71,4 +71,4 @@ const AssetsSection = ({ walletAddress, setShowUnderConstruction, amount }: Asse
   );
 };
 
-export default AssetsSection;
+export default connector(AssetsSection);

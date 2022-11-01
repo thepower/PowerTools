@@ -4,11 +4,11 @@ import { Button } from '@mui/material';
 import { push } from 'connected-react-router';
 import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
 import { Modal } from '../modal/Modal';
-import { ApplicationState } from '../../application';
 import { RoutesEnum } from '../../application/typings/routes';
 import styles from './underConstruction.module.scss';
+import { RootState } from '../../application/store';
 
-const mapStateToProps = (state: ApplicationState) => ({
+const mapStateToProps = (state: RootState) => ({
   showUnderConstruction: state.applicationData.showUnderConstruction,
 });
 
