@@ -4,14 +4,13 @@ import {
   Draft,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { ChainNameEnum, NetworkApi, WalletApi } from '@thepowereco/tssdk';
+import { NetworkApi, WalletApi } from '@thepowereco/tssdk';
 
 interface ApplicationDataState {
   testnetAvailable: boolean;
   showUnderConstruction: boolean;
   networkApi: Draft<NetworkApi> | null;
   walletApi: Draft<WalletApi> | null;
-  currentChain: string;
 }
 
 const SLICE_NAME = 'applicationData';
@@ -21,7 +20,6 @@ const initialState: ApplicationDataState = {
   showUnderConstruction: false,
   networkApi: null,
   walletApi: null,
-  currentChain: ChainNameEnum.hundredAndThree,
 };
 
 const applicationDataSlice = createSlice({
@@ -38,9 +36,6 @@ const applicationDataSlice = createSlice({
     setShowUnderConstruction: (state: ApplicationDataState, action: PayloadAction<boolean>) => {
       state.showUnderConstruction = action.payload;
     },
-    setCurrentChain: (state: ApplicationDataState, action: PayloadAction<ChainNameEnum>) => {
-      state.currentChain = action.payload.toString();
-    },
   },
 });
 
@@ -52,6 +47,5 @@ export const {
     setDynamicApis,
     setTestnetAvailable,
     setShowUnderConstruction,
-    setCurrentChain,
   },
 } = applicationDataSlice;

@@ -18,16 +18,13 @@ import { clearApplicationStorage, setKeyToApplicationStorage } from '../../appli
 import { getNetworkApi, getWalletApi } from '../../application/selectors';
 import { RoutesEnum } from '../../application/typings/routes';
 import { showNotification } from '../../notification/slice';
-import { reInitApis } from '../../application/sagas/initApplicationSaga';
-import { setCurrentChain } from '../../application/slice/applicationSlice';
 
 export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInput } = {}) {
   const { address, wif } = payload!;
-  let NetworkAPI = (yield* select(getNetworkApi))!;
+  const NetworkAPI = (yield* select(getNetworkApi))!;
 
   try {
     let subChain: GetChainResultType;
-    let currentChainValue = ChainNameEnum.hundredAndThree;
 
     do {
       subChain = yield NetworkAPI.getAddressChain(address!);
@@ -46,11 +43,8 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
           return;
         }
 
-        currentChainValue = subChain.chain.toString() as ChainNameEnum;
-        const { NetworkApi } = yield* reInitApis({ payload: currentChainValue });
-        NetworkAPI = NetworkApi;
+        NetworkAPI.changeChain(subChain.chain.toString() as ChainNameEnum);
       }
-      yield setCurrentChain(currentChainValue);
     } while (subChain.result !== 'found');
 
     yield setKeyToApplicationStorage('address', address);
