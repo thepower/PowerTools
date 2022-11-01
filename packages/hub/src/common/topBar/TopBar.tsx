@@ -1,12 +1,12 @@
 import React from 'react';
 import cn from 'classnames';
 import { connect, ConnectedProps } from 'react-redux';
-import styles from './TopBar.module.scss';
 import IconButton from '../iconButton/IconButton';
 import { Account } from '../../account/components/Account';
 import ArrowLink from '../arrowLink/ArrowLink';
 import { BellIcon } from '../icons';
 import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
+import styles from './TopBar.module.scss';
 
 const mapDispatchToProps = {
   setShowUnderConstruction,

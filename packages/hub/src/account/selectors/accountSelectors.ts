@@ -1,15 +1,4 @@
-import { createSelector } from '@reduxjs/toolkit';
-import { ApplicationState } from '../../application';
-import { AccountState } from '../slice/accountSlice';
+import { RootState } from '../../application/store';
 
-export const getAccountState = (state: ApplicationState) => state.account;
-
-export const getWalletData = createSelector(
-  getAccountState,
-  (accountData: AccountState) => accountData.walletData,
-);
-
-export const getWalletAddress = createSelector(
-  getWalletData,
-  (walletData) => walletData.address,
-);
+export const getWalletData = (state: RootState) => state.account.walletData;
+export const getWalletAddress = (state: RootState) => state.account.walletData.address;

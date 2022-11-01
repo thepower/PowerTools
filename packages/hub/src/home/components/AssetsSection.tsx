@@ -1,21 +1,22 @@
-import React, { useCallback, useRef } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React from 'react';
 import {
   BuySvg,
-  CopySvg,
   FaucetSvg,
   LogoIcon,
   SendSvg,
   WalletsSvg,
 } from 'common/icons';
-import { ArrowLink, CardLink } from 'common';
-import styles from './AssetsSection.module.scss';
-import { ApplicationState } from '../../application';
+import { connect, ConnectedProps } from 'react-redux';
+import { ArrowLink, CardLink, CopyButton } from 'common';
 import { getWalletAddress } from '../../account/selectors/accountSelectors';
+import { getWalletAmount } from '../../myAssets/selectors/walletSelectors';
 import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
+import { RootState } from '../../application/store';
+import styles from './AssetsSection.module.scss';
 
-const mapStateToProps = (state: ApplicationState) => ({
+const mapStateToProps = (state: RootState) => ({
   walletAddress: getWalletAddress(state),
+  amount: getWalletAmount(state),
 });
 const mapDispatchToProps = {
   setShowUnderConstruction,
@@ -24,15 +25,7 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 type AssetsSectionProps = ConnectedProps<typeof connector>;
 
-const AssetsSection = ({ walletAddress, setShowUnderConstruction }: AssetsSectionProps) => {
-  const ref = useRef<HTMLButtonElement>(null);
-
-  const handleClick = useCallback(() => {
-    if (ref.current) {
-      navigator.clipboard.writeText(ref.current.textContent || '');
-    }
-  }, []);
-
+const AssetsSection = ({ walletAddress, setShowUnderConstruction, amount }: AssetsSectionProps) => {
   const handleShowUnderConstruction = React.useCallback((event: React.MouseEvent) => {
     event.preventDefault();
 
@@ -46,20 +39,24 @@ const AssetsSection = ({ walletAddress, setShowUnderConstruction }: AssetsSectio
       </ArrowLink>
       <div className={styles.box}>
         <div className={styles.majorWallet}>
+          <p className={styles.info}>
+            How much is the fish
+          </p>
           <p className={styles.total}>
             <LogoIcon className={styles.icon} />
-            {'47 002.007'}
+            {amount}
           </p>
-          <button type="button" className={styles.addressButton} ref={ref} onClick={handleClick}>
-            {walletAddress}
-            <CopySvg className={styles.copyIcon} />
-          </button>
+          <CopyButton
+            textButton={walletAddress}
+            className={styles.addressButton}
+            iconClassName={styles.copyIcon}
+          />
         </div>
         <div className={styles.cards}>
           <CardLink to="/my-assets" label="Wallets">
             <WalletsSvg />
           </CardLink>
-          <CardLink to="/faucet" label="Faucet">
+          <CardLink label="Faucet" isAnchor to="https://faucet.thepower.io/" target="_blank" rel="noreferrer">
             <FaucetSvg />
           </CardLink>
           <CardLink to="/send" label="Send">
@@ -74,4 +71,4 @@ const AssetsSection = ({ walletAddress, setShowUnderConstruction }: AssetsSectio
   );
 };
 
-export default connector(AssetsSection);
+export default AssetsSection;

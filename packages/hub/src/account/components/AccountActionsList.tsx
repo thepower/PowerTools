@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './Account.module.scss';
 import { AccountActionType } from '../typings/accountTypings';
+import styles from './Account.module.scss';
 
 interface AccountActionsListProps {
   actions: AccountActionType[];

@@ -2,14 +2,14 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Button } from '@mui/material';
 import { OutlinedInput, Tabs } from 'common';
+import { RootState } from 'application/store';
 import styles from '../../Registration.module.scss';
 import { LoginRegisterAccountTabs, LoginRegisterAccountTabsLabels, RegistrationPageAdditionalProps } from '../../../typings/registrationTypes';
-import { ApplicationState } from '../../../../application';
 import { RegistrationBackground } from '../../common/RegistrationBackground';
 import { loginToWalletFromRegistration } from '../../../slice/registrationSlice';
 import { getLoginErrors } from '../../../selectors/registrationSelectors';
 
-const mapStateToProps = (state: ApplicationState) => ({
+const mapStateToProps = (state: RootState) => ({
   ...getLoginErrors(state),
 });
 const mapDispatchToProps = {
