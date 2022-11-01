@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 import { Button } from '@mui/material';
 import {
   BreadcrumbsDataType,
@@ -12,19 +11,13 @@ import { RegistrationTabsEnum } from '../typings/registrationTypes';
 import { QuickGuide } from './pages/QuickGuide';
 import { BeAware } from './pages/BeAware';
 import { RegisterPage } from './pages/loginRegisterAccount/RegisterPage';
-import { Backup } from './pages/Backup';
-
-const mapStateToProps = () => ({});
-const mapDispatchToProps = {};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type RegistrationPageProps = ConnectedProps<typeof connector>;
+import { Backup } from './pages/backup/Backup';
 
 interface RegistrationPageState {
   enterButtonPressed: boolean;
 }
 
-class RegistrationComponent extends React.PureComponent<RegistrationPageProps, RegistrationPageState> {
+export class RegistrationPage extends React.PureComponent<{}, RegistrationPageState> {
   private registrationBreadcrumbs: BreadcrumbsDataType[] = [
     {
       label: RegistrationTabsEnum.quickGuide,
@@ -44,7 +37,7 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
     },
   ];
 
-  constructor(props: RegistrationPageProps) {
+  constructor(props: never) {
     super(props);
     this.state = {
       enterButtonPressed: false,
@@ -93,5 +86,3 @@ class RegistrationComponent extends React.PureComponent<RegistrationPageProps, R
     </div>;
   }
 }
-
-export const RegistrationPage = connector(RegistrationComponent);

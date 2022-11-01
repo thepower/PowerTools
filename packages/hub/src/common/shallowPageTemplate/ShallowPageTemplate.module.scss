@@ -1,4 +1,5 @@
 @import '../../styles/mixins';
+@import '../../styles/variables';
 
 .template {
   display: flex;
@@ -11,7 +12,8 @@
 }
 
 .aside {
-  width: 312px;
+  z-index: 20;
+  width: $aside-width;
   background: #1b222c;
 
   @include mobile {

@@ -1,7 +1,7 @@
 import createHash from 'create-hash';
 import { Buffer } from 'safe-buffer';
 import * as msgPack from '@thepowereco/msgpack';
-import { AddressApi } from './address';
+import { AddressApi } from './address/address';
 
 const Bitcoin = require('bitcoinjs-lib');
 // const sha512 = require('js-sha512').sha512;
@@ -82,7 +82,6 @@ const KIND_LSTORE = 22;
 // URL.revokeObjectURL(blobURL);
 
 const generateNonce = (body: Uint8Array, offset: number, powDifficulty: number) => '0';
-
 // if (powDifficulty > POW_DIFFICULTY_THRESHOLD) {
 //   throw new Error('PoW difficulty is too high');
 // }
@@ -95,9 +94,11 @@ const generateNonce = (body: Uint8Array, offset: number, powDifficulty: number) 
 //   };
 //   worker.postMessage([body, offset, powDifficulty]);
 // });
-// return '0';
 
 const getRegisterTxBody = async (chain: number, publicKey: string, timestamp: number, referrer: string, powDifficulty = 16) => {
+  /**
+   * @todo move to env/const
+   */
   const clid = `power_wallet_${process.env.GIT_HEAD_HASH}`;
 
   let body = {

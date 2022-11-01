@@ -1,4 +1,5 @@
 import React, { useCallback, useRef } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
 import {
   BuySvg,
   CopySvg,
@@ -9,8 +10,18 @@ import {
 } from 'common/icons';
 import { ArrowLink, CardLink } from 'common';
 import styles from './AssetsSection.module.scss';
+import { ApplicationState } from '../../application';
+import { getWalletAddress } from '../../account/selectors/accountSelectors';
 
-const AssetsSection = () => {
+const mapStateToProps = (state: ApplicationState) => ({
+  walletAddress: getWalletAddress(state),
+});
+const mapDispatchToProps = {};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type AssetsSectionProps = ConnectedProps<typeof connector>;
+
+const AssetsSection = ({ walletAddress }: AssetsSectionProps) => {
   const ref = useRef<HTMLButtonElement>(null);
 
   const handleClick = useCallback(() => {
@@ -26,15 +37,12 @@ const AssetsSection = () => {
       </ArrowLink>
       <div className={styles.box}>
         <div className={styles.majorWallet}>
-          <p className={styles.info}>
-            {'How much is the fish'}
-          </p>
           <p className={styles.total}>
             <LogoIcon className={styles.icon} />
             {'47 002.007'}
           </p>
           <button type="button" className={styles.addressButton} ref={ref} onClick={handleClick}>
-            {'AA030000174483054062'}
+            {walletAddress}
             <CopySvg className={styles.copyIcon} />
           </button>
         </div>
@@ -57,4 +65,4 @@ const AssetsSection = () => {
   );
 };
 
-export default AssetsSection;
+export default connector(AssetsSection);

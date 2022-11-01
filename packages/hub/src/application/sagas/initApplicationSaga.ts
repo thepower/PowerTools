@@ -5,6 +5,7 @@ import { getIsProductionOnlyDomains } from '../utils/applicationUtils';
 import { getKeyFromApplicationStorage } from '../utils/localStorageUtils';
 import { loginToWalletSaga } from '../../account/sagas/accountSaga';
 import { setWalletData } from '../../account/slice/accountSlice';
+import { RoutesEnum } from '../typings/routes';
 
 export function* initApplicationSaga() {
   // let subChain = -1;
@@ -40,6 +41,6 @@ export function* initApplicationSaga() {
       logged: true,
     }));
   } else {
-    yield put(push('/signup'));
+    yield put(push(RoutesEnum.signup));
   }
 }

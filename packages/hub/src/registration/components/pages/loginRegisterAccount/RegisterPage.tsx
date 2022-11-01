@@ -7,7 +7,7 @@ import { setCurrentRegisterCreateAccountTab } from '../../../slice/registrationS
 import { ApplicationState } from '../../../../application';
 import { LoginToAccount } from './LoginToAccount';
 import { getCurrentRegistrationTab } from '../../../selectors/registrationSelectors';
-import { ImportAccount } from './ImportAccount';
+import { ImportAccount } from './import/ImportAccount';
 
 const mapStateToProps = (state: ApplicationState) => ({
   tab: getCurrentRegistrationTab(state),

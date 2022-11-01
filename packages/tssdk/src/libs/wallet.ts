@@ -1,7 +1,7 @@
-import { AddressApi } from './address';
-import { NetworkApi } from './network';
+import { AddressApi } from './address/address';
+import { NetworkApi } from './network/network';
 import { TransactionsApi } from './transactions';
-import { CryptoApi } from './crypto';
+import { CryptoApi } from './crypto/crypto';
 import { correctAmount, correctAmountsObject } from '../utils/numbers';
 import { Maybe } from '../typings';
 

@@ -1,5 +1,11 @@
 [
   {
+    "name": "asset-manifest.json",
+    "path": ".",
+    "hash": "5a75fc36dac02c2dc906a7f29030e03586599ab42348c59bde918eaa2fda0144",
+    "size": 2327
+  },
+  {
     "name": "favicon.ico",
     "path": ".",
     "hash": "30b750567f314553be83aa4d0da6c5ea4676ec56c6fb1ca41233a07e73fc1819",
@@ -8,7 +14,175 @@
   {
     "name": "index.html",
     "path": ".",
-    "hash": "ba56a0fbf14cf0be64d87cb15d97fadcb09694242d83ccb0a7ff39849c7a92bb",
+    "hash": "9a1e84ed4a499592710147695f5e6a559b9e2c30eb7a9a2a12bd0078502b6285",
     "size": 644
+  },
+  {
+    "name": "manifest.json",
+    "path": ".",
+    "hash": "50b3d8c3903af3f78d871b94557ab14f4e39ca192eaca3d2cfa863c867279a14",
+    "size": 492
+  },
+  {
+    "name": "robots.txt",
+    "path": ".",
+    "hash": "90d24bc3bf698ac1e173739502298ccca72adf1f564fab05f484b8c48d1cadd2",
+    "size": 67
+  },
+  {
+    "name": "main.8a67503b.css",
+    "path": "static/css/",
+    "hash": "303dcd6673eb9d4362e5b616f2a4d026455cdd5006567b2ebd9d76f16576b64f",
+    "size": 39415
+  },
+  {
+    "name": "main.8a67503b.css.map",
+    "path": "static/css/",
+    "hash": "2ef73e85bb8a29a90b12ade69325246d0499e615bf763a886c8362aeb44b3d0e",
+    "size": 41201
+  },
+  {
+    "name": "main.e85ad78b.js",
+    "path": "static/js/",
+    "hash": "bdb4ef8bf9e44b1c43d47d6a9c35ea10eaf67f45ffce8415a81477e26c840a4f",
+    "size": 4739079
+  },
+  {
+    "name": "main.e85ad78b.js.LICENSE.txt",
+    "path": "static/js/",
+    "hash": "436472e492393562f93241ef8e77ec672446ccb757d97e1a93d7803425358d6b",
+    "size": 4205
+  },
+  {
+    "name": "main.e85ad78b.js.map",
+    "path": "static/js/",
+    "hash": "458da9fd90dc42babf9c913d71f392d7f75721f49f5cd1688e3d98c812317198",
+    "size": 11759198
+  },
+  {
+    "name": "RegistraionBackground.477a741ab76ef7658b45.png",
+    "path": "static/media/",
+    "hash": "9cd757bf2be75cd7de89d1534b5442043926b771b0ab55083fa1b6b71e7b7fea",
+    "size": 690532
+  },
+  {
+    "name": "bell.87154776dd420b5db5591212968a45b8.svg",
+    "path": "static/media/",
+    "hash": "5ecb212b86db52cc34d07816f11be9436e1a56c9e3310475564a7ff87945c9b1",
+    "size": 1115
+  },
+  {
+    "name": "build.515bb52b28ca70dfa9c0b7fb8d1c618c.svg",
+    "path": "static/media/",
+    "hash": "d46da4ba059186de33f9c3eda4ab737790a4bbd8b65c348fef5bf22a6fd8d8ae",
+    "size": 1032
+  },
+  {
+    "name": "buy.4bc8b0ba2e7b9eb877f8eb1dfb737efc.svg",
+    "path": "static/media/",
+    "hash": "c98eef11699195afc9566080f3371adfdf0f0c46a7a6e3c83339f311b30033f1",
+    "size": 664
+  },
+  {
+    "name": "chevron_left.191ef8232bc81d439fd90de865038f25.svg",
+    "path": "static/media/",
+    "hash": "b1cf775aa6d8feda452e56ff9c312a774ebc5ab0e0edd1c009a2ed15f595745e",
+    "size": 231
+  },
+  {
+    "name": "contribute.d6ea072a12694e1b7791c2e4c32df5e0.svg",
+    "path": "static/media/",
+    "hash": "79c41d3d39f4b89611704892ba823f7cef8acc749ac904bf541d6411575bfcc0",
+    "size": 4767
+  },
+  {
+    "name": "copy.b220e15d1107845c65d8116f2abd451b.svg",
+    "path": "static/media/",
+    "hash": "5e4f3858ffa330807ff69e3e5ffb4cf308c5277f89ae9e203446069d01f9a075",
+    "size": 398
+  },
+  {
+    "name": "create.461238a021daea5020f57a5ec8736b18.svg",
+    "path": "static/media/",
+    "hash": "45829a6d192e3d0d26d4166ec2d40bd2d9a7d388bc74529b1a3942aa1109f1b8",
+    "size": 1043
+  },
+  {
+    "name": "discover.b2a9c4481466b391bef4abc0dad67d50.svg",
+    "path": "static/media/",
+    "hash": "53b8042c45c21278eb80b36b002376bd67228ed68be2f25c4e12642d700c82de",
+    "size": 2263
+  },
+  {
+    "name": "export.eee7e94a490721f92645e5af3545591d.svg",
+    "path": "static/media/",
+    "hash": "9559e3a6b76a76670727d0b659dda63a150ba14c748c0625a36b968f1392cafa",
+    "size": 375
+  },
+  {
+    "name": "faucet.81e1dc19027c66d1703868052b432a6c.svg",
+    "path": "static/media/",
+    "hash": "9a7f4ed2c3e19c87aacc5c431ea8e0cfa0547e10edcea8ccd95933f1dc5e3d66",
+    "size": 456
+  },
+  {
+    "name": "globe.76d9f69dbb1faefe9d3a.jpg",
+    "path": "static/media/",
+    "hash": "343c2014558fde460c7a78676afe4e200fb85a43870466c22708a4872e0128df",
+    "size": 10594
+  },
+  {
+    "name": "home.af30c1ad40117d5a7ba8f1d7f585fca7.svg",
+    "path": "static/media/",
+    "hash": "7a3ca31ae2a1116caeaed34db99a73f3551d5b4dc2a5cf53606b4011a1c35e7f",
+    "size": 678
+  },
+  {
+    "name": "import.ee563d271599070acd84325ce4d90b31.svg",
+    "path": "static/media/",
+    "hash": "5a9ce0181c39b96869d01dc977403cf7895261710ef700fd4a864488615c68ea",
+    "size": 377
+  },
+  {
+    "name": "initGradientsSvg.03409040d2cc215d60f4718822959972.svg",
+    "path": "static/media/",
+    "hash": "8615d74cd08ce9ef804b00b4aaaeada842133c266d08de57598217b8d4226a57",
+    "size": 366
+  },
+  {
+    "name": "logo.1e6c6a813bbc6936a77b758ceac2c216.svg",
+    "path": "static/media/",
+    "hash": "2004eaa3871a5f275e63b9970723bdd8ec288bdea5e7d1e0ffab305d7d593886",
+    "size": 3337
+  },
+  {
+    "name": "my-place.28cf490a4407a22c49f374925331c52b.svg",
+    "path": "static/media/",
+    "hash": "d4caa04fcc1f0f90c870e33f041b0d844b0376f8d172fbbbde45271af427478e",
+    "size": 1487
+  },
+  {
+    "name": "reset.47d11da3cbfc2cd502328fbe75f9227e.svg",
+    "path": "static/media/",
+    "hash": "8e35933fd9c6d850cb635b2250e23855fa58fbc9b177c63905bdd7d6630efe57",
+    "size": 2268
+  },
+  {
+    "name": "send.26b8356b796054a2328be42e662f8af4.svg",
+    "path": "static/media/",
+    "hash": "a31d38230c503cab2207dba04a14cc90cd976cde0e1d87db8dea5e403dc059ba",
+    "size": 390
+  },
+  {
+    "name": "support.ef09152493959371ae42c0e7eec9a898.svg",
+    "path": "static/media/",
+    "hash": "f5752d42823fac6f97b243dd43a24f8615287ba89043a28acdd3361c6317a16f",
+    "size": 755
+  },
+  {
+    "name": "wallets.0520168ca9dc3b8ce70fd2d50299710f.svg",
+    "path": "static/media/",
+    "hash": "77e853944248ac534a89c1cd90ce3553017c59b6770fe61b1eaaa4ddda81b37a",
+    "size": 1230
   }
 ]
