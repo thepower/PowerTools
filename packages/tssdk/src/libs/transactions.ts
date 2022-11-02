@@ -355,14 +355,23 @@ export const TransactionsApi = {
     gasValue: number,
     wif: string,
     feeSettings: any,
+    feeToken: string,
+    feeValue: number,
+    amountToken: string,
+    amountValue: number,
+
   ) {
+    const PURPOSE = [];
+    if (gasValue) { PURPOSE.push([PURPOSE_GAS, gasToken, gasValue]); }
+    if (feeValue) { PURPOSE.push([PURPOSE_SRCFEE, feeToken, feeValue]); }
+    if (amountValue) { PURPOSE.push([PURPOSE_TRANSFER, amountToken, amountValue]); }
     const body = {
       k: KIND_GENERIC,
       t: +new Date(),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       to: Buffer.from(AddressApi.parseTextAddress(sc)),
       s: +new Date(),
-      p: [/* [PURPOSE_GAS, gasToken, gasValue] */],
+      p: PURPOSE,
       c: toCall,
     };
 

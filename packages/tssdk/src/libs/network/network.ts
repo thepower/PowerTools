@@ -245,6 +245,8 @@ export class NetworkApi {
       throw new NoNodesToQueryException();
     }
 
+    // console.log(parameters);
+
     while (!success) {
       i += 1;
       /**
@@ -375,9 +377,7 @@ export class NetworkApi {
 
     let response = await this.httpRequest(actionUrl, requestParams);
     this.checkResponseValidity(response);
-
     response = transformResponse(response, kind);
-
     return response;
   }
 }

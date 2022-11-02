@@ -78,7 +78,6 @@ export class EvmApi {
     }
 
     const results = AbiCoder.decode(io.outputs, greetResult.execResult.returnValue);
-
     let returnValue: any = results;
 
     if (io.outputNames.length === results.length) {
@@ -88,11 +87,11 @@ export class EvmApi {
       }, {});
     }
 
-    return returnValue;
+    return results.length === 1 ? results[0] : returnValue;
   }
 
   // Send trx to chain
-  public async scSet(key: AccountKey, method: string, params?: string[]) {
+  public async scSet(key: AccountKey, method: string, params?: string[], amount = 0) {
     if (!this.isMethodExist(method)) {
       throw new MethodDoesNotExistException();
     }
@@ -110,10 +109,14 @@ export class EvmApi {
       key.address,
       this.scAddress,
       ['0x0', [data]],
-      'SK',
-      20000,
+      '',
+      0,
       key.wif,
       feeSettings,
+      '',
+      0,
+      'SK',
+      amount,
     );
 
     const res = await this.network.sendTxAndWaitForResponse(tx);

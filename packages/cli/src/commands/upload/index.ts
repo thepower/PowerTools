@@ -1,28 +1,22 @@
 import { Command } from '@oclif/core';
+import {
+  AddressApi,
+  ChainNameEnum,
+  EvmApi,
+} from '@thepowereco/tssdk';
+
 import ux from 'cli-ux';
-import { promises, statSync } from 'fs';
-import { getFileHash, getHash } from '../../helpers/calcHash.helper';
-import { File } from '../../types/file.type';
+import * as Listr from 'listr';
 import { resolve } from 'path';
-import { BlockChainService } from '../../services/blockshain.service';
-import { Config } from '@oclif/core/lib/config';
-import { UploaderApi } from '../../api/uploader.api';
-import { archiveDir } from '../../helpers/archiver.helper';
+import { color } from '@oclif/color';
+import { getHash } from '../../helpers/calcHash.helper';
+import { uploadTaskManifest, uploadTaskFile, scanDir } from '../../helpers/upload.helper';
 import { getConfig, setConfig } from '../../helpers/config.helper';
 import { CliConfig } from '../../types/cliConfig.type';
+import * as abiJson from '../../config/scStorageAbi.json';
+import { storageScAddress } from '../../config/cli.config';
 
 export default class Upload extends Command {
-
-  private blockChainService: BlockChainService;
-
-  private api: UploaderApi;
-
-  constructor(argv: string[], config: Config) {
-    super(argv, config);
-    this.blockChainService = new BlockChainService();
-    this.api = new UploaderApi();
-  }
-
   static description = 'Upload application files to storage';
 
   static examples = [
@@ -38,84 +32,90 @@ export default class Upload extends Command {
 
   static args = [];
 
-  async scanDir(root: string, dir: string, result: any[] = []) {
-    const files = await promises.readdir(dir);
+  async run(): Promise<void> { // TODO: update task
+    this.log(color.whiteBright('✋️WELCOME TO THE POWER ECOSYSTEM! 💪 🌍'));
 
-    for (const file of files) {
-      const fullPath = `${dir}/${file}`;
-      const stat = statSync(fullPath);
-
-      if (stat.isDirectory()) {
-        await this.scanDir(root, fullPath, result);
-      } else {
-        const hash = await getFileHash(fullPath);
-
-        const fileData: File = {
-          name: file,
-          path: fullPath.replace(root, ''),
-          hash,
-          size: stat.size,
-        };
-
-        result.push(fileData);
-      }
-    }
-
-    return result;
-  }
-
-  async run(): Promise<void> {
     let config: CliConfig = await getConfig();
 
-    if (!config) {
+    if (!config) { // TODO: smart prompt
       const source = await ux.prompt('Please, enter the source path of your project, ex. "./dist")');
       await ux.confirm(`Source path = "${resolve(source)}". Continue? (yes/no)`);
 
       const projectId = await ux.prompt('Please, enter your project id (must be unique in list of your projects)');
-
       const address = await ux.prompt('Please, enter your account address, ex. "AA030000174483048139"');
-      // TODO: check address is valid
-
       const wif = await ux.prompt('Please, enter your account private key (wif)', { type: 'hide' });
 
-      config = { source, projectId, address, wif };
+      config = {
+        source, projectId, address, wif,
+      };
       await setConfig(config);
     }
 
-    this.log(JSON.stringify(config, null, 2));
+    this.log(color.whiteBright('Current cli config:'));
 
-    const { source, projectId, address, wif } = config;
+    this.log(color.cyan(JSON.stringify(config, null, 2)));
+
+    const {
+      source, projectId, address, wif,
+    } = config;
+
     const dir = resolve(source);
+    const storageSc = await EvmApi.build(storageScAddress, ChainNameEnum.first, abiJson.abi);
+    let taskId = await storageSc.scGet(
+      'taskIdByName',
+      [AddressApi.textAddressToEvmAddress(address), projectId],
+    );
 
-    await this.blockChainService.prepareShard();
-    this.log('upload process started...');
-    const files = await this.scanDir(dir, dir);
-    const manifestHash = getHash(JSON.stringify(files));
-    const totalSize = files.reduce((size, file) => file.size + size, 0);
-    this.log('totalSize =', totalSize);
-    const existedProject = await this.blockChainService.getProject(address, projectId);
+    const files = await scanDir(dir, dir);
+    const manifestJsonString = JSON.stringify(files, null, 2);
 
-    const storageData = [
-      address,
-      wif,
-      projectId,
-      manifestHash,
-      totalSize,
-      2000, // TODO: how to calculate it?
-    ];
+    if (taskId.toString() === '0') {
+      const manifestHash = getHash(manifestJsonString);
+      const totalSize = files.reduce((size, file) => file.size + size, 0);
+      this.log('totalSize =', totalSize);
 
-    if (existedProject) {
-      this.log('Project data:', JSON.parse(existedProject));
-      const updateResp = await this.blockChainService.updaterStorageProject.apply(this.blockChainService, storageData);
-      this.log('updateResp = ', updateResp);
-    } else {
-      const regResp = await this.blockChainService.registerStorageProject.apply(this.blockChainService, storageData);
-      this.log('regResp = ', regResp);
+      const expire = 60 * 60 * 24 * 30; // one month
+
+      await storageSc.scSet(
+        { address, wif },
+        'addTask',
+        [projectId, manifestHash, expire, totalSize],
+        1, // TODO: change to normal amount
+      );
+
+      taskId = await storageSc.scGet(
+        'taskIdByName',
+        [AddressApi.textAddressToEvmAddress(address), projectId],
+      );
     }
 
-    await this.api.login(address, wif);
+    const taskInfo = await storageSc.scGet(
+      'getTask',
+      [taskId.toString()],
+    );
 
-    const archivePath = await archiveDir(dir);
-    await this.api.uploadProject(projectId, archivePath, JSON.stringify(files));
+    const { uploadUrl, baseUrls } = await storageSc.scGet(
+      'getProvider',
+      [taskInfo.uploader.toString()],
+    );
+
+    // upload manifest
+    await uploadTaskManifest(uploadUrl, taskId.toString(), manifestJsonString);
+
+    // upload project files
+    const uploadTasks = new Listr(
+      files.map((file) => (
+        {
+          title: color.whiteBright(`Uploading ${file.name}, size: ${file.size} bytes`),
+          task: async () => {
+            await uploadTaskFile(uploadUrl, taskId.toString(), `${source}/${file.path}`, file.name);
+          },
+        }
+      )),
+    );
+
+    await uploadTasks.run();
+
+    this.log(`Upload completed, please visit ${baseUrls}${address}/${projectId} to check it.`);
   }
 }

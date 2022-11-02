@@ -1,3 +1,0 @@
-[submodule "tp_msgpack"]
-	path = tp_msgpack
-	url = https://github.com/thepower/tp_msgpack.git
