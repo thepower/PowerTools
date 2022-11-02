@@ -4,8 +4,7 @@ import { CliConfig } from '../types/cliConfig.type';
 const CONFIG_FILE_NAME = 'tp-cli.json';
 
 export const validateConfig = (cfg: CliConfig) => {
-
-  const required = [ 'source', 'address', 'projectId', 'wif' ];
+  const required = ['source', 'address', 'projectId', 'wif'];
 
   for (const field of required) {
     if (!cfg[field]) {
@@ -39,7 +38,11 @@ export const getConfig = async (): Promise<CliConfig> => {
   }
 
   return cfgJSON;
+};
 
+export const saveManifest = async (manifestStr: string) => {
+  const path = './manifest.json';
+  await promises.writeFile(path, manifestStr);
 };
 
 export const setConfig = async (config: CliConfig) => {

@@ -2,17 +2,15 @@ import React, { ChangeEvent } from 'react';
 import cn from 'classnames';
 import {
   SupportIcon,
-  CopySvg,
   CreateIcon,
   ExportIcon,
   ImportIcon,
   ResetIcon,
 } from 'common/icons';
+import { CopyButton } from 'common';
 import { connect, ConnectedProps } from 'react-redux';
 import { Drawer } from '@mui/material';
-import { ApplicationState } from '../../application';
 import { getWalletAddress } from '../selectors/accountSelectors';
-import styles from './Account.module.scss';
 import globe from './globe.jpg';
 import { Maybe } from '../../typings/common';
 import { AccountActionsList } from './AccountActionsList';
@@ -21,12 +19,16 @@ import { ImportAccountModal } from '../../registration/components/pages/loginReg
 import { importAccountFromFile } from '../slice/accountSlice';
 import { ExportAccountModal } from '../../registration/components/pages/backup/ExportAccountModal';
 import { ResetAccountModal } from './ResetAccountModal';
+import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
+import { RootState } from '../../application/store';
+import styles from './Account.module.scss';
 
-const mapStateToProps = (state: ApplicationState) => ({
+const mapStateToProps = (state: RootState) => ({
   walletAddress: getWalletAddress(state),
 });
 const mapDispatchToProps = {
   importAccountFromFile,
+  setShowUnderConstruction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -56,8 +58,6 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
   };
 
   private mobileWidth = 768;
-
-  private copyWalletRef: Maybe<HTMLDivElement> = null;
 
   private importAccountInput: Maybe<HTMLInputElement> = null;
 
@@ -90,7 +90,7 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
   };
 
   handleCreateAccount = () => {
-    console.log('create account');
+    this.props.setShowUnderConstruction(true);
   };
 
   handleExportAccount = () => {
@@ -173,16 +173,6 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
     this.setState({ openedAccountMenu: false });
   };
 
-  setWalletRef = (el: HTMLDivElement) => {
-    this.copyWalletRef = el;
-  };
-
-  handleCopyWalletAddress = () => {
-    if (this.copyWalletRef) {
-      navigator.clipboard.writeText(this.copyWalletRef.textContent || '');
-    }
-  };
-
   render() {
     const { walletAddress, className } = this.props;
     const {
@@ -211,14 +201,11 @@ class AccountComponent extends React.PureComponent<AccountProps, AccountState> {
         <div className={styles.accountTitle}>
           {'My Account'}
         </div>
-        <div
+        <CopyButton
+          textButton={walletAddress}
           className={styles.addressButton}
-          ref={this.setWalletRef}
-          onClick={this.handleCopyWalletAddress}
-        >
-          {walletAddress}
-          <CopySvg className={styles.copyIcon} />
-        </div>
+          iconClassName={styles.copyIcon}
+        />
         <AccountActionsList actions={this.accountActionsData} />
         <a
           className={styles.supportLink}

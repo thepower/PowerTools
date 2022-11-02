@@ -1,5 +1,5 @@
-import { takeLatest } from 'redux-saga/effects';
-import { manageSagaState } from '../../application';
+import { takeLatest } from 'typed-redux-saga';
+import { manageSagaState } from 'common';
 import {
   importAccountFromFile,
   loginToWallet,
@@ -13,9 +13,9 @@ import {
   exportAccountSaga,
 } from './accountSaga';
 
-export default function* accountSaga() {
-  yield takeLatest(importAccountFromFile, manageSagaState(importAccountFromFileSaga));
-  yield takeLatest(loginToWallet, manageSagaState(loginToWalletSaga));
-  yield takeLatest(resetAccount, manageSagaState(resetAccountSaga));
-  yield takeLatest(exportAccount, manageSagaState(exportAccountSaga));
+export default function* () {
+  yield* takeLatest(importAccountFromFile, manageSagaState(importAccountFromFileSaga));
+  yield* takeLatest(loginToWallet, manageSagaState(loginToWalletSaga));
+  yield* takeLatest(resetAccount, manageSagaState(resetAccountSaga));
+  yield* takeLatest(exportAccount, manageSagaState(exportAccountSaga));
 }

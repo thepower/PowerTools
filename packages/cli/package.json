@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/cli",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "the power cli",
   "author": "thepower",
   "main": "dist/src/index.js",
@@ -29,17 +29,19 @@
     "url": "https://github.com/thepower/power_hub/issues"
   },
   "dependencies": {
-    "@oclif/core": "^1",
+    "@oclif/color": "^1.0.1",
+    "@oclif/core": "^1.20.2",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.0.1",
+    "@thepowereco/tssdk": "^1.13.0",
     "archiver": "^5.3.0",
     "axios": "^0.26.1",
     "cli-ux": "^6.0.9",
     "form-data": "^4.0.0",
+    "listr": "^0.14.3",
     "oclif": "^2",
     "reflect-metadata": "^0.1.13",
     "shx": "^0.3.3",
-    "the_power_sdk_js": "^1.0.2",
     "typedi": "^0.10.0"
   },
   "devDependencies": {
@@ -55,8 +57,8 @@
     "typescript": "^4.4.3"
   },
   "oclif": {
-    "bin": "tp",
-    "dirname": "tp",
+    "bin": "tpe",
+    "dirname": "tpe",
     "commands": "./dist/src/commands",
     "plugins": [
       "@oclif/plugin-help",

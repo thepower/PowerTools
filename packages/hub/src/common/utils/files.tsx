@@ -6,14 +6,14 @@ export enum FileReaderType {
 export const getFileData = (inputFile: File, type: FileReaderType) => {
   const fileReader = new FileReader();
 
-  return new Promise((resolve, reject) => {
+  return new Promise<string | null>((resolve, reject) => {
     fileReader.onerror = () => {
       fileReader.abort();
-      reject("Parsing error.");
+      reject(Error('Parsing error.'));
     };
 
     fileReader.onload = () => {
-      resolve(fileReader.result);
+      resolve(fileReader.result as string);
     };
     if (type === FileReaderType.binary) {
       fileReader.readAsBinaryString(inputFile);

@@ -1,23 +1,24 @@
-import { spawn, all, call } from 'redux-saga/effects';
-import { getErrorMessage } from '../utils/getApiErrorMessage';
+import { spawn, all, call } from 'typed-redux-saga';
 import accountSaga from '../../account/sagas';
 import applicationSaga from './index';
 import registrationSaga from '../../registration/sagas';
+import assetsSaga from '../../myAssets/sagas';
 
 export default function* rootSaga() {
-  const sagas: any[] = [
+  const sagas = [
     applicationSaga,
     accountSaga,
     registrationSaga,
+    assetsSaga,
   ];
 
-  yield all(sagas.map((saga) => spawn(function* () {
+  yield* all(sagas.map((saga) => spawn(function* () {
     while (true) {
       try {
-        yield call(saga);
+        yield* call(saga);
         break;
       } catch (err) {
-        console.error(getErrorMessage(err));
+        console.error(err);
       }
     }
   })));

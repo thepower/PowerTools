@@ -1,9 +1,7 @@
-import { call, put, select } from 'redux-saga/effects';
-import { CryptoApi } from '@thepowereco/tssdk';
+import { call, put, select } from 'typed-redux-saga';
+import { ChainNameEnum, CryptoApi } from '@thepowereco/tssdk';
 import fileSaver from 'file-saver';
-import {
-  FileReaderType, getFileData,
-} from 'common';
+import { FileReaderType, getFileData } from 'common';
 import { push } from 'connected-react-router';
 import { toast } from 'react-toastify';
 import {
@@ -18,39 +16,37 @@ import {
   ImportAccountInputType,
 } from '../typings/accountTypings';
 import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
-import { NetworkAPI, WalletAPI } from '../../application/utils/applicationUtils';
+import { getNetworkApi, getWalletApi } from '../../application/selectors';
 import { RoutesEnum } from '../../application/typings/routes';
 
 export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInput } = {}) {
   const { address, wif } = payload!;
+  const NetworkAPI = (yield* select(getNetworkApi))!;
 
   try {
     let subChain: GetChainResultType;
-    let currentChain = 8;
-    let prevChain = null;
 
     do {
       subChain = yield NetworkAPI.getAddressChain(address!);
 
       // Switch bootstrap when transitioning from testnet to 101-th chain
-      if (subChain.chain === 101 && currentChain !== 101) {
+      if (subChain.chain === 101) {
         subChain = yield NetworkAPI.getAddressChain(address!);
       }
 
       if (subChain.result === 'other_chain') {
-        if (prevChain === subChain.chain) {
+        if (subChain.chain === null) {
           toast.error('Portation in progress. Try again in a few minutes.');
           return;
         }
 
-        prevChain = currentChain;
-        currentChain = subChain.chain;
+        NetworkAPI.changeChain(subChain.chain.toString() as ChainNameEnum);
       }
     } while (subChain.result !== 'found');
 
     yield setKeyToApplicationStorage('address', address);
     yield setKeyToApplicationStorage('wif', wif);
-    yield put(setWalletData({
+    yield* put(setWalletData({
       address: payload?.address!,
       wif: payload?.wif!,
       logged: true,
@@ -62,22 +58,24 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
 
 export function* importAccountFromFileSaga({ payload }: { payload:ImportAccountInputType }) {
   const { accountFile, password } = payload;
+  const WalletAPI = (yield* select(getWalletApi))!;
 
   try {
-    const data: string = yield call(getFileData, accountFile, FileReaderType.binary);
-    const walletData: LoginToWalletSagaInput = yield WalletAPI.parseExportData(data, password);
-    const wif: string = yield CryptoApi.encryptWif(walletData.wif!, password);
+    const data = yield* call(getFileData, accountFile, FileReaderType.binary);
+    const walletData: LoginToWalletSagaInput = yield WalletAPI.parseExportData(data!, password);
+    const wif = yield* call(CryptoApi.encryptWif, walletData.wif!, password);
 
     yield* loginToWalletSaga({ payload: { address: walletData.address, wif } });
-    yield put(push(RoutesEnum.root));
+    yield* put(push(RoutesEnum.root));
   } catch (e) {
     toast.error('Import account error. Try again in a few minutes.');
   }
 }
 
 export function* exportAccountSaga({ payload }: { payload: ExportAccountInputType }) {
-  const { wif, address } = yield select(getWalletData);
+  const { wif, address } = yield* select(getWalletData);
   const { password, hint } = payload;
+  const WalletAPI = (yield* select(getWalletApi))!;
 
   try {
     const decryptedWif: string = yield CryptoApi.decryptWif(wif, password);
@@ -94,10 +92,10 @@ export function* exportAccountSaga({ payload }: { payload: ExportAccountInputTyp
 }
 
 export function* resetAccountSaga({ payload }: { payload: string }) {
-  const { wif } = yield select(getWalletData);
-  try {
-    yield CryptoApi.decryptWif(wif, payload);
+  const { wif } = yield* select(getWalletData);
+  yield CryptoApi.decryptWif(wif, payload);
 
+  try {
     yield clearApplicationStorage();
     yield put(clearAccountData());
     yield put(push(RoutesEnum.signup));

@@ -1,6 +1,7 @@
-import { put } from 'redux-saga/effects';
+import { put } from 'typed-redux-saga';
 import { push } from 'connected-react-router';
-import { setTestnetAvailable } from '../slice/applicationSlice';
+import { ChainNameEnum, NetworkApi, WalletApi } from '@thepowereco/tssdk';
+import { setDynamicApis, setTestnetAvailable } from '../slice/applicationSlice';
 import { getIsProductionOnlyDomains } from '../utils/applicationUtils';
 import { getKeyFromApplicationStorage } from '../utils/localStorageUtils';
 import { loginToWalletSaga } from '../../account/sagas/accountSaga';
@@ -8,13 +9,19 @@ import { setWalletData } from '../../account/slice/accountSlice';
 import { RoutesEnum } from '../typings/routes';
 
 export function* initApplicationSaga() {
+  const networkApi = new NetworkApi(ChainNameEnum.hundredAndTwo);
+  yield networkApi.bootstrap();
+
+  const walletApi = new WalletApi(networkApi);
+
+  yield* put(setDynamicApis({ networkApi, walletApi }));
   // let subChain = -1;
   let address = '';
   let wif = '';
   // let hashParams = null;
 
   if (process.env.NODE_ENV !== 'test' && getIsProductionOnlyDomains()) {
-    yield put(setTestnetAvailable(false));
+    yield* put(setTestnetAvailable(false));
   }
 
   // hashParams = parseHash();
@@ -35,12 +42,12 @@ export function* initApplicationSaga() {
       },
     });
 
-    yield put(setWalletData({
+    yield* put(setWalletData({
       address,
       wif,
       logged: true,
     }));
   } else {
-    yield put(push(RoutesEnum.signup));
+    yield* put(push(RoutesEnum.signup));
   }
 }

@@ -6,12 +6,12 @@ import {
   PELogoWithTitle,
   Wizard,
 } from 'common';
-import styles from './Registration.module.scss';
 import { RegistrationTabsEnum } from '../typings/registrationTypes';
 import { QuickGuide } from './pages/QuickGuide';
 import { BeAware } from './pages/BeAware';
 import { RegisterPage } from './pages/loginRegisterAccount/RegisterPage';
 import { Backup } from './pages/backup/Backup';
+import styles from './Registration.module.scss';
 
 interface RegistrationPageState {
   enterButtonPressed: boolean;

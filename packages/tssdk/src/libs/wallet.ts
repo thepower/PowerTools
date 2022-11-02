@@ -1,7 +1,7 @@
-import { AddressApi } from './address';
-import { NetworkApi } from './network';
+import { AddressApi } from './address/address';
+import { NetworkApi } from './network/network';
 import { TransactionsApi } from './transactions';
-import { CryptoApi } from './crypto';
+import { CryptoApi } from './crypto/crypto';
 import { correctAmount, correctAmountsObject } from '../utils/numbers';
 import { Maybe } from '../typings';
 
@@ -159,8 +159,6 @@ export class WalletApi {
       block = JSON.parse(localStorage.getItem(hash)!);
     } else {
       block = await this.networkApi.getBlock(hash);
-
-      block = block.block;
       // Correct the sums and addresses: we bring the addresses to text form, and the sums to the required number of characters after the decimal point
       block.bals = Object.keys(block.bals).reduce(
         (acc, key) => Object.assign(acc, {
@@ -191,8 +189,8 @@ export class WalletApi {
     const walletData = await this.networkApi.getWallet(address);
 
     return {
-      ...walletData.info,
-      amount: correctAmountsObject(walletData.info.amount),
+      ...walletData,
+      amount: correctAmountsObject(walletData.amount),
     };
   }
 

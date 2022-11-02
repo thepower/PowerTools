@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from './ShallowPageTemplate.module.scss';
 import NavList from './NavList';
 import { Account } from '../../account/components/Account';
+import styles from './ShallowPageTemplate.module.scss';
 
 const ShallowPageTemplate: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className={styles.template}>

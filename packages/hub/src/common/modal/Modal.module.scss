@@ -53,6 +53,10 @@
   background: rgb(255 255 255 / 2%);
 }
 
+.alwaysShowCloseIcon {
+  display: flex !important;
+}
+
 .closeIcon {
   position: absolute;
   top: 10px;
