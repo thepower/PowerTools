@@ -87,6 +87,7 @@ export function* exportAccountSaga({ payload }: { payload: ExportAccountInputTyp
     yield* loginToWalletSaga({ payload: { address, wif } });
     yield put(push(RoutesEnum.root));
   } catch (e) {
+    console.log(e);
     toast.error('Export account error. Try again in a few minutes.');
   }
 }

@@ -2,10 +2,7 @@ import { put, select } from 'typed-redux-saga';
 import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
 import { push } from 'connected-react-router';
 import { toast } from 'react-toastify';
-import {
-  setLoginErrors,
-  setSeedPhrase,
-} from '../slice/registrationSlice';
+import { setSeedPhrase } from '../slice/registrationSlice';
 import { CreateAccountStepsEnum, LoginToWalletInputType } from '../typings/registrationTypes';
 import { loginToWallet, setWalletData } from '../../account/slice/accountSlice';
 import { getCurrentShardSelector, getGeneratedSeedPhrase } from '../selectors/registrationSelectors';
@@ -45,26 +42,20 @@ export function* createWalletSaga({ payload }: { payload: AddActionType<{ passwo
 }
 
 export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputType }) {
-  const { address, seedOrPassword } = payload;
+  const { address, seed } = payload;
 
   try {
     yield AddressApi.parseTextAddress(address);
   } catch (e: any) {
-    yield* put(setLoginErrors({ addressError: e.message as string }));
+    toast.error(e.message);
     return;
   }
+  // enrich baby since canal tired average ozone social rich ozone reform seek
 
   try {
-    const isSeed: boolean = yield CryptoApi.validateMnemonic(seedOrPassword);
-    let wif = '';
-
-    if (isSeed) {
-      // @ts-ignore
-      const keyPair = yield CryptoApi.generateKeyPairFromSeedPhraseAndAddress(seedOrPassword, address);
-      wif = keyPair.toWIF();
-    } else {
-      wif = seedOrPassword;
-    }
+    // @ts-ignore
+    const keyPair = yield CryptoApi.generateKeyPairFromSeedPhraseAndAddress(seed, address);
+    const wif: string = yield CryptoApi.encryptWif(keyPair.toWIF(), payload.password);
 
     yield* put(loginToWallet({ address, wif }));
     yield* put(push(RoutesEnum.root));
