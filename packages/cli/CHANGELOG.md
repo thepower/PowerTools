@@ -6,7 +6,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ## [1.6.3](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.6.2...@thepowereco/cli@1.6.3) (2022-10-17)
 
 
-### Bug Fixes
+### Bug Fixe
 
 * **up:** up ([5663b91](https://github.com/thepower/power_hub/commit/5663b913ac8f35654ecf2eedd62b05670aa75403))
 
