@@ -18,9 +18,6 @@ const networkSlice = createSlice({
   name: 'network',
   initialState,
   reducers: {
-    setLoadingNetworkState: (state: NetworkState, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
-    },
     startAction: (state, { payload }: PayloadAction<Action>) => {
       state.actions.push(payload);
     },
@@ -35,6 +32,5 @@ export const {
   actions: {
     startAction,
     stopAction,
-    setLoadingNetworkState,
   },
 } = networkSlice;

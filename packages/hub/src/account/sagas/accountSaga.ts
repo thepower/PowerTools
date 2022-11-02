@@ -3,6 +3,7 @@ import { ChainNameEnum, CryptoApi } from '@thepowereco/tssdk';
 import fileSaver from 'file-saver';
 import { FileReaderType, getFileData } from 'common';
 import { push } from 'connected-react-router';
+import { toast } from 'react-toastify';
 import {
   clearAccountData,
   setWalletData,
@@ -17,7 +18,6 @@ import {
 import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
 import { getNetworkApi, getWalletApi } from '../../application/selectors';
 import { RoutesEnum } from '../../application/typings/routes';
-import { showNotification } from '../../notification/slice';
 
 export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInput } = {}) {
   const { address, wif } = payload!;
@@ -36,10 +36,7 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
 
       if (subChain.result === 'other_chain') {
         if (subChain.chain === null) {
-          yield* put(showNotification({
-            text: 'Portation in progress. Try again in a few minutes.',
-            type: 'error',
-          }));
+          toast.error('Portation in progress. Try again in a few minutes.');
           return;
         }
 
@@ -55,7 +52,7 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
       logged: true,
     }));
   } catch (e) {
-    // handle error in notifications
+    toast.error('Login error');
   }
 }
 
@@ -71,7 +68,7 @@ export function* importAccountFromFileSaga({ payload }: { payload:ImportAccountI
     yield* loginToWalletSaga({ payload: { address: walletData.address, wif } });
     yield* put(push(RoutesEnum.root));
   } catch (e) {
-    // handle error in notifications
+    toast.error('Import account error. Try again in a few minutes.');
   }
 }
 
@@ -80,21 +77,28 @@ export function* exportAccountSaga({ payload }: { payload: ExportAccountInputTyp
   const { password, hint } = payload;
   const WalletAPI = (yield* select(getWalletApi))!;
 
-  const decryptedWif: string = yield CryptoApi.decryptWif(wif, password);
-  const exportedData: string = yield WalletAPI.getExportData(decryptedWif, address, password, hint);
+  try {
+    const decryptedWif: string = yield CryptoApi.decryptWif(wif, password);
+    const exportedData: string = yield WalletAPI.getExportData(decryptedWif, address, password, hint);
 
-  const blob: Blob = yield new Blob([exportedData], { type: 'octet-stream' });
-  yield fileSaver.saveAs(blob, 'power_wallet.pem', true);
+    const blob: Blob = yield new Blob([exportedData], { type: 'octet-stream' });
+    yield fileSaver.saveAs(blob, 'power_wallet.pem', true);
 
-  yield* loginToWalletSaga({ payload: { address, wif } });
-  yield* put(push(RoutesEnum.root));
+    yield* loginToWalletSaga({ payload: { address, wif } });
+    yield put(push(RoutesEnum.root));
+  } catch (e) {
+    toast.error('Export account error. Try again in a few minutes.');
+  }
 }
 
 export function* resetAccountSaga({ payload }: { payload: string }) {
-  const { wif } = yield* select(getWalletData);
-  yield CryptoApi.decryptWif(wif, payload);
-
-  yield clearApplicationStorage();
-  yield* put(clearAccountData());
-  yield* put(push(RoutesEnum.signup));
+  const { wif } = yield select(getWalletData);
+  try {
+    yield CryptoApi.decryptWif(wif, payload);
+    yield clearApplicationStorage();
+    yield put(clearAccountData());
+    yield put(push(RoutesEnum.signup));
+  } catch (e) {
+    toast.error('Reset account error. Try again in a few minutes.');
+  }
 }

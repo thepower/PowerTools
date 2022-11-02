@@ -7,7 +7,6 @@ import rootSaga from './sagas/rootSaga';
 import history from './utils/history';
 import { accountReducer } from '../account/slice/accountSlice';
 import { applicationDataReducer } from './slice/applicationSlice';
-import { notificationReducer } from '../notification/slice';
 import { registrationReducer } from '../registration/slice/registrationSlice';
 import { networkReducer } from '../network/slice';
 import { walletReducer } from '../myAssets/slices/walletSlice';
@@ -21,7 +20,6 @@ const reducer = {
   router: connectRouter(history),
   account: accountReducer,
   applicationData: applicationDataReducer,
-  notification: notificationReducer,
   registration: registrationReducer,
   wallet: walletReducer,
   network: networkReducer,

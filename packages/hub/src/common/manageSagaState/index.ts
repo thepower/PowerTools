@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { put } from 'typed-redux-saga';
-import { showNotification } from 'notification/slice';
+import { toast } from 'react-toastify';
 import { startAction, stopAction } from 'network/slice';
 
 const manageSagaState = (saga: any) => (function* (action: PayloadAction<any>) {
@@ -9,13 +9,10 @@ const manageSagaState = (saga: any) => (function* (action: PayloadAction<any>) {
     yield* saga(action);
   } catch (err: any) {
     if (err.networkError) {
-      yield* put(showNotification({
-        text: 'Ошибка сети',
-        type: 'info',
-      }));
+      toast.error('Network error');
     } else {
       console.error(err);
-      yield* put(showNotification({ text: err.message, type: 'error' }));
+      toast.error(err.message);
     }
   } finally {
     yield* put(stopAction({ name: action.type, params: action.payload }));

@@ -1,12 +1,15 @@
 {
   "npmClient": "yarn",
-  "useWorkspaces": true,
-  "workspaces": ["packages/*"],
+  "packages": [
+    "packages/*"
+  ],
   "version": "independent",
   "command": {
     "publish": {
       "conventionalCommits": true,
       "message": "chore(release): publish"
     }
-  }
+  },
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "useWorkspaces": false
 }
