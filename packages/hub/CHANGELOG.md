@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.2](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.10.1...@thepowereco/hub@1.10.2) (2022-11-02)
+
+### Bug Fixes
+
+- **up:** up ([9a8c545](https://github.com/thepower/power_hub/commit/9a8c545807063b8e201dfc21668e2db09a4c1ba2))
+
 ## [1.10.1](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.10.0...@thepowereco/hub@1.10.1) (2022-11-01)
 
 ### Bug Fixe

@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/hub",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "description": "thepower hub",
   "author": "thepower",
   "license": "ISC",
@@ -12,7 +12,7 @@
     "@mui/material": "^5.6.2",
     "@mui/styles": "^5.6.2",
     "@reduxjs/toolkit": "^1.8.6",
-    "@thepowereco/tssdk": "^1.12.1",
+    "@thepowereco/tssdk": "^1.13.0",
     "@types/bip32": "^2.0.0",
     "@types/classnames": "^2.3.1",
     "@types/create-hash": "^1.2.2",
