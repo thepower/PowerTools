@@ -5,7 +5,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.12.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.12.0...@thepowereco/tssdk@1.12.1) (2022-11-01)
 
-### Bug Fixes
+### Bug Fixe
 
 - **apis:** move apis to sync store ([78f4e54](https://github.com/thepower/power_hub/commit/78f4e547023e885019e669d6b04963308d905cf8))
 
