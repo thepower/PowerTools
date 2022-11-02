@@ -2223,26 +2223,26 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
-"@thepowereco/msgpack@^1.5.2":
-  version "1.5.2"
-  resolved "https://npm.vmassive.ru/@thepowereco%2fmsgpack/-/msgpack-1.5.2.tgz#2da07c015a02835499ea89443e90affdcb5e8ddb"
-  integrity sha512-+jZyqs8CEff5603M5jif4DJCGBdy96ZwRtwrDj/MkVkUX0qKHHfq58Mg7uU7AwE0agaAvLyOtl2aNz/ZvpAYlw==
+"@thepowereco/msgpack@^1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@thepowereco/msgpack/-/msgpack-1.5.3.tgz#c776be69f54f34bb5b2d0496ea9edf3df4ec14dd"
+  integrity sha512-T54DeUX+xKYSDoq89pZsqUrJV/erJm4EzC0nbDzCSa9A3yeLHAWGQNFEIaD/VFEQwkf6cW5Vhxz4eYssCMc1zg==
   dependencies:
     event-lite "^0.1.1"
     ieee754 "^1.1.8"
     int64-buffer "^0.1.9"
     isarray "^1.0.0"
 
-"@thepowereco/tssdk@*":
-  version "1.12.0"
-  resolved "https://npm.vmassive.ru/@thepowereco%2ftssdk/-/tssdk-1.12.0.tgz#01d7e10b06a2e161c076a3a70298b80c3347c526"
-  integrity sha512-mfmWKbnOXcOoA5BIBDQXqa+C+/Bs9AyjeGL6QME8t5bWVXbmqoblbCbEcXpB1NZorsX2STvYAZGyiWtdaqGEwg==
+"@thepowereco/tssdk@^1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@thepowereco/tssdk/-/tssdk-1.13.0.tgz#a773f54397e945c2d560f2892e235643f11b52f3"
+  integrity sha512-9CKx0fcEZ4NKOD5Pbyj6h70Ea0sCyNj2UzN7zp/3WIFlbsgpshIcOZrOSMuJJSeVryXwE1HG34C7AVgMyvoqgg==
   dependencies:
     "@ethereumjs/common" "^2.6.4"
     "@ethereumjs/tx" "^3.5.2"
     "@ethereumjs/vm" "^5.9.2"
     "@ethersproject/abi" "^5.6.3"
-    "@thepowereco/msgpack" "^1.5.2"
+    "@thepowereco/msgpack" "^1.5.3"
     "@types/bitcoinjs-lib" "^5.0.0"
     axios "^0.27.2"
     bignumber.js "^9.1.0"
@@ -2612,6 +2612,13 @@
   dependencies:
     "@types/history" "^4.7.11"
     "@types/react" "*"
+
+"@types/react-toastify@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@types/react-toastify/-/react-toastify-4.1.0.tgz#604e712855dd677916d5c66af595d3b590f5d95d"
+  integrity sha512-u7Ie/7LHBsPVz/iJxi/WlRDS7Gh9csCJACTDXx+pSLuZCm94xpkwzhM3jV1L5ZxP/in0Gp2tFbJ91VrSGr1gyQ==
+  dependencies:
+    react-toastify "*"
 
 "@types/react-transition-group@^4.4.5":
   version "4.4.5"
@@ -4087,7 +4094,7 @@ cliui@^7.0.2:
     strip-ansi "^6.0.0"
     wrap-ansi "^7.0.0"
 
-clsx@^1.2.1:
+clsx@^1.1.1, clsx@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
   integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
@@ -9230,6 +9237,13 @@ react-scripts@5.0.1:
     workbox-webpack-plugin "^6.4.1"
   optionalDependencies:
     fsevents "^2.3.2"
+
+react-toastify@*, react-toastify@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-9.1.0.tgz#7be07cb61f7e352c5d25a3228575db4cce88a2b5"
+  integrity sha512-63i/5SROvfYz9yzdkmxIrpndtggTdif/5ZpswY3VH+s2/S1Hxo/hiv+oGXnPH6UO2pJBOgfcLNeyVh7okRmnhg==
+  dependencies:
+    clsx "^1.1.1"
 
 react-transition-group@^4.4.2:
   version "4.4.2"

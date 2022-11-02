@@ -4,7 +4,6 @@ export { Page } from './page/Page';
 export { LinkBlock } from './linkBlock/LinkBlock';
 export { Modal } from './modal/Modal';
 export { ConfirmModal } from './modal/ConfirmModal';
-export { Notification } from '../notification/components/Notification';
 export { Breadcrumbs } from './breadcrumbs/components/Breadcrumbs';
 export { Wizard } from './wizard/Wizard';
 export { Tabs } from './tabs/Tabs';
@@ -23,7 +22,6 @@ export { UnderConstruction } from './underConstruction/UnderConstruction';
 
 // types
 export type { UnknownFunctionType } from './typings/common';
-export type { NotificationType } from '../notification/typings';
 export type { BreadcrumbsDataType } from './breadcrumbs/typings/breadcrumbsTypings';
 export { BreadcrumbsTypeEnum } from './breadcrumbs/typings/breadcrumbsTypings';
 export type { WizardComponentProps } from './wizard/Wizard';

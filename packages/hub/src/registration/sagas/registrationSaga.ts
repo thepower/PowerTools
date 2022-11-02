@@ -1,6 +1,7 @@
 import { put, select } from 'typed-redux-saga';
 import { CryptoApi, AddressApi } from '@thepowereco/tssdk';
 import { push } from 'connected-react-router';
+import { toast } from 'react-toastify';
 import {
   setLoginErrors,
   setSeedPhrase,
@@ -28,15 +29,19 @@ export function* createWalletSaga({ payload }: { payload: AddActionType<{ passwo
   const shard = yield* select(getCurrentShardSelector);
   const WalletAPI = (yield* select(getWalletApi))!;
 
-  const { privateKey, address } = yield WalletAPI.createNew(shard!.toString(), seedPhrase!, '', true);
-  const walletPrivateKey = CryptoApi.encryptWif(privateKey, password);
+  try {
+    const { privateKey, address } = yield WalletAPI.createNew(shard!.toString()!, seedPhrase!, '', true);
+    const walletPrivateKey = CryptoApi.encryptWif(privateKey, password);
 
-  yield* put(setWalletData({
-    address,
-    wif: walletPrivateKey,
-  }));
+    yield put(setWalletData({
+      address,
+      wif: walletPrivateKey,
+    }));
 
-  additionalAction?.();
+    additionalAction?.();
+  } catch (e) {
+    toast.error('Create account error');
+  }
 }
 
 export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputType }) {
@@ -64,7 +69,7 @@ export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputTyp
     yield* put(loginToWallet({ address, wif }));
     yield* put(push(RoutesEnum.root));
   } catch (e) {
-    // todo: toast
+    toast.error('Login error');
   }
 }
 

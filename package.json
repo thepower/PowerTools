@@ -2,7 +2,6 @@
   "name": "@thepower/power-hub",
   "version": "0.1.0",
   "private": true,
-  "workspaces": ["packages/*"],
   "scripts": {
     "lerna:init": "yarn install && lerna bootstrap",
     "lernapub": "lerna publish",
