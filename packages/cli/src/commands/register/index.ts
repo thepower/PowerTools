@@ -1,4 +1,5 @@
 import { Command } from '@oclif/core';
+import { color } from '@oclif/color';
 import {
   NetworkApi,
   CryptoApi,
@@ -15,7 +16,7 @@ export default class Upload extends Command {
 
   static flags = {};
 
-  static args = [];
+  static args = []; // TODO: chain number
 
   async run(): Promise<void> {
     const networkApi = new NetworkApi(ChainNameEnum.first);
@@ -34,7 +35,8 @@ export default class Upload extends Command {
     const res: any = await networkApi.sendTxAndWaitForResponse(tx, Number(ChainNameEnum.first));
     const txtAddress = res.split(' ')[1];
 
-    console.log('Account address:', txtAddress);
-    console.log('Account wif:', wif);
+    this.log(`${color.whiteBright('Account address:')}`, color.green(txtAddress));
+    this.log(`${color.whiteBright('Account wif:')}`, color.green(wif));
+    this.log(`${color.whiteBright('To replenish the balance of your account please visit: https://faucet.thepower.io')}`);
   }
 }

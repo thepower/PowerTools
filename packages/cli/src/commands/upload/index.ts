@@ -7,18 +7,14 @@ import {
 
 import ux from 'cli-ux';
 import * as Listr from 'listr';
-import { promises, statSync } from 'fs';
 import { resolve } from 'path';
-import * as FormData from 'form-data';
-import axios from 'axios';
-import {
-  getFileHash,
-  getHash,
-} from '../../helpers/calcHash.helper';
-import { File } from '../../types/file.type';
-import { getConfig, saveManifest, setConfig } from '../../helpers/config.helper';
+import { color } from '@oclif/color';
+import { getHash } from '../../helpers/calcHash.helper';
+import { uploadTaskManifest, uploadTaskFile, scanDir } from '../../helpers/upload.helper';
+import { getConfig, setConfig } from '../../helpers/config.helper';
 import { CliConfig } from '../../types/cliConfig.type';
 import * as abiJson from '../../config/scStorageAbi.json';
+import { storageScAddress } from '../../config/cli.config';
 
 export default class Upload extends Command {
   static description = 'Upload application files to storage';
@@ -36,58 +32,12 @@ export default class Upload extends Command {
 
   static args = [];
 
-  async scanDir(root: string, dir: string, result: any[] = []) {
-    const files = await promises.readdir(dir);
+  async run(): Promise<void> { // TODO: update task
+    this.log(color.whiteBright('✋️WELCOME TO THE POWER ECOSYSTEM! 💪 🌍'));
 
-    for (const file of files) {
-      const fullPath = `${dir}/${file}`;
-      const stat = statSync(fullPath);
-
-      if (stat.isDirectory()) {
-        await this.scanDir(root, fullPath, result);
-      } else {
-        const hash = await getFileHash(fullPath);
-        const pathWithFile = fullPath.replace(`${root}/`, '');
-        const path = pathWithFile.replace(file, '');
-        const fileData: File = {
-          name: file,
-          path: path || '.',
-          hash,
-          size: stat.size,
-        };
-
-        result.push(fileData);
-      }
-    }
-
-    return result;
-  }
-
-  async timeout(milisecs: number) {
-    return new Promise((resolve: Function) => setTimeout(resolve, milisecs));
-  }
-
-  async uploadTaskFile(storageUrl: string, taskId: string, path: string, name: string) {
-    const form = new FormData();
-    const fullPath = `${path}/${name}`;
-    const manifestData = await promises.readFile(fullPath);
-
-    form.append('file', manifestData);
-
-    await axios.put(
-      `${storageUrl}/${taskId}/${name}`,
-      manifestData,
-      {
-        maxContentLength: 100000000,
-        maxBodyLength: 1000000000,
-      },
-    );
-  }
-
-  async run(): Promise<void> {
     let config: CliConfig = await getConfig();
 
-    if (!config) {
+    if (!config) { // TODO: smart prompt
       const source = await ux.prompt('Please, enter the source path of your project, ex. "./dist")');
       await ux.confirm(`Source path = "${resolve(source)}". Continue? (yes/no)`);
 
@@ -101,22 +51,23 @@ export default class Upload extends Command {
       await setConfig(config);
     }
 
-    this.log(JSON.stringify(config, null, 2));
+    this.log(color.whiteBright('Current cli config:'));
+
+    this.log(color.cyan(JSON.stringify(config, null, 2)));
 
     const {
       source, projectId, address, wif,
     } = config;
 
     const dir = resolve(source);
-    const storageSc = await EvmApi.build('AA100000001677723663', ChainNameEnum.first, abiJson.abi);
+    const storageSc = await EvmApi.build(storageScAddress, ChainNameEnum.first, abiJson.abi);
     let taskId = await storageSc.scGet(
       'taskIdByName',
       [AddressApi.textAddressToEvmAddress(address), projectId],
     );
 
-    const files = await this.scanDir(dir, dir);
+    const files = await scanDir(dir, dir);
     const manifestJsonString = JSON.stringify(files, null, 2);
-    await saveManifest(manifestJsonString);
 
     if (taskId.toString() === '0') {
       const manifestHash = getHash(manifestJsonString);
@@ -149,15 +100,15 @@ export default class Upload extends Command {
     );
 
     // upload manifest
-    await this.uploadTaskFile(uploadUrl, taskId.toString(), '.', 'manifest.json');
+    await uploadTaskManifest(uploadUrl, taskId.toString(), manifestJsonString);
 
     // upload project files
     const uploadTasks = new Listr(
       files.map((file) => (
         {
-          title: `Uploading ${file.name}, size: ${file.size} bytes`,
+          title: color.whiteBright(`Uploading ${file.name}, size: ${file.size} bytes`),
           task: async () => {
-            await this.uploadTaskFile(uploadUrl, taskId.toString(), `${source}/${file.path}`, file.name);
+            await uploadTaskFile(uploadUrl, taskId.toString(), `${source}/${file.path}`, file.name);
           },
         }
       )),
