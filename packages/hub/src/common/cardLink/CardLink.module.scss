@@ -1,7 +1,7 @@
 @import 'src/styles/utils';
 
 .card {
-  @include the-power-color-outlined($card-gradient);
+  @include border-gradient($card-gradient);
 
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@
   text-decoration: none;
 
   &:hover {
-    @include the-power-color-outlined($card-hover-gradient);
+    @include border-gradient($card-hover-gradient);
 
     .text {
       @include text-gradient($card-hover-gradient);
@@ -25,7 +25,7 @@
   }
 
   &:active {
-    @include the-power-color-outlined($card-active-gradient);
+    @include border-gradient($card-active-gradient);
 
     .text {
       @include text-gradient($card-active-gradient);

@@ -11,6 +11,7 @@ import { registrationReducer } from '../registration/slice/registrationSlice';
 import { networkReducer } from '../network/slice';
 import { walletReducer } from '../myAssets/slices/walletSlice';
 import { transactionsReducer } from '../myAssets/slices/transactionsSlice';
+import { sendReducer } from '../send/slices/sendSlice';
 
 const loggerMiddleware = createLogger();
 const routeMiddleware = routerMiddleware(history);
@@ -24,6 +25,7 @@ const reducer = {
   wallet: walletReducer,
   network: networkReducer,
   transactions: transactionsReducer,
+  send: sendReducer,
 };
 
 const store = configureStore({

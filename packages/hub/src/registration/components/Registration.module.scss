@@ -212,7 +212,7 @@
   text-transform: unset;
 
   &_outlined {
-    @include the-power-color-outlined;
+    @include border-gradient;
     padding: 0 !important;
     background: #121923;
 

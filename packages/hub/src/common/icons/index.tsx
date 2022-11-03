@@ -6,6 +6,7 @@ export { ReactComponent as BuildIcon } from './build.svg';
 export { ReactComponent as DiscoverIcon } from './discover.svg';
 export { ReactComponent as MyPlaceIcon } from './my-place.svg';
 export { ReactComponent as LogoIcon } from './logo.svg';
+export { ReactComponent as MoneyBugIcon } from './money-bug.svg';
 export { ReactComponent as CopySvg } from './copy.svg';
 export { ReactComponent as WalletsSvg } from './wallets.svg';
 export { ReactComponent as SendSvg } from './send.svg';

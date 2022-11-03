@@ -147,7 +147,7 @@ const getSimpleTransferTxBody = (
   amount: number,
   msg: string,
   timestamp: number,
-  seq: string,
+  seq: number,
   feeSettings: any,
 ) => {
   const body = {
@@ -218,7 +218,7 @@ export const TransactionsApi = {
     token: string,
     amount: number,
     message: string,
-    seq: string,
+    seq: number,
   ) {
     const keyPair = Bitcoin.ECPair.fromWIF(wif);
     const publicKey = keyPair.getPublicKeyBuffer();
@@ -247,7 +247,7 @@ export const TransactionsApi = {
     token: string,
     amount: number,
     message: string,
-    seq: string,
+    seq: number,
   ) {
     const timestamp = +new Date();
 
