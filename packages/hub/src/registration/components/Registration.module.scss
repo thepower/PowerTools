@@ -59,6 +59,24 @@
   @include text-gradient($the-power-gradient);
 }
 
+.buttonsHolder {
+  display: flex;
+  flex-direction: row;
+
+  @include mobile {
+    flex-direction: column;
+
+    button:first-child {
+      margin-right: 0 !important;
+      margin-bottom: 32px;
+    }
+  }
+
+  button:first-child {
+    margin-right: 60px;
+  }
+}
+
 .registrationButton {
   @include the-power-color;
   width: 312px;
@@ -75,7 +93,6 @@
   @media screen and (max-width: $tablet) {
     width: 280px;
     height: 48px;
-    margin-top: $unit * 47;
   }
 }
 
@@ -103,7 +120,6 @@
   background-color: #151516 !important;
 
   @media screen and (max-width: $notebook) {
-    max-width: unset;
     padding: $unit * 5 $unit * 4;
   }
 }
@@ -251,11 +267,12 @@
 .loginRegisterAccountHolder {
   display: flex;
   width: 100%;
-  height: 370px;
+  min-height: 370px;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   padding: 20px 45px;
+  padding-bottom: 46px;
   border-radius: 20px;
   margin-right: auto;
   margin-left: auto;
@@ -521,4 +538,75 @@
 .importModalPasswordInput {
   margin-top: 36px;
   margin-bottom: 90px;
+}
+
+.loginPageBackground {
+  display: flex;
+  width: 95vw;
+  max-width: 1072px;
+  height: auto;
+  align-items: center;
+  padding: 40px 16px;
+}
+
+.loginPagePart {
+  display: flex;
+  max-width: 380px;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 32px 50px;
+  border-radius: 20px;
+  background: #151516;
+
+  @include mobile {
+    width: 100%;
+    max-width: unset;
+    padding: 32px 16px;
+  }
+}
+
+.loginPageFormsHolder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-evenly;
+  margin-top: 16px;
+
+  @include mobile {
+    flex-direction: column;
+  }
+
+  .loginPagePart:nth-child(1) {
+    margin-right: 40px;
+
+    @include mobile {
+      margin-right: 0 !important;
+    }
+  }
+}
+
+.loginPagePartTitle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px !important;
+  color: #f5f5f7;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.loginPagePartDesc {
+  color: #f5f5f7;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  text-align: center;
+}
+
+.loginPageImportButton {
+  margin-top: 60px;
 }

@@ -18,10 +18,12 @@ import {
 import { clearApplicationStorage, setKeyToApplicationStorage } from '../../application/utils/localStorageUtils';
 import { getNetworkApi, getWalletApi } from '../../application/selectors';
 import { RoutesEnum } from '../../application/typings/routes';
+import { reInitApis } from '../../application/sagas/initApplicationSaga';
+import { loadBalanceTrigger } from '../../myAssets/slices/walletSlice';
 
 export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInput } = {}) {
   const { address, wif } = payload!;
-  const NetworkAPI = (yield* select(getNetworkApi))!;
+  let NetworkAPI = (yield* select(getNetworkApi))!;
 
   try {
     let subChain: GetChainResultType;
@@ -40,7 +42,8 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
           return;
         }
 
-        NetworkAPI.changeChain(subChain.chain.toString() as ChainNameEnum);
+        const { networkApi } = yield* reInitApis({ payload: subChain.chain.toString() as ChainNameEnum });
+        NetworkAPI = networkApi;
       }
     } while (subChain.result !== 'found');
 
@@ -51,6 +54,8 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
       wif: payload?.wif!,
       logged: true,
     }));
+
+    yield* put(loadBalanceTrigger());
   } catch (e) {
     toast.error('Login error');
   }

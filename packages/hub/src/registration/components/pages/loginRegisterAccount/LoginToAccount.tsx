@@ -2,26 +2,25 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Button } from '@mui/material';
 import { OutlinedInput, Tabs } from 'common';
-import { RootState } from 'application/store';
 import styles from '../../Registration.module.scss';
 import { LoginRegisterAccountTabs, LoginRegisterAccountTabsLabels, RegistrationPageAdditionalProps } from '../../../typings/registrationTypes';
 import { RegistrationBackground } from '../../common/RegistrationBackground';
 import { loginToWalletFromRegistration } from '../../../slice/registrationSlice';
-import { getLoginErrors } from '../../../selectors/registrationSelectors';
+import { compareTwoStrings } from '../../../utils/registrationUtils';
 
-const mapStateToProps = (state: RootState) => ({
-  ...getLoginErrors(state),
-});
 const mapDispatchToProps = {
   loginToWalletFromRegistration,
 };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(null, mapDispatchToProps);
 type LoginToAccountProps = ConnectedProps<typeof connector> & RegistrationPageAdditionalProps;
 
 interface LoginToAccountState {
   address: string;
-  seedOrPassword: string;
+  seed: string;
+  password: string;
+  confirmedPassword: string;
+  passwordsNotEqual: boolean;
 }
 
 class LoginToAccountComponent extends React.PureComponent<LoginToAccountProps, LoginToAccountState> {
@@ -29,7 +28,10 @@ class LoginToAccountComponent extends React.PureComponent<LoginToAccountProps, L
     super(props);
     this.state = {
       address: '',
-      seedOrPassword: '',
+      seed: '',
+      password: '',
+      confirmedPassword: '',
+      passwordsNotEqual: false,
     };
   }
 
@@ -39,27 +41,57 @@ class LoginToAccountComponent extends React.PureComponent<LoginToAccountProps, L
     });
   };
 
-  onChangeSeedOrPassword = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  onChangeSeed = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     this.setState({
-      seedOrPassword: event.target.value,
+      seed: event.target.value,
     });
   };
 
   loginToAccount = () => {
     const { loginToWalletFromRegistration } = this.props;
-    const { address, seedOrPassword } = this.state;
+    const {
+      address,
+      seed,
+      password,
+      confirmedPassword,
+    } = this.state;
 
-    loginToWalletFromRegistration({ address, seedOrPassword });
+    const passwordsNotEqual = !compareTwoStrings(password!, confirmedPassword!);
+
+    if (passwordsNotEqual) {
+      this.setState({ passwordsNotEqual });
+      return;
+    }
+
+    loginToWalletFromRegistration({ address, seed, password });
+  };
+
+  onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      password: event.target.value,
+      passwordsNotEqual: false,
+    });
+  };
+
+  onChangeConfirmedPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      confirmedPassword: event.target.value,
+      passwordsNotEqual: false,
+    });
   };
 
   render() {
     const {
       tab,
       onChangeTab,
-      addressError,
-      seedOrPasswordError,
     } = this.props;
-    const { address, seedOrPassword } = this.state;
+    const {
+      address,
+      seed,
+      passwordsNotEqual,
+      password,
+      confirmedPassword,
+    } = this.state;
 
     return <>
       <RegistrationBackground>
@@ -82,17 +114,29 @@ class LoginToAccountComponent extends React.PureComponent<LoginToAccountProps, L
               className={styles.passwordInput}
               value={address}
               onChange={this.onChangeAddress}
-              error={Boolean(addressError)}
-              errorMessage={addressError}
             />
             <OutlinedInput
-              placeholder={'Private key or Seed phrase'}
+              placeholder={'Seed phrase'}
               className={styles.passwordInput}
-              value={seedOrPassword}
+              value={seed}
               type={'password'}
-              onChange={this.onChangeSeedOrPassword}
-              error={Boolean(seedOrPasswordError)}
-              errorMessage={seedOrPasswordError}
+              onChange={this.onChangeSeed}
+            />
+            <OutlinedInput
+              placeholder={'Password'}
+              className={styles.passwordInput}
+              value={password}
+              type={'password'}
+              onChange={this.onChangePassword}
+            />
+            <OutlinedInput
+              placeholder={'Repeated password'}
+              className={styles.passwordInput}
+              value={confirmedPassword}
+              type={'password'}
+              error={passwordsNotEqual}
+              errorMessage={'oops, passwords didn\'t match, try again'}
+              onChange={this.onChangeConfirmedPassword}
             />
           </div>
         </div>
@@ -103,7 +147,7 @@ class LoginToAccountComponent extends React.PureComponent<LoginToAccountProps, L
           variant="contained"
           size="large"
           onClick={this.loginToAccount}
-          disabled={!address || !seedOrPassword || Boolean(addressError) || Boolean(seedOrPasswordError)}
+          disabled={!address || !seed || passwordsNotEqual || !password || !confirmedPassword}
         >
           {'Next'}
         </Button>

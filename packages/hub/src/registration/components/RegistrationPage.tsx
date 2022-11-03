@@ -1,5 +1,8 @@
 import React from 'react';
 import { Button } from '@mui/material';
+import classnames from 'classnames';
+import { push } from 'connected-react-router';
+import { connect, ConnectedProps } from 'react-redux';
 import {
   BreadcrumbsDataType,
   BreadcrumbsTypeEnum,
@@ -12,12 +15,20 @@ import { BeAware } from './pages/BeAware';
 import { RegisterPage } from './pages/loginRegisterAccount/RegisterPage';
 import { Backup } from './pages/backup/Backup';
 import styles from './Registration.module.scss';
+import { RoutesEnum } from '../../application/typings/routes';
+
+const mapDispatchToProps = {
+  routeTo: push,
+};
+
+const connector = connect(null, mapDispatchToProps);
+type RegistrationPageProps = ConnectedProps<typeof connector>;
 
 interface RegistrationPageState {
   enterButtonPressed: boolean;
 }
 
-export class RegistrationPage extends React.PureComponent<{}, RegistrationPageState> {
+class RegistrationPageComponent extends React.PureComponent<RegistrationPageProps, RegistrationPageState> {
   private registrationBreadcrumbs: BreadcrumbsDataType[] = [
     {
       label: RegistrationTabsEnum.quickGuide,
@@ -37,7 +48,7 @@ export class RegistrationPage extends React.PureComponent<{}, RegistrationPageSt
     },
   ];
 
-  constructor(props: never) {
+  constructor(props: RegistrationPageProps) {
     super(props);
     this.state = {
       enterButtonPressed: false,
@@ -48,18 +59,34 @@ export class RegistrationPage extends React.PureComponent<{}, RegistrationPageSt
     this.setState({ enterButtonPressed: true });
   };
 
+  handleProceedToLogin = () => {
+    this.props.routeTo(RoutesEnum.login);
+  };
+
   renderWelcome = () => (
     <>
       <div className={styles.registrationTitle}>{'Power Hub'}</div>
       <div className={styles.registrationDesc}>{'home for everyone and every dapp'}</div>
-      <Button
-        className={styles.registrationButton}
-        variant="outlined"
-        size="large"
-        onClick={this.handleProceedToRegistration}
-      >
-        {'Join to Web3'}
-      </Button>
+      <div className={styles.buttonsHolder}>
+        <Button
+          className={styles.registrationButton}
+          variant="outlined"
+          size="large"
+          onClick={this.handleProceedToRegistration}
+        >
+          {'Join to Web3'}
+        </Button>
+        <Button
+          className={classnames(styles.registrationButton, styles.registrationNextButton_outlined)}
+          variant="outlined"
+          size="large"
+          onClick={this.handleProceedToLogin}
+        >
+          <span className={styles.registrationNextButtonText}>
+            {'Login or import an account'}
+          </span>
+        </Button>
+      </div>
     </>
   );
 
@@ -86,3 +113,5 @@ export class RegistrationPage extends React.PureComponent<{}, RegistrationPageSt
     </div>;
   }
 }
+
+export const RegistrationPage = connector(RegistrationPageComponent);

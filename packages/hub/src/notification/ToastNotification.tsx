@@ -7,6 +7,7 @@ type ToastNotificationProps = ToastContainerProps;
 export const ToastNotification: React.FC<ToastNotificationProps> = (props) => (
   <ToastContainer
     {...props}
+    className={styles.toastContainer}
     toastClassName={styles.toast}
     theme={'dark'}
     transition={Slide}

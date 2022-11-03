@@ -3,7 +3,6 @@ import {
   CreateAccountStepsEnum,
   LoginRegisterAccountTabs,
   LoginToWalletInputType,
-  LoginErrorsType,
   SetSeedPhraseInput,
 } from '../typings/registrationTypes';
 import { AddActionType, Maybe } from '../../typings/common';
@@ -20,7 +19,6 @@ export type RegistrationState = {
   currentShard: Maybe<number>;
   seedPhrase: Maybe<string>;
   creatingStep: CreateAccountStepsEnum;
-  loginErrors: LoginErrorsType;
 };
 
 const initialState: RegistrationState = {
@@ -28,10 +26,6 @@ const initialState: RegistrationState = {
   currentShard: null,
   seedPhrase: null,
   creatingStep: CreateAccountStepsEnum.selectSubChain,
-  loginErrors: {
-    addressError: '',
-    seedOrPasswordError: '',
-  },
 };
 
 const registrationSlice = createSlice({
@@ -51,12 +45,6 @@ const registrationSlice = createSlice({
     setCreatingStep: (state: RegistrationState, action: PayloadAction<CreateAccountStepsEnum>) => {
       state.creatingStep = action.payload;
     },
-    setLoginErrors: (state: RegistrationState, action: PayloadAction<Partial<LoginErrorsType>>) => {
-      state.loginErrors = {
-        addressError: action.payload.addressError!,
-        seedOrPasswordError: action.payload.seedOrPasswordError!,
-      };
-    },
   },
 });
 
@@ -67,7 +55,6 @@ const {
     setCreatingCurrentShard,
     setSeedPhrase,
     setCreatingStep,
-    setLoginErrors,
   },
 } = registrationSlice;
 
@@ -80,6 +67,5 @@ export {
   setCreatingStep,
   createWallet,
   loginToWalletFromRegistration,
-  setLoginErrors,
   proceedToHub,
 };

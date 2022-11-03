@@ -12,7 +12,6 @@ const manageSagaState = (saga: any) => (function* (action: PayloadAction<any>) {
       toast.error('Network error');
     } else {
       console.error(err);
-      toast.error(err.message);
     }
   } finally {
     yield* put(stopAction({ name: action.type, params: action.payload }));
