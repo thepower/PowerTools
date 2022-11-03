@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.14.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.13.0...@thepowereco/tssdk@1.14.0) (2022-11-03)
+
+
+### Features
+
+* **hub:** login page fixes ([306e3eb](https://github.com/thepower/power_hub/commit/306e3ebd2b4267ff757ac5cb2724b08952360e25))
+* **send:** add send trx page ([06b2ee1](https://github.com/thepower/power_hub/commit/06b2ee14f89423aa183885526e56bc8229f245b1))
+
+
+
+
+
 # [1.13.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.12.1...@thepowereco/tssdk@1.13.0) (2022-11-02)
 
 ### Bug Fixes

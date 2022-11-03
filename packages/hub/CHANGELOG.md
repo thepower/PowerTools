@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.12.0](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.11.0...@thepowereco/hub@1.12.0) (2022-11-03)
+
+
+### Bug Fixes
+
+* **hub:** add password field to login page ([66ef78c](https://github.com/thepower/power_hub/commit/66ef78c826203329c9d97ee3c2d83a859dd81f50))
+* **hub:** login to account ([bf471f5](https://github.com/thepower/power_hub/commit/bf471f5db4b8d74a7125d88436fe138719e105c5))
+
+
+### Features
+
+* **hub:** login page fixes ([306e3eb](https://github.com/thepower/power_hub/commit/306e3ebd2b4267ff757ac5cb2724b08952360e25))
+* **hub:** login page: styles ([708c6d7](https://github.com/thepower/power_hub/commit/708c6d79bb956f0fac0570e84d9fbdc5d3626d46))
+* **hub:** login: import acc ([a60f3a9](https://github.com/thepower/power_hub/commit/a60f3a9a95955d7b1abb80dd4519c11679712cb8))
+* **hub:** review fix ([acab569](https://github.com/thepower/power_hub/commit/acab569e5277ac29b415c79c54134489ebd800f4))
+* **send:** add send trx page ([06b2ee1](https://github.com/thepower/power_hub/commit/06b2ee14f89423aa183885526e56bc8229f245b1))
+
+
+
+
+
 # [1.11.0](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.10.2...@thepowereco/hub@1.11.0) (2022-11-03)
 
 
