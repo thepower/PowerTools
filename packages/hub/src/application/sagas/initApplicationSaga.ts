@@ -9,7 +9,7 @@ import { setWalletData } from '../../account/slice/accountSlice';
 import { RoutesEnum } from '../typings/routes';
 
 export function* initApplicationSaga() {
-  const networkApi = new NetworkApi(ChainNameEnum.hundredAndTwo);
+  const networkApi = new NetworkApi(ChainNameEnum.first);
   yield networkApi.bootstrap();
 
   const walletApi = new WalletApi(networkApi);

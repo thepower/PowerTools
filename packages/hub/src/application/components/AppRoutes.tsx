@@ -5,6 +5,7 @@ import { RoutesEnum } from '../typings/routes';
 import { initApplication } from '../slice/applicationSlice';
 import Home from '../../home/components/Home';
 import { RegistrationPage } from '../../registration/components/RegistrationPage';
+import { LoginPage } from '../../registration/components/pages/LoginPage';
 import { useAppDispatch, useAppSelector } from '../store';
 import { checkIfLoading } from '../../network/selectors';
 
@@ -33,6 +34,9 @@ const AppRoutesComponent: React.FC = () => {
       <Route exact path={RoutesEnum.contribute} />
       <Route path={RoutesEnum.signup}>
         <RegistrationPage />
+      </Route>
+      <Route path={RoutesEnum.login}>
+        <LoginPage />
       </Route>
       <Route path={RoutesEnum.root}>
         <Home />

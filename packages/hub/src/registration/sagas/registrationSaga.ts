@@ -50,7 +50,6 @@ export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputTyp
     toast.error(e.message);
     return;
   }
-  // enrich baby since canal tired average ozone social rich ozone reform seek
 
   try {
     // @ts-ignore

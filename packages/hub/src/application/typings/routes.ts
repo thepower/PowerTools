@@ -6,4 +6,5 @@ export enum RoutesEnum {
   contribute = '/contribute',
   signup = '/signup',
   root = '/',
+  login = '/login',
 }
