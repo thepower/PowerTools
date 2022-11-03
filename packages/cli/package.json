@@ -5,7 +5,7 @@
   "author": "thepower",
   "main": "dist/src/index.js",
   "bin": {
-    "tp": "./bin/run"
+    "tpe": "./bin/run"
   },
   "publishConfig": {
     "access": "public"
