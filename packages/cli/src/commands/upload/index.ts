@@ -68,14 +68,12 @@ export default class Upload extends Command {
 
     const files = await scanDir(dir, dir);
     const manifestJsonString = JSON.stringify(files, null, 2);
+    const manifestHash = getHash(manifestJsonString);
+    const expire = 60 * 60 * 24 * 30; // one month
+    const totalSize = files.reduce((size, file) => file.size + size, 0);
+    this.log('totalSize =', totalSize);
 
-    if (taskId.toString() === '0') {
-      const manifestHash = getHash(manifestJsonString);
-      const totalSize = files.reduce((size, file) => file.size + size, 0);
-      this.log('totalSize =', totalSize);
-
-      const expire = 60 * 60 * 24 * 30; // one month
-
+    if (taskId.toString() === '0') { // task does not exist, need creata
       await storageSc.scSet(
         { address, wif },
         'addTask',
@@ -87,12 +85,26 @@ export default class Upload extends Command {
         'taskIdByName',
         [AddressApi.textAddressToEvmAddress(address), projectId],
       );
+    } else { // task exists, need update
+      const updateResp = await storageSc.scSet(
+        { address, wif },
+        'updateTask',
+        [taskId.toString(), manifestHash, expire, totalSize],
+        1, // TODO: change to normal amount
+      );
+
+      console.log(updateResp);
     }
 
     const taskInfo = await storageSc.scGet(
       'getTask',
       [taskId.toString()],
     );
+
+    console.log(taskInfo);
+    console.log(taskInfo.size.toString());
+
+    return;
 
     const { uploadUrl, baseUrls } = await storageSc.scGet(
       'getProvider',
