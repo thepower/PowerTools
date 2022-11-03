@@ -8,6 +8,7 @@ import { checkIfLoading } from '../../network/selectors';
 import { RoutesEnum } from '../../application/typings/routes';
 import MyAssets from '../../myAssets/components/MyAssets';
 import styles from './Home.module.scss';
+import Send from '../../send/components/Send';
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +24,9 @@ const Home = () => {
 
   return (
     <Switch>
+      <Route path={`${RoutesEnum.myAssets}${RoutesEnum.send}`}>
+        <Send />
+      </Route>
       <Route path={RoutesEnum.myAssets}>
         <MyAssets />
       </Route>

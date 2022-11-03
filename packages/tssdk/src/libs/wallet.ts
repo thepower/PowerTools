@@ -129,8 +129,7 @@ export class WalletApi {
     token: string,
     inputAmount: number,
     message: string,
-    seq: string,
-    callback: any,
+    seq: number,
   ) {
     const amount = correctAmount(inputAmount, token, false);
     const feeSettings = this.networkApi.getFeeSettings();
@@ -146,7 +145,7 @@ export class WalletApi {
       seq,
     );
 
-    return this.networkApi.sendPreparedTX(transmission, callback);
+    return this.networkApi.sendPreparedTX(transmission);
   }
 
   public async getBlock(inputHash: string, address: Maybe<string> = null) {
@@ -287,7 +286,7 @@ export class WalletApi {
     token: string,
     amount: number,
     message: string,
-    seq: string,
+    seq: number,
   ) {
     const rawFee = TransactionsApi.calculateFee(
       feeSettings,

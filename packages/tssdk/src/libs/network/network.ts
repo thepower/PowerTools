@@ -37,16 +37,7 @@ export class NetworkApi {
   };
 
   public async sendTxAndWaitForResponse(tx: any, timeout = 120) {
-    // TODO: refactor this shit
-    return new Promise((resolve, reject) => {
-      this.sendPreparedTX(
-        tx,
-        (success: boolean, message: string) => (success ?
-          resolve(message)
-          : reject(message)),
-        timeout,
-      );
-    });
+    return this.sendPreparedTX(tx, timeout);
   }
 
   public async getFeeSettings() {
@@ -170,13 +161,9 @@ export class NetworkApi {
     return binaryCode;
   }
 
-  public async sendPreparedTX(tx: any, callback: Function, timeout = 1000, vm: 'wasm' | 'evm' = 'evm') {
-    // await this.setChain(chain);
+  public async sendPreparedTX(tx: any, timeout = 1000) {
     const response = await this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data: { tx } });
-    if (callback) {
-      setTimeout(() => this.checkTransaction(response.txid, callback, timeout), cfg.callbackCallDelay);
-    }
-    return response;
+    return this.checkTransaction(response.txid, timeout);
   }
 
   private calculateFeeSettings(settings: any) {
@@ -204,24 +191,32 @@ export class NetworkApi {
     };
   }
 
-  private checkTransaction = async (txId: string, callback: Function, timeout: number, count = 0) => {
-    let status;
-    let finalCount = count;
+  private checkTransaction = async (txId: string, timeout: number) => new Promise((resolve, reject) => {
+    let callCount = 0;
 
-    try {
-      status = await this.askBlockchainTo(ChainAction.GET_TRANSACTION_STATUS, { txId });
-    } catch (e) {
-      callback(false, 'Network error');
-    }
+    const check = () => setTimeout(async () => {
+      try {
+        callCount += 1;
+        const status = await this.askBlockchainTo(ChainAction.GET_TRANSACTION_STATUS, { txId });
 
-    if (status) {
-      callback(!status.error, `${txId}: ${status.res}`);
-    } else if (count < timeout) {
-      setTimeout(() => this.checkTransaction(txId, callback, timeout, finalCount += 1), cfg.callbackCallDelay);
-    } else {
-      callback(false, `${txId}: Transaction status lost`);
-    }
-  };
+        if (status) {
+          if (status.error) {
+            reject(new Error(`${txId}: ${status.res}`));
+          } else {
+            resolve({ txId, res: status.res });
+          }
+        } else if (callCount < timeout) {
+          check();
+        } else {
+          reject(new Error(`${txId}: Transaction status lost`));
+        }
+      } catch (e) {
+        reject(e);
+      }
+    }, cfg.callbackCallDelay);
+
+    return check();
+  });
 
   private incrementNodeIndex = async () => {
     this.nodeIndex += 1;
