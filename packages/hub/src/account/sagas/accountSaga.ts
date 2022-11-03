@@ -19,6 +19,7 @@ import { clearApplicationStorage, setKeyToApplicationStorage } from '../../appli
 import { getNetworkApi, getWalletApi } from '../../application/selectors';
 import { RoutesEnum } from '../../application/typings/routes';
 import { reInitApis } from '../../application/sagas/initApplicationSaga';
+import { loadBalanceTrigger } from '../../myAssets/slices/walletSlice';
 
 export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInput } = {}) {
   const { address, wif } = payload!;
@@ -53,6 +54,8 @@ export function* loginToWalletSaga({ payload }: { payload?: LoginToWalletSagaInp
       wif: payload?.wif!,
       logged: true,
     }));
+
+    yield* put(loadBalanceTrigger());
   } catch (e) {
     toast.error('Login error');
   }

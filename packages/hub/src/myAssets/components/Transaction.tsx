@@ -64,8 +64,8 @@ class Transaction extends React.PureComponent<TransactionProps, TransactionState
       { Icon: <LogoIcon />, key: 'Cur', value: trx.cur },
       { Icon: <WatchIcon />, key: 'Timestamp', value: format(trx.timestamp, 'MMMM dd, yyyy, \'at\' p') },
       { Icon: <BarCodeIcon />, key: 'Seq', value: trx.seq },
-      { Icon: <KeyIcon />, key: 'Public key', value: trx.sigverify.pubkeys[0] },
-      { Icon: <FingerPrintIcon />, key: 'Signature', value: trx.sig[trx.sigverify.pubkeys[0]] },
+      { Icon: <KeyIcon />, key: 'Public key', value: trx?.sigverify?.pubkeys?.[0] },
+      { Icon: <FingerPrintIcon />, key: 'Signature', value: trx.sig[trx.sigverify?.pubkeys?.[0]] },
       { Icon: <CubeIcon />, key: 'In block', value: trx.inBlock },
     ];
 
