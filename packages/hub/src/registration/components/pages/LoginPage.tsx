@@ -4,14 +4,17 @@ import classnames from 'classnames';
 import { Button } from '@mui/material';
 import styles from '../Registration.module.scss';
 import { RegistrationBackground } from '../common/RegistrationBackground';
-import { AttachIcon, PELogoWithTitle } from '../../../common';
+import { AttachIcon, OutlinedInput, PELogoWithTitle } from '../../../common';
 import { Maybe } from '../../../typings/common';
 import { importAccountFromFile } from '../../../account/slice/accountSlice';
 import { ImportAccountModal } from './loginRegisterAccount/import/ImportAccountModal';
+import { compareTwoStrings } from '../../utils/registrationUtils';
+import { loginToWalletFromRegistration } from '../../slice/registrationSlice';
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = {
   importAccountFromFile,
+  loginToWalletFromRegistration,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -20,6 +23,11 @@ type LoginPageProps = ConnectedProps<typeof connector>;
 interface LoginPageState {
   openedPasswordModal: boolean;
   accountFile: Maybe<File>;
+  address: string;
+  seed: string;
+  password: string;
+  confirmedPassword: string;
+  passwordsNotEqual: boolean;
 }
 
 class LoginPageComponent extends React.PureComponent<LoginPageProps, LoginPageState> {
@@ -31,6 +39,11 @@ class LoginPageComponent extends React.PureComponent<LoginPageProps, LoginPageSt
     this.state = {
       openedPasswordModal: false,
       accountFile: null,
+      address: '',
+      seed: '',
+      password: '',
+      confirmedPassword: '',
+      passwordsNotEqual: false,
     };
   }
 
@@ -51,6 +64,51 @@ class LoginPageComponent extends React.PureComponent<LoginPageProps, LoginPageSt
 
   closePasswordModal = () => {
     this.setState({ openedPasswordModal: false });
+  };
+
+  onChangeAddress = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    this.setState({
+      address: event.target.value,
+    });
+  };
+
+  onChangeSeed = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    this.setState({
+      seed: event.target.value,
+    });
+  };
+
+  onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      password: event.target.value,
+      passwordsNotEqual: false,
+    });
+  };
+
+  onChangeConfirmedPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      confirmedPassword: event.target.value,
+      passwordsNotEqual: false,
+    });
+  };
+
+  loginToAccount = () => {
+    const { loginToWalletFromRegistration } = this.props;
+    const {
+      address,
+      seed,
+      password,
+      confirmedPassword,
+    } = this.state;
+
+    const passwordsNotEqual = !compareTwoStrings(password!, confirmedPassword!);
+
+    if (passwordsNotEqual) {
+      this.setState({ passwordsNotEqual });
+      return;
+    }
+
+    loginToWalletFromRegistration({ address, seed, password });
   };
 
   handleImportAccount = (password: string) => {
@@ -96,14 +154,66 @@ class LoginPageComponent extends React.PureComponent<LoginPageProps, LoginPageSt
     </Button>
   </div>;
 
-  renderLoginPart = () => <div className={styles.loginPagePart}>
-    <div className={styles.loginPagePartTitle}>
-      {'Login to account'}
-    </div>
-    <div className={styles.loginPagePartDesc}>
-      {'To login, you need enter the address and private key or seed phrase'}
-    </div>
-  </div>;
+  renderLoginPart = () => {
+    const {
+      address,
+      seed,
+      password,
+      confirmedPassword,
+      passwordsNotEqual,
+    } = this.state;
+
+    return <div className={styles.loginPagePart}>
+      <div className={styles.loginPagePartTitle}>
+        {'Login to account'}
+      </div>
+      <div className={styles.loginPagePartDesc}>
+        {'To login, you need enter the address and private key or seed phrase'}
+      </div>
+      <OutlinedInput
+        placeholder={'Address'}
+        className={styles.passwordInput}
+        value={address}
+        onChange={this.onChangeAddress}
+      />
+      <OutlinedInput
+        placeholder={'Seed phrase'}
+        className={styles.passwordInput}
+        value={seed}
+        type={'password'}
+        onChange={this.onChangeSeed}
+      />
+      <OutlinedInput
+        placeholder={'Password'}
+        className={styles.passwordInput}
+        value={password}
+        type={'password'}
+        onChange={this.onChangePassword}
+      />
+      <OutlinedInput
+        placeholder={'Repeated password'}
+        className={styles.passwordInput}
+        value={confirmedPassword}
+        type={'password'}
+        error={passwordsNotEqual}
+        errorMessage={'oops, passwords didn\'t match, try again'}
+        onChange={this.onChangeConfirmedPassword}
+      />
+      <div className={styles.registrationButtonsHolder}>
+        <Button
+          className={styles.registrationNextButton}
+          variant="contained"
+          size="large"
+          onClick={this.loginToAccount}
+          disabled={!address || !seed || passwordsNotEqual || !password || !confirmedPassword}
+        >
+          {'Next'}
+        </Button>
+      </div>
+    </div>;
+  };
+
+  // winner load hint inherit napkin entry library drip crunch copper glory soda
 
   render() {
     const { openedPasswordModal } = this.state;

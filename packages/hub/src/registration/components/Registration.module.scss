@@ -546,7 +546,7 @@
   display: flex;
   width: 80vw;
   max-width: 1072px;
-  max-height: 626px;
+  height: auto;
   align-items: center;
   padding: 40px 136px;
 }
@@ -568,6 +568,10 @@
   width: 100%;
   height: 100%;
   margin-top: 16px;
+
+  @include mobile {
+    flex-direction: column;
+  }
 
   .loginPagePart:nth-child(1) {
     margin-right: 40px;

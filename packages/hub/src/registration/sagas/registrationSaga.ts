@@ -46,6 +46,11 @@ export function* loginToWalletSaga({ payload }: { payload: LoginToWalletInputTyp
 
   try {
     yield AddressApi.parseTextAddress(address);
+    const isValidSeed: boolean = yield CryptoApi.validateMnemonic(seed);
+    if (!isValidSeed) {
+      toast.error('Seed phrase is not valid');
+      return;
+    }
   } catch (e: any) {
     toast.error(e.message);
     return;

@@ -8,13 +8,19 @@ import { loginToWalletSaga } from '../../account/sagas/accountSaga';
 import { setWalletData } from '../../account/slice/accountSlice';
 import { RoutesEnum } from '../typings/routes';
 
-export function* initApplicationSaga() {
-  const networkApi = new NetworkApi(ChainNameEnum.first);
+export function* reInitApis({ payload }: { payload: ChainNameEnum }) {
+  const networkApi = new NetworkApi(payload || ChainNameEnum.first);
   yield networkApi.bootstrap();
 
   const walletApi = new WalletApi(networkApi);
 
   yield* put(setDynamicApis({ networkApi, walletApi }));
+
+  return { walletApi, networkApi };
+}
+
+export function* initApplicationSaga() {
+  yield* reInitApis({ payload: ChainNameEnum.first });
   // let subChain = -1;
   let address = '';
   let wif = '';
