@@ -213,8 +213,6 @@ class LoginPageComponent extends React.PureComponent<LoginPageProps, LoginPageSt
     </div>;
   };
 
-  // winner load hint inherit napkin entry library drip crunch copper glory soda
-
   render() {
     const { openedPasswordModal } = this.state;
 
