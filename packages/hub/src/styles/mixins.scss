@@ -4,7 +4,7 @@
   background: $the-power-gradient;
 }
 
-@mixin the-power-color-outlined($gradient: $the-power-gradient) {
+@mixin border-gradient($gradient: $the-power-gradient) {
   position: relative;
 
   &::before {

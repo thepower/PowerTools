@@ -5,15 +5,17 @@ import { TopBar } from '../index';
 interface DeepPageTemplateProps {
   topBarTitle: string;
   backUrl: string;
+  backUrlText?: string;
 }
 
 const DeepPageTemplate: React.FC<PropsWithChildren<DeepPageTemplateProps>> = ({
   children,
   topBarTitle,
   backUrl,
+  backUrlText = 'Back',
 }) => (
   <div className={styles.template}>
-    <TopBar type="deep" backUrl={backUrl}>
+    <TopBar type="deep" backUrl={backUrl} backUrlText={backUrlText}>
       {topBarTitle}
     </TopBar>
     {children}

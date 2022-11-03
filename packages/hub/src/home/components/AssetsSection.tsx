@@ -13,6 +13,7 @@ import { getWalletAmount } from '../../myAssets/selectors/walletSelectors';
 import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
 import { RootState } from '../../application/store';
 import styles from './AssetsSection.module.scss';
+import { RoutesEnum } from '../../application/typings/routes';
 
 const mapStateToProps = (state: RootState) => ({
   walletAddress: getWalletAddress(state),
@@ -59,7 +60,7 @@ const AssetsSection = ({ walletAddress, setShowUnderConstruction, amount }: Asse
           <CardLink label="Faucet" isAnchor to="https://faucet.thepower.io/" target="_blank" rel="noreferrer">
             <FaucetSvg />
           </CardLink>
-          <CardLink to="/send" label="Send">
+          <CardLink to={`${RoutesEnum.myAssets}${RoutesEnum.send}`} label="Send">
             <SendSvg />
           </CardLink>
           <CardLink to="/buy" label="Buy" onClick={handleShowUnderConstruction}>

@@ -22,6 +22,7 @@ import { getGroupedWalletTransactions } from '../selectors/transactionsSelectors
 import styles from './MyAssets.module.scss';
 import { TransactionType } from '../slices/transactionsSlice';
 import { setShowUnderConstruction } from '../../application/slice/applicationSlice';
+import { RoutesEnum } from '../../application/typings/routes';
 
 const connector = connect(
   (state: RootState) => ({
@@ -89,7 +90,7 @@ class MyAssets extends React.PureComponent<MyAssetsProps> {
             <CardLink label="Faucet" isAnchor to="https://faucet.thepower.io/" target="_blank" rel="noreferrer">
               <FaucetSvg />
             </CardLink>
-            <CardLink to="/send" label="Send">
+            <CardLink to={`${RoutesEnum.myAssets}${RoutesEnum.send}`} label="Send">
               <SendSvg />
             </CardLink>
             <CardLink onClick={this.handleShowUnderConstruction} to="/buy" label="Buy">

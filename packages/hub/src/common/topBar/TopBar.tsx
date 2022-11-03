@@ -11,6 +11,7 @@ import { useAppDispatch } from '../../application/store';
 type TopBarProps = {
   type: 'deep' | 'shallow';
   backUrl?: string;
+  backUrlText?: string;
   children?: React.ReactNode;
 };
 
@@ -18,6 +19,7 @@ const TopBar: React.FC<TopBarProps> = ({
   children,
   type,
   backUrl,
+  backUrlText = 'Back',
 }) => {
   const dispatch = useAppDispatch();
   const handleShowUnderConstruction = React.useCallback(() => {
@@ -34,7 +36,7 @@ const TopBar: React.FC<TopBarProps> = ({
           size="small"
           defaultColor="lilac"
         >
-          Back
+          {backUrlText}
         </ArrowLink>
       )}
       {type === 'shallow' && (

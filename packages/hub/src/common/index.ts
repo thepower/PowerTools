@@ -1,6 +1,7 @@
 // components
 export { default as CopyButton } from './copyButton/CopyButton';
 export { Page } from './page/Page';
+export { default as Button } from './button/Button';
 export { LinkBlock } from './linkBlock/LinkBlock';
 export { Modal } from './modal/Modal';
 export { ConfirmModal } from './modal/ConfirmModal';

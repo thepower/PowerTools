@@ -1,11 +1,11 @@
 {
   "name": "@thepowereco/cli",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "the power cli",
   "author": "thepower",
   "main": "dist/src/index.js",
   "bin": {
-    "tp": "./bin/run"
+    "tpe": "./bin/run"
   },
   "publishConfig": {
     "access": "public"
