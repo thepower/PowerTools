@@ -32,9 +32,7 @@ export default class Upload extends Command {
 
     const wif = keyPair.toWIF();
     const tx = await TransactionsApi.composeRegisterTX(Number(ChainNameEnum.first), wif, null);
-    const res: any = await networkApi.sendTxAndWaitForResponse(tx, Number(ChainNameEnum.first));
-    const txtAddress = res.split(' ')[1];
-
+    const { res: txtAddress }: any = await networkApi.sendTxAndWaitForResponse(tx);
     this.log(`${color.whiteBright('Account address:')}`, color.green(txtAddress));
     this.log(`${color.whiteBright('Account wif:')}`, color.green(wif));
     this.log(`${color.whiteBright('To replenish the balance of your account please visit: https://faucet.thepower.io')}`);

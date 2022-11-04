@@ -42,5 +42,3 @@ export interface ChainConfig {
   chainRequestTimeout: number;
   maxNodeResponseTime: number;
 }
-
-
