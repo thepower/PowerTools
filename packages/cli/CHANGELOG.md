@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.7.3...@thepowereco/cli@1.8.0) (2022-11-04)
+
+
+### Features
+
+* **cli:** show seed phrase after registration ([ed3e2cc](https://github.com/thepower/power_hub/commit/ed3e2cc8773f7c59ff573b9c9649c7dc340033cc))
+
+
+
+
+
 ## [1.7.3](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.7.2...@thepowereco/cli@1.7.3) (2022-11-04)
 
 
