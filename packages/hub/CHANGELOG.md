@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.1](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.12.0...@thepowereco/hub@1.12.1) (2022-11-04)
+
+
+### Bug Fixes
+
+* **hub:** remove test label ([dc8a34b](https://github.com/thepower/power_hub/commit/dc8a34b531a5e06723ee33347bc62b3469119b7d))
+
+
+
+
+
 # [1.12.0](https://github.com/thepower/power_hub/compare/@thepowereco/hub@1.11.0...@thepowereco/hub@1.12.0) (2022-11-03)
 
 
