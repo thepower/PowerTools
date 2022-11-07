@@ -31,7 +31,7 @@ export default class Upload extends Command {
     );
 
     const wif = keyPair.toWIF();
-    const tx = await TransactionsApi.composeRegisterTX(Number(ChainNameEnum.first), wif, null);
+    const tx = await TransactionsApi.registerRandomChain('devnet', wif, null);
     const { res: txtAddress }: any = await networkApi.sendTxAndWaitForResponse(tx);
 
     // TODO set password for account
