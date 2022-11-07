@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.1](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.8.0...@thepowereco/cli@1.8.1) (2022-11-07)
+
+
+### Bug Fixes
+
+* **all:** cicd test ([1461cac](https://github.com/thepower/power_hub/commit/1461cacf5d06900189257dd89b8b4f4cacf2ddc0))
+
+
+
+
+
 # [1.8.0](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.7.3...@thepowereco/cli@1.8.0) (2022-11-04)
 
 
