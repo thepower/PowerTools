@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.9.0...@thepowereco/cli@1.10.0) (2022-11-08)
+
+
+### Features
+
+* **cli:** enquirer integration ([8acb8fb](https://github.com/thepower/power_hub/commit/8acb8fb26f94fb93d4fdc99bbaccd76c6fab7a78))
+
+
+
+
+
 # [1.9.0](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.8.1...@thepowereco/cli@1.9.0) (2022-11-08)
 
 
