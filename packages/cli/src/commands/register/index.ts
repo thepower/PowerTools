@@ -1,5 +1,6 @@
 import { Command } from '@oclif/core';
 import { color } from '@oclif/color';
+import { prompt } from 'enquirer';
 import ux from 'cli-ux';
 import {
   NetworkApi,
@@ -10,7 +11,7 @@ import {
 } from '@thepowereco/tssdk';
 
 export default class Upload extends Command {
-  static description = 'Generate wif key and address';
+  static description = 'Generate wif key, address, seed phrase in random chain from selected network';
 
   // static examples = [
   //   '$ cd app_dir && pow-up',
@@ -18,11 +19,23 @@ export default class Upload extends Command {
 
   static flags = {};
 
-  static args = []; // TODO: chain number
+  static args = [];
 
   async run(): Promise<void> {
-    // TODO: radio select with enquirer
-    const network: NetworkEnum = await ux.prompt('Please, enter network name (testnet or devnet)');
+    const question = {
+      name: 'network',
+      type: 'select',
+      message: 'Please, select the network:',
+      choices: [
+        { name: 'testnet' },
+        { name: 'devnet' },
+        // { name: 'mainnet' },
+      ],
+    };
+
+    const { network } : { network: NetworkEnum } = await prompt([question]);
+
+    ux.action.start('Loading');
     const networkApi = new NetworkApi(ChainNameEnum.first);
     await networkApi.bootstrap();
 
@@ -37,6 +50,8 @@ export default class Upload extends Command {
     const wif = keyPair.toWIF();
     const { tx, chain } = await TransactionsApi.registerRandomChain(network, wif, null);
     const { res: txtAddress }: any = await networkApi.sendTxAndWaitForResponse(tx);
+
+    ux.action.stop();
 
     // TODO set password for account
     this.log(`${color.whiteBright('Network:')}`, color.green(network));

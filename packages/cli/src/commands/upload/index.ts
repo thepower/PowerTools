@@ -23,12 +23,7 @@ export default class Upload extends Command {
     '$ cd app_dir && pow-up',
   ];
 
-  static flags = {
-    // path: Flags.string({char: 'p', description: 'The path of directory to upload', required: false}),
-    // wif: Flags.string({char: 'w', description: 'private key (wif)', required: true}),
-    // address: Flags.string({char: 'a', description: 'your address', required: true}),
-    // projectId: Flags.string({char: 'i', description: 'ID of yur project', required: true}),
-  };
+  static flags = {};
 
   static args = [];
 

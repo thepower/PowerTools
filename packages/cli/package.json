@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "@oclif/test": "^2",
+    "@types/inquirer": "^9.0.3",
     "@types/chai": "^4",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.9.4",
