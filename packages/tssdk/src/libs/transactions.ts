@@ -3,6 +3,7 @@ import { Buffer } from 'safe-buffer';
 import * as msgPack from '@thepowereco/msgpack';
 import { AddressApi } from './address/address';
 import { NetworkApi } from './network/network';
+import { NetworkEnum } from '../config/network.enum';
 
 const Bitcoin = require('bitcoinjs-lib');
 // const sha512 = require('js-sha512').sha512;
@@ -232,13 +233,18 @@ export const TransactionsApi = {
     return msgPack.encode(wrapAndSignPayload(payload, keyPair, publicKey)).toString('base64');
   },
 
-  async registerRandomChain(networkName: string, wif: string, referrer: string) { // todo: enum
+  async registerRandomChain(networkName: NetworkEnum, wif: string, referrer: string) { // todo: enum
     const chainGlobalConfig = await NetworkApi.getChainGlobalConfig();
     const networks = chainGlobalConfig.settings;
-    const chainArray = Object.keys(networks);
+    const chainArray = networks[networkName];
+
+    if (!chainArray) {
+      throw new Error(`Chains not found for network ${networkName}`);
+    }
+
     const chain = chainArray[Math.floor(Math.random() * chainArray.length)];
-    console.log(chain);
-    return this.composeRegisterTX(Number(chain), wif, referrer);
+    const tx = await this.composeRegisterTX(Number(chain), wif, referrer);
+    return { tx, chain };
   },
 
   async composeRegisterTX(chain: number, wif: string, referrer: string) {
