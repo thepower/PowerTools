@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@oclif/color": "^1.0.1",
+    "enquirer": "^2.3.6",
     "@oclif/core": "^1.20.2",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.0.1",
@@ -38,7 +39,6 @@
     "axios": "^0.26.1",
     "cli-ux": "^6.0.9",
     "form-data": "^4.0.0",
-    "inquirer": "^9.1.4",
     "listr": "^0.14.3",
     "oclif": "^2",
     "reflect-metadata": "^0.1.13",
@@ -48,7 +48,6 @@
   "devDependencies": {
     "@oclif/test": "^2",
     "@types/chai": "^4",
-    "@types/inquirer": "^9.0.3",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.9.4",
     "chai": "^4",

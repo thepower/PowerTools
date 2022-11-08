@@ -18,7 +18,7 @@ jobs:
 
       - name: Set Git User
         run: |
-          git config --global user.name "The Power Ecosystem"
+          git config --global user.name "Power DCloud"
           git config --global user.email "info@thepower.io"
 
       - uses: actions/setup-node@v3
