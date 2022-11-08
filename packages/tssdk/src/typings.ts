@@ -33,7 +33,16 @@ export interface AccountKey {
 }
 
 export interface ChainBootstrapConfig {
-  [key: number] : ChainNode[];
+  [key: number] : RawNodes;
+}
+
+export interface ChainNetwork {
+  [key: string] : number[];
+}
+
+export interface ChainGlobalConfig {
+  chains: ChainBootstrapConfig,
+  settings: ChainNetwork;
 }
 
 export interface ChainConfig {

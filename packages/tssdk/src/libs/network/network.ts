@@ -2,7 +2,7 @@ import axios from 'axios';
 import createHash from 'create-hash';
 import Debug from 'debug';
 import { config as cfg } from '../../config/chain.config';
-import { ChainNode } from '../../typings';
+import { ChainGlobalConfig, ChainNode } from '../../typings';
 import { queueNodes, transformNodeList, transformResponse } from '../../helpers/network.helper';
 import { ChainAction } from '../../helpers/network.enum';
 import { ChainNameEnum } from '../../config/chain.enum';
@@ -16,6 +16,12 @@ const info = Debug('info');
 
 export class NetworkApi {
   private currentChain: ChainNameEnum;
+
+  public static async getChainGlobalConfig(): Promise<ChainGlobalConfig> {
+    const baseURL = 'https://raw.githubusercontent.com/thepower/all_chains/main/config.json';
+    const { data } = await axios.request({ baseURL });
+    return data;
+  }
 
   private currentNodes: ChainNode[] = [];
 
@@ -80,19 +86,10 @@ export class NetworkApi {
     return this.currentChain;
   }
 
-  private async getChainInfo() {
-    /**
-     * @todo move to env param
-     */
-    const baseURL = 'https://raw.githubusercontent.com/thepower/all_chains/main/config.json';
-    const { data } = await axios.request({ baseURL });
-    return data.chains;
-  }
-
   public bootstrap = async () => {
-    const chainInfo = await this.getChainInfo();
+    const chainInfo = await NetworkApi.getChainGlobalConfig();
 
-    const chainData = chainInfo[this.currentChain];
+    const chainData = chainInfo.chains[this.currentChain];
 
     if (chainData) {
       const fullNodes = transformNodeList(chainData);

@@ -2,6 +2,8 @@ import createHash from 'create-hash';
 import { Buffer } from 'safe-buffer';
 import * as msgPack from '@thepowereco/msgpack';
 import { AddressApi } from './address/address';
+import { NetworkApi } from './network/network';
+import { NetworkEnum } from '../config/network.enum';
 
 const Bitcoin = require('bitcoinjs-lib');
 // const sha512 = require('js-sha512').sha512;
@@ -229,6 +231,20 @@ export const TransactionsApi = {
 
     const payload = msgPack.encode(getSimpleTransferTxBody(bufferFrom, bufferTo, token, amount, message, timestamp, seq, feeSettings));
     return msgPack.encode(wrapAndSignPayload(payload, keyPair, publicKey)).toString('base64');
+  },
+
+  async registerRandomChain(networkName: NetworkEnum, wif: string, referrer: string) {
+    const chainGlobalConfig = await NetworkApi.getChainGlobalConfig();
+    const networks = chainGlobalConfig.settings;
+    const chainArray = networks[networkName];
+
+    if (!chainArray) {
+      throw new Error(`Chains not found for network ${networkName}`);
+    }
+
+    const chain = chainArray[Math.floor(Math.random() * chainArray.length)];
+    const tx = await this.composeRegisterTX(Number(chain), wif, referrer);
+    return { tx, chain };
   },
 
   async composeRegisterTX(chain: number, wif: string, referrer: string) {
