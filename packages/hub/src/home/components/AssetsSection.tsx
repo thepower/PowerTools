@@ -40,9 +40,12 @@ const AssetsSection = ({ walletAddress, setShowUnderConstruction, amount }: Asse
       </ArrowLink>
       <div className={styles.box}>
         <div className={styles.majorWallet}>
+          <p className={styles.info}>
+            How much is the fish
+          </p>
           <p className={styles.total}>
             <LogoIcon className={styles.icon} />
-            {amount}
+            {amount === '0' ? <span className={styles.emptyTitle}>Your tokens will be here</span> : amount}
           </p>
           <CopyButton
             textButton={walletAddress}

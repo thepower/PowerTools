@@ -83,7 +83,11 @@ class MyAssets extends React.PureComponent<MyAssetsProps> {
             </p>
             <p className={styles.balance}>
               <LogoIcon className={styles.icon} />
-              {amount}
+              {amount === '0' ? (
+                <span className={styles.emptyTitle}>
+                  Your tokens will be here
+                </span>
+              ) : amount}
             </p>
           </div>
           <div className={styles.linksGroup}>
@@ -101,10 +105,9 @@ class MyAssets extends React.PureComponent<MyAssetsProps> {
         <Divider />
         <div className={styles.transactions}>
           <p className={styles.pageTitle}>
-            {'Transactions'}
-          </p>
-          <p className={styles.historyTitle}>
-            {'History'}
+            {Object.entries(transactions).length
+              ? 'Transaction history'
+              : 'Make the first transaction and they will be reflected below'}
           </p>
           <Divider />
           <ul className={styles.groupByDates}>

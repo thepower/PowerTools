@@ -42,8 +42,8 @@
   line-height: 20px;
 }
 
-.icon {
-  margin-left: 8px;
+.totalBalanceIcon {
+  margin-right: 8px;
 }
 
 .divider {
@@ -64,18 +64,18 @@
   grid-gap: 40px 32px;
   grid-template-columns: 1fr 1fr;
 
-  @include mobile {
-    > * {
-      grid-column: 2 span;
-    }
-  }
-
   > * {
     grid-column: 1 span;
   }
 
   > :last-child {
     grid-column: 2 span;
+  }
+
+  @include mobile {
+    > * {
+      grid-column: 2 span;
+    }
   }
 }
 
