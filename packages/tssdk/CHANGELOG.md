@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.14.2...@thepowereco/tssdk@1.15.0) (2022-11-08)
+
+
+### Bug Fixes
+
+* **cli:** review fixes ([734531b](https://github.com/thepower/power_hub/commit/734531be0eea85bfc480d080807ac10ac1fdbd70))
+
+
+### Features
+
+* **cli:** register with random chain from network ([2ebcef4](https://github.com/thepower/power_hub/commit/2ebcef44ee943ef44620c59923956e4867bd7060))
+* **tssdk:** register random chain ([143a0d9](https://github.com/thepower/power_hub/commit/143a0d928bf74d3da55a684516014ae2f9e8b919))
+
+
+
+
+
 ## [1.14.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.14.1...@thepowereco/tssdk@1.14.2) (2022-11-04)
 
 **Note:** Version bump only for package @thepowereco/tssdk
