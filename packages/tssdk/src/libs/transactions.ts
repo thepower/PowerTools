@@ -233,7 +233,7 @@ export const TransactionsApi = {
     return msgPack.encode(wrapAndSignPayload(payload, keyPair, publicKey)).toString('base64');
   },
 
-  async registerRandomChain(networkName: NetworkEnum, wif: string, referrer: string) { // todo: enum
+  async registerRandomChain(networkName: NetworkEnum, wif: string, referrer: string) {
     const chainGlobalConfig = await NetworkApi.getChainGlobalConfig();
     const networks = chainGlobalConfig.settings;
     const chainArray = networks[networkName];
