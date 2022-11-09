@@ -51,17 +51,32 @@ const MUITheme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
+          color: '#F5F5F7',
           padding: '8px 16px',
           borderRadius: 5,
           background: '#252B35',
+          '&:hover': {
+            background: '#2E353D',
+          },
+          '&:hover .MuiOutlinedInput-input::placeholder': {
+            color: 'rgba(87, 97, 114, 0.7)',
+          },
           '&.Mui-focused': {
             background: '#121923',
             '.MuiOutlinedInput-notchedOutline': {
               border: '1px solid #F5F5F7',
             },
+            '.MuiOutlinedInput-input::placeholder': {
+              color: 'transparent',
+            },
           },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            border: '1px solid #F5F5F7',
+          '&:hover:not(.Mui-focused) .MuiOutlinedInput-notchedOutline': {
+            border: 'inherit',
+          },
+        },
+        input: {
+          '&::placeholder': {
+            color: '#6B798F',
           },
         },
         notchedOutline: {
@@ -71,6 +86,16 @@ const MUITheme = createTheme({
     },
     MuiInput: {
       styleOverrides: {
+        input: {
+          color: '#F5F5F7',
+          '&::placeholder': {
+            color: 'inherit',
+            opacity: 0.4,
+          },
+          '&:hover::placeholder': {
+            opacity: 0.6,
+          },
+        },
         root: {
           '&::before': {
             borderColor: '#2E3642',

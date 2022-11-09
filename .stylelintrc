@@ -9,6 +9,8 @@
         "ignoreProperties": ["text-fill-color"]
       }
     ],
+    "value-no-vendor-prefix": null,
+    "order/order": null,
     "selector-no-qualifying-type": null,
     "no-descending-specificity": null,
     "selector-class-pattern": null,

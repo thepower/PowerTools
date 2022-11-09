@@ -3,12 +3,20 @@
 
 .button {
   display: inline-flex;
-  min-width: 190px;
-  height: 48px;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.medium {
+  min-width: 190px;
+  height: 48px;
+}
+
+.large {
+  min-width: 290px;
+  height: 56px;
 }
 
 .text {

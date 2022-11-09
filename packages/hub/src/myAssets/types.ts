@@ -26,7 +26,7 @@ export type TransactionPayloadType = {
   };
   t: number;
   to: string;
-  txext: [];
+  txext: { msg: string } | never[];
   ver: number;
   timestamp: number;
   cur: string;

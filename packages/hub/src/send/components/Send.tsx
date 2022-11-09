@@ -152,6 +152,7 @@ class Send extends React.Component<SendProps, SendState> {
           />
         </div>
         <Button
+          size="large"
           variant="filled"
           className={styles.button}
           type="submit"
@@ -224,8 +225,8 @@ class Send extends React.Component<SendProps, SendState> {
               {address}
             </span>
             <span className={styles.amount}>
-              {amount}
-              <LogoIcon width={20} height={20} className={styles.icon} />
+              <LogoIcon width={20} height={20} className={styles.totalBalanceIcon} />
+              {amount === '0' ? 'Your tokens will be here' : amount}
             </span>
           </div>
           <Divider className={styles.divider} />

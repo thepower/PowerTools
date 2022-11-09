@@ -4,6 +4,7 @@ import cn from 'classnames';
 import { Collapse } from '@mui/material';
 import { CopyButton, Divider } from 'common';
 import { connect, ConnectedProps } from 'react-redux';
+import { isArray } from 'lodash';
 import { FaucetSvg, SendSvg } from '../../common/icons';
 import { RootState } from '../../application/store';
 import { getWalletAddress } from '../../account/selectors/accountSelectors';
@@ -88,53 +89,66 @@ class Transaction extends React.PureComponent<TransactionProps, TransactionState
     const isReceived = currentAddress === trx.to;
 
     return (
-      <div className={styles.transaction}>
-        <div
-          className={styles.shortInfoButton}
-          onClick={this.handleClick}
-          onKeyDown={this.handleKeyDown}
-          tabIndex={0}
-          role="button"
-          aria-expanded={expanded}
-        >
-          <div className={cn(styles.icon)}>
-            {isReceived
-              ? <FaucetSvg className={styles.receiveIcon} />
-              : <SendSvg className={styles.sendIcon} />}
-          </div>
-          <div className={styles.info}>
-            <span className={styles.name}>My wallet</span>
-            <span className={cn(styles.date, styles.fullDate)}>
-              {format(trx.timestamp, 'dd MMM yyyy \'at\' p')}
-            </span>
-            <span className={cn(styles.date, styles.compactDate)}>
-              {format(trx.timestamp, '\'at\' p')}
-            </span>
-          </div>
-          <span className={styles.amount}>
-            {`${isReceived ? '+' : '-'} ${trx.amount.toFixed(2)} ${trx.cur}`}
-          </span>
-        </div>
-        <Collapse in={expanded}>
-          <div className={styles.content}>
-            <div
-              role="button"
-              tabIndex={0}
-              className={styles.row}
-              onClick={this.handleClick}
-              onKeyDown={this.handleKeyDown}
-            >
-              <span className={styles.title}>
-                {`Transaction #${trx.timestamp}`}
+      <>
+        <div className={styles.transaction} aria-expanded={expanded}>
+          <div
+            className={styles.shortInfoButton}
+            onClick={this.handleClick}
+            onKeyDown={this.handleKeyDown}
+            tabIndex={0}
+            role="button"
+          >
+            <div className={styles.row}>
+              <div className={cn(styles.icon)}>
+                {isReceived
+                  ? <FaucetSvg className={styles.receiveIcon} />
+                  : <SendSvg className={styles.sendIcon} />}
+              </div>
+              <div className={styles.info}>
+                <span className={styles.name}>My wallet</span>
+                <span className={cn(styles.date, styles.fullDate)}>
+                  {format(trx.timestamp, 'dd MMM yyyy \'at\' p')}
+                </span>
+                <span className={cn(styles.date, styles.compactDate)}>
+                  {format(trx.timestamp, '\'at\' p')}
+                </span>
+              </div>
+              <span className={styles.amount}>
+                {`${isReceived ? '+' : '-'} ${trx.amount.toFixed(2)} ${trx.cur}`}
               </span>
-              <MinimizeIcon className={cn(styles.minimizedIcon, expanded && styles.expandMinimizedIcon)} />
             </div>
-            {this.renderGrid()}
-            <CopyButton textButton="Copy" copyInfo={trx.id} />
+            {!isArray(trx.txext) && (
+              <div className={styles.comment}>
+                <div className={styles.commentTitle}>
+                  Comment
+                </div>
+                <div className={styles.msg}>
+                  {trx.txext.msg}
+                </div>
+              </div>
+            )}
           </div>
-        </Collapse>
+          <Collapse in={expanded}>
+            <div className={styles.content}>
+              <div
+                role="button"
+                tabIndex={0}
+                className={styles.row}
+                onClick={this.handleClick}
+                onKeyDown={this.handleKeyDown}
+              >
+                <span className={styles.title}>
+                  {`Transaction #${trx.timestamp}`}
+                </span>
+                <MinimizeIcon className={cn(styles.minimizedIcon, expanded && styles.expandMinimizedIcon)} />
+              </div>
+              {this.renderGrid()}
+              <CopyButton textButton="Copy" copyInfo={trx.id} />
+            </div>
+          </Collapse>
+        </div>
         <Divider className={styles.divider} />
-      </div>
+      </>
     );
   }
 }
