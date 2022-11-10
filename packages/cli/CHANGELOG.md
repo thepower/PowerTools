@@ -1,7 +1,20 @@
 # Change Log
 
-All notable changes to this project will be documented in this file
+All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [1.10.4](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.10.1...@thepowereco/cli@1.10.4) (2022-11-10)
+
+
+### Bug Fixes
+
+* **cli:** ver up ([a292e1e](https://github.com/thepower/power_hub/commit/a292e1e4dd75d6b635efa4c6012def2eba737740))
+* **cli:** version up ([ed1bd8b](https://github.com/thepower/power_hub/commit/ed1bd8b5f2e2ebf6bc8ced86d910df5ea6132f0b))
+* **tssdk:** register random chain fix ([08df28f](https://github.com/thepower/power_hub/commit/08df28f75cd5906306a2e7dc5ddac806ad4848d4))
+
+
+
+
 
 ## [1.10.1](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.10.0...@thepowereco/cli@1.10.1) (2022-11-08)
 
