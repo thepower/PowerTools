@@ -5,17 +5,17 @@ import { config as cfg } from '../../config/chain.config';
 import { ChainGlobalConfig, ChainNode } from '../../typings';
 import { queueNodes, transformNodeList, transformResponse } from '../../helpers/network.helper';
 import { ChainAction } from '../../helpers/network.enum';
-import { ChainNameEnum } from '../../config/chain.enum';
 import { NoNodesFoundException } from './eceptions/no-nodes-found.exception';
 import { UnknownChainException } from './eceptions/unknown-chain.exception';
 import { HashMismatchException } from './eceptions/hash-mismatch.exception';
 import { ChainUnavailableException } from './eceptions/chain-unavailable.exception';
 import { NoNodesToQueryException } from './eceptions/no-nodes-to-query.exception';
+import { NetworkEnum } from '../../config/network.enum';
 
 const info = Debug('info');
 
 export class NetworkApi {
-  private currentChain: ChainNameEnum;
+  private currentChain: number;
 
   public static async getChainGlobalConfig(): Promise<ChainGlobalConfig> {
     const baseURL = 'https://raw.githubusercontent.com/thepower/all_chains/main/config.json';
@@ -23,15 +23,38 @@ export class NetworkApi {
     return data;
   }
 
+  public static async getNetworkChains(networkName: NetworkEnum): Promise<number[]> {
+    const chainGlobalConfig = await NetworkApi.getChainGlobalConfig();
+    const networks = chainGlobalConfig.settings;
+    const chainArray = networks[networkName];
+
+    if (!chainArray) {
+      throw new Error(`Chains not found for network ${networkName}`);
+    }
+
+    return chainArray;
+  }
+
+  public static async getRandomChain(networkName: NetworkEnum): Promise<number> {
+    const chainArray = await NetworkApi.getNetworkChains(networkName);
+
+    if (!chainArray) {
+      throw new Error(`Chains not found for network ${networkName}`);
+    }
+
+    const strChain: string = chainArray[Math.floor(Math.random() * chainArray.length)].toString();
+    return Number(strChain);
+  }
+
   private currentNodes: ChainNode[] = [];
 
   private nodeIndex = 0;
 
-  constructor(chain: ChainNameEnum) {
+  constructor(chain: number) {
     this.currentChain = chain;
   }
 
-  public async changeChain(chain: ChainNameEnum) {
+  public async changeChain(chain: number) {
     this.currentChain = chain;
     await this.bootstrap();
   }

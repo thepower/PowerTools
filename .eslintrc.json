@@ -14,7 +14,6 @@
         },
         "sourceType": "module",
         "project": [
-            "./packages/hub/tsconfig.json",
             "./packages/cli/tsconfig.json",
             "./packages/tssdk/tsconfig.json",
             "./packages/uploader/tsconfig.json"

@@ -1,7 +1,6 @@
 import { Command } from '@oclif/core';
 import {
   AddressApi,
-  ChainNameEnum,
   EvmApi,
 } from '@thepowereco/tssdk';
 
@@ -55,7 +54,7 @@ export default class Upload extends Command {
     } = config;
 
     const dir = resolve(source);
-    const storageSc = await EvmApi.build(storageScAddress, ChainNameEnum.first, abiJson.abi);
+    const storageSc = await EvmApi.build(storageScAddress, 1, abiJson.abi);
     let taskId = await storageSc.scGet(
       'taskIdByName',
       [AddressApi.textAddressToEvmAddress(address), projectId],

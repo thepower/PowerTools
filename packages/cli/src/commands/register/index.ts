@@ -5,7 +5,6 @@ import ux from 'cli-ux';
 import {
   NetworkApi,
   CryptoApi,
-  ChainNameEnum,
   NetworkEnum,
   TransactionsApi,
 } from '@thepowereco/tssdk';
@@ -34,9 +33,10 @@ export default class Upload extends Command {
     };
 
     const { network } : { network: NetworkEnum } = await prompt([question]);
+    const chain = await NetworkApi.getRandomChain(network);
 
     ux.action.start('Loading');
-    const networkApi = new NetworkApi(ChainNameEnum.first);
+    const networkApi = new NetworkApi(chain);
     await networkApi.bootstrap();
 
     const seed = await CryptoApi.generateSeedPhrase();
@@ -48,7 +48,7 @@ export default class Upload extends Command {
     );
 
     const wif = keyPair.toWIF();
-    const { tx, chain } = await TransactionsApi.registerRandomChain(network, wif, null);
+    const tx = await TransactionsApi.composeRegisterTX(chain, wif, null);
     const { res: txtAddress }: any = await networkApi.sendTxAndWaitForResponse(tx);
 
     ux.action.stop();

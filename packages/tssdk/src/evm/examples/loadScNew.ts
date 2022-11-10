@@ -1,6 +1,5 @@
 import path from 'path';
 import { EvmApi } from '../../libs';
-import { ChainNameEnum } from '../../config/chain.enum';
 import abiJson from './contractAbi.json';
 import { CryptoApi } from '../../libs/crypto/crypto';
 
@@ -8,7 +7,7 @@ async function testVm() {
   const scAddress = 'AA100000001677721810';
   const mapAddress = '0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c';
 
-  const sc = await EvmApi.build(scAddress, ChainNameEnum.first, abiJson.abi);
+  const sc = await EvmApi.build(scAddress, 1, abiJson.abi);
 
   const greeting = await sc.scGet('getGreeting', []);
   console.log('getGreeting:', greeting);

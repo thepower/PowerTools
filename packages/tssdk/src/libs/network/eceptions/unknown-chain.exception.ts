@@ -1,4 +1,3 @@
-import { ChainNameEnum } from '../../../config/chain.enum';
 import { formatString } from '../../../helpers/string';
 
 export class UnknownChainException extends Error {
@@ -6,7 +5,7 @@ export class UnknownChainException extends Error {
 
   static MESSAGE = 'Unknown chain ??';
 
-  constructor(chainName: ChainNameEnum) {
+  constructor(chainName: number) {
     super(formatString(UnknownChainException.MESSAGE, chainName));
 
     this.name = UnknownChainException.CODE;
