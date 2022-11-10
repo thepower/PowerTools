@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.15.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.0...@thepowereco/tssdk@1.15.1) (2022-11-10)
+
+
+### Bug Fixes
+
+* **tssdk:** register random chain fix ([08df28f](https://github.com/thepower/power_hub/commit/08df28f75cd5906306a2e7dc5ddac806ad4848d4))
+* **tssdk:** review fixes ([4902113](https://github.com/thepower/power_hub/commit/4902113057e682fcd18dbb489280dc785fbe820e))
+
+
+
+
+
 # [1.15.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.14.2...@thepowereco/tssdk@1.15.0) (2022-11-08)
 
 

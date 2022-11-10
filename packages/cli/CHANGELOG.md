@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.2](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.10.1...@thepowereco/cli@1.10.2) (2022-11-10)
+
+
+### Bug Fixes
+
+* **tssdk:** register random chain fix ([08df28f](https://github.com/thepower/power_hub/commit/08df28f75cd5906306a2e7dc5ddac806ad4848d4))
+
+
+
+
+
 ## [1.10.1](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.10.0...@thepowereco/cli@1.10.1) (2022-11-08)
 
 
