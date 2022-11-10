@@ -37,11 +37,6 @@ export class NetworkApi {
 
   public static async getRandomChain(networkName: NetworkEnum): Promise<number> {
     const chainArray = await NetworkApi.getNetworkChains(networkName);
-
-    if (!chainArray) {
-      throw new Error(`Chains not found for network ${networkName}`);
-    }
-
     const strChain: string = chainArray[Math.floor(Math.random() * chainArray.length)].toString();
     return Number(strChain);
   }
