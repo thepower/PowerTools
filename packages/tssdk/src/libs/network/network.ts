@@ -23,10 +23,20 @@ export class NetworkApi {
     return data;
   }
 
-  public static async getRandomChain(networkName: NetworkEnum): Promise<number> {
+  public static async getNetworkChains(networkName: NetworkEnum): Promise<number[]> {
     const chainGlobalConfig = await NetworkApi.getChainGlobalConfig();
     const networks = chainGlobalConfig.settings;
     const chainArray = networks[networkName];
+
+    if (!chainArray) {
+      throw new Error(`Chains not found for network ${networkName}`);
+    }
+
+    return chainArray;
+  }
+
+  public static async getRandomChain(networkName: NetworkEnum): Promise<number> {
+    const chainArray = await NetworkApi.getNetworkChains(networkName);
 
     if (!chainArray) {
       throw new Error(`Chains not found for network ${networkName}`);
