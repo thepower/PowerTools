@@ -1,6 +1,6 @@
 # Change Log
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented in this file
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 ## [1.10.1](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.10.0...@thepowereco/cli@1.10.1) (2022-11-08)
