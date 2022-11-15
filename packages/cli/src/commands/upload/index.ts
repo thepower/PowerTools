@@ -4,7 +4,6 @@ import {
   EvmApi,
 } from '@thepowereco/tssdk';
 
-import ux from 'cli-ux';
 import * as Listr from 'listr';
 import { resolve } from 'path';
 import { color } from '@oclif/color';
@@ -31,18 +30,8 @@ export default class Upload extends Command {
 
     let config: CliConfig = await getConfig();
 
-    if (!config) { // TODO: smart prompt
-      const source = await ux.prompt('Please, enter the source path of your project, ex. "./dist")');
-      await ux.confirm(`Source path = "${resolve(source)}". Continue? (yes/no)`);
-
-      const projectId = await ux.prompt('Please, enter your project id (must be unique in list of your projects)');
-      const address = await ux.prompt('Please, enter your account address, ex. "AA030000174483048139"');
-      const wif = await ux.prompt('Please, enter your account private key (wif)', { type: 'hide' });
-
-      config = {
-        source, projectId, address, wif,
-      };
-      await setConfig(config);
+    if (!config) {
+      config = await setConfig();
     }
 
     this.log(color.whiteBright('Current cli config:'));
