@@ -1,4 +1,6 @@
 export class Task {
+  id: number;
+
   owner: string;
 
   name: string;

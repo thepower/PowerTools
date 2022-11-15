@@ -49,14 +49,17 @@ export default class TaskList extends Command {
     ux.action.start('Loading');
 
     const list: Task[] = await Promise.all([...Array(Number(tasksCount)).keys()]
-      .map((index) => storageSc.scGet(
-        'getTask',
-        [index + 1],
-      )));
+      .map(async (index) => {
+        const task = await storageSc.scGet(
+          'getTask',
+          [index + 1],
+        );
+        return { ...task, id: index + 1 };
+      }));
 
     const table = new Table({
       head: [
-        '№',
+        'Id',
         'Name',
         'Status',
         'Hash',
@@ -70,7 +73,7 @@ export default class TaskList extends Command {
     const rows = list
       .filter((task) => task.owner.toString() === AddressApi.textAddressToEvmAddress(address).toString())
       .map((task, num) => [
-        num + 1,
+        task.id,
         task.name,
         task.status.toString(),
         task.hash.toString(),
