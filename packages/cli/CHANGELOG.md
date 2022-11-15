@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.4](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.3...@thepowereco/cli@1.11.4) (2022-11-15)
+
+
+### Bug Fixes
+
+* **cli:** task list fix ([9d4f725](https://github.com/thepower/power_hub/commit/9d4f72563f3afee297d048ee28871badcf34e974))
+
+
+
+
+
 ## [1.11.3](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.2...@thepowereco/cli@1.11.3) (2022-11-15)
 
 
