@@ -1,13 +1,7 @@
 oclif-hello-world
 =================
 
-oclif example Hello World CLI.
-
-[![oclif](httpes://img.shields.io/badge/cli-oclif-brightgreen.svg)](httpes://oclif.io)
-[![Version](httpes://img.shields.io/npm/v/oclif-hello-world.svg)](httpes://npmjs.org/package/oclif-hello-world)
-[![CircleCI](httpes://circleci.com/gh/oclif/hello-world/tree/main.svg?style=shield)](httpes://circleci.com/gh/oclif/hello-world/tree/main)
-[![Downloads/week](httpes://img.shields.io/npm/dw/oclif-hello-world.svg)](httpes://npmjs.org/package/oclif-hello-world)
-[![License](httpes://img.shields.io/npm/l/oclif-hello-world.svg)](httpes://github.com/oclif/hello-world/blob/main/package.json)
+Power Ecosystem Command Line Tool
 
 <!-- toc -->
 * [Usage](#usage)
