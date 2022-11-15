@@ -14,7 +14,7 @@ import { Task } from '../../types/task.type';
 const Table = require('cli-table');
 
 export default class TaskList extends Command {
-  static description = 'Shows the list of all tasks for current account';
+  static description = 'Shows the list of all tasks for the current account';
 
   static examples = [
     '$ cd app_dir && pow-up',
@@ -26,6 +26,7 @@ export default class TaskList extends Command {
 
   async run(): Promise<void> {
     let config: CliConfig = await getConfig();
+    const chainNumber = 1; // TODO: get by address
 
     if (!config) {
       config = await setConfig();
@@ -37,7 +38,7 @@ export default class TaskList extends Command {
     const { address } = config;
     this.log(color.whiteBright(`Task list for ${address} account`));
 
-    const storageSc = await EvmApi.build(storageScAddress, 1, abiJson.abi);
+    const storageSc = await EvmApi.build(storageScAddress, chainNumber, abiJson.abi);
 
     const tasksCount = await storageSc.scGet(
       'storageTasksCount',

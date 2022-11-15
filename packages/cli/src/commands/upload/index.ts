@@ -15,7 +15,7 @@ import * as abiJson from '../../config/scStorageAbi.json';
 import { storageScAddress } from '../../config/cli.config';
 
 export default class Upload extends Command {
-  static description = 'Upload application files to storage';
+  static description = 'Upload application files to the storage';
 
   static examples = [
     '$ cd app_dir && pow-up',
