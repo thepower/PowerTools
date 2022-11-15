@@ -10,7 +10,7 @@ import {
 } from '@thepowereco/tssdk';
 
 export default class Upload extends Command {
-  static description = 'Generate wif key, address, seed phrase in random chain from selected network';
+  static description = 'Generate wif key, address, seed phrase in random chain from the selected network';
 
   // static examples = [
   //   '$ cd app_dir && pow-up',
