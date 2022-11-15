@@ -1,6 +1,7 @@
 import { Command } from '@oclif/core';
 import {
   EvmApi,
+  AddressApi,
 } from '@thepowereco/tssdk';
 import ux from 'cli-ux';
 
@@ -45,7 +46,6 @@ export default class TaskList extends Command {
       [],
     );
 
-    this.log(color.whiteBright(`Task count = ${tasksCount}`));
     ux.action.start('Loading');
 
     const list: Task[] = await Promise.all([...Array(Number(tasksCount)).keys()]
@@ -54,18 +54,35 @@ export default class TaskList extends Command {
         [index + 1],
       )));
 
-    const table = new Table({ head: ['Name', 'Status', 'Owner', 'Hash', 'Size', 'TaskTime', 'Expire', 'Uploader'] });
+    const table = new Table({
+      head: [
+        '№',
+        'Name',
+        'Status',
+        'Owner',
+        'Hash',
+        'Size',
+        'TaskTime',
+        'Expire',
+        'Uploader',
+      ],
+    });
 
-    table.push(...list.map((task) => [
-      task.name,
-      task.status.toString(),
-      task.owner,
-      task.hash.toString(),
-      task.size.toString(),
-      task.taskTime.toString(),
-      task.expire.toString(),
-      task.uploader.toString(),
-    ]));
+    const rows = list
+      .filter((task) => task.owner.toString() === AddressApi.textAddressToEvmAddress(address).toString())
+      .map((task, num) => [
+        num + 1,
+        task.name,
+        task.status.toString(),
+        task.owner,
+        task.hash.toString(),
+        task.size.toString(),
+        task.taskTime.toString(),
+        task.expire.toString(),
+        task.uploader.toString(),
+      ]);
+
+    table.push(...rows);
 
     ux.action.stop();
 

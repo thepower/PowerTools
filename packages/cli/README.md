@@ -1,7 +1,5 @@
-oclif-hello-world
-=================
-
 Power Ecosystem Command Line Tool
+=================
 
 <!-- toc -->
 * [Usage](#usage)
