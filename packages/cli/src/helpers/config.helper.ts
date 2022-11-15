@@ -1,4 +1,6 @@
 import { promises, existsSync } from 'fs';
+import ux from 'cli-ux';
+import { resolve } from 'path';
 import { CliConfig } from '../types/cliConfig.type';
 
 const CONFIG_FILE_NAME = 'tp-cli.json';
@@ -40,13 +42,24 @@ export const getConfig = async (): Promise<CliConfig> => {
   return cfgJSON;
 };
 
-export const saveManifest = async (manifestStr: string) => {
-  const path = './manifest.json';
-  await promises.writeFile(path, manifestStr);
-};
-
-export const setConfig = async (config: CliConfig) => {
+export const setConfigFile = async (config: CliConfig) => {
   const content = JSON.stringify(config, null, 2);
   const path = `./${CONFIG_FILE_NAME}`;
   await promises.writeFile(path, content);
+};
+
+export const setConfig = async () => {
+  const source = await ux.prompt('Please, enter the source path of your project, ex. "./dist")');
+  await ux.confirm(`Source path = "${resolve(source)}". Continue? (yes/no)`);
+
+  const projectId = await ux.prompt('Please, enter your project id (must be unique in list of your projects)');
+  const address = await ux.prompt('Please, enter your account address, ex. "AA030000174483048139"');
+  const wif = await ux.prompt('Please, enter your account private key (wif)', { type: 'hide' });
+
+  const config = {
+    source, projectId, address, wif,
+  };
+  await setConfigFile(config);
+
+  return config;
 };

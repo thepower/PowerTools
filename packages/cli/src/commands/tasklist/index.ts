@@ -5,7 +5,7 @@ import {
 import ux from 'cli-ux';
 
 import { color } from '@oclif/color';
-import { getConfig } from '../../helpers/config.helper';
+import { getConfig, setConfig } from '../../helpers/config.helper';
 import { CliConfig } from '../../types/cliConfig.type';
 import * as abiJson from '../../config/scStorageAbi.json';
 import { storageScAddress } from '../../config/cli.config';
@@ -25,7 +25,11 @@ export default class TaskList extends Command {
   static args = [];
 
   async run(): Promise<void> {
-    const config: CliConfig = await getConfig();
+    let config: CliConfig = await getConfig();
+
+    if (!config) {
+      config = await setConfig();
+    }
 
     this.log(color.whiteBright('Current cli config:'));
     this.log(color.cyan(JSON.stringify(config, null, 2)));
@@ -43,26 +47,24 @@ export default class TaskList extends Command {
     this.log(color.whiteBright(`Task count = ${tasksCount}`));
     ux.action.start('Loading');
 
-    const list: Task[] = await Promise.all([...Array(tasksCount).keys()]
+    const list: Task[] = await Promise.all([...Array(Number(tasksCount)).keys()]
       .map((index) => storageSc.scGet(
         'getTask',
         [index + 1],
       )));
 
-    const table = new Table({ head: ['', 'Name', 'Status', 'Owner', 'Hash', 'Size', 'TaskTime', 'Expire', 'Uploader'] });
+    const table = new Table({ head: ['Name', 'Status', 'Owner', 'Hash', 'Size', 'TaskTime', 'Expire', 'Uploader'] });
 
-    for (const task of list) {
-      table.push([
-        task.name,
-        task.status.toString(),
-        task.owner,
-        task.hash.toString(),
-        task.size.toString(),
-        task.taskTime.toString(),
-        task.expire.toString(),
-        task.uploader.toString(),
-      ]);
-    }
+    table.push(...list.map((task) => [
+      task.name,
+      task.status.toString(),
+      task.owner,
+      task.hash.toString(),
+      task.size.toString(),
+      task.taskTime.toString(),
+      task.expire.toString(),
+      task.uploader.toString(),
+    ]));
 
     ux.action.stop();
 
