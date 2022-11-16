@@ -1,9 +1,10 @@
 import createHash from 'create-hash';
-import { Buffer } from 'safe-buffer';
+import {Buffer} from 'safe-buffer';
 import * as msgPack from '@thepowereco/msgpack';
-import { AddressApi } from './address/address';
-import { NetworkApi } from './network/network';
-import { NetworkEnum } from '../config/network.enum';
+import {AddressApi} from './address/address';
+import {NetworkApi} from './network/network';
+import {NetworkEnum} from '../config/network.enum';
+import {ChainNameEnum} from "../config/chain.enum";
 
 const Bitcoin = require('bitcoinjs-lib');
 // const sha512 = require('js-sha512').sha512;
@@ -142,6 +143,17 @@ const computeFee = (body: any, feeSettings: any) => {
   return body;
 };
 
+const computeGas = (body: any, gasSettings: any) => {
+  const pSize = msgPack.encode(body.p).length;
+  if (pSize > 100) {
+    const info = body.p[0];
+
+    if (info.)
+  }
+
+  return body;
+};
+
 const getSimpleTransferTxBody = (
   from: Buffer,
   to: Buffer,
@@ -212,6 +224,9 @@ export const TransactionsApi = {
     return keyPair.verify(hash, ecsig);
   },
 
+  // получить настройки
+  // не можем сказать сколько стоит газ. Локально развернуть эвм и посчитать газ + накинуть 10%
+
   composeSimpleTransferTX(
     feeSettings: any,
     wif: string,
@@ -274,12 +289,27 @@ export const TransactionsApi = {
     return payload.p.find((item: any) => item[0] === PURPOSE_SRCFEE);
   },
 
-  packAndSignTX(tx: string, wif: string) {
+  /**
+   * Low level transaction method
+   *
+   * @param tx
+   * @param wif
+   * @param feeSettings
+   */
+  async packAndSignTX(tx: string, wif: string) {
     const keyPair = Bitcoin.ECPair.fromWIF(wif);
     const publicKey = keyPair.getPublicKeyBuffer();
-    const payload = msgPack.encode(tx);
+    const encodedTx = msgPack.encode(tx);
+    const chainGlobalConfig = await NetworkApi.getChainGlobalConfig();
+
+    // Как выбрать сеть для получения настроек
+    const network = new NetworkApi(ChainNameEnum.eight);
+    const feeSettings = network.getFeeSettings();
+    const payload = computeFee(encodedTx, feeSettings);
+
     return msgPack.encode(wrapAndSignPayload(payload, keyPair, publicKey)).toString('base64');
   },
+
   prepareTXFromSC(
     feeSettings: any,
     address: string,
@@ -302,6 +332,19 @@ export const TransactionsApi = {
 
     return computeFee({ scData, actual }, feeSettings);
   },
+
+  /**
+   * High level transaction method
+   *
+   * @param address
+   * @param code
+   * @param initParams
+   * @param gasToken
+   * @param gasValue
+   * @param wif
+   * @param feeSettings
+   * @param vm
+   */
   composeDeployTX(
     address: string,
     code: any,
@@ -363,6 +406,17 @@ export const TransactionsApi = {
     return bsig.subarray(index + 2, index + 2 + bsig[index + 1]);
   },
 
+  /**
+   * High level transaction method
+   *
+   * @param address
+   * @param sc
+   * @param toCall
+   * @param gasToken
+   * @param gasValue
+   * @param wif
+   * @param feeSettings
+   */
   composeSCMethodCallTX(
     address: string,
     sc: string,
@@ -394,6 +448,14 @@ export const TransactionsApi = {
     return this.packAndSignTX(computeFee(body, feeSettings), wif);
   },
 
+  /**
+   * High level transaction method
+   *
+   * @param address
+   * @param patches
+   * @param wif
+   * @param feeSettings
+   */
   composeStoreTX(address: string, patches: any, wif: string, feeSettings: any) {
     const body = {
       k: KIND_LSTORE,

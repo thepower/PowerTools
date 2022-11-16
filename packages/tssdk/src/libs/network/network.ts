@@ -51,6 +51,12 @@ export class NetworkApi {
     return this.calculateFeeSettings(settings);
   }
 
+  public async getGasSettings() {
+    const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {});
+    return this.calculateFeeSettings(settings);
+  }
+
+
   public getBlock = async (hash = 'last') => this.askBlockchainTo(
     ChainAction.GET_BLOCK,
     { chain: this.currentChain, hash },
@@ -163,28 +169,20 @@ export class NetworkApi {
     return this.checkTransaction(response.txid, timeout);
   }
 
-  private calculateFeeSettings(settings: any) {
+  private calculateGasSettings(settings: any) {
     let result = settings.current;
-    let feeCur;
+    let gasCur;
 
-    if (result.fee) {
-      result = result.fee;
-      if (result.SK) {
-        feeCur = 'SK';
-      } else if (result.FEE) {
-        feeCur = 'FEE';
-      } else {
-        return {};
-      }
-    } else {
-      return {};
-    }
+
+  }
+
+  private calculateFeeSettings(settings: any) {
+    let result = settings.current.gas;
+    let gasCur = Object.keys(result)[0];
 
     return {
-      feeCur,
-      fee: result[feeCur].base,
-      baseEx: result[feeCur].baseextra,
-      kb: result[feeCur].kb,
+      gasCur,
+      ...result.SK,
     };
   }
 
