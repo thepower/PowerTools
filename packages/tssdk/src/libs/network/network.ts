@@ -2,7 +2,7 @@ import axios from 'axios';
 import createHash from 'create-hash';
 import Debug from 'debug';
 import { config as cfg } from '../../config/chain.config';
-import { ChainGlobalConfig, ChainNode } from '../../typings';
+import { ChainGlobalConfig, ChainNode, RegisteredAccount } from '../../typings';
 import { queueNodes, transformNodeList, transformResponse } from '../../helpers/network.helper';
 import { ChainAction } from '../../helpers/network.enum';
 import { NoNodesFoundException } from './eceptions/no-nodes-found.exception';
@@ -11,11 +11,53 @@ import { HashMismatchException } from './eceptions/hash-mismatch.exception';
 import { ChainUnavailableException } from './eceptions/chain-unavailable.exception';
 import { NoNodesToQueryException } from './eceptions/no-nodes-to-query.exception';
 import { NetworkEnum } from '../../config/network.enum';
+import { CryptoApi } from '../crypto/crypto';
+import { TransactionsApi } from '../transactions';
 
 const info = Debug('info');
 
 export class NetworkApi {
   private currentChain: number;
+
+  private currentNodes: ChainNode[] = [];
+
+  private nodeIndex = 0;
+
+  constructor(chain: number) {
+    this.currentChain = chain;
+  }
+
+  public static async registerCertainChain(chain: number): Promise<RegisteredAccount> {
+    // const chain = await NetworkApi.getRandomChain(network);
+    const seed = CryptoApi.generateSeedPhrase();
+    const networkApi = new NetworkApi(chain);
+    await networkApi.bootstrap();
+
+    const settings = await networkApi.getNodeSettings();
+    const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
+      seed,
+      settings.current.allocblock.block,
+      settings.current.allocblock.group,
+    );
+
+    const wif = keyPair.toWIF();
+
+    const tx = await TransactionsApi.composeRegisterTX(chain, wif, ''); // TODO: empty referer?
+
+    const { res: address }: any = await networkApi.sendTxAndWaitForResponse(tx);
+
+    return {
+      chain,
+      wif,
+      address,
+      seed,
+    };
+  }
+
+  public static async registerRandomChain(network: NetworkEnum): Promise<RegisteredAccount> {
+    const chain = await NetworkApi.getRandomChain(network);
+    return NetworkApi.registerCertainChain(chain);
+  }
 
   public static async getChainGlobalConfig(): Promise<ChainGlobalConfig> {
     const baseURL = 'https://raw.githubusercontent.com/thepower/all_chains/main/config.json';
@@ -39,14 +81,6 @@ export class NetworkApi {
     const chainArray = await NetworkApi.getNetworkChains(networkName);
     const strChain: string = chainArray[Math.floor(Math.random() * chainArray.length)].toString();
     return Number(strChain);
-  }
-
-  private currentNodes: ChainNode[] = [];
-
-  private nodeIndex = 0;
-
-  constructor(chain: number) {
-    this.currentChain = chain;
   }
 
   public async changeChain(chain: number) {

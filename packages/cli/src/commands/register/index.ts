@@ -4,10 +4,9 @@ import { prompt } from 'enquirer';
 import ux from 'cli-ux';
 import {
   NetworkApi,
-  CryptoApi,
   NetworkEnum,
-  TransactionsApi,
 } from '@thepowereco/tssdk';
+import { RegisteredAccount } from '@thepowereco/tssdk/dist/typings';
 
 export default class Upload extends Command {
   static description = 'Generate wif key, address, seed phrase in random chain from the selected network';
@@ -33,30 +32,19 @@ export default class Upload extends Command {
     };
 
     const { network } : { network: NetworkEnum } = await prompt([question]);
-    const chain = await NetworkApi.getRandomChain(network);
 
     ux.action.start('Loading');
-    const networkApi = new NetworkApi(chain);
-    await networkApi.bootstrap();
 
-    const seed = await CryptoApi.generateSeedPhrase();
-    const settings = await networkApi.getNodeSettings();
-    const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
-      seed,
-      settings.current.allocblock.block,
-      settings.current.allocblock.group,
-    );
-
-    const wif = keyPair.toWIF();
-    const tx = await TransactionsApi.composeRegisterTX(chain, wif, null);
-    const { res: txtAddress }: any = await networkApi.sendTxAndWaitForResponse(tx);
+    const {
+      chain, address, seed, wif,
+    }: RegisteredAccount = await NetworkApi.registerRandomChain(network);
 
     ux.action.stop();
 
     // TODO set password for account
     this.log(`${color.whiteBright('Network:')}`, color.green(network));
     this.log(`${color.whiteBright('Chain number:')}`, color.green(chain));
-    this.log(`${color.whiteBright('Account address:')}`, color.green(txtAddress));
+    this.log(`${color.whiteBright('Account address:')}`, color.green(address));
     this.log(`${color.whiteBright('Account seed phrase:')}`, color.green(seed));
     this.log(`${color.whiteBright('Account wif:')}`, color.green(wif));
     this.log(`${color.whiteBright('To replenish the balance of your account please visit: https://faucet.thepower.io')}`);

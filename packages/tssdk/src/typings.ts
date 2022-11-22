@@ -32,6 +32,13 @@ export interface AccountKey {
   wif: string;
 }
 
+export interface RegisteredAccount {
+  chain: number;
+  address: string;
+  seed: string;
+  wif: string;
+}
+
 export interface ChainBootstrapConfig {
   [key: number] : RawNodes;
 }
