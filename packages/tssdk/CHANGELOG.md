@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.15.3](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.2...@thepowereco/tssdk@1.15.3) (2022-11-22)
+
+
+### Bug Fixes
+
+* **cli, tssdk:** refactored account reg ([61dab0b](https://github.com/thepower/power_hub/commit/61dab0b0c825fae8daf9572df1705d8aa9c5a9a0))
+
+
+
+
+
 ## [1.15.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.0...@thepowereco/tssdk@1.15.2) (2022-11-10)
 
 
