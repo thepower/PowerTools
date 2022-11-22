@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.8](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.7...@thepowereco/cli@1.11.8) (2022-11-22)
+
+
+### Bug Fixes
+
+* **tssdk:** exports fix ([3273bc3](https://github.com/thepower/power_hub/commit/3273bc391fc9b9b5a317d9dc6405e2960eb24372))
+
+
+
+
+
 ## [1.11.7](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.6...@thepowereco/cli@1.11.7) (2022-11-22)
 
 
