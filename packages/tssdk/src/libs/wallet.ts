@@ -3,7 +3,8 @@ import { NetworkApi } from './network/network';
 import { TransactionsApi } from './transactions';
 import { CryptoApi } from './crypto/crypto';
 import { correctAmount, correctAmountsObject } from '../utils/numbers';
-import { Maybe } from '../typings';
+import { Maybe, RegisteredAccount } from '../typings';
+import { NetworkEnum } from '../config/network.enum';
 
 export class WalletApi {
   private networkApi;
@@ -12,6 +13,68 @@ export class WalletApi {
 
   constructor(network: NetworkApi) {
     this.networkApi = network;
+  }
+
+  public static async registerCertainChain(chain: number, customSeed?: string): Promise<RegisteredAccount> {
+    const seed = customSeed || CryptoApi.generateSeedPhrase();
+    const networkApi = new NetworkApi(chain);
+    await networkApi.bootstrap();
+
+    const settings = await networkApi.getNodeSettings();
+    const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
+      seed,
+      settings.current.allocblock.block,
+      settings.current.allocblock.group,
+    );
+
+    const wif = keyPair.toWIF();
+
+    // const tx = await TransactionsApi.composeRegisterTX(chain, wif, ''); // TODO: empty referer?
+    //
+    // const { res: address }: any = await networkApi.sendTxAndWaitForResponse(tx, 500); // TODO: timeout???
+
+    const transmission = await TransactionsApi.composeRegisterTX(
+      +chain,
+      wif,
+      '',
+    );
+
+    const { txid } = await networkApi.createTransaction({ tx: transmission });
+
+    const wait = true;
+    let address = '';
+
+    if (wait) {
+      let count = 0;
+      while (address === '') {
+        if (count > 60) {
+          throw 'Timeout';
+        }
+        count += 1;
+        const status = await networkApi.getTransactionStatus(txid);
+        if (status?.error) {
+          throw status?.error;
+        }
+        if (status?.ok) {
+          address = status.res;
+          break;
+        }
+
+        await WalletApi.sleep(500);
+      }
+    }
+
+    return {
+      chain,
+      wif,
+      address,
+      seed,
+    };
+  }
+
+  public static async registerRandomChain(network: NetworkEnum, customSeed?: string): Promise<RegisteredAccount> {
+    const chain = await NetworkApi.getRandomChain(network);
+    return WalletApi.registerCertainChain(chain, customSeed);
   }
 
   private prettifyTx(inputTx: any, block: any) {
@@ -62,7 +125,7 @@ export class WalletApi {
     return tx;
   }
 
-  private async sleep(ms: number) {
+  public static async sleep(ms: number) {
     return new Promise((r) => setTimeout(r, ms));
   }
 
@@ -113,7 +176,7 @@ export class WalletApi {
           break;
         }
 
-        await this.sleep(500);
+        await WalletApi.sleep(500);
       }
 
       return { privateKey: wif, address: walletAddress };

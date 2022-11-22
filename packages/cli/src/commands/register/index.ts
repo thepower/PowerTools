@@ -3,7 +3,7 @@ import { color } from '@oclif/color';
 import { prompt } from 'enquirer';
 import ux from 'cli-ux';
 import {
-  NetworkApi,
+  WalletApi,
   NetworkEnum,
 } from '@thepowereco/tssdk';
 import { RegisteredAccount } from '@thepowereco/tssdk/dist/typings';
@@ -37,7 +37,7 @@ export default class Upload extends Command {
 
     const {
       chain, address, seed, wif,
-    }: RegisteredAccount = await NetworkApi.registerRandomChain(network);
+    }: RegisteredAccount = await WalletApi.registerRandomChain(network);
 
     ux.action.stop();
 
