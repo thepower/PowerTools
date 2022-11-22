@@ -13,3 +13,4 @@ export {
 
 export { ChainAction } from './helpers/network.enum';
 export { NetworkEnum } from './config/network.enum';
+export * from './typings';

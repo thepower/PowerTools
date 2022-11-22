@@ -29,10 +29,6 @@ export class WalletApi {
 
     const wif = keyPair.toWIF();
 
-    // const tx = await TransactionsApi.composeRegisterTX(chain, wif, ''); // TODO: empty referer?
-    //
-    // const { res: address }: any = await networkApi.sendTxAndWaitForResponse(tx, 500); // TODO: timeout???
-
     const transmission = await TransactionsApi.composeRegisterTX(
       +chain,
       wif,

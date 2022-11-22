@@ -47,6 +47,9 @@ export default class Upload extends Command {
     this.log(`${color.whiteBright('Account address:')}`, color.green(address));
     this.log(`${color.whiteBright('Account seed phrase:')}`, color.green(seed));
     this.log(`${color.whiteBright('Account wif:')}`, color.green(wif));
-    this.log(`${color.whiteBright('To replenish the balance of your account please visit: https://faucet.thepower.io')}`);
+
+    if (network === 'testnet') {
+      this.log(`${color.whiteBright('To replenish the balance of your account please visit: https://faucet.thepower.io')}`);
+    }
   }
 }
