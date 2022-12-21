@@ -10,7 +10,15 @@ These tools will help you develop DApps and use Power DCloud services.
 
 ## Installation
 
+**Power SDK**
+```bash 
+npm i @thepowereco/tssdk
+```
+Power CLI
 
+```bash
+npm i @thepowereco/cli
+```
 
 ## Useful links
 
