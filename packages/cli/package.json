@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/cli",
-  "version": "1.11.9",
+  "version": "1.11.91",
   "description": "the power cli",
   "author": "thepower",
   "main": "dist/src/index.js",

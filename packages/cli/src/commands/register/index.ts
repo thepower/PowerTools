@@ -35,20 +35,23 @@ export default class Upload extends Command {
 
     ux.action.start('Loading');
 
-    const {
-      chain, address, seed, wif,
-    }: RegisteredAccount = await WalletApi.registerRandomChain(network);
-
+    let acc:RegisteredAccount;
+    if (network === 'devnet') {
+      acc = await WalletApi.registerCertainChain(1);
+    }
+    else {
+    acc = await WalletApi.registerRandomChain(network);
+    }
     ux.action.stop();
 
     // TODO set password for account
     this.log(`${color.whiteBright('Network:')}`, color.green(network));
-    this.log(`${color.whiteBright('Chain number:')}`, color.green(chain));
-    this.log(`${color.whiteBright('Account address:')}`, color.green(address));
-    this.log(`${color.whiteBright('Account seed phrase:')}`, color.green(seed));
-    this.log(`${color.whiteBright('Account wif:')}`, color.green(wif));
+    this.log(`${color.whiteBright('Chain number:')}`, color.green(acc.chain));
+    this.log(`${color.whiteBright('Account address:')}`, color.green(acc.address));
+    this.log(`${color.whiteBright('Account seed phrase:')}`, color.green(acc.seed));
+    this.log(`${color.whiteBright('Account wif:')}`, color.green(acc.wif));
 
-    if (network === 'testnet') {
+    if (network === 'devnet') {
       this.log(`${color.whiteBright('To replenish the balance of your account please visit: https://faucet.thepower.io')}`);
     }
   }
