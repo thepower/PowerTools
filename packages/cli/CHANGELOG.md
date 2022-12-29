@@ -3,6 +3,119 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.8](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.7...@thepowereco/cli@1.11.8) (2022-11-22)
+
+
+### Bug Fixes
+
+* **tssdk:** exports fix ([3273bc3](https://github.com/thepower/power_hub/commit/3273bc391fc9b9b5a317d9dc6405e2960eb24372))
+
+
+
+
+
+## [1.11.7](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.6...@thepowereco/cli@1.11.7) (2022-11-22)
+
+
+### Bug Fixes
+
+* **tssdk, cli:** register account refactored ([40d35a0](https://github.com/thepower/power_hub/commit/40d35a0c54a232bc0de5e69e968338a2bdcc73e7))
+
+
+
+
+
+## [1.11.6](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.5...@thepowereco/cli@1.11.6) (2022-11-22)
+
+
+### Bug Fixes
+
+* **cli, tssdk:** refactored account reg ([61dab0b](https://github.com/thepower/power_hub/commit/61dab0b0c825fae8daf9572df1705d8aa9c5a9a0))
+
+
+
+
+
+## [1.11.5](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.4...@thepowereco/cli@1.11.5) (2022-11-15)
+
+
+### Bug Fixes
+
+* **cli:** small fix ([4eb34ed](https://github.com/thepower/power_hub/commit/4eb34ed0b5c305b719f1846f166bd648f5c5ba97))
+
+
+
+
+
+## [1.11.4](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.3...@thepowereco/cli@1.11.4) (2022-11-15)
+
+
+### Bug Fixes
+
+* **cli:** task list fix ([9d4f725](https://github.com/thepower/power_hub/commit/9d4f72563f3afee297d048ee28871badcf34e974))
+
+
+
+
+
+## [1.11.3](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.2...@thepowereco/cli@1.11.3) (2022-11-15)
+
+
+### Bug Fixes
+
+* **cli:** task list final ([391bf1f](https://github.com/thepower/power_hub/commit/391bf1f838ff0d150ba0348ed299d7e8088faa4c))
+
+
+
+
+
+## [1.11.2](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.1...@thepowereco/cli@1.11.2) (2022-11-15)
+
+
+### Bug Fixes
+
+* **cli:** readme fix ([395feec](https://github.com/thepower/power_hub/commit/395feec0f63fd9f2b998c2afb0deefa95ca1a2e6))
+* **cli:** readme fixes ([63ea6e8](https://github.com/thepower/power_hub/commit/63ea6e86a4923677216268cd33b111eb56385860))
+
+
+
+
+
+## [1.11.1](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.0...@thepowereco/cli@1.11.1) (2022-11-15)
+
+
+### Bug Fixes
+
+* **cli:** task list final fixes ([47c4ac7](https://github.com/thepower/power_hub/commit/47c4ac7f28671064f3d87a0868097a99b49f1959))
+
+
+
+
+
+# [1.11.0](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.10.4...@thepowereco/cli@1.11.0) (2022-11-14)
+
+
+### Features
+
+* **cli:** task list ([f280ef8](https://github.com/thepower/power_hub/commit/f280ef8b7d55fbdb412dd2a7287bcbc91b82305b))
+
+
+
+
+
+## [1.10.4](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.10.1...@thepowereco/cli@1.10.4) (2022-11-10)
+
+
+### Bug Fixes
+
+* **cli:** ver up ([a292e1e](https://github.com/thepower/power_hub/commit/a292e1e4dd75d6b635efa4c6012def2eba737740))
+* **cli:** version up ([ed1bd8b](https://github.com/thepower/power_hub/commit/ed1bd8b5f2e2ebf6bc8ced86d910df5ea6132f0b))
+* **tssdk:** register random chain fix ([08df28f](https://github.com/thepower/power_hub/commit/08df28f75cd5906306a2e7dc5ddac806ad4848d4))
+
+
+
+
+
 ## [1.10.1](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.10.0...@thepowereco/cli@1.10.1) (2022-11-08)
 
 

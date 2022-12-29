@@ -1,13 +1,5 @@
-oclif-hello-world
+Power Ecosystem Command Line Tool
 =================
-
-oclif example Hello World CLI.
-
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![CircleCI](https://circleci.com/gh/oclif/hello-world/tree/main.svg?style=shield)](https://circleci.com/gh/oclif/hello-world/tree/main)
-[![Downloads/week](https://img.shields.io/npm/dw/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/oclif/hello-world/blob/main/package.json)
 
 <!-- toc -->
 * [Usage](#usage)
@@ -17,37 +9,37 @@ oclif example Hello World CLI.
 <!-- usage -->
 ```sh-session
 $ npm install -g @thepowereco/cli
-$ tp COMMAND
+$ tpe COMMAND
 running command...
-$ tp (--version)
+$ tpe (--version)
 @thepowereco/cli/1.2.11 darwin-x64 node-v14.18.1
-$ tp --help [COMMAND]
+$ tpe --help [COMMAND]
 USAGE
-  $ tp COMMAND
+  $ tpe COMMAND
 ...
 ```
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`tp help [COMMAND]`](#tp-help-command)
-* [`tp plugins`](#tp-plugins)
-* [`tp plugins:install PLUGIN...`](#tp-pluginsinstall-plugin)
-* [`tp plugins:inspect PLUGIN...`](#tp-pluginsinspect-plugin)
-* [`tp plugins:install PLUGIN...`](#tp-pluginsinstall-plugin-1)
-* [`tp plugins:link PLUGIN`](#tp-pluginslink-plugin)
-* [`tp plugins:uninstall PLUGIN...`](#tp-pluginsuninstall-plugin)
-* [`tp plugins:uninstall PLUGIN...`](#tp-pluginsuninstall-plugin-1)
-* [`tp plugins:uninstall PLUGIN...`](#tp-pluginsuninstall-plugin-2)
-* [`tp plugins update`](#tp-plugins-update)
-* [`tp upload`](#tp-upload)
+* [`tpe help [COMMAND]`](#tpe-help-command)
+* [`tpe plugins`](#tpe-plugins)
+* [`tpe plugins:install PLUGIN...`](#tpe-pluginsinstall-plugin)
+* [`tpe plugins:inspect PLUGIN...`](#tpe-pluginsinspect-plugin)
+* [`tpe plugins:install PLUGIN...`](#tpe-pluginsinstall-plugin-1)
+* [`tpe plugins:link PLUGIN`](#tpe-pluginslink-plugin)
+* [`tpe plugins:uninstall PLUGIN...`](#tpe-pluginsuninstall-plugin)
+* [`tpe plugins:uninstall PLUGIN...`](#tpe-pluginsuninstall-plugin-1)
+* [`tpe plugins:uninstall PLUGIN...`](#tpe-pluginsuninstall-plugin-2)
+* [`tpe plugins update`](#tpe-plugins-update)
+* [`tpe upload`](#tpe-upload)
 
-## `tp help [COMMAND]`
+## `tpe help [COMMAND]`
 
-Display help for tp.
+Display help for tpe.
 
 ```
 USAGE
-  $ tp help [COMMAND] [-n]
+  $ tpe help [COMMAND] [-n]
 
 ARGUMENTS
   COMMAND  Command to show help for.
@@ -56,18 +48,18 @@ FLAGS
   -n, --nested-commands  Include all nested commands in the output.
 
 DESCRIPTION
-  Display help for tp.
+  Display help for tpe.
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.12/src/commands/help.ts)_
 
-## `tp plugins`
+## `tpe plugins`
 
 List installed plugins.
 
 ```
 USAGE
-  $ tp plugins [--core]
+  $ tpe plugins [--core]
 
 FLAGS
   --core  Show core plugins.
@@ -76,18 +68,18 @@ DESCRIPTION
   List installed plugins.
 
 EXAMPLES
-  $ tp plugins
+  $ tpe plugins
 ```
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.1.0/src/commands/plugins/index.ts)_
 
-## `tp plugins:install PLUGIN...`
+## `tpe plugins:install PLUGIN...`
 
 Installs a plugin into the CLI.
 
 ```
 USAGE
-  $ tp plugins:install PLUGIN...
+  $ tpe plugins:install PLUGIN...
 
 ARGUMENTS
   PLUGIN  Plugin to install.
@@ -109,23 +101,23 @@ DESCRIPTION
   the CLI without the need to patch and update the whole CLI.
 
 ALIASES
-  $ tp plugins add
+  $ tpe plugins add
 
 EXAMPLES
-  $ tp plugins:install myplugin 
+  $ tpe plugins:install myplugin 
 
-  $ tp plugins:install https://github.com/someuser/someplugin
+  $ tpe plugins:install https://github.com/someuser/someplugin
 
-  $ tp plugins:install someuser/someplugin
+  $ tpe plugins:install someuser/someplugin
 ```
 
-## `tp plugins:inspect PLUGIN...`
+## `tpe plugins:inspect PLUGIN...`
 
 Displays installation properties of a plugin.
 
 ```
 USAGE
-  $ tp plugins:inspect PLUGIN...
+  $ tpe plugins:inspect PLUGIN...
 
 ARGUMENTS
   PLUGIN  [default: .] Plugin to inspect.
@@ -138,16 +130,16 @@ DESCRIPTION
   Displays installation properties of a plugin.
 
 EXAMPLES
-  $ tp plugins:inspect myplugin
+  $ tpe plugins:inspect myplugin
 ```
 
-## `tp plugins:install PLUGIN...`
+## `tpe plugins:install PLUGIN...`
 
 Installs a plugin into the CLI.
 
 ```
 USAGE
-  $ tp plugins:install PLUGIN...
+  $ tpe plugins:install PLUGIN...
 
 ARGUMENTS
   PLUGIN  Plugin to install.
@@ -169,23 +161,23 @@ DESCRIPTION
   the CLI without the need to patch and update the whole CLI.
 
 ALIASES
-  $ tp plugins add
+  $ tpe plugins add
 
 EXAMPLES
-  $ tp plugins:install myplugin 
+  $ tpe plugins:install myplugin 
 
-  $ tp plugins:install https://github.com/someuser/someplugin
+  $ tpe plugins:install https://github.com/someuser/someplugin
 
-  $ tp plugins:install someuser/someplugin
+  $ tpe plugins:install someuser/someplugin
 ```
 
-## `tp plugins:link PLUGIN`
+## `tpe plugins:link PLUGIN`
 
 Links a plugin into the CLI for development.
 
 ```
 USAGE
-  $ tp plugins:link PLUGIN
+  $ tpe plugins:link PLUGIN
 
 ARGUMENTS
   PATH  [default: .] path to plugin
@@ -203,16 +195,16 @@ DESCRIPTION
   command will override the user-installed or core plugin implementation. This is useful for development work.
 
 EXAMPLES
-  $ tp plugins:link myplugin
+  $ tpe plugins:link myplugin
 ```
 
-## `tp plugins:uninstall PLUGIN...`
+## `tpe plugins:uninstall PLUGIN...`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ tp plugins:uninstall PLUGIN...
+  $ tpe plugins:uninstall PLUGIN...
 
 ARGUMENTS
   PLUGIN  plugin to uninstall
@@ -225,17 +217,17 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ tp plugins unlink
-  $ tp plugins remove
+  $ tpe plugins unlink
+  $ tpe plugins remove
 ```
 
-## `tp plugins:uninstall PLUGIN...`
+## `tpe plugins:uninstall PLUGIN...`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ tp plugins:uninstall PLUGIN...
+  $ tpe plugins:uninstall PLUGIN...
 
 ARGUMENTS
   PLUGIN  plugin to uninstall
@@ -248,17 +240,17 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ tp plugins unlink
-  $ tp plugins remove
+  $ tpe plugins unlink
+  $ tpe plugins remove
 ```
 
-## `tp plugins:uninstall PLUGIN...`
+## `tpe plugins:uninstall PLUGIN...`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ tp plugins:uninstall PLUGIN...
+  $ tpe plugins:uninstall PLUGIN...
 
 ARGUMENTS
   PLUGIN  plugin to uninstall
@@ -271,17 +263,17 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ tp plugins unlink
-  $ tp plugins remove
+  $ tpe plugins unlink
+  $ tpe plugins remove
 ```
 
-## `tp plugins update`
+## `tpe plugins update`
 
 Update installed plugins.
 
 ```
 USAGE
-  $ tp plugins update [-h] [-v]
+  $ tpe plugins update [-h] [-v]
 
 FLAGS
   -h, --help     Show CLI help.
@@ -291,13 +283,13 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-## `tp upload`
+## `tpe upload`
 
 Upload application files to storage
 
 ```
 USAGE
-  $ tp upload
+  $ tpe upload
 
 DESCRIPTION
   Upload application files to storage

@@ -1,10 +1,10 @@
 import createHash from 'create-hash';
-import {Buffer} from 'safe-buffer';
+import { Buffer } from 'safe-buffer';
 import * as msgPack from '@thepowereco/msgpack';
-import {AddressApi} from './address/address';
-import {NetworkApi} from './network/network';
-import {NetworkEnum} from '../config/network.enum';
-import {ChainNameEnum} from "../config/chain.enum";
+import { AddressApi } from './address/address';
+import { NetworkApi } from './network/network';
+import { NetworkEnum } from '../config/network.enum';
+import { ChainSettingsCurrencySettingsValue, ChainSettingsGasSettingsValue } from '../typings';
 
 const Bitcoin = require('bitcoinjs-lib');
 // const sha512 = require('js-sha512').sha512;
@@ -19,7 +19,7 @@ const PURPOSE_GAS = 0x03;
 const KIND_GENERIC = 0x10;
 const KIND_REGISTER = 0x11;
 const KIND_DEPLOY = 0x12;
-const KIND_PATCH = 0x13;
+// const KIND_PATCH = 0x13;
 const KIND_LSTORE = 22;
 
 // tmp unsed
@@ -128,29 +128,46 @@ const getRegisterTxBody = async (chain: number, publicKey: string, timestamp: nu
   return body;
 };
 
-const computeFee = (body: any, feeSettings: any) => {
-  if (feeSettings.feeCur && feeSettings.fee && feeSettings.baseEx && feeSettings.kb) {
-    body.p.push([PURPOSE_SRCFEE, feeSettings.feeCur, feeSettings.fee]);
-    let bodySize;
-    do {
-      bodySize = msgPack.encode(body).length;
-      if (bodySize > feeSettings.baseEx) {
-        body.p.find((item: any) => item[0] === PURPOSE_SRCFEE)[2] = feeSettings.fee + Math.floor(((bodySize - feeSettings.baseEx) * feeSettings.kb) / 1024);
-      }
-    } while (bodySize !== msgPack.encode(body).length);
+const computeFee = (body: any, feeSettings?: ChainSettingsCurrencySettingsValue) => {
+  if (feeSettings) {
+    const {
+      feeCurrency,
+      baseextra,
+      base,
+      kb,
+    } = feeSettings;
+
+    if (feeCurrency && base && baseextra && kb) {
+      body.p.push([PURPOSE_SRCFEE, feeCurrency, base]);
+      let bodySize;
+      do {
+        bodySize = msgPack.encode(body).length;
+        if (bodySize > baseextra) {
+          body.p.find((item: any) => item[0] === PURPOSE_SRCFEE)[2] = base + Math.floor(((bodySize - baseextra) * kb) / 1024);
+        }
+      } while (bodySize !== msgPack.encode(body).length);
+    }
   }
 
   return body;
 };
 
-const computeGas = (body: any, gasSettings: any) => {
-  const pSize = msgPack.encode(body.p).length;
-  if (pSize > 100) {
-    const info = body.p[0];
+const computeGas = (body: any, gasSettings: ChainSettingsGasSettingsValue) => { // TODO: Передавать гораздо больше если нет
+  if (gasSettings) {
+    const {
+      gas,
+      tokens,
+      gasCurrency,
+    } = gasSettings;
 
-    if (info.)
+    const pSize = msgPack.encode(body.p).length;
+    if (pSize > 100) {
+      const info = body.p[0];
+      console.log(gas, tokens, gasCurrency, info); // TODO: implement calculation
+
+      // if (info.)
+    }
   }
-
   return body;
 };
 
@@ -162,7 +179,6 @@ const getSimpleTransferTxBody = (
   msg: string,
   timestamp: number,
   seq: number,
-  feeSettings: any,
 ) => {
   const body = {
     k: KIND_GENERIC,
@@ -174,7 +190,7 @@ const getSimpleTransferTxBody = (
     e: msg ? { msg } : {},
   };
 
-  return computeFee(body, feeSettings);
+  return computeFee(body);
 };
 
 const wrapAndSignPayload = (payload: any, keyPair: any, publicKey: string) => {
@@ -228,7 +244,7 @@ export const TransactionsApi = {
   // не можем сказать сколько стоит газ. Локально развернуть эвм и посчитать газ + накинуть 10%
 
   composeSimpleTransferTX(
-    feeSettings: any,
+    // feeSettings: any,
     wif: string,
     from: string,
     to: string,
@@ -244,7 +260,7 @@ export const TransactionsApi = {
     const bufferFrom = Buffer.from(AddressApi.parseTextAddress(from));
     const bufferTo = Buffer.from(AddressApi.parseTextAddress(to));
 
-    const payload = msgPack.encode(getSimpleTransferTxBody(bufferFrom, bufferTo, token, amount, message, timestamp, seq, feeSettings));
+    const payload = msgPack.encode(getSimpleTransferTxBody(bufferFrom, bufferTo, token, amount, message, timestamp, seq));
     return msgPack.encode(wrapAndSignPayload(payload, keyPair, publicKey)).toString('base64');
   },
 
@@ -285,7 +301,7 @@ export const TransactionsApi = {
     const bufferFrom = Buffer.from(AddressApi.parseTextAddress(from));
     const bufferTo = Buffer.from(AddressApi.parseTextAddress(to));
 
-    const payload = getSimpleTransferTxBody(bufferFrom, bufferTo, token, amount, message, timestamp, seq, feeSettings);
+    const payload = getSimpleTransferTxBody(bufferFrom, bufferTo, token, amount, message, timestamp, seq);
     return payload.p.find((item: any) => item[0] === PURPOSE_SRCFEE);
   },
 
@@ -300,37 +316,16 @@ export const TransactionsApi = {
     const keyPair = Bitcoin.ECPair.fromWIF(wif);
     const publicKey = keyPair.getPublicKeyBuffer();
     const encodedTx = msgPack.encode(tx);
-    const chainGlobalConfig = await NetworkApi.getChainGlobalConfig();
+    // const chainGlobalConfig = await NetworkApi.getChainGlobalConfig();
 
     // Как выбрать сеть для получения настроек
-    const network = new NetworkApi(ChainNameEnum.eight);
-    const feeSettings = network.getFeeSettings();
-    const payload = computeFee(encodedTx, feeSettings);
+    const network = new NetworkApi(8); // TODO: define correct chain
+    const feeSettings = await network.getFeeSettings();
+    const gasSettings = await network.getGasSettings();
+    const payloadWithFee = computeFee(encodedTx, feeSettings);
+    const payloadWithGas = computeGas(payloadWithFee, gasSettings);
 
-    return msgPack.encode(wrapAndSignPayload(payload, keyPair, publicKey)).toString('base64');
-  },
-
-  prepareTXFromSC(
-    feeSettings: any,
-    address: string,
-    sc: string,
-    seq: string,
-    scData: any,
-    gasToken = 'SK',
-    gasValue = 20000,
-  ) {
-    const timestamp = +new Date();
-    const bufferAddress = Buffer.from(AddressApi.parseTextAddress(address));
-    // sc = Buffer.from(AddressApi.parseTextAddress(sc));
-
-    const actual = scData.k !== KIND_PATCH ? {
-      t: timestamp,
-      s: seq,
-      p: scData.p ? [...scData.p, [PURPOSE_GAS, gasToken, gasValue]] : [[PURPOSE_GAS, gasToken, gasValue]],
-      f: bufferAddress,
-    } : {};
-
-    return computeFee({ scData, actual }, feeSettings);
+    return msgPack.encode(wrapAndSignPayload(payloadWithGas, keyPair, publicKey)).toString('base64');
   },
 
   /**
@@ -345,7 +340,7 @@ export const TransactionsApi = {
    * @param feeSettings
    * @param vm
    */
-  composeDeployTX(
+  composeDeployTX( // TODO: remove as unused
     address: string,
     code: any,
     initParams: any,

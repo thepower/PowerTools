@@ -2,20 +2,30 @@ import axios from 'axios';
 import createHash from 'create-hash';
 import Debug from 'debug';
 import { config as cfg } from '../../config/chain.config';
-import { ChainGlobalConfig, ChainNode } from '../../typings';
+import {
+  ChainGlobalConfig, ChainNode, ChainSettings, ChainSettingsGasSettingsValue,
+} from '../../typings';
 import { queueNodes, transformNodeList, transformResponse } from '../../helpers/network.helper';
 import { ChainAction } from '../../helpers/network.enum';
-import { ChainNameEnum } from '../../config/chain.enum';
 import { NoNodesFoundException } from './eceptions/no-nodes-found.exception';
 import { UnknownChainException } from './eceptions/unknown-chain.exception';
 import { HashMismatchException } from './eceptions/hash-mismatch.exception';
 import { ChainUnavailableException } from './eceptions/chain-unavailable.exception';
 import { NoNodesToQueryException } from './eceptions/no-nodes-to-query.exception';
+import { NetworkEnum } from '../../config/network.enum';
 
 const info = Debug('info');
 
 export class NetworkApi {
-  private currentChain: ChainNameEnum;
+  private currentChain: number;
+
+  private currentNodes: ChainNode[] = [];
+
+  private nodeIndex = 0;
+
+  constructor(chain: number) {
+    this.currentChain = chain;
+  }
 
   public static async getChainGlobalConfig(): Promise<ChainGlobalConfig> {
     const baseURL = 'https://raw.githubusercontent.com/thepower/all_chains/main/config.json';
@@ -23,15 +33,25 @@ export class NetworkApi {
     return data;
   }
 
-  private currentNodes: ChainNode[] = [];
+  public static async getNetworkChains(networkName: NetworkEnum): Promise<number[]> {
+    const chainGlobalConfig = await NetworkApi.getChainGlobalConfig();
+    const networks = chainGlobalConfig.settings;
+    const chainArray = networks[networkName];
 
-  private nodeIndex = 0;
+    if (!chainArray) {
+      throw new Error(`Chains not found for network ${networkName}`);
+    }
 
-  constructor(chain: ChainNameEnum) {
-    this.currentChain = chain;
+    return chainArray;
   }
 
-  public async changeChain(chain: ChainNameEnum) {
+  public static async getRandomChain(networkName: NetworkEnum): Promise<number> {
+    const chainArray = await NetworkApi.getNetworkChains(networkName);
+    const strChain: string = chainArray[Math.floor(Math.random() * chainArray.length)].toString();
+    return Number(strChain);
+  }
+
+  public async changeChain(chain: number) {
     this.currentChain = chain;
     await this.bootstrap();
   }
@@ -53,9 +73,8 @@ export class NetworkApi {
 
   public async getGasSettings() {
     const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {});
-    return this.calculateFeeSettings(settings);
+    return this.calculateGasSettings(settings);
   }
-
 
   public getBlock = async (hash = 'last') => this.askBlockchainTo(
     ChainAction.GET_BLOCK,
@@ -169,20 +188,24 @@ export class NetworkApi {
     return this.checkTransaction(response.txid, timeout);
   }
 
-  private calculateGasSettings(settings: any) {
-    let result = settings.current;
-    let gasCur;
-
-
-  }
-
-  private calculateFeeSettings(settings: any) {
-    let result = settings.current.gas;
-    let gasCur = Object.keys(result)[0];
+  private calculateGasSettings(settings: ChainSettings, currencyName = 'SK'): ChainSettingsGasSettingsValue {
+    const result = settings.current.gas;
+    const currencyArr: any = Object.keys(result);
+    const currencyGasValue: ChainSettingsGasSettingsValue = currencyArr[currencyName];
 
     return {
-      gasCur,
-      ...result.SK,
+      // gasCurrency: currencyName,
+      ...currencyGasValue,
+    };
+  }
+
+  private calculateFeeSettings(settings: ChainSettings, currency = 'SK') {
+    const result = settings.current.fee;
+    const feeCur = Object.keys(result)[0];
+
+    return {
+      feeCur,
+      ...result[currency],
     };
   }
 
@@ -287,7 +310,7 @@ export class NetworkApi {
     });
   }
 
-  public async getNodeSettings() {
+  public async getNodeSettings(): Promise<ChainSettings> {
     return this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {});
   }
 

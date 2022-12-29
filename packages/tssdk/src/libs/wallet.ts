@@ -3,7 +3,8 @@ import { NetworkApi } from './network/network';
 import { TransactionsApi } from './transactions';
 import { CryptoApi } from './crypto/crypto';
 import { correctAmount, correctAmountsObject } from '../utils/numbers';
-import { Maybe } from '../typings';
+import { Maybe, RegisteredAccount } from '../typings';
+import { NetworkEnum } from '../config/network.enum';
 
 export class WalletApi {
   private networkApi;
@@ -12,6 +13,67 @@ export class WalletApi {
 
   constructor(network: NetworkApi) {
     this.networkApi = network;
+  }
+
+  public static async registerCertainChain(chain: number, customSeed?: string): Promise<RegisteredAccount> {
+    const seed = customSeed || CryptoApi.generateSeedPhrase();
+    const networkApi = new NetworkApi(chain);
+    await networkApi.bootstrap();
+
+    const settings = await networkApi.getNodeSettings();
+
+    console.log(JSON.stringify(settings.current, null, 2));
+
+    const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
+      seed,
+      settings.current.allocblock.block,
+      settings.current.allocblock.group,
+    );
+
+    const wif = keyPair.toWIF();
+
+    const transmission = await TransactionsApi.composeRegisterTX(
+      +chain,
+      wif,
+      '',
+    );
+
+    const { txid } = await networkApi.createTransaction({ tx: transmission });
+
+    const wait = true;
+    let address = '';
+
+    if (wait) {
+      let count = 0;
+      while (address === '') {
+        if (count > 60) {
+          throw 'Timeout';
+        }
+        count += 1;
+        const status = await networkApi.getTransactionStatus(txid);
+        if (status?.error) {
+          throw status?.error;
+        }
+        if (status?.ok) {
+          address = status.res;
+          break;
+        }
+
+        await WalletApi.sleep(500);
+      }
+    }
+
+    return {
+      chain,
+      wif,
+      address,
+      seed,
+    };
+  }
+
+  public static async registerRandomChain(network: NetworkEnum, customSeed?: string): Promise<RegisteredAccount> {
+    const chain = await NetworkApi.getRandomChain(network);
+    return WalletApi.registerCertainChain(chain, customSeed);
   }
 
   private prettifyTx(inputTx: any, block: any) {
@@ -62,90 +124,8 @@ export class WalletApi {
     return tx;
   }
 
-  private async sleep(ms: number) {
+  public static async sleep(ms: number) {
     return new Promise((r) => setTimeout(r, ms));
-  }
-
-  public async createNew(
-    chain: string,
-    seedPhrase: string,
-    referrer = '',
-    wait = false,
-  ) {
-    // const nodes = await this.networkApi.getChainNodes(chain, chain);
-
-    // if (Object.keys(nodes.chain_nodes).length === 0) {
-    //   throw 'Can not access chain';
-    // }
-
-    const settings = await this.networkApi.getNodeSettings();
-
-    const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
-      seedPhrase,
-      settings.current.allocblock.block,
-      settings.current.allocblock.group,
-    );
-
-    const wif = keyPair.toWIF();
-
-    const transmission = await TransactionsApi.composeRegisterTX(
-      +chain,
-      wif,
-      referrer,
-    );
-
-    const { txid } = await this.networkApi.createTransaction({ tx: transmission });
-
-    if (wait) {
-      let walletAddress = '';
-      let count = 0;
-      while (walletAddress === '') {
-        if (count > 60) {
-          throw 'Timeout';
-        }
-        count += 1;
-        const status = await this.networkApi.getTransactionStatus(txid);
-        if (status?.error) {
-          throw status?.error;
-        }
-        if (status?.ok) {
-          walletAddress = status.res;
-          break;
-        }
-
-        await this.sleep(500);
-      }
-
-      return { privateKey: wif, address: walletAddress };
-    }
-
-    return { privateKey: wif, txid };
-  }
-
-  public async makeNewTx(
-    wif: string,
-    from: string,
-    to: string,
-    token: string,
-    inputAmount: number,
-    message: string,
-    seq: number,
-  ) {
-    const amount = correctAmount(inputAmount, token, false);
-    const feeSettings = this.networkApi.getFeeSettings();
-
-    const transmission = TransactionsApi.composeSimpleTransferTX(
-      feeSettings,
-      wif,
-      from,
-      to,
-      token,
-      amount,
-      message,
-      seq,
-    );
-
-    return this.networkApi.sendPreparedTX(transmission);
   }
 
   public async getBlock(inputHash: string, address: Maybe<string> = null) {

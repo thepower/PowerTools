@@ -3,7 +3,6 @@ import { Address } from 'ethereumjs-util';
 import { defaultAbiCoder as AbiCoder } from '@ethersproject/abi';
 import { NetworkApi, TransactionsApi } from '../index';
 
-import { ChainNameEnum } from '../../config/chain.enum';
 import { AccountKey } from '../../typings';
 import { bnToHex } from '../../helpers/bnHex.helper';
 import { encodeFunction, getAbiInputsOutputs, getAbiInputsOutputsType } from '../../helpers/abi.helper';
@@ -33,7 +32,7 @@ export class EvmApi {
     this.abi = abi;
   }
 
-  public static async build(scAddress: string, chain: ChainNameEnum, abiJSON: any): Promise<EvmApi> {
+  public static async build(scAddress: string, chain: number, abiJSON: any): Promise<EvmApi> {
     const network = new NetworkApi(chain);
     await network.bootstrap();
     const vm = await VM.create();
@@ -103,7 +102,6 @@ export class EvmApi {
     const io = getAbiInputsOutputsType(this.abi, method);
     const encodedFunction = encodeFunction(method, params, io.inputs);
     const data = Buffer.from(encodedFunction, 'hex');
-    const feeSettings = await this.network.getFeeSettings();
 
     const tx = await TransactionsApi.composeSCMethodCallTX(
       key.address,
@@ -112,7 +110,6 @@ export class EvmApi {
       '',
       0,
       key.wif,
-      feeSettings,
       '',
       0,
       'SK',

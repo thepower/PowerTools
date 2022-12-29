@@ -3,6 +3,53 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.15.5](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.4...@thepowereco/tssdk@1.15.5) (2022-11-22)
+
+
+### Bug Fixes
+
+* **tssdk:** exports fix ([3273bc3](https://github.com/thepower/power_hub/commit/3273bc391fc9b9b5a317d9dc6405e2960eb24372))
+
+
+
+
+
+## [1.15.4](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.3...@thepowereco/tssdk@1.15.4) (2022-11-22)
+
+
+### Bug Fixes
+
+* **tssdk, cli:** register account refactored ([40d35a0](https://github.com/thepower/power_hub/commit/40d35a0c54a232bc0de5e69e968338a2bdcc73e7))
+
+
+
+
+
+## [1.15.3](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.2...@thepowereco/tssdk@1.15.3) (2022-11-22)
+
+
+### Bug Fixes
+
+* **cli, tssdk:** refactored account reg ([61dab0b](https://github.com/thepower/power_hub/commit/61dab0b0c825fae8daf9572df1705d8aa9c5a9a0))
+
+
+
+
+
+## [1.15.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.0...@thepowereco/tssdk@1.15.2) (2022-11-10)
+
+
+### Bug Fixes
+
+* **cicd:** fix ([308d329](https://github.com/thepower/power_hub/commit/308d329b1ffee6031b5191d153b2c6ed92935ad2))
+* **tssdk:** register random chain fix ([08df28f](https://github.com/thepower/power_hub/commit/08df28f75cd5906306a2e7dc5ddac806ad4848d4))
+* **tssdk:** review fixes ([4902113](https://github.com/thepower/power_hub/commit/4902113057e682fcd18dbb489280dc785fbe820e))
+* **tssdk:** ver up ([2fc12ed](https://github.com/thepower/power_hub/commit/2fc12ed789921cb6c4cac491b64f49852106aaf9))
+
+
+
+
+
 # [1.15.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.14.2...@thepowereco/tssdk@1.15.0) (2022-11-08)
 
 
