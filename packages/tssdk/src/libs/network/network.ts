@@ -2,7 +2,9 @@ import axios from 'axios';
 import createHash from 'create-hash';
 import Debug from 'debug';
 import { config as cfg } from '../../config/chain.config';
-import { ChainGlobalConfig, ChainNode } from '../../typings';
+import {
+  ChainGlobalConfig, ChainNode, ChainSettings, ChainSettingsGasSettingsValue,
+} from '../../typings';
 import { queueNodes, transformNodeList, transformResponse } from '../../helpers/network.helper';
 import { ChainAction } from '../../helpers/network.enum';
 import { NoNodesFoundException } from './eceptions/no-nodes-found.exception';
@@ -67,6 +69,11 @@ export class NetworkApi {
   public async getFeeSettings() {
     const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {});
     return this.calculateFeeSettings(settings);
+  }
+
+  public async getGasSettings() {
+    const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {});
+    return this.calculateGasSettings(settings);
   }
 
   public getBlock = async (hash = 'last') => this.askBlockchainTo(
@@ -181,28 +188,24 @@ export class NetworkApi {
     return this.checkTransaction(response.txid, timeout);
   }
 
-  private calculateFeeSettings(settings: any) {
-    let result = settings.current;
-    let feeCur;
+  private calculateGasSettings(settings: ChainSettings, currencyName = 'SK'): ChainSettingsGasSettingsValue {
+    const result = settings.current.gas;
+    const currencyArr: any = Object.keys(result);
+    const currencyGasValue: ChainSettingsGasSettingsValue = currencyArr[currencyName];
 
-    if (result.fee) {
-      result = result.fee;
-      if (result.SK) {
-        feeCur = 'SK';
-      } else if (result.FEE) {
-        feeCur = 'FEE';
-      } else {
-        return {};
-      }
-    } else {
-      return {};
-    }
+    return {
+      // gasCurrency: currencyName,
+      ...currencyGasValue,
+    };
+  }
+
+  private calculateFeeSettings(settings: ChainSettings, currency = 'SK') {
+    const result = settings.current.fee;
+    const feeCur = Object.keys(result)[0];
 
     return {
       feeCur,
-      fee: result[feeCur].base,
-      baseEx: result[feeCur].baseextra,
-      kb: result[feeCur].kb,
+      ...result[currency],
     };
   }
 
@@ -307,7 +310,7 @@ export class NetworkApi {
     });
   }
 
-  public async getNodeSettings() {
+  public async getNodeSettings(): Promise<ChainSettings> {
     return this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {});
   }
 

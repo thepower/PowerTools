@@ -21,6 +21,9 @@ export class WalletApi {
     await networkApi.bootstrap();
 
     const settings = await networkApi.getNodeSettings();
+
+    console.log(JSON.stringify(settings.current, null, 2));
+
     const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
       seed,
       settings.current.allocblock.block,
@@ -123,88 +126,6 @@ export class WalletApi {
 
   public static async sleep(ms: number) {
     return new Promise((r) => setTimeout(r, ms));
-  }
-
-  public async createNew(
-    chain: string,
-    seedPhrase: string,
-    referrer = '',
-    wait = false,
-  ) {
-    // const nodes = await this.networkApi.getChainNodes(chain, chain);
-
-    // if (Object.keys(nodes.chain_nodes).length === 0) {
-    //   throw 'Can not access chain';
-    // }
-
-    const settings = await this.networkApi.getNodeSettings();
-
-    const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
-      seedPhrase,
-      settings.current.allocblock.block,
-      settings.current.allocblock.group,
-    );
-
-    const wif = keyPair.toWIF();
-
-    const transmission = await TransactionsApi.composeRegisterTX(
-      +chain,
-      wif,
-      referrer,
-    );
-
-    const { txid } = await this.networkApi.createTransaction({ tx: transmission });
-
-    if (wait) {
-      let walletAddress = '';
-      let count = 0;
-      while (walletAddress === '') {
-        if (count > 60) {
-          throw 'Timeout';
-        }
-        count += 1;
-        const status = await this.networkApi.getTransactionStatus(txid);
-        if (status?.error) {
-          throw status?.error;
-        }
-        if (status?.ok) {
-          walletAddress = status.res;
-          break;
-        }
-
-        await WalletApi.sleep(500);
-      }
-
-      return { privateKey: wif, address: walletAddress };
-    }
-
-    return { privateKey: wif, txid };
-  }
-
-  public async makeNewTx(
-    wif: string,
-    from: string,
-    to: string,
-    token: string,
-    inputAmount: number,
-    message: string,
-    seq: number,
-  ) {
-    const amount = correctAmount(inputAmount, token, false);
-    const feeSettings = this.networkApi.getFeeSettings();
-
-    const transmission = TransactionsApi.composeSimpleTransferTX(
-      feeSettings,
-      wif,
-      from,
-      to,
-      token,
-      amount,
-      message,
-      seq,
-    );
-
-    return this.networkApi.sendPreparedTX(transmission);
   }
 
   public async getBlock(inputHash: string, address: Maybe<string> = null) {
