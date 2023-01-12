@@ -263,7 +263,7 @@ export const TransactionsApi = {
     return payload.p.find((item: any) => item[0] === PURPOSE_SRCFEE);
   },
 */
-  packAndSignTX(tx: string, wif: string) {
+  packAndSignTX(tx: any, wif: string) {
     const keyPair = Bitcoin.ECPair.fromWIF(wif);
     const publicKey = keyPair.getPublicKeyBuffer();
     const payload = msgPack.encode(tx);
@@ -304,9 +304,9 @@ export const TransactionsApi = {
     fee?:number,
     feeToken?:string
   ) {
-    const PURPOSE: any[] = [];
+    const CLEAR: any[] = [];
 
-    const selfInitParams = [Buffer.from(AddressApi.parseTextAddress(address))];
+    //const selfInitParams = [Buffer.from(AddressApi.parseTextAddress(address))];
     const scCode = vm === 'evm'
       ? new Uint8Array(code.match(/[\da-f]{2}/gi).map((h: string) => parseInt(h, 16)))
       : new Uint8Array(code);
@@ -317,11 +317,12 @@ export const TransactionsApi = {
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       to: Buffer.from(AddressApi.parseTextAddress(address)),
       s: +new Date(),
-      p: PURPOSE,
-      c: ['init', selfInitParams],
-      // "e": {'code': Buffer.from(new Uint8Array(code)), "vm": "wasm", "view": ["sha1:2b4ccea0d1de703012832f374e30effeff98fe4d", "/questions.wasm"]}
+      p: CLEAR,
+      c: CLEAR,
       e: { code: Buffer.from(scCode), vm, view: [] },
     };
+    if (vm === 'wasm') { body.c=['init', initParams]; }
+    
     if (gasValue>0) { body.p.push([PURPOSE_GAS, gasToken, gasValue]); }
     else {
       body=this.autoAddGas(body, gasSettings)
@@ -331,7 +332,7 @@ export const TransactionsApi = {
       else
       {body=this.autoAddFee(body, feeSettings)} 
   
-    return TransactionsApi.packAndSignTX(msgPack.encode(body), wif);
+    return TransactionsApi.packAndSignTX(body, wif);
   },
 
   decodeTx(tx: any) {
@@ -401,7 +402,7 @@ export const TransactionsApi = {
       else
       {body=this.autoAddFee(body, feeSettings)} 
 
-    return this.packAndSignTX(msgPack.encode(body), wif);
+    return this.packAndSignTX(body, wif);
   },
 
   composeStoreTX(address: string, patches: any, wif: string, feeSettings: any, fee?: number, feeToken?: string) {
@@ -411,7 +412,6 @@ export const TransactionsApi = {
       k: KIND_LSTORE,
       t: +new Date(),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
-      // to: Buffer.from(AddressAPI.parseTextAddress(sc)),
       s: +new Date(),
       p: PURPOSE,
       pa: msgPack.encode(patches.map((i: any) => msgPack.encode(i))),
@@ -421,7 +421,7 @@ export const TransactionsApi = {
       else
       {body=this.autoAddFee(body, feeSettings)} 
 
-    return this.packAndSignTX(msgPack.encode(body), wif);
+    return this.packAndSignTX(body, wif);
   },
   autoAddFee(body: any, feeSettings: any) {
     if (feeSettings.feeCur && feeSettings.fee && feeSettings.baseEx && feeSettings.kb) {

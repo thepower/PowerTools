@@ -122,7 +122,7 @@ export class NetworkApi {
 
       await this.setCurrentConfig(fullNodes);
       info(`Bootstrapped chain ${this.currentChain}`, this.currentNodes);
-      this.loadFeeGasSettings();
+      await this.loadFeeGasSettings();
       return;
     }
     // } else {
