@@ -401,26 +401,22 @@ export class NetworkApi {
     this.feeSettings = this.calculateFeeSettings(settings);
     this.gasSettings = this.calculateGasSettings(settings);
   }
+
   private calculateGasSettings(settings: any) {
     let result = settings.current;
     let gasCur;
 
     if (result.gas) {
       result = result.gas;
-      if (result.SK) {
-        gasCur = 'SK';
-      } else if (result.gas) {
-        gasCur = 'FEE';
-      } else {
-        return {};
-      }
+      gasCur = result.SK ? 'SK' : 'FEE';
     } else {
       return {};
     }
+
     return {
       gasCur,
       gas: result[gasCur].gas,
       tokens: result[gasCur].tokens,
-      };
+    };
   }
 }

@@ -16,7 +16,7 @@ const PURPOSE_GAS = 0x03;
 const KIND_GENERIC = 0x10;
 const KIND_REGISTER = 0x11;
 const KIND_DEPLOY = 0x12;
-const KIND_PATCH = 0x13;
+// const KIND_PATCH = 0x13;
 const KIND_LSTORE = 22;
 
 // tmp unsed
@@ -147,7 +147,7 @@ const getSimpleTransferTxBody = (
   amount: number,
   msg: string,
   timestamp: number,
-  seq: number
+  seq: number,
 ) => {
   const body = {
     k: KIND_GENERIC,
@@ -218,8 +218,8 @@ export const TransactionsApi = {
     amount: number,
     message: string,
     seq: number,
-    fee?:number,
-    feeToken?:string
+    fee?: number,
+    feeToken?: string,
   ) {
     const keyPair = Bitcoin.ECPair.fromWIF(wif);
     const publicKey = keyPair.getPublicKeyBuffer();
@@ -227,11 +227,12 @@ export const TransactionsApi = {
 
     const bufferFrom = Buffer.from(AddressApi.parseTextAddress(from));
     const bufferTo = Buffer.from(AddressApi.parseTextAddress(to));
-    let body=getSimpleTransferTxBody(bufferFrom, bufferTo, token, amount, message, timestamp, seq);
-    if (feeToken && fee) {body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
+    let body = getSimpleTransferTxBody(bufferFrom, bufferTo, token, amount, message, timestamp, seq);
+    if (feeToken && fee) {
+      body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
+    } else {
+      body = this.autoAddFee(body, feeSettings);
     }
-      else
-      {body=this.autoAddFee(body, feeSettings)} 
     const payload = msgPack.encode(body);
     return msgPack.encode(wrapAndSignPayload(payload, keyPair, publicKey)).toString('base64');
   },
@@ -244,7 +245,7 @@ export const TransactionsApi = {
     const payload = msgPack.encode(await getRegisterTxBody(chain, publicKey, timestamp, referrer));
     return msgPack.encode(wrapAndSignPayload(payload, keyPair, publicKey)).toString('base64');
   },
-/*
+  /*
   calculateFee(
     feeSettings: any,
     from: string,
@@ -268,7 +269,7 @@ export const TransactionsApi = {
     const publicKey = keyPair.getPublicKeyBuffer();
     const payload = msgPack.encode(tx);
     return msgPack.encode(wrapAndSignPayload(payload, keyPair, publicKey)).toString('base64');
-  },/*
+  }, /*
   prepareTXFromSC(
     feeSettings: any,
     address: string,
@@ -290,7 +291,7 @@ export const TransactionsApi = {
     } : {};
 
     return this.autoAddFee({ scData, actual }, feeSettings);
-  },*/
+  }, */
   composeDeployTX(
     address: string,
     code: any,
@@ -298,15 +299,13 @@ export const TransactionsApi = {
     gasToken: string,
     gasValue: number,
     wif: string,
-    vm: 'wasm' | 'evm' = 'wasm',
+    vm: 'wasm' | 'evm',
     feeSettings: any,
     gasSettings: any,
     fee?:number,
-    feeToken?:string
+    feeToken?:string,
   ) {
-    const CLEAR: any[] = [];
-
-    //const selfInitParams = [Buffer.from(AddressApi.parseTextAddress(address))];
+    // const selfInitParams = [Buffer.from(AddressApi.parseTextAddress(address))];
     const scCode = vm === 'evm'
       ? new Uint8Array(code.match(/[\da-f]{2}/gi).map((h: string) => parseInt(h, 16)))
       : new Uint8Array(code);
@@ -317,21 +316,19 @@ export const TransactionsApi = {
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       to: Buffer.from(AddressApi.parseTextAddress(address)),
       s: +new Date(),
-      p: CLEAR,
-      c: CLEAR,
+      p: [] as any,
+      c: [] as any,
       e: { code: Buffer.from(scCode), vm, view: [] },
     };
-    if (vm === 'wasm') { body.c=['init', initParams]; }
-    
-    if (gasValue>0) { body.p.push([PURPOSE_GAS, gasToken, gasValue]); }
-    else {
-      body=this.autoAddGas(body, gasSettings)
+    if (vm === 'wasm') { body.c = ['init', initParams]; }
+
+    if (gasValue > 0) { body.p.push([PURPOSE_GAS, gasToken, gasValue]); } else {
+      body = this.autoAddGas(body, gasSettings);
     }
-    if (feeToken && fee) {body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
-    }
-      else
-      {body=this.autoAddFee(body, feeSettings)} 
-  
+    if (feeToken && fee) {
+      body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
+    } else { body = this.autoAddFee(body, feeSettings); }
+
     return TransactionsApi.packAndSignTX(body, wif);
   },
 
@@ -393,36 +390,38 @@ export const TransactionsApi = {
       p: PURPOSE,
       c: toCall,
     };
-    if (gasValue>0) { body.p.push([PURPOSE_GAS, gasToken, gasValue]); }
-    else {
-      body=this.autoAddGas(body, gasSettings)
+    if (gasValue > 0) {
+      body.p.push([PURPOSE_GAS, gasToken, gasValue]);
+    } else {
+      body = this.autoAddGas(body, gasSettings);
     }
-    if (feeToken && fee) {body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
+    if (feeToken && fee) {
+      body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
+    } else {
+      body = this.autoAddFee(body, feeSettings);
     }
-      else
-      {body=this.autoAddFee(body, feeSettings)} 
 
     return this.packAndSignTX(body, wif);
   },
 
   composeStoreTX(address: string, patches: any, wif: string, feeSettings: any, fee?: number, feeToken?: string) {
-    const PURPOSE: any[] = [];
-    
-    let  body = {
+    let body = {
       k: KIND_LSTORE,
       t: +new Date(),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       s: +new Date(),
-      p: PURPOSE,
+      p: [] as any,
       pa: msgPack.encode(patches.map((i: any) => msgPack.encode(i))),
     };
-    if (feeToken && fee) {body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
+    if (feeToken && fee) {
+      body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
+    } else {
+      body = this.autoAddFee(body, feeSettings);
     }
-      else
-      {body=this.autoAddFee(body, feeSettings)} 
 
     return this.packAndSignTX(body, wif);
   },
+
   autoAddFee(body: any, feeSettings: any) {
     if (feeSettings.feeCur && feeSettings.fee && feeSettings.baseEx && feeSettings.kb) {
       body.p.push([PURPOSE_SRCFEE, feeSettings.feeCur, feeSettings.fee]);
@@ -434,12 +433,13 @@ export const TransactionsApi = {
         }
       } while (bodySize !== msgPack.encode(body).length);
     }
-  
+
     return body;
   },
+
   autoAddGas(body: any, gasSettings: any) {
-      body.p.push([PURPOSE_GAS, 'SK', 1000000000]);
+    body.p.push([PURPOSE_GAS, 'SK', 1000000000]);
     return body;
   },
-  
+
 };
