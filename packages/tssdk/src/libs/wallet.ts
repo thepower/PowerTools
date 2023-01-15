@@ -191,7 +191,7 @@ export class WalletApi {
     seq: number,
   ) {
     const amount = correctAmount(inputAmount, token, false);
-    const feeSettings = this.networkApi.getFeeSettings();
+    const feeSettings = this.networkApi.feeSettings;
 
     const transmission = TransactionsApi.composeSimpleTransferTX(
       feeSettings,
@@ -337,7 +337,7 @@ export class WalletApi {
 
     return CryptoApi.decryptWalletData(data, password);
   }
-
+/*
   public calculateFee(
     feeSettings: any,
     from: string,
@@ -360,4 +360,5 @@ export class WalletApi {
       ? [rawFee[1], correctAmount(rawFee[2], rawFee[1])]
       : [];
   }
+  */
 }

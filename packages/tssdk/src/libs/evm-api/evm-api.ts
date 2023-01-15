@@ -102,8 +102,7 @@ export class EvmApi {
     const io = getAbiInputsOutputsType(this.abi, method);
     const encodedFunction = encodeFunction(method, params, io.inputs);
     const data = Buffer.from(encodedFunction, 'hex');
-    const feeSettings = await this.network.getFeeSettings();
-
+    
     const tx = await TransactionsApi.composeSCMethodCallTX(
       key.address,
       this.scAddress,
@@ -111,11 +110,10 @@ export class EvmApi {
       '',
       0,
       key.wif,
-      feeSettings,
-      '',
-      0,
       'SK',
       amount,
+      this.network.feeSettings,
+      this.network.gasSettings
     );
 
     const res = await this.network.sendTxAndWaitForResponse(tx);

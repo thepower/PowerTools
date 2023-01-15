@@ -21,6 +21,10 @@ export class NetworkApi {
 
   private nodeIndex = 0;
 
+  public feeSettings:any;
+
+  public gasSettings:any;
+
   constructor(chain: number) {
     this.currentChain = chain;
   }
@@ -118,6 +122,7 @@ export class NetworkApi {
 
       await this.setCurrentConfig(fullNodes);
       info(`Bootstrapped chain ${this.currentChain}`, this.currentNodes);
+      await this.loadFeeGasSettings();
       return;
     }
     // } else {
@@ -389,5 +394,29 @@ export class NetworkApi {
     this.checkResponseValidity(response);
     response = transformResponse(response, kind);
     return response;
+  }
+
+  private async loadFeeGasSettings() {
+    const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {});
+    this.feeSettings = this.calculateFeeSettings(settings);
+    this.gasSettings = this.calculateGasSettings(settings);
+  }
+
+  private calculateGasSettings(settings: any) {
+    let result = settings.current;
+    let gasCur;
+
+    if (result.gas) {
+      result = result.gas;
+      gasCur = result.SK ? 'SK' : 'FEE';
+    } else {
+      return {};
+    }
+
+    return {
+      gasCur,
+      gas: result[gasCur].gas,
+      tokens: result[gasCur].tokens,
+    };
   }
 }
