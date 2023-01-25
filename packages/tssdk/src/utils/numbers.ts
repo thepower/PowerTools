@@ -57,7 +57,14 @@ export const correctAmountFromStr = (
     const multiplier = 10 ** digits;
     let result = BigInt(multiplier) * BigInt(valueArray[0]);
     if (valueArray.length === 2) {
-      result += BigInt(valueArray[0]);
+      const fractionalDigits = digits - valueArray[1].length;
+      if (fractionalDigits >= 0) {
+        const fractionalMultiplier = 10 ** fractionalDigits;
+        result += BigInt(fractionalMultiplier) * BigInt(valueArray[1]);
+      } else {
+        const fractionalMultiplier = 10 ** (-fractionalDigits);
+        result += BigInt(valueArray[1]) / BigInt(fractionalMultiplier);
+      }
     }
     return result;
   }
