@@ -1,7 +1,7 @@
 export const correctAmount = (
   value: number,
   inputToken: Uint8Array | string | number[],
-  incoming: boolean = true,
+  incoming = true,
 ) => {
   let multiplier = 1000000000;
 
@@ -11,7 +11,7 @@ export const correctAmount = (
     : inputToken;
 
   if (token === 'SK') {
-    multiplier = 100;
+    multiplier = 1000000000;
   }
 
   if (incoming) {
@@ -21,40 +21,52 @@ export const correctAmount = (
   return Math.round(value * multiplier);
 };
 
-export const scientificToDecimal = (number: number) => {
-  const sign = Math.sign(number);
-  let num: string | number = Math.abs(number);
-  //if the number is in scientific notation remove it
-  if (/\d+\.?\d*e[\+\-]*\d+/i.test(num.toString())) {
-    const zero = '0';
-    const parts = String(num).toLowerCase().split('e'); //split into coeff and exponent
-    const e = parts.pop(); //store the exponential part
-    let l = Math.abs(+e!); //get the number of zeros
-    const direction = +e! / l; // use to determine the zeroes on the left or right
-    const coeffArray = parts[0].split('.');
+export const correctAmountsObject = (amountObj: any) => Object.keys(amountObj).reduce(
+  (acc, key) => Object.assign(acc, { [key]: correctAmount(amountObj[key], key) }),
+  {},
+);
 
-    if (direction === -1) {
-      coeffArray[0] = Math.abs(+coeffArray[0]).toString();
-      num = zero + '.' + new Array(l).join(zero) + coeffArray.join('');
-    } else {
-      const dec = coeffArray[1];
-      if (dec) {
-        l = l - dec.length;
-      }
-      num = coeffArray.join('') + new Array(l + 1).join(zero);
-    }
+export const correctAmountToStr = (
+  value: bigint,
+  digits: number,
+  roundTo: number,
+) => {
+  const multiplier = 10 ** digits;
+  let integerPart = '0';
+  let fractionalPart = '';
+
+  integerPart = (value / BigInt(multiplier)).toString();
+  const fractionalB = value % BigInt(multiplier);
+  if (fractionalB > 0n) {
+    fractionalPart = fractionalB.toString().slice(0, roundTo);
   }
 
-  if (sign < 0) {
-    num = '-' + num;
+  if (fractionalPart === '') {
+    return integerPart;
   }
-
-  return num;
+  return `${integerPart}.${fractionalPart}`;
 };
 
-export const correctAmountsObject = (amountObj: any) =>
-  Object.keys(amountObj).reduce(
-    (acc, key) =>
-      Object.assign(acc, { [key]: correctAmount(amountObj[key], key) }),
-    {},
-  );
+export const correctAmountFromStr = (
+  value: string,
+  digits: number,
+) => {
+  const correctValue = value.replace(',', '.');
+  const valueArray = correctValue.split('.');
+  if (valueArray.length <= 2) {
+    const multiplier = 10 ** digits;
+    let result = BigInt(multiplier) * BigInt(valueArray[0]);
+    if (valueArray.length === 2) {
+      const fractionalDigits = digits - valueArray[1].length;
+      if (fractionalDigits >= 0) {
+        const fractionalMultiplier = 10 ** fractionalDigits;
+        result += BigInt(fractionalMultiplier) * BigInt(valueArray[1]);
+      } else {
+        const fractionalMultiplier = 10 ** (-fractionalDigits);
+        result += BigInt(valueArray[1]) / BigInt(fractionalMultiplier);
+      }
+    }
+    return result;
+  }
+  return 0n;
+};
