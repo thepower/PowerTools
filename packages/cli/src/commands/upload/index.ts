@@ -2,17 +2,19 @@ import { Command } from '@oclif/core';
 import {
   AddressApi,
   EvmApi,
+  NetworkEnum,
+  NetworkApi,
 } from '@thepowereco/tssdk';
 
 import * as Listr from 'listr';
 import { resolve } from 'path';
 import { color } from '@oclif/color';
+import { prompt } from 'enquirer';
 import { getHash } from '../../helpers/calcHash.helper';
 import { uploadTaskManifest, uploadTaskFile, scanDir } from '../../helpers/upload.helper';
 import { getConfig, setConfig } from '../../helpers/config.helper';
 import { CliConfig } from '../../types/cliConfig.type';
 import * as abiJson from '../../config/scStorageAbi.json';
-import { storageScAddress } from '../../config/cli.config';
 
 export default class Upload extends Command {
   static description = 'Upload application files to the storage';
@@ -27,6 +29,27 @@ export default class Upload extends Command {
 
   async run(): Promise<void> { // TODO: update task
     this.log(color.whiteBright('✋️WELCOME TO THE POWER ECOSYSTEM! 💪 🌍'));
+
+    const question = {
+      name: 'network',
+      type: 'select',
+      message: 'Please, select the network:',
+      choices: [
+        { name: 'testnet' },
+        { name: 'devnet' },
+        // { name: 'mainnet' },
+      ],
+    };
+
+    const { network } : { network: NetworkEnum } = await prompt([question]);
+    const globalConfig: any = await NetworkApi.getChainGlobalConfig();
+    const storageSettings: any = globalConfig.storage;
+    const [storageScSettings] = Object.values(storageSettings[network]);
+    const [storageScAddress] = Object.values(storageScSettings);
+
+    if (!storageScAddress) {
+      return;
+    }
 
     let config: CliConfig = await getConfig();
 
