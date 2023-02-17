@@ -2,11 +2,11 @@
 
 This repository contains Powerful tools, such as:
 
-- [The Power frontend CLI](./packages/cli/README.md). The main purpose of this utility is working with the decentralized storage (account registration and files uploading using the command line;
-- [The Power Msgpack](./packages/msgpack/README.md). The main purpose of The Power Masgpack is to code transactions and blocks into the binary format;
-- [The Power SDK](./packages/tssdk/README.md). The main purpose of Power SDK is to simplify the development of dApps as well as the UX for their end-users.
+- [The Power frontend CLI](./packages/cli/README.md). This utility works with the decentralized storage in terms of account registration and files uploading using the command line;
+- [The Power Msgpack](./packages/msgpack/README.md). The Power Masgpack aims to code transactions and blocks into binary format;
+- [The Power SDK](./packages/tssdk/README.md). The Power SDK aims to ease dApps development process and UX for end-users.
 
-These tools will help you develop DApps and use Power DCloud services.
+These tools will help you develop DApps and use The Power DCloud services.
 
 ## Installation
 
@@ -14,7 +14,7 @@ These tools will help you develop DApps and use Power DCloud services.
 ```bash 
 npm i @thepowereco/tssdk
 ```
-Power CLI
+**Power CLI**
 
 ```bash
 npm i @thepowereco/cli
@@ -26,4 +26,4 @@ npm i @thepowereco/cli
 
 [The Power API Reference](https://doc.thepower.io/docs/Build/api/api-reference)
 
-[Check out the docs](https://doc.thepower.io/docs/about).
+[Check out the docs](https://doc.thepower.io/docs/about)
