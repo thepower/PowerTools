@@ -41,7 +41,19 @@ export default class Upload extends Command {
       ],
     };
 
+    const copiesQuestion = {
+      name: 'copies',
+      type: 'input',
+      message: 'Enter a number of copies',
+    };
+
     const { network } : { network: NetworkEnum } = await prompt([question]);
+    const { copies } : { copies: string } = await prompt([copiesQuestion]);
+
+    if (!Number(copies)) { // TODO: where to pass it?
+      return;
+    }
+
     const globalConfig: any = await NetworkApi.getChainGlobalConfig();
     const storageSettings: any = globalConfig.storage;
     const [storageScSettings] = Object.values(storageSettings[network]);
@@ -66,7 +78,7 @@ export default class Upload extends Command {
     } = config;
 
     const dir = resolve(source);
-    const storageSc = await EvmApi.build(storageScAddress, 1, abiJson.abi);
+    const storageSc = await EvmApi.build(storageScAddress, 1, abiJson.abi); // TODO: what chain use here?
     let taskId = await storageSc.scGet(
       'taskIdByName',
       [AddressApi.textAddressToEvmAddress(address), projectId],
