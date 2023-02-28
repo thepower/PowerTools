@@ -222,8 +222,12 @@ export class NetworkApi {
         if (status) {
           if (status.error) {
             reject(new Error(`${txId}: ${status.res}`));
+          } else if (status.retval) {
+            resolve({
+              txId, res: status.res, block: status.block, retval: status.retval,
+            });
           } else {
-            resolve({ txId, res: status.res });
+            resolve({ txId, res: status.res, block: status.block });
           }
         } else if (callCount < timeout) {
           check();

@@ -9,6 +9,8 @@ export {
   WalletApi,
   SmartContractWrapper,
   loadScLocal,
+  EvmCore,
+  EvmContract,
 } from './libs';
 
 export { ChainAction } from './helpers/network.enum';

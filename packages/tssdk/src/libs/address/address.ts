@@ -186,7 +186,10 @@ export const AddressApi = {
     const hexAddress = AddressApi.textAddressToHex(textAddress);
     return `0x000000000000000000000000${hexAddress}`;
   },
-
+  evmAddressToHexAddress(evmHexAddress: string) {
+    const arr = evmHexAddress.split('0x000000000000000000000000');
+    return arr[1];
+  },
   isTextAddressValid(textAddress: string) {
     try {
       this.parseTextAddress(textAddress);

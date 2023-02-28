@@ -30,7 +30,7 @@ export const getAbiInputsOutputs = (abi: any, method: string) => {
 
 export const encodeFunction = (
   method: string,
-  params: string[] = [],
+  params: any[] = [],
   inputs: any[] = [],
 ): string => {
   const methodWithParameters = `function ${method}(${inputs.join(',')})`;
