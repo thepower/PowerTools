@@ -6,6 +6,5 @@ export { SmartContractWrapper } from './sc-interface/sc-interface';
 export { instantiateSC, loadScLocal } from './sc-loader';
 export { EvmApi } from './evm-api/evm-api';
 export { EvmCore, EvmContract } from './evm-api/evmCore';
-export { Evm20Contract, Evm721Contract } from './evmContracts';
 export { TransactionsApi } from './transactions';
 export { WalletApi } from './wallet';
