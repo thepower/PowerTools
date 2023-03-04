@@ -97,7 +97,6 @@ export class EvmContract {
     );
 
     const res = await this.evm.network.sendTxAndWaitForResponse(tx);
-    console.log('Transaction result:', res);
     return res;
   }
 

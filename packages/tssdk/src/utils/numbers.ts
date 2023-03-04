@@ -1,9 +1,11 @@
+export const getMultiplier = () => 1000000000;
+
 export const correctAmount = (
   value: number,
   inputToken: Uint8Array | string | number[],
   incoming = true,
 ) => {
-  let multiplier = 1000000000;
+  let multiplier = getMultiplier();
 
   const token = Array.isArray(inputToken) || (inputToken instanceof Uint8Array)
     // @ts-ignore
