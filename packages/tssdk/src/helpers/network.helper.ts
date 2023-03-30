@@ -10,23 +10,25 @@ import { config } from '../config/chain.config';
  */
 export const queueNodes = async (nodesList: ChainNode[]) => {
   const startTime = +new Date();
-
+  const heights: number [] = []
   const sortedNodes: ChainNode[] = await Promise.all(
     nodesList.map(elem => axios
       .request({
-        url: `${elem.address}/api/status`,
+        url: `${elem.address}/api/node/status`,
         timeout: 1000,
         params: {
           node: elem.nodeId,
         },
       })
-      .then((data: any) => {
-        const url = new URL(data.config.url);
-
+      .then((response: any) => {
+        const url = new URL(response.config.url);
+        const height = response?.data.status?.blockchain?.header?.height;
+        heights.push(height)
         return {
           address: url.origin,
           time: +(new Date()) - startTime,
-          nodeId: data.config?.params?.node,
+          nodeId: response.config?.params?.node,
+          height,
         };
       }, (data: any) => {
         const url = new URL(data.config.url);
@@ -35,11 +37,15 @@ export const queueNodes = async (nodesList: ChainNode[]) => {
           address: url.origin,
           time: config.maxNodeResponseTime, // default max response time
           nodeId: data.config?.params?.node,
+          height: 0,
         };
       })),
   );
-
-  return sortedNodes.sort((a, b) => (a.time || 0) - (b.time || 0)); // TODO: default time
+  const maxHeight = Math.max(...heights)
+  const nodesWithMaxHeight = sortedNodes.filter(
+    (item) => item?.height && item?.height >= maxHeight - 3,
+  );
+  return nodesWithMaxHeight.sort((a, b) => (a.time || 0) - (b.time || 0)); // TODO: default time
 };
 
 export const transformNodeList = (rawNodes: RawNodes) => {
@@ -70,6 +76,12 @@ export const transformResponse = async (response: any, kind: ChainAction) => {
 
     case ChainAction.GET_BLOCK:
       return response.block;
+
+    case ChainAction.GET_BLOCK_INFO:
+        return response.block;
+
+    case ChainAction.GET_BLOCK_HASH:
+      return response.blockhash;
 
     case ChainAction.GET_WALLET:
       return response.info;
