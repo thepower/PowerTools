@@ -357,7 +357,8 @@ export class NetworkApi {
 
     switch (kind) {
       case ChainAction.GET_BLOCK_HASH:
-        actionUrl = `/blockhash/${parameters.height}`;
+        actionUrl = '/blockhash';
+        requestParams.url = parameters.height.toString();
         break;
 
       case ChainAction.GET_BLOCK:
