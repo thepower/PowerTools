@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.97](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.96...@thepowereco/cli@1.11.97) (2023-04-03)
+
+**Note:** Version bump only for package @thepowereco/cli
+
+
+
+
+
 ## [1.11.96](https://github.com/thepower/power_hub/compare/@thepowereco/cli@1.11.95...@thepowereco/cli@1.11.96) (2023-03-01)
 
 **Note:** Version bump only for package @thepowereco/cli
