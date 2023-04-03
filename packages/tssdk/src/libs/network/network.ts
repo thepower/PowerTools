@@ -21,12 +21,21 @@ export class NetworkApi {
 
   private nodeIndex = 0;
 
-  public feeSettings:any;
+  public feeSettings: any;
 
-  public gasSettings:any;
+  public gasSettings: any;
 
   constructor(chain: number) {
     this.currentChain = chain;
+  }
+
+  public load(params: { currentChain: number, currentNodes: ChainNode[], nodeIndex: number, feeSettings: any, gasSettings: any }) {
+    Object.assign(this, params);
+  }
+
+  public upload() {
+    const { currentChain, currentNodes, nodeIndex, feeSettings, gasSettings } = this
+    return { currentChain, currentNodes, nodeIndex, feeSettings, gasSettings }
   }
 
   public static async getChainGlobalConfig(): Promise<ChainGlobalConfig> {
@@ -73,8 +82,18 @@ export class NetworkApi {
     return this.calculateFeeSettings(settings);
   }
 
+  public getBlockHash = async (height: number) => this.askBlockchainTo(
+    ChainAction.GET_BLOCK_HASH,
+    { chain: this.currentChain, height },
+  );
+
   public getBlock = async (hash = 'last') => this.askBlockchainTo(
     ChainAction.GET_BLOCK,
+    { chain: this.currentChain, hash },
+  );
+
+  public getBlockInfo = async (hash = 'last') => this.askBlockchainTo(
+    ChainAction.GET_BLOCK_INFO,
     { chain: this.currentChain, hash },
   );
 
@@ -305,7 +324,7 @@ export class NetworkApi {
     }
   }
 
-  public async getAddressChain(address : string) {
+  public async getAddressChain(address: string) {
     return this.askBlockchainTo(ChainAction.GET_MY_CHAIN, { address });
   }
 
@@ -337,8 +356,18 @@ export class NetworkApi {
     };
 
     switch (kind) {
+      case ChainAction.GET_BLOCK_HASH:
+        actionUrl = '/blockhash';
+        requestParams.url = parameters.height.toString();
+        break;
+
       case ChainAction.GET_BLOCK:
         actionUrl = '/block';
+        requestParams.url = parameters.hash;
+        break;
+
+      case ChainAction.GET_BLOCK_INFO:
+        actionUrl = '/blockinfo';
         requestParams.url = parameters.hash;
         break;
 
