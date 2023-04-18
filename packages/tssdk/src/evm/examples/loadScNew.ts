@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import path from 'path';
 import { EvmApi } from '../../libs';
 import abiJson from './contractAbi.json';
