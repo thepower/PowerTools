@@ -34,8 +34,12 @@ export class NetworkApi {
   }
 
   public upload() {
-    const { currentChain, currentNodes, nodeIndex, feeSettings, gasSettings } = this
-    return { currentChain, currentNodes, nodeIndex, feeSettings, gasSettings }
+    const {
+      currentChain, currentNodes, nodeIndex, feeSettings, gasSettings,
+    } = this;
+    return {
+      currentChain, currentNodes, nodeIndex, feeSettings, gasSettings,
+    };
   }
 
   public static async getChainGlobalConfig(): Promise<ChainGlobalConfig> {
@@ -144,39 +148,6 @@ export class NetworkApi {
       await this.loadFeeGasSettings();
       return;
     }
-    // } else {
-    //   //Нужного чейна нет в бутстрапе опрашиваем все из бутстрапа - может они знают
-    //   for (const key in defaultBootstrap) {
-    //     const bootstrapNodes = await queueNodes(defaultBootstrap[key]);
-    //
-    //     const unsortedNodes = await this.askBlockchainTo(
-    //       ChainAction.GET_CHAIN_NODES,
-    //       { remoteChain: this.currentChain },
-    //       bootstrapNodes,
-    //     );
-    //
-    //     const tempNodes = await queueNodes(unsortedNodes);
-    //
-    //     if (tempNodes.length) {
-    //       //Чейн сказал, что знает
-    //       const fullNodes = await this.askBlockchainTo(
-    //         ChainAction.GET_CHAIN_NODES,
-    //         { remoteChain: this.currentChain },
-    //         tempNodes,
-    //       );
-    //
-    //       if (fullNodes.length) {
-    //         //Нашли
-    //         await this.setCurrentConfig(chain, fullNodes);
-    //         console.log(`Bootstrapped chain ${chain}  via ${key}`, fullNodes);
-    //         return;
-    //       } else {
-    //         //Ни одна нода из переданных не отдала список нод
-    //         console.log(`No nodes found for chain ${chain} via ${key}`)
-    //       }
-    //     }
-    //   }
-    // }
 
     throw new UnknownChainException(this.currentChain);
   };
@@ -282,8 +253,6 @@ export class NetworkApi {
     if (!this.currentNodes.length) {
       throw new NoNodesToQueryException();
     }
-
-    // console.log(parameters);
 
     while (!success) {
       i += 1;
