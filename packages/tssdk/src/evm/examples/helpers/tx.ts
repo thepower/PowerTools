@@ -25,7 +25,7 @@ export const encodeDeployment = (
     values: unknown[]
   },
 ) => {
-  const deploymentData = '0x' + bytecode;
+  const deploymentData = `0x${bytecode}`;
   if (params) {
     const argumentsEncoded = AbiCoder.encode(params.types, params.values);
     return deploymentData + argumentsEncoded.slice(2);

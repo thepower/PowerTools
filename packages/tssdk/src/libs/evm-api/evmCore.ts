@@ -97,7 +97,6 @@ export class EvmContract {
     );
 
     const res = await this.evm.network.sendTxAndWaitForResponse(tx);
-    console.log('Transaction result:', res);
     return res;
   }
 
@@ -140,8 +139,6 @@ export class EvmCore {
 
     vm.stateManager.getContractStorage = async (address: Address, key: Buffer) => {
       const val = bnToHex(`0x${key.toString('hex')}`);
-      //      console.log('address.toString()',address.toString());
-      //      console.log('AddressApi.evmAddressToHexAddress(address.toString())',AddressApi.evmAddressToHexAddress(address.toString()));
 
       const state = await network.loadScStateByKey(AddressApi.hexToTextAddress(AddressApi.evmAddressToHexAddress(address.toString())), val);
       return Buffer.from(state);

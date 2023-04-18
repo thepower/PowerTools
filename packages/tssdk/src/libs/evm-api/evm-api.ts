@@ -102,7 +102,7 @@ export class EvmApi {
     const io = getAbiInputsOutputsType(this.abi, method);
     const encodedFunction = encodeFunction(method, params, io.inputs);
     const data = Buffer.from(encodedFunction, 'hex');
-    
+
     const tx = await TransactionsApi.composeSCMethodCallTX(
       key.address,
       this.scAddress,
@@ -113,11 +113,10 @@ export class EvmApi {
       'SK',
       amount,
       this.network.feeSettings,
-      this.network.gasSettings
+      this.network.gasSettings,
     );
 
-    const res = await this.network.sendTxAndWaitForResponse(tx);
-    console.log('Transaction result:', res);
+    return this.network.sendTxAndWaitForResponse(tx);
   }
 
   private isMethodExist(method: string): boolean {

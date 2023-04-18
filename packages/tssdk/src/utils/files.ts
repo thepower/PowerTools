@@ -9,7 +9,7 @@ export const getFileData = (inputFile: File, type: FileReaderType) => {
   return new Promise((resolve, reject) => {
     fileReader.onerror = () => {
       fileReader.abort();
-      reject('Parsing error');
+      reject(new Error('Parsing error'));
     };
 
     fileReader.onload = () => {

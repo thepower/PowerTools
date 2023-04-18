@@ -1,5 +1,5 @@
-import { ChainNode, RawNodes } from '../typings';
 import axios from 'axios';
+import { ChainNode, RawNodes } from '../typings';
 import { ChainAction } from './network.enum';
 import { config } from '../config/chain.config';
 
@@ -10,9 +10,9 @@ import { config } from '../config/chain.config';
  */
 export const queueNodes = async (nodesList: ChainNode[]) => {
   const startTime = +new Date();
-  const heights: number [] = []
+  const heights: number [] = [];
   const sortedNodes: ChainNode[] = await Promise.all(
-    nodesList.map(elem => axios
+    nodesList.map((elem) => axios
       .request({
         url: `${elem.address}/api/node/status`,
         timeout: 1000,
@@ -23,7 +23,7 @@ export const queueNodes = async (nodesList: ChainNode[]) => {
       .then((response: any) => {
         const url = new URL(response.config.url);
         const height = response?.data.status?.blockchain?.header?.height;
-        heights.push(height)
+        heights.push(height);
         return {
           address: url.origin,
           time: +(new Date()) - startTime,
@@ -41,7 +41,7 @@ export const queueNodes = async (nodesList: ChainNode[]) => {
         };
       })),
   );
-  const maxHeight = Math.max(...heights)
+  const maxHeight = Math.max(...heights);
   const nodesWithMaxHeight = sortedNodes.filter(
     (item) => item?.height && item?.height >= maxHeight - 3,
   );
@@ -49,19 +49,18 @@ export const queueNodes = async (nodesList: ChainNode[]) => {
 };
 
 export const transformNodeList = (rawNodes: RawNodes) => {
-  let nodesList: ChainNode[] = [];
+  const nodesList: ChainNode[] = [];
   const nodeIds = Object.keys(rawNodes);
 
-  nodeIds.forEach(nodeId => {
+  nodeIds.forEach((nodeId) => {
     rawNodes[nodeId].ip.forEach((address) => nodesList.push({ address, nodeId }));
     rawNodes[nodeId].host.forEach((address) => nodesList.push({ address, nodeId }));
   });
 
   return nodesList.reduce(
-    (acc: ChainNode[], { address, nodeId }) =>
-      acc.some(item => item.address === address && item.nodeId === nodeId)
-        ? acc // if address exists in acc - return acc
-        : [...acc, { address, nodeId }], // if address not exists - add it
+    (acc: ChainNode[], { address, nodeId }) => (acc.some((item) => item.address === address && item.nodeId === nodeId)
+      ? acc // if address exists in acc - return acc
+      : [...acc, { address, nodeId }]), // if address not exists - add it
     [],
   );
 };
@@ -78,7 +77,7 @@ export const transformResponse = async (response: any, kind: ChainAction) => {
       return response.block;
 
     case ChainAction.GET_BLOCK_INFO:
-        return response.block;
+      return response.block;
 
     case ChainAction.GET_BLOCK_HASH:
       return response.blockhash;
@@ -88,7 +87,7 @@ export const transformResponse = async (response: any, kind: ChainAction) => {
 
     case ChainAction.GET_NODE_SETTINGS:
       return response.settings;
+    default:
+      return response;
   }
-
-  return response;
 };
