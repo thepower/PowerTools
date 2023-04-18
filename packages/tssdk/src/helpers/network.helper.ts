@@ -10,7 +10,7 @@ import { config } from '../config/chain.config';
  */
 export const queueNodes = async (nodesList: ChainNode[]) => {
   const startTime = +new Date();
-  const heights: number[] = [];
+  const heights: number [] = [];
   const sortedNodes: ChainNode[] = await Promise.all(
     nodesList.map((elem) => axios
       .request({
@@ -87,7 +87,6 @@ export const transformResponse = async (response: any, kind: ChainAction) => {
 
     case ChainAction.GET_NODE_SETTINGS:
       return response.settings;
-
     default:
       return response;
   }
