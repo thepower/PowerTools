@@ -34,8 +34,12 @@ export class NetworkApi {
   }
 
   public upload() {
-    const { currentChain, currentNodes, nodeIndex, feeSettings, gasSettings } = this
-    return { currentChain, currentNodes, nodeIndex, feeSettings, gasSettings }
+    const {
+      currentChain, currentNodes, nodeIndex, feeSettings, gasSettings,
+    } = this;
+    return {
+      currentChain, currentNodes, nodeIndex, feeSettings, gasSettings,
+    };
   }
 
   public static async getChainGlobalConfig(): Promise<ChainGlobalConfig> {
