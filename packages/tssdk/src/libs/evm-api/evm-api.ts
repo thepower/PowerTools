@@ -32,9 +32,9 @@ export class EvmApi {
     this.abi = abi;
   }
 
-  public static async build(scAddress: string, chain: number, abiJSON: any): Promise<EvmApi> {
+  public static async build(scAddress: string, chain: number, abiJSON: any, isHTTPSNodesOnly = false): Promise<EvmApi> {
     const network = new NetworkApi(chain);
-    await network.bootstrap();
+    await network.bootstrap(isHTTPSNodesOnly);
     const vm = await VM.create();
 
     vm.stateManager.getContractStorage = async (address: Address, key: Buffer) => {
