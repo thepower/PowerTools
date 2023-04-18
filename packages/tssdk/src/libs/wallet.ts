@@ -246,17 +246,17 @@ export class WalletApi {
     inputLastBlock: string,
     address: string,
     perPage: number = this.blocksPerPage,
-    txsFilter: (txID: string, tx: any) => boolean = () => true,
+    txsFilter?: (txID: string, tx: any) => boolean,
   ) {
     const transactionHistory = new Map();
     let loadedBlocks = 0;
     let lastBlock = inputLastBlock;
-
+    // TODO refactor
     while (lastBlock !== '0000000000000000' && loadedBlocks < perPage) {
       const block = await this.getBlock(lastBlock, address);
       loadedBlocks += 1;
-      const filteredTxs = Object.fromEntries(Object.entries(block.txs).filter(([key, val]) => txsFilter(key, val)));
-      const txsKeys = Object.keys(filteredTxs);
+      const txs = txsFilter ? Object.fromEntries(Object.entries(block.txs).filter(([key, val]) => txsFilter(key, val))) : Object.entries(block.txs);
+      const txsKeys = Object.keys(txs);
       if (txsKeys.length) {
         for (const key of txsKeys) {
           const tx = block.txs[key];
