@@ -208,37 +208,27 @@ export class WalletApi {
   }
 
   public async getBlock(inputHash: string, address: Maybe<string> = null) {
-    let block: any;
     let hash = inputHash;
     if (address !== null) {
       hash = `${hash}?addr=${address}`;
     }
-    if (hash !== 'last' && localStorage.getItem(hash)) {
-      block = JSON.parse(localStorage.getItem(hash)!);
-    } else {
-      block = await this.networkApi.getBlock(hash);
-      // Correct the sums and addresses: we bring the addresses to text form, and the sums to the required number of characters after the decimal point
-      block.bals = Object.keys(block.bals).reduce(
-        (acc, key) => Object.assign(acc, {
-          [AddressApi.hexToTextAddress(key)]: {
-            ...block.bals[key],
-            amount: correctAmountsObject(block.bals[key].amount),
-          },
-        }),
-        {},
-      );
 
-      block.txs = Object.keys(block.txs).reduce(
-        (acc, key) => Object.assign(acc, { [key]: this.prettifyTx(block.txs[key], block) }),
-        {},
-      );
+    const block = await this.networkApi.getBlock(hash);
+    // Correct the sums and addresses: we bring the addresses to text form, and the sums to the required number of characters after the decimal point
+    block.bals = Object.keys(block.bals).reduce(
+      (acc, key) => Object.assign(acc, {
+        [AddressApi.hexToTextAddress(key)]: {
+          ...block.bals[key],
+          amount: correctAmountsObject(block.bals[key].amount),
+        },
+      }),
+      {},
+    );
 
-      // Do not cache last block
-      if (hash !== 'last' && block.child) {
-        // caching disabled altogether
-        // localStorage.setItem(hash, JSON.stringify(block))
-      }
-    }
+    block.txs = Object.keys(block.txs).reduce(
+      (acc, key) => Object.assign(acc, { [key]: this.prettifyTx(block.txs[key], block) }),
+      {},
+    );
 
     return block;
   }
@@ -252,34 +242,30 @@ export class WalletApi {
     };
   }
 
-  public async getRawTransactionsHistory(inputLastBlock: string, address: string, perPage: number = this.blocksPerPage) {
+  public async getRawTransactionsHistory(
+    inputLastBlock: string,
+    address: string,
+    perPage: number = this.blocksPerPage,
+    txsFilter?: (txID: string, tx: any) => boolean,
+  ) {
     const transactionHistory = new Map();
     let loadedBlocks = 0;
     let lastBlock = inputLastBlock;
-
+    // TODO refactor
     while (lastBlock !== '0000000000000000' && loadedBlocks < perPage) {
       const block = await this.getBlock(lastBlock, address);
       loadedBlocks += 1;
-      if (!Object.keys(block.txs).length) {
-        // TODO remove when backend is fixed and tx id for wallet creation is visible
-        if (!block.bals[address].lastblk) {
-          transactionHistory.set('dummy_tx_id', {
-            incoming: true,
-            inBlock: lastBlock,
-            blockNumber: block.header.height,
-            address,
-            addressAllocationBlock: true,
-          });
-        }
-      } else {
-        // eslint-disable-next-line @typescript-eslint/no-loop-func
-        Object.keys(block.txs).forEach((key) => {
+      const txs = txsFilter ? Object.fromEntries(Object.entries(block.txs).filter(([key, val]) => txsFilter(key, val))) : Object.entries(block.txs);
+      const txsKeys = Object.keys(txs);
+      if (txsKeys.length) {
+        for (const key of txsKeys) {
+          const tx = block.txs[key];
           if (
-            block.txs[key].to === address ||
-            block.txs[key].from === address
+            tx.to === address ||
+            tx.from === address
           ) {
-            transactionHistory.set(key, block.txs[key]);
-          } else if (block.txs[key].address === address) {
+            transactionHistory.set(key, tx);
+          } else if (tx.address === address) {
             transactionHistory.set(key, {
               incoming: true,
               inBlock: lastBlock,
@@ -288,7 +274,7 @@ export class WalletApi {
               addressAllocationBlock: true,
             });
           }
-        });
+        }
       }
 
       lastBlock = block.bals[address].lastblk
@@ -306,8 +292,7 @@ export class WalletApi {
   public getExportData(wif: string, address: string, password: string, hint = '') {
     return (
       `${JSON.stringify({ version: 2, hint })
-      }\n${
-        CryptoApi.encryptWalletDataToPEM(wif, address, password)
+      }\n${CryptoApi.encryptWalletDataToPEM(wif, address, password)
       }\n`
     );
   }
@@ -337,28 +322,28 @@ export class WalletApi {
 
     return CryptoApi.decryptWalletData(data, password);
   }
-/*
-  public calculateFee(
-    feeSettings: any,
-    from: string,
-    to: string,
-    token: string,
-    amount: number,
-    message: string,
-    seq: number,
-  ) {
-    const rawFee = TransactionsApi.calculateFee(
-      feeSettings,
-      from,
-      to,
-      token,
-      correctAmount(amount, token, false),
-      message,
-      seq,
-    );
-    return rawFee
-      ? [rawFee[1], correctAmount(rawFee[2], rawFee[1])]
-      : [];
-  }
-  */
+  /*
+    public calculateFee(
+      feeSettings: any,
+      from: string,
+      to: string,
+      token: string,
+      amount: number,
+      message: string,
+      seq: number,
+    ) {
+      const rawFee = TransactionsApi.calculateFee(
+        feeSettings,
+        from,
+        to,
+        token,
+        correctAmount(amount, token, false),
+        message,
+        seq,
+      );
+      return rawFee
+        ? [rawFee[1], correctAmount(rawFee[2], rawFee[1])]
+        : [];
+    }
+    */
 }
