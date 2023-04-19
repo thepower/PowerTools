@@ -25,7 +25,7 @@ export interface ChainNode {
   address: string;
   nodeId: string;
   time?: number;
-  height?: number 
+  height?: number
 }
 
 export interface AccountKey {
