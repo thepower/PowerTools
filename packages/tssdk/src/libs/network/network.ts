@@ -66,9 +66,9 @@ export class NetworkApi {
     return Number(strChain);
   }
 
-  public async changeChain(chain: number) {
+  public async changeChain(chain: number, isHTTPSNodesOnly = false) {
     this.currentChain = chain;
-    await this.bootstrap();
+    await this.bootstrap(isHTTPSNodesOnly);
   }
 
   private setCurrentConfig = async (newNodes: ChainNode[]) => {
@@ -127,23 +127,26 @@ export class NetworkApi {
     ),
   );
 
-  private getChain() {
+  public getChain() {
     return this.currentChain;
   }
 
-  public bootstrap = async () => {
+  public bootstrap = async (isHTTPSNodesOnly = false) => {
     const chainInfo = await NetworkApi.getChainGlobalConfig();
 
     const chainData = chainInfo.chains[this.currentChain];
 
     if (chainData) {
-      const fullNodes = transformNodeList(chainData);
+      const httpsRegExp = /^https:\/\//ig;
 
-      if (!fullNodes.length) {
+      const transformedNodeList = transformNodeList(chainData);
+      const nodesList = isHTTPSNodesOnly ? transformedNodeList.filter((node) => httpsRegExp.test(node.address)) : transformedNodeList;
+
+      if (!transformedNodeList.length) {
         throw new NoNodesFoundException(this.currentChain);
       }
 
-      await this.setCurrentConfig(fullNodes);
+      await this.setCurrentConfig(nodesList);
       info(`Bootstrapped chain ${this.currentChain}`, this.currentNodes);
       await this.loadFeeGasSettings();
       return;

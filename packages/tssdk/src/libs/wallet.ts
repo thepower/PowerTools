@@ -15,10 +15,10 @@ export class WalletApi {
     this.networkApi = network;
   }
 
-  public static async registerCertainChain(chain: number, customSeed?: string): Promise<RegisteredAccount> {
+  public static async registerCertainChain(chain: number, customSeed?: string, isHTTPSNodesOnly = false): Promise<RegisteredAccount> {
     const seed = customSeed || CryptoApi.generateSeedPhrase();
     const networkApi = new NetworkApi(chain);
-    await networkApi.bootstrap();
+    await networkApi.bootstrap(isHTTPSNodesOnly);
 
     const settings = await networkApi.getNodeSettings();
     const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
