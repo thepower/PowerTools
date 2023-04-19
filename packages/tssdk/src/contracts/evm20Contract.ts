@@ -31,6 +31,11 @@ export class Evm20Contract {
     return name;
   }
 
+  public async getSymbol(): Promise<string> {
+    const symbol = await this.evmContract.scGet('symbol', []);
+    return symbol;
+  }
+
   public async getDecimals(): Promise<number> {
     const decimals = await this.evmContract.scGet('decimals', []);
     return decimals;
@@ -39,6 +44,11 @@ export class Evm20Contract {
   public async getBalance(owner: string): Promise<bigint> {
     const balanceOf = await this.evmContract.scGet('balanceOf', [AddressApi.textAddressToEvmAddress(owner)]);
     return balanceOf;
+  }
+
+  public async getTotalSupply(): Promise<bigint> {
+    const totalSupply = await this.evmContract.scGet('totalSupply', []);
+    return totalSupply;
   }
 
   public async getAllowance(owner: string, spender: string): Promise<bigint> {
