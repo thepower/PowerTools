@@ -70,7 +70,7 @@ export class EvmContract {
     return results.length === 1 ? results[0] : returnValue;
   }
 
-  public async scSet(key: AccountKey, method: string, params?: any[], amount = 0) {
+  public async scSet(key: AccountKey, method: string, params?: any[], amount = 0, isHTTPSNodesOnly = false) {
     if (!this.isMethodExist(method)) {
       throw new MethodDoesNotExistException();
     }
@@ -78,7 +78,12 @@ export class EvmContract {
     if (!this.isValidParamsPassedToMethod(method, params)) {
       throw new WrongParamsPassedToMethodException();
     }
-
+    const workChainNumber = await this.evm.network.getAddressChain(key.address);
+    let workNetwork = this.evm.network;
+    if (this.evm.network.getChain() !== workChainNumber) {
+      workNetwork = new NetworkApi(workChainNumber);
+      await workNetwork.bootstrap(isHTTPSNodesOnly);
+    }
     const io = getAbiInputsOutputsType(this.abi, method);
     const encodedFunction = encodeFunction(method, params, io.inputs);
     const data = Buffer.from(encodedFunction, 'hex');
@@ -92,11 +97,11 @@ export class EvmContract {
       key.wif,
       'SK',
       amount,
-      this.evm.network.feeSettings,
-      this.evm.network.gasSettings,
+      workNetwork.feeSettings,
+      workNetwork.gasSettings,
     );
 
-    const res = await this.evm.network.sendTxAndWaitForResponse(tx);
+    const res = await workNetwork.sendTxAndWaitForResponse(tx);
     return res;
   }
 
