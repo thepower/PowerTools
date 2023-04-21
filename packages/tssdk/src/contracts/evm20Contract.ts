@@ -10,20 +10,21 @@ const defaultABI = JSON.parse(
 export class Evm20Contract {
   private evmContract: EvmContract;
 
-  private key: AccountKey;
-
   private abi: any;
 
-  constructor(evmContract: EvmContract, key: AccountKey, ABI?: any) {
+  constructor(evmContract: EvmContract, ABI?: any) {
     this.evmContract = evmContract;
-    this.key = key;
     this.abi = ABI || defaultABI;
   }
 
-  public async build(address: string, evmc: EvmCore, key: AccountKey, ABI?: any): Promise<Evm20Contract> {
+  public async build(address: string, evmc: EvmCore, ABI?: any): Promise<Evm20Contract> {
     const evmContract = await EvmContract.build(evmc, address, ABI);
 
-    return new Evm20Contract(evmContract, key, ABI);
+    return new Evm20Contract(evmContract, ABI);
+  }
+
+  public getAbi() {
+    return this.abi;
   }
 
   public async getName(): Promise<string> {
@@ -59,19 +60,19 @@ export class Evm20Contract {
     return allowance;
   }
 
-  public async transfer(to: string, amount: bigint) {
-    return this.evmContract.scSet(this.key, 'transfer', [AddressApi.textAddressToEvmAddress(to), amount]);
+  public async transfer(to: string, amount: bigint, key: AccountKey) {
+    return this.evmContract.scSet(key, 'transfer', [AddressApi.textAddressToEvmAddress(to), amount]);
   }
 
-  public async transferFrom(from: string, to: string, amount: bigint) {
-    return this.evmContract.scSet(this.key, 'transferFrom', [
+  public async transferFrom(from: string, to: string, amount: bigint, key: AccountKey) {
+    return this.evmContract.scSet(key, 'transferFrom', [
       AddressApi.textAddressToEvmAddress(from),
       AddressApi.textAddressToEvmAddress(to),
       amount,
     ]);
   }
 
-  public async setApprove(spender: string, value: bigint) {
-    return this.evmContract.scSet(this.key, 'approve', [AddressApi.textAddressToEvmAddress(spender), value]);
+  public async setApprove(spender: string, value: bigint, key: AccountKey) {
+    return this.evmContract.scSet(key, 'approve', [AddressApi.textAddressToEvmAddress(spender), value]);
   }
 }
