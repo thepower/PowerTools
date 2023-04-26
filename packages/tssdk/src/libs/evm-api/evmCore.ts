@@ -78,10 +78,11 @@ export class EvmContract {
     if (!this.isValidParamsPassedToMethod(method, params)) {
       throw new WrongParamsPassedToMethodException();
     }
-    const workChainNumber = await this.evm.network.getAddressChain(key.address);
+    const addressChain = await this.evm.network.getAddressChain(key.address);
+    const addressChainNumber = addressChain?.chain;
     let workNetwork = this.evm.network;
-    if (this.evm.network.getChain() !== workChainNumber) {
-      workNetwork = new NetworkApi(workChainNumber);
+    if (this.evm.network.getChain() !== addressChainNumber) {
+      workNetwork = new NetworkApi(addressChainNumber);
       await workNetwork.bootstrap(isHTTPSNodesOnly);
     }
     const io = getAbiInputsOutputsType(this.abi, method);
