@@ -65,7 +65,7 @@ export const transformNodeList = (rawNodes: RawNodes) => {
   );
 };
 
-export const transformResponse = async (response: any, kind: ChainAction) => {
+export const transformResponse = async (response: any, kind: ChainAction, requestParams: any) => {
   switch (kind) {
     case ChainAction.GET_TRANSACTION_STATUS:
       return response.res;
@@ -83,7 +83,7 @@ export const transformResponse = async (response: any, kind: ChainAction) => {
       return response.blockhash;
 
     case ChainAction.GET_WALLET:
-      return response.info;
+      return { ...response.info, rawDataURL: `${requestParams.baseURL}/${requestParams.url}` };
 
     case ChainAction.GET_NODE_SETTINGS:
       return response.settings;
