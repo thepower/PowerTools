@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.15.20](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.19...@thepowereco/tssdk@1.15.20) (2023-05-26)
+
+**Note:** Version bump only for package @thepowereco/tssdk
+
+
+
+
+
 ## [1.15.19](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.18...@thepowereco/tssdk@1.15.19) (2023-04-26)
 
 **Note:** Version bump only for package @thepowereco/tssdk
