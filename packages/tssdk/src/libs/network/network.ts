@@ -397,7 +397,7 @@ export class NetworkApi {
 
     let response = await this.httpRequest(actionUrl, requestParams);
     this.checkResponseValidity(response);
-    response = transformResponse(response, kind);
+    response = transformResponse(response, kind, requestParams);
     return response;
   }
 
