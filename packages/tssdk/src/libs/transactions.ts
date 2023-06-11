@@ -302,8 +302,8 @@ export const TransactionsApi = {
     vm: 'wasm' | 'evm',
     feeSettings: any,
     gasSettings: any,
-    fee?:number,
-    feeToken?:string,
+    fee?: number,
+    feeToken?: string,
   ) {
     // const selfInitParams = [Buffer.from(AddressApi.parseTextAddress(address))];
     const scCode = vm === 'evm'
@@ -367,7 +367,7 @@ export const TransactionsApi = {
   composeSCMethodCallTX(
     address: string,
     sc: string,
-    toCall: [ string, [ any ] ],
+    toCall: [string, [any]],
     gasToken: string,
     gasValue: number,
     wif: string,
@@ -438,7 +438,7 @@ export const TransactionsApi = {
   },
 
   autoAddGas(body: any, gasSettings: any) {
-    body.p.push([PURPOSE_GAS, 'SK', 1000000000]);
+    body.p.push([PURPOSE_GAS, 'SK', 2000000000]);
     return body;
   },
 
