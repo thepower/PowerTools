@@ -5,6 +5,7 @@ export {
   PaymentsApi,
   CryptoApi,
   TransactionsApi,
+  LStoreApi,
   EvmApi,
   WalletApi,
   SmartContractWrapper,

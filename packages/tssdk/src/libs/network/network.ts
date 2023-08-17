@@ -19,6 +19,8 @@ export class NetworkApi {
 
   private currentNodes: ChainNode[] = [];
 
+  private isHTTPSNodesOnly = false;
+
   private nodeIndex = 0;
 
   public feeSettings: any;
@@ -127,8 +129,17 @@ export class NetworkApi {
     ),
   );
 
+  public getLstoreData = async (address: string, path: string) => this.askBlockchainTo(
+    ChainAction.GET_LSTORE,
+    { chain: this.currentChain, address, path },
+  );
+
   public getChain() {
     return this.currentChain;
+  }
+
+  public getIsHTTPSNodesOnly() {
+    return this.isHTTPSNodesOnly;
   }
 
   public bootstrap = async (isHTTPSNodesOnly = false) => {
@@ -137,6 +148,8 @@ export class NetworkApi {
     const chainData = chainInfo.chains[this.currentChain];
 
     if (chainData) {
+      this.isHTTPSNodesOnly = isHTTPSNodesOnly;
+
       const httpsRegExp = /^https:\/\//ig;
 
       const transformedNodeList = transformNodeList(chainData);
@@ -388,6 +401,12 @@ export class NetworkApi {
       case ChainAction.GET_SC_STATE_BY_KEY:
         requestParams.responseType = 'arraybuffer';
         requestParams.url = `${parameters.address}/state/0x${parameters.key}`;
+        actionUrl = '/address';
+        break;
+
+      case ChainAction.GET_LSTORE:
+        requestParams.responseType = 'arraybuffer';
+        requestParams.url = `${parameters.address}/lstore/${parameters.path}`;
         actionUrl = '/address';
         break;
 
