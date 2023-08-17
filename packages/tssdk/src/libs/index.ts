@@ -8,3 +8,4 @@ export { EvmApi } from './evm-api/evm-api';
 export { EvmCore, EvmContract } from './evm-api/evmCore';
 export { TransactionsApi } from './transactions';
 export { WalletApi } from './wallet';
+export { LStoreApi } from './lstore';

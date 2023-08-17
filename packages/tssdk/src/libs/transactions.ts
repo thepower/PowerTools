@@ -441,5 +441,4 @@ export const TransactionsApi = {
     body.p.push([PURPOSE_GAS, 'SK', 2000000000]);
     return body;
   },
-
 };
