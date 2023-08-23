@@ -68,9 +68,11 @@ const decrypt = (binaryEncrypted: NodeJS.ArrayBufferView, key: CipherKey, iv: Bi
 
 const encryptRawPrivateKeyToPEM = (rawPrivateKey: Buffer, password: string, algorithm: string = AES_CBC_ALGORITHM) => {
   const binaryData = SafeBuffer.concat(
-    // eslint-disable-next-line max-len
-    [SafeBuffer.from([0x30, 0x3E, 0x02, 0x01, 0x00, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x0A, 0x04, 0x27, 0x30, 0x25, 0x02, 0x01, 0x01, 0x04]),
-      SafeBuffer.from([rawPrivateKey.length]), rawPrivateKey as unknown as SafeBuffer],
+    [
+      // eslint-disable-next-line max-len
+      SafeBuffer.from([0x30, 0x3E, 0x02, 0x01, 0x00, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x0A, 0x04, 0x27, 0x30, 0x25, 0x02, 0x01, 0x01, 0x04]),
+      SafeBuffer.from([rawPrivateKey.length]), rawPrivateKey as unknown as SafeBuffer,
+    ],
   ) as unknown as Buffer;
   const iv: any = Crypto.randomBytes(16);
   const key = passwordToKey(password, iv.slice(0, 8));
@@ -165,6 +167,11 @@ export const CryptoApi = {
     const rootKey = node.derivePath(derivationPath);
 
     return Bitcoin.ECPair.fromWIF(rootKey.toWIF());
+  },
+
+  generateKeyPairFromPrivateKey(privateKey: string) {
+    const decryptedWif = wif.encode(128, textToHex(privateKey), true);
+    return Bitcoin.ECPair.fromWIF(decryptedWif);
   },
 
   generateKeyPairFromWIF(wif: string) {
