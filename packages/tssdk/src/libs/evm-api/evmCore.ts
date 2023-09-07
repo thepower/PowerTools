@@ -70,7 +70,7 @@ export class EvmContract {
     return results.length === 1 ? results[0] : returnValue;
   }
 
-  public async scSet(key: AccountKey, method: string, params?: any[], amount = 0, isHTTPSNodesOnly = false) {
+  public async scSet(key: AccountKey, method: string, params?: any[], amount = 0, isHTTPSNodesOnly = false, sponsor = '') {
     if (!this.isMethodExist(method)) {
       throw new MethodDoesNotExistException();
     }
@@ -88,19 +88,32 @@ export class EvmContract {
     const io = getAbiInputsOutputsType(this.abi, method);
     const encodedFunction = encodeFunction(method, params, io.inputs);
     const data = Buffer.from(encodedFunction, 'hex');
-
-    const tx = await TransactionsApi.composeSCMethodCallTX(
-      key.address,
-      this.address,
-      ['0x0', [data]],
-      '',
-      0,
-      key.wif,
-      'SK',
-      amount,
-      workNetwork.feeSettings,
-      workNetwork.gasSettings,
-    );
+    const tx = sponsor === '' ?
+      await TransactionsApi.composeSCMethodCallTX(
+        key.address,
+        this.address,
+        ['0x0', [data]],
+        '',
+        0,
+        key.wif,
+        'SK',
+        amount,
+        workNetwork.feeSettings,
+        workNetwork.gasSettings,
+      ) :
+      await TransactionsApi.composeSponsorSCMethodCallTX(
+        key.address,
+        this.address,
+        ['0x0', [data]],
+        '',
+        0,
+        key.wif,
+        'SK',
+        amount,
+        workNetwork.feeSettings,
+        workNetwork.gasSettings,
+        sponsor,
+      );
 
     const res = await workNetwork.sendTxAndWaitForResponse(tx);
     return res;

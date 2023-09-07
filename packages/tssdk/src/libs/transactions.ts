@@ -7,11 +7,14 @@ const Bitcoin = require('bitcoinjs-lib');
 // const sha512 = require('js-sha512').sha512;
 
 const TAG_PUBLIC_KEY = 0x02;
-const TAG_SIGNATURE = 0xFF;
+const TAG_SIGNATURE = 0xff;
 
 const PURPOSE_TRANSFER = 0x00;
 const PURPOSE_SRCFEE = 0x01;
 const PURPOSE_GAS = 0x03;
+
+const PURPOSE_SPONSOR_SRCFEE = 0x21;
+const PURPOSE_SPONSOR_GAS = 0x23;
 
 const KIND_GENERIC = 0x10;
 const KIND_REGISTER = 0x11;
@@ -81,7 +84,11 @@ const KIND_LSTORE = 22;
 // const worker = new Worker(blobURL);
 // URL.revokeObjectURL(blobURL);
 
-const generateNonce = (body: Uint8Array, offset: number, powDifficulty: number) => '0';
+const generateNonce = (
+  body: Uint8Array,
+  offset: number,
+  powDifficulty: number,
+) => '0';
 // if (powDifficulty > POW_DIFFICULTY_THRESHOLD) {
 //   throw new Error('PoW difficulty is too high');
 // }
@@ -95,7 +102,13 @@ const generateNonce = (body: Uint8Array, offset: number, powDifficulty: number) 
 //   worker.postMessage([body, offset, powDifficulty]);
 // });
 
-const getRegisterTxBody = async (chain: number, publicKey: string, timestamp: number, referrer: string, powDifficulty = 16) => {
+const getRegisterTxBody = async (
+  chain: number,
+  publicKey: string,
+  timestamp: number,
+  referrer: string,
+  powDifficulty = 16,
+) => {
   /**
    * @todo move to env/const
    */
@@ -114,10 +127,11 @@ const getRegisterTxBody = async (chain: number, publicKey: string, timestamp: nu
     body = { ...body, e: { ...body.e, referrer } };
   }
 
-  const pckd = msgPack.encode(body); const arr = new Uint8Array(pckd); const
-    offset = pckd.indexOf('A56E6F6E636500', 0, 'hex') + 6;
+  const pckd = msgPack.encode(body);
+  const arr = new Uint8Array(pckd);
+  const offset = pckd.indexOf('A56E6F6E636500', 0, 'hex') + 6;
   try {
-    body.nonce = await generateNonce(arr, offset, powDifficulty) as string;
+    body.nonce = (await generateNonce(arr, offset, powDifficulty)) as string;
   } catch (e: any) {
     throw new Error(e.message);
   }
@@ -173,7 +187,9 @@ const wrapAndSignPayload = (payload: any, keyPair: any, publicKey: string) => {
   toSign.set(extraData);
   toSign.set(payload, extraData.length);
 
-  const signature = keyPair.sign(createHash('sha256').update(toSign).digest()).toDER();
+  const signature = keyPair
+    .sign(createHash('sha256').update(toSign).digest())
+    .toDER();
 
   const sig = new Uint8Array(signature.length + 2);
   sig.set([TAG_SIGNATURE]);
@@ -227,14 +243,24 @@ export const TransactionsApi = {
 
     const bufferFrom = Buffer.from(AddressApi.parseTextAddress(from));
     const bufferTo = Buffer.from(AddressApi.parseTextAddress(to));
-    let body = getSimpleTransferTxBody(bufferFrom, bufferTo, token, amount, message, timestamp, seq);
+    let body = getSimpleTransferTxBody(
+      bufferFrom,
+      bufferTo,
+      token,
+      amount,
+      message,
+      timestamp,
+      seq,
+    );
     if (feeToken && fee) {
       body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
     } else {
       body = this.autoAddFee(body, feeSettings);
     }
     const payload = msgPack.encode(body);
-    return msgPack.encode(wrapAndSignPayload(payload, keyPair, publicKey)).toString('base64');
+    return msgPack
+      .encode(wrapAndSignPayload(payload, keyPair, publicKey))
+      .toString('base64');
   },
 
   async composeRegisterTX(chain: number, wif: string, referrer: string) {
@@ -242,8 +268,12 @@ export const TransactionsApi = {
     const publicKey = keyPair.getPublicKeyBuffer();
     const timestamp = +new Date();
 
-    const payload = msgPack.encode(await getRegisterTxBody(chain, publicKey, timestamp, referrer));
-    return msgPack.encode(wrapAndSignPayload(payload, keyPair, publicKey)).toString('base64');
+    const payload = msgPack.encode(
+      await getRegisterTxBody(chain, publicKey, timestamp, referrer),
+    );
+    return msgPack
+      .encode(wrapAndSignPayload(payload, keyPair, publicKey))
+      .toString('base64');
   },
   /*
   calculateFee(
@@ -268,9 +298,10 @@ export const TransactionsApi = {
     const keyPair = Bitcoin.ECPair.fromWIF(wif);
     const publicKey = keyPair.getPublicKeyBuffer();
     const payload = msgPack.encode(tx);
-    return msgPack.encode(wrapAndSignPayload(payload, keyPair, publicKey)).toString('base64');
-  }, /*
-  prepareTXFromSC(
+    return msgPack
+      .encode(wrapAndSignPayload(payload, keyPair, publicKey))
+      .toString('base64');
+  }, /*  prepareTXFromSC(
     feeSettings: any,
     address: string,
     sc: string,
@@ -306,9 +337,12 @@ export const TransactionsApi = {
     feeToken?: string,
   ) {
     // const selfInitParams = [Buffer.from(AddressApi.parseTextAddress(address))];
-    const scCode = vm === 'evm'
-      ? new Uint8Array(code.match(/[\da-f]{2}/gi).map((h: string) => parseInt(h, 16)))
-      : new Uint8Array(code);
+    const scCode =
+      vm === 'evm'
+        ? new Uint8Array(
+          code.match(/[\da-f]{2}/gi).map((h: string) => parseInt(h, 16)),
+        )
+        : new Uint8Array(code);
 
     let body = {
       k: KIND_DEPLOY,
@@ -320,14 +354,20 @@ export const TransactionsApi = {
       c: [] as any,
       e: { code: Buffer.from(scCode), vm, view: [] },
     };
-    if (vm === 'wasm') { body.c = ['init', initParams]; }
+    if (vm === 'wasm') {
+      body.c = ['init', initParams];
+    }
 
-    if (gasValue > 0) { body.p.push([PURPOSE_GAS, gasToken, gasValue]); } else {
+    if (gasValue > 0) {
+      body.p.push([PURPOSE_GAS, gasToken, gasValue]);
+    } else {
       body = this.autoAddGas(body, gasSettings);
     }
     if (feeToken && fee) {
       body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
-    } else { body = this.autoAddFee(body, feeSettings); }
+    } else {
+      body = this.autoAddFee(body, feeSettings);
+    }
 
     return TransactionsApi.packAndSignTX(body, wif);
   },
@@ -378,9 +418,93 @@ export const TransactionsApi = {
     fee?: number,
     feeToken?: string,
   ) {
-    const PURPOSE: any[] = [];
+    const body = this.composeSCMethodCallTxBody(
+      address,
+      sc,
+      toCall,
+      gasToken,
+      gasValue,
+      amountToken,
+      amountValue,
+      feeSettings,
+      gasSettings,
+      fee,
+      feeToken,
+    );
+    return this.packAndSignTX(body, wif);
+  },
 
-    if (amountValue) { PURPOSE.push([PURPOSE_TRANSFER, amountToken, amountValue]); }
+  composeStoreTX(
+    address: string,
+    patches: any,
+    wif: string,
+    feeSettings: any,
+    fee?: number,
+    feeToken?: string,
+  ) {
+    let body = {
+      k: KIND_LSTORE,
+      t: +new Date(),
+      f: Buffer.from(AddressApi.parseTextAddress(address)),
+      s: +new Date(),
+      p: [] as any,
+      pa: msgPack.encode(patches.map((i: any) => msgPack.encode(i))),
+    };
+    if (feeToken && fee) {
+      body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
+    } else {
+      body = this.autoAddFee(body, feeSettings);
+    }
+
+    return this.packAndSignTX(body, wif);
+  },
+
+  autoAddFee(body: any, feeSettings: any) {
+    if (
+      feeSettings.feeCur &&
+      feeSettings.fee &&
+      feeSettings.baseEx &&
+      feeSettings.kb
+    ) {
+      body.p.push([PURPOSE_SRCFEE, feeSettings.feeCur, feeSettings.fee]);
+      let bodySize;
+      do {
+        bodySize = msgPack.encode(body).length;
+        if (bodySize > feeSettings.baseEx) {
+          body.p.find((item: any) => item[0] === PURPOSE_SRCFEE)[2] =
+            feeSettings.fee +
+            Math.floor(
+              ((bodySize - feeSettings.baseEx) * feeSettings.kb) / 1024,
+            );
+        }
+      } while (bodySize !== msgPack.encode(body).length);
+    }
+
+    return body;
+  },
+
+  autoAddGas(body: any, gasSettings: any) {
+    body.p.push([PURPOSE_GAS, 'SK', 2000000000]);
+    return body;
+  },
+
+  composeSCMethodCallTxBody(
+    address: string,
+    sc: string,
+    toCall: [string, [any]],
+    gasToken: string,
+    gasValue: number,
+    amountToken: string,
+    amountValue: number,
+    feeSettings: any,
+    gasSettings: any,
+    fee?: number,
+    feeToken?: string,
+  ) {
+    const PURPOSE: any[] = [];
+    if (amountValue) {
+      PURPOSE.push([PURPOSE_TRANSFER, amountToken, amountValue]);
+    }
     let body = {
       k: KIND_GENERIC,
       t: +new Date(),
@@ -401,44 +525,51 @@ export const TransactionsApi = {
       body = this.autoAddFee(body, feeSettings);
     }
 
-    return this.packAndSignTX(body, wif);
+    return body;
   },
 
-  composeStoreTX(address: string, patches: any, wif: string, feeSettings: any, fee?: number, feeToken?: string) {
-    let body = {
-      k: KIND_LSTORE,
-      t: +new Date(),
-      f: Buffer.from(AddressApi.parseTextAddress(address)),
-      s: +new Date(),
-      p: [] as any,
-      pa: msgPack.encode(patches.map((i: any) => msgPack.encode(i))),
+  // sponsor
+  composeSponsorSCMethodCallTX(
+    address: string,
+    sc: string,
+    toCall: [string, [any]],
+    gasToken: string,
+    gasValue: number,
+    wif: string,
+    amountToken: string,
+    amountValue: number,
+    feeSettings: any,
+    gasSettings: any,
+    sponsor: string,
+    fee?: number,
+    feeToken?: string,
+  ) {
+    const body = this.composeSCMethodCallTxBody(
+      address,
+      sc,
+      toCall,
+      gasToken,
+      gasValue,
+      amountToken,
+      amountValue,
+      feeSettings,
+      gasSettings,
+      fee,
+      feeToken,
+    );
+
+    body.p.forEach((item) => {
+      if (item[0] === PURPOSE_SRCFEE) {
+        item[0] = PURPOSE_SPONSOR_SRCFEE;
+      }
+      if (item[0] === PURPOSE_GAS) {
+        item[0] = PURPOSE_SPONSOR_GAS;
+      }
+    });
+    const sponsorBody = {
+      e: { sponsor: [Buffer.from(AddressApi.parseTextAddress(sponsor))] },
     };
-    if (feeToken && fee) {
-      body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
-    } else {
-      body = this.autoAddFee(body, feeSettings);
-    }
-
-    return this.packAndSignTX(body, wif);
-  },
-
-  autoAddFee(body: any, feeSettings: any) {
-    if (feeSettings.feeCur && feeSettings.fee && feeSettings.baseEx && feeSettings.kb) {
-      body.p.push([PURPOSE_SRCFEE, feeSettings.feeCur, feeSettings.fee]);
-      let bodySize;
-      do {
-        bodySize = msgPack.encode(body).length;
-        if (bodySize > feeSettings.baseEx) {
-          body.p.find((item: any) => item[0] === PURPOSE_SRCFEE)[2] = feeSettings.fee + Math.floor(((bodySize - feeSettings.baseEx) * feeSettings.kb) / 1024);
-        }
-      } while (bodySize !== msgPack.encode(body).length);
-    }
-
-    return body;
-  },
-
-  autoAddGas(body: any, gasSettings: any) {
-    body.p.push([PURPOSE_GAS, 'SK', 2000000000]);
-    return body;
+    Object.assign(sponsorBody, body);
+    return this.packAndSignTX(sponsorBody, wif);
   },
 };
