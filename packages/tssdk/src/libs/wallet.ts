@@ -81,7 +81,8 @@ export class WalletApi {
       if (tx.payload) {
         const payment =
           tx.payload.find((elem: any) => elem.purpose === 'transfer') ||
-          tx.payload.find((elem: any) => elem.purpose === 'srcfee');
+          tx.payload.find((elem: any) => elem.purpose === 'srcfee' ||
+          tx.payload.find((elem: any) => elem.purpose === 'srcfeehint'));
         if (payment) {
           tx.cur = payment.cur;
           tx.amount = correctAmount(payment.amount, tx.cur);
@@ -89,7 +90,7 @@ export class WalletApi {
       }
       if (!tx.cur || !tx.amount) {
         tx.cur = '---';
-        tx.amount = '0';
+        tx.amount = 0;
       }
 
       tx.sig = Array.isArray(tx.sig)
