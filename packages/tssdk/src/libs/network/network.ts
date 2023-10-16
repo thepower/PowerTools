@@ -226,8 +226,8 @@ export class NetworkApi {
         const status = await this.askBlockchainTo(ChainAction.GET_TRANSACTION_STATUS, { txId });
 
         if (status) {
-          if (status.error) {
-            reject(new Error(`${txId}: ${status.res}`));
+          if (status?.error || status?.revert) {
+            reject(new Error(`${txId}: ${status?.res} ${status?.revert}`));
           } else if (status.retval) {
             resolve({
               txId, res: status.res, block: status.block, retval: status.retval,
