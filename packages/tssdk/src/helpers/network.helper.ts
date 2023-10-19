@@ -3,43 +3,41 @@ import { ChainNode, RawNodes } from '../typings';
 import { ChainAction } from './network.enum';
 import { config } from '../config/chain.config';
 
-/**
- * Asks all nodes in chain and sorts it by answer time
- * @param nodesList
- * @returns {Promise<any[]>}
- */
-export const queueNodes = async (nodesList: ChainNode[]) => {
-  const startTime = +new Date();
+export const queueNodes = async (nodesList: ChainNode[], timeout = 1000) => {
+  const startTime = Date.now();
   const heights: number [] = [];
   const sortedNodes: ChainNode[] = await Promise.all(
     nodesList.map((elem) => axios
       .request({
         url: `${elem.address}/api/node/status`,
-        timeout: 1000,
+        timeout,
         params: {
           node: elem.nodeId,
         },
       })
-      .then((response: any) => {
-        const url = new URL(response.config.url);
-        const height = response?.data.status?.blockchain?.header?.height;
-        heights.push(height);
-        return {
-          address: url.origin,
-          time: +(new Date()) - startTime,
-          nodeId: response.config?.params?.node,
-          height,
-        };
-      }, (data: any) => {
-        const url = new URL(data.config.url);
+      .then(
+        (response: any) => {
+          const url = new URL(response.config.url);
+          const height = response?.data.status?.blockchain?.header?.height;
+          heights.push(height);
+          return {
+            address: url.origin,
+            time: Date.now() - startTime,
+            nodeId: response.config?.params?.node,
+            height,
+          };
+        },
+        (data: any) => {
+          const url = new URL(data.config.url);
 
-        return {
-          address: url.origin,
-          time: config.maxNodeResponseTime, // default max response time
-          nodeId: data.config?.params?.node,
-          height: 0,
-        };
-      })),
+          return {
+            address: url.origin,
+            time: config.maxNodeResponseTime, // default max response time
+            nodeId: data.config?.params?.node,
+            height: 0,
+          };
+        },
+      )),
   );
   const maxHeight = Math.max(...heights);
   const nodesWithMaxHeight = sortedNodes.filter(

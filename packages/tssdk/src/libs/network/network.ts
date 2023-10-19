@@ -74,9 +74,16 @@ export class NetworkApi {
   }
 
   private setCurrentConfig = async (newNodes: ChainNode[]) => {
-    this.currentNodes = await queueNodes(newNodes);
+    let currentNodes = [];
+
+    currentNodes = await queueNodes(newNodes);
+
+    if (!currentNodes.length) {
+      currentNodes = await queueNodes(newNodes, 5000);
+    }
+
+    this.currentNodes = currentNodes;
     this.nodeIndex = 0;
-    // nodesCache[newChain] = nodes; // TODO: cache for what?
   };
 
   public async sendTxAndWaitForResponse(tx: any, timeout = 120) {
