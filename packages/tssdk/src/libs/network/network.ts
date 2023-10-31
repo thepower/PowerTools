@@ -1,6 +1,8 @@
 import axios from 'axios';
 import createHash from 'create-hash';
 import Debug from 'debug';
+import { defaultAbiCoder as AbiCoder } from '@ethersproject/abi';
+import { getAbiInputsOutputsType } from '../../helpers/abi.helper';
 import { config as cfg } from '../../config/chain.config';
 import { ChainGlobalConfig, ChainNode } from '../../typings';
 import { queueNodes, transformNodeList, transformResponse } from '../../helpers/network.helper';
@@ -258,7 +260,7 @@ export class NetworkApi {
   private incrementNodeIndex = async () => {
     this.nodeIndex += 1;
     if (this.nodeIndex >= this.currentNodes.length || this.currentNodes[this.nodeIndex].time === cfg.maxNodeResponseTime) {
-      this.currentNodes = await queueNodes(this.currentNodes);
+      this.currentNodes = await queueNodes(this.currentNodes, 5000);
       this.nodeIndex = 0;
 
       if (this.nodeIndex >= this.currentNodes.length || this.currentNodes[this.nodeIndex].time === cfg.maxNodeResponseTime) {
@@ -335,6 +337,29 @@ export class NetworkApi {
     return this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data });
   }
 
+  public async executeCall(address: string, method: string, args: any[], abi: any) {
+    const io = getAbiInputsOutputsType(abi, method);
+
+    const data = { call: `${method}(${io.inputs.join(',')})`, args, to: address };
+
+    const response = await this.askBlockchainTo(ChainAction.EXECUTE_CALL, { data });
+
+    if (response.result !== 'return') throw new Error(`${response.result}: ${response?.signature}`);
+
+    const results = AbiCoder.decode(io.outputs, response.bin);
+
+    let returnValue: any = results;
+
+    if (io.outputNames.length === results.length) {
+      returnValue = results.reduce((aggr, item, key) => {
+        aggr[io.outputNames[key]] = item;
+        return aggr;
+      }, {});
+    }
+
+    return results.length === 1 ? results[0] : returnValue;
+  }
+
   public async getTransactionStatus(txId: string) {
     return this.askBlockchainTo(ChainAction.GET_TRANSACTION_STATUS, { txId });
   }
@@ -370,6 +395,12 @@ export class NetworkApi {
 
       case ChainAction.CREATE_TRANSACTION:
         actionUrl = '/tx/new';
+        requestParams.method = 'post';
+        requestParams.data = parameters.data;
+        break;
+
+      case ChainAction.EXECUTE_CALL:
+        actionUrl = '/execute/call';
         requestParams.method = 'post';
         requestParams.data = parameters.data;
         break;
