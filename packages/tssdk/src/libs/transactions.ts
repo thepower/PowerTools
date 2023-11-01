@@ -109,21 +109,15 @@ const getRegisterTxBody = async (
   referrer: string,
   powDifficulty = 16,
 ) => {
-  /**
-   * @todo move to env/const
-   */
-  const clid = `power_wallet_${process.env.GIT_HEAD_HASH}`;
-
   let body = {
     k: KIND_REGISTER,
     t: timestamp,
     nonce: '',
     h: createHash('sha256').update(publicKey).digest(),
-    e: { clid },
+    e: { },
   };
 
   if (referrer) {
-    // @ts-ignore
     body = { ...body, e: { ...body.e, referrer } };
   }
 
