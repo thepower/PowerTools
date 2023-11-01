@@ -2,7 +2,7 @@ import axios from 'axios';
 import createHash from 'create-hash';
 import Debug from 'debug';
 import { defaultAbiCoder as AbiCoder } from '@ethersproject/abi';
-import { getAbiInputsOutputsType } from '../../helpers/abi.helper';
+import { encodeFunction, getAbiInputsOutputsType } from '../../helpers/abi.helper';
 import { config as cfg } from '../../config/chain.config';
 import { ChainGlobalConfig, ChainNode } from '../../typings';
 import { queueNodes, transformNodeList, transformResponse } from '../../helpers/network.helper';
@@ -340,7 +340,9 @@ export class NetworkApi {
   public async executeCall(address: string, method: string, args: any[], abi: any) {
     const io = getAbiInputsOutputsType(abi, method);
 
-    const data = { call: `${method}(${io.inputs.join(',')})`, args, to: address };
+    const encodedFunction = encodeFunction(method, args, io.inputs);
+
+    const data = { call: '0x0', args: [`0x${encodedFunction}`], to: `0x${address}` };
 
     const response = await this.askBlockchainTo(ChainAction.EXECUTE_CALL, { data });
 
