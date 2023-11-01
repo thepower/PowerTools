@@ -338,6 +338,7 @@ export class NetworkApi {
   }
 
   public async executeCall(address: string, method: string, args: any[], abi: any) {
+    // TODO move to evmContract.scGet
     const io = getAbiInputsOutputsType(abi, method);
 
     const encodedFunction = encodeFunction(method, args, io.inputs);
