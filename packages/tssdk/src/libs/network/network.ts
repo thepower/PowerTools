@@ -152,29 +152,45 @@ export class NetworkApi {
   }
 
   public bootstrap = async (isHTTPSNodesOnly = false) => {
-    const chainInfo = await NetworkApi.getChainGlobalConfig();
+    if (typeof localStorage !== 'undefined' && localStorage !== null && localStorage.getItem('nodesList')) {
+      const stringifiedNodesList = localStorage.getItem('nodesList');
+      const chainIdString = localStorage.getItem('chainId');
+      const chainId = chainIdString ? +chainIdString : this.currentChain;
 
-    const chainData = chainInfo.chains[this.currentChain];
+      if (stringifiedNodesList) {
+        this.currentChain = chainId;
+        const nodesList: ChainNode[] = JSON.parse(stringifiedNodesList);
+        await this.setCurrentConfig(nodesList);
+        info(`Bootstrapped chain ${chainId}`, nodesList);
+        await this.loadFeeGasSettings();
+      } else {
+        throw new NoNodesFoundException(chainId);
+      }
+    } else {
+      const chainInfo = await NetworkApi.getChainGlobalConfig();
 
-    if (chainData) {
-      this.isHTTPSNodesOnly = isHTTPSNodesOnly;
+      const chainData = chainInfo.chains[this.currentChain];
 
-      const httpsRegExp = /^https:\/\//ig;
+      if (chainData) {
+        this.isHTTPSNodesOnly = isHTTPSNodesOnly;
 
-      const transformedNodeList = transformNodeList(chainData);
-      const nodesList = isHTTPSNodesOnly ? transformedNodeList.filter((node) => httpsRegExp.test(node.address)) : transformedNodeList;
+        const httpsRegExp = /^https:\/\//ig;
 
-      if (!transformedNodeList.length) {
-        throw new NoNodesFoundException(this.currentChain);
+        const transformedNodeList = transformNodeList(chainData);
+        const nodesList = isHTTPSNodesOnly ? transformedNodeList.filter((node) => httpsRegExp.test(node.address)) : transformedNodeList;
+
+        if (!transformedNodeList.length) {
+          throw new NoNodesFoundException(this.currentChain);
+        }
+
+        await this.setCurrentConfig(nodesList);
+        info(`Bootstrapped chain ${this.currentChain}`, this.currentNodes);
+        await this.loadFeeGasSettings();
+        return;
       }
 
-      await this.setCurrentConfig(nodesList);
-      info(`Bootstrapped chain ${this.currentChain}`, this.currentNodes);
-      await this.loadFeeGasSettings();
-      return;
+      throw new UnknownChainException(this.currentChain);
     }
-
-    throw new UnknownChainException(this.currentChain);
   };
 
   private async loadRemoteSCInterface(interfaceData: any[]) {

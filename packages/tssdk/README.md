@@ -39,3 +39,12 @@ npm i @thepowereco/tssdk
 - [GitHub](https://github.com/thepower/power_hub/tree/master/packages/tssdk/src/libs)
 - [Report an issue](https://github.com/thepower/power_hub/issues) 
 [The Power API Reference](https://doc.thepower.io/docs/Build/api/api-reference)
+
+## Custom chain
+
+If you need to join to custom chain you can override chain id and bootstrap nodes this way:
+
+    localStorage.setItem("nodesList", JSON.stringify(
+      [{address:"nodeUrl", nodeId:"nodeId"}]
+    ))
+    localStorage.setItem("chainId", "chainId")
