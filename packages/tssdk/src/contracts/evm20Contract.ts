@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import {
   AccountKey, AddressApi, EvmContract, EvmCore,
 } from '../index';
@@ -43,7 +42,7 @@ export class Evm20Contract {
     return decimals;
   }
 
-  public async getBalance(owner: string): Promise<BigNumber> {
+  public async getBalance(owner: string): Promise<bigint> {
     const balanceOf = await this.evmContract.scGet('balanceOf', [AddressApi.textAddressToEvmAddress(owner)]);
     return balanceOf;
   }
@@ -53,7 +52,7 @@ export class Evm20Contract {
     return totalSupply;
   }
 
-  public async getAllowance(owner: string, spender: string): Promise<BigNumber> {
+  public async getAllowance(owner: string, spender: string): Promise<bigint> {
     const allowance = await this.evmContract.scGet('allowance', [
       AddressApi.textAddressToEvmAddress(owner),
       AddressApi.textAddressToEvmAddress(spender),

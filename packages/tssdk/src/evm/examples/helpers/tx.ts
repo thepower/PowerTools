@@ -1,33 +1,33 @@
-import { Interface, defaultAbiCoder as AbiCoder } from '@ethersproject/abi';
 import { AccessListEIP2930TxData, FeeMarketEIP1559TxData, TxData } from '@ethereumjs/tx';
+import { encodeFunctionCall } from 'web3-eth-abi';
 
 type TransactionsData = TxData | AccessListEIP2930TxData | FeeMarketEIP1559TxData;
 
 export const encodeFunction = (
   method: string,
-  params?: {
-    types: any[]
-    values: unknown[]
-  },
+  params: any[],
+  abi: any,
 ): string => {
-  const parameters = params?.types ?? [];
-  const methodWithParameters = `function ${method}(${parameters.join(',')})`;
-  const signatureHash = new Interface([methodWithParameters]).getSighash(method);
-  const encodedArgs = AbiCoder.encode(parameters, params?.values ?? []);
+  const abiItem = abi?.find((item: any) => item.name === method);
 
-  return signatureHash + encodedArgs.slice(2);
+  if (!abiItem) {
+    throw new Error('ABI item not found');
+  }
+
+  const paramStringAbi = encodeFunctionCall(abiItem, params).slice(2);
+  return paramStringAbi;
 };
 
 export const encodeDeployment = (
   bytecode: string,
   params?: {
-    types: any[]
+    types: any
     values: unknown[]
   },
 ) => {
   const deploymentData = `0x${bytecode}`;
   if (params) {
-    const argumentsEncoded = AbiCoder.encode(params.types, params.values);
+    const argumentsEncoded = encodeFunctionCall(params.types, params.values);
     return deploymentData + argumentsEncoded.slice(2);
   }
   return deploymentData;
