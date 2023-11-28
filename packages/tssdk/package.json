@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/tssdk",
-  "version": "1.15.30",
+  "version": "1.15.31",
   "main": "dist/index.js",
   "description": "thepower tssdk",
   "author": "thepower",
