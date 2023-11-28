@@ -1,7 +1,8 @@
 import axios from 'axios';
 import createHash from 'create-hash';
 import Debug from 'debug';
-import { decodeReturnValue, encodeFunction } from '../../helpers/abi.helper';
+import { defaultAbiCoder as AbiCoder } from '@ethersproject/abi';
+import { encodeFunction, getAbiInputsOutputsType } from '../../helpers/abi.helper';
 import { config as cfg } from '../../config/chain.config';
 import { ChainGlobalConfig, ChainNode } from '../../typings';
 import { queueNodes, transformNodeList, transformResponse } from '../../helpers/network.helper';
@@ -250,8 +251,8 @@ export class NetworkApi {
         const status = await this.askBlockchainTo(ChainAction.GET_TRANSACTION_STATUS, { txId });
 
         if (status) {
-          if (status?.error || 'revert' in status) {
-            reject(new Error(`${txId}: ${status?.res} ${status?.revert || 'revert with no data'}`));
+          if (status?.error || status?.revert) {
+            reject(new Error(`${txId}: ${status?.res} ${status?.revert}`));
           } else if (status.retval) {
             resolve({
               txId, res: status.res, block: status.block, retval: status.retval,
@@ -354,8 +355,9 @@ export class NetworkApi {
 
   public async executeCall(address: string, method: string, args: any[], abi: any) {
     // TODO move to evmContract.scGet
+    const io = getAbiInputsOutputsType(abi, method);
 
-    const encodedFunction = encodeFunction(method, args, abi);
+    const encodedFunction = encodeFunction(method, args, io.inputs);
 
     const data = { call: '0x0', args: [`0x${encodedFunction}`], to: `0x${address}` };
 
@@ -363,10 +365,18 @@ export class NetworkApi {
 
     if (response.result !== 'return') throw new Error(`${response.result}: ${response?.signature}`);
 
-    const results = decodeReturnValue(method, response.bin, abi);
+    const results = AbiCoder.decode(io.outputs, response.bin);
 
-    // eslint-disable-next-line no-underscore-dangle
-    return results?.__length__ === 1 ? results[0] : results;
+    let returnValue: any = results;
+
+    if (io.outputNames.length === results.length) {
+      returnValue = results.reduce((aggr, item, key) => {
+        aggr[io.outputNames[key]] = item;
+        return aggr;
+      }, {});
+    }
+
+    return results.length === 1 ? results[0] : returnValue;
   }
 
   public async getTransactionStatus(txId: string) {
