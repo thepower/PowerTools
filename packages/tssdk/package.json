@@ -21,7 +21,6 @@
     "@ethereumjs/common": "^2.6.4",
     "@ethereumjs/tx": "^3.5.2",
     "@ethereumjs/vm": "^5.9.2",
-    "@ethersproject/abi": "^5.6.3",
     "@thepowereco/msgpack": "^1.5.3",
     "@types/bitcoinjs-lib": "^5.0.0",
     "axios": "^0.27.2",
@@ -42,6 +41,7 @@
     "stream-browserify": "^3.0.0",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
     "util": "^0.12.4",
+    "web3-eth-abi": "^4.1.4",
     "webpack-node-externals": "^3.0.0",
     "wif": "^2.0.6"
   },
