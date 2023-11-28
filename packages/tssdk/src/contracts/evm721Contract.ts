@@ -105,22 +105,9 @@ export class Evm721Contract {
     );
   }
 
-  // public async safeTransferFromWithData(from: string, to: string, tokenID: bigint, data: any, key: AccountKey) {
-  //   return this.evmContract.scSet(
-  //     key,
-  //     'safeTransferFrom',
-  //     [AddressApi.textAddressToEvmAddress(from), AddressApi.textAddressToEvmAddress(to), tokenID, data],
-  //   );
-  // }
-
   public async setApprovalForAll(operator: string, approved: boolean, key: AccountKey) {
     return this.evmContract.scSet(key, 'setApprovalForAll', [AddressApi.textAddressToEvmAddress(operator), approved]);
   }
-
-  // public async getSupportsInterface(interfaceId: number) {
-  //   const approved = await this.evmContract.scGet('supportsInterface', [ethers.utils.toHex('DA')]);
-  //   return approved;
-  // }
 
   public async transferFrom(from: string, to: string, tokenID: bigint, key: AccountKey) {
     return this.evmContract.scSet(
