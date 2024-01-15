@@ -18,13 +18,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ethereumjs/common": "^2.6.4",
-    "@ethereumjs/tx": "^3.5.2",
-    "@ethereumjs/vm": "^5.9.2",
+    "@ethereumjs/common": "^4.1.0",
+    "@ethereumjs/tx": "^5.1.0",
+    "@ethereumjs/util": "^9.0.1",
+    "@ethereumjs/vm": "^7.1.0",
     "@thepowereco/msgpack": "^1.5.3",
-    "@types/bitcoinjs-lib": "^5.0.0",
     "axios": "^0.27.2",
-    "bignumber.js": "^9.1.0",
     "bip32": "1.0.2",
     "bip39": "^3.0.4",
     "bitcoinjs-lib": "3.3.2",
@@ -34,7 +33,6 @@
     "crypto-browserify": "^3.12.0",
     "debug": "^4.3.4",
     "ecpair": "^2.0.1",
-    "ethereumjs-util": "^7.1.5",
     "lz4js": "^0.2.0",
     "safe-buffer": "^5.2.1",
     "solc": "^0.8.14-fixed",
@@ -46,6 +44,7 @@
     "wif": "^2.0.6"
   },
   "devDependencies": {
+    "@types/bitcoinjs-lib": "^5.0.0",
     "@types/create-hash": "^1.2.2",
     "@types/debug": "^4.1.7",
     "@types/node": "^18.7.4",
@@ -56,7 +55,7 @@
     "ts-loader": "^9.2.8",
     "ts-node": "^10.7.0",
     "tsconfig-paths": "^3.14.1",
-    "typescript": "^4.6.3",
+    "typescript": "^5.3.3",
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2"
   },

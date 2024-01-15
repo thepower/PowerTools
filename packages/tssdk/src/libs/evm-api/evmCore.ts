@@ -1,5 +1,5 @@
-import VM from '@ethereumjs/vm';
-import { Address } from 'ethereumjs-util';
+import { VM } from '@ethereumjs/vm';
+import { Address } from '@ethereumjs/util';
 import { AddressApi, NetworkApi, TransactionsApi } from '../index';
 
 import { AccountKey } from '../../typings';
@@ -32,7 +32,7 @@ export class EvmContract {
 
     const contractAddress = Address.fromString(AddressApi.textAddressToEvmAddress(this.address));
 
-    const getResult = await this.evm.vm.runCall({
+    const getResult = await this.evm.vm.evm.runCall({
       to: contractAddress,
       data: Buffer.from(encodedFunction, 'hex'),
       code: this.code as any,
@@ -42,7 +42,7 @@ export class EvmContract {
       throw getResult.execResult.exceptionError;
     }
 
-    const results = decodeReturnValue(method, getResult.execResult.returnValue, this.abi);
+    const results = decodeReturnValue(method, `0x${Buffer.from(getResult.execResult.returnValue).toString('hex')}`, this.abi);
 
     // eslint-disable-next-line no-underscore-dangle
     return results?.__length__ === 1 ? results[0] : results;

@@ -1,3 +1,4 @@
+import { PrefixedHexString } from '@ethereumjs/util';
 import { decodeParameters, encodeFunctionCall } from 'web3-eth-abi';
 
 export const encodeFunction = (
@@ -17,7 +18,7 @@ export const encodeFunction = (
 
 export const decodeReturnValue = (
   method: string,
-  returnValue: Buffer,
+  returnValue: PrefixedHexString,
   abi: any,
 ) => {
   const abiItem = abi?.find((item: any) => item.name === method);
@@ -26,6 +27,6 @@ export const decodeReturnValue = (
     throw new Error('ABI item not found');
   }
 
-  const paramStringAbi: any = decodeParameters(abiItem.outputs, returnValue.toString('hex'));
+  const paramStringAbi: any = decodeParameters(abiItem.outputs, returnValue);
   return paramStringAbi;
 };
