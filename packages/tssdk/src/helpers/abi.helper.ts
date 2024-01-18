@@ -5,15 +5,16 @@ export const encodeFunction = (
   method: string,
   params: any[],
   abi: any,
-): string => {
+  isWithPrefix = false,
+) => {
   const abiItem = abi?.find((item: any) => item.name === method);
 
   if (!abiItem) {
     throw new Error('ABI item not found');
   }
 
-  const paramStringAbi = encodeFunctionCall(abiItem, params).slice(2);
-  return paramStringAbi;
+  const paramStringAbi = encodeFunctionCall(abiItem, params);
+  return isWithPrefix ? paramStringAbi : paramStringAbi.slice(2);
 };
 
 export const decodeReturnValue = (

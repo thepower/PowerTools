@@ -1,9 +1,8 @@
 import { VM } from '@ethereumjs/vm';
-import { Address } from '@ethereumjs/util';
+import { Address, bytesToHex, hexToBytes } from '@ethereumjs/util';
 import { AddressApi, NetworkApi, TransactionsApi } from '../index';
 
 import { AccountKey } from '../../typings';
-import { bnToHex } from '../../helpers/bnHex.helper';
 import { decodeReturnValue, encodeFunction } from '../../helpers/abi.helper';
 
 export class EvmContract {
@@ -28,21 +27,21 @@ export class EvmContract {
   }
 
   public async scGet(method: string, params: any[] = []) {
-    const encodedFunction = encodeFunction(method, params, this.abi);
+    const encodedFunction = encodeFunction(method, params, this.abi, true);
 
     const contractAddress = Address.fromString(AddressApi.textAddressToEvmAddress(this.address));
 
     const getResult = await this.evm.vm.evm.runCall({
       to: contractAddress,
-      data: Buffer.from(encodedFunction, 'hex'),
-      code: this.code as any,
+      data: hexToBytes(encodedFunction),
+      code: this.code,
     });
 
     if (getResult.execResult.exceptionError) {
       throw getResult.execResult.exceptionError;
     }
 
-    const results = decodeReturnValue(method, `0x${Buffer.from(getResult.execResult.returnValue).toString('hex')}`, this.abi);
+    const results = decodeReturnValue(method, bytesToHex(getResult.execResult.returnValue), this.abi);
 
     // eslint-disable-next-line no-underscore-dangle
     return results?.__length__ === 1 ? results[0] : results;
@@ -57,9 +56,10 @@ export class EvmContract {
       await workNetwork.bootstrap(isHTTPSNodesOnly);
     }
 
-    const encodedFunction = encodeFunction(method, params, this.abi);
+    const encodedFunction = encodeFunction(method, params, this.abi, true);
 
-    const data = Buffer.from(encodedFunction, 'hex');
+    const data = hexToBytes(encodedFunction);
+
     const tx = sponsor === '' ?
       await TransactionsApi.composeSCMethodCallTX(
         key.address,
@@ -105,8 +105,8 @@ export class EvmCore {
   public static async build(network: NetworkApi): Promise<EvmCore> {
     const vm = await VM.create();
 
-    vm.stateManager.getContractStorage = async (address: Address, key: Buffer) => {
-      const val = bnToHex(`0x${key.toString('hex')}`);
+    vm.stateManager.getContractStorage = async (address: Address, key: Uint8Array) => {
+      const val = bytesToHex(key);
 
       const state = await network.loadScStateByKey(AddressApi.hexToTextAddress(AddressApi.evmAddressToHexAddress(address.toString())), val);
       return Buffer.from(state);

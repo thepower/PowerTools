@@ -1,9 +1,8 @@
 import { VM } from '@ethereumjs/vm';
-import { Address } from '@ethereumjs/util';
+import { Address, bytesToHex, hexToBytes } from '@ethereumjs/util';
 import { NetworkApi, TransactionsApi } from '../index';
 
 import { AccountKey } from '../../typings';
-import { bnToHex } from '../../helpers/bnHex.helper';
 import { decodeReturnValue, encodeFunction } from '../../helpers/abi.helper';
 
 export class EvmApi {
@@ -31,8 +30,8 @@ export class EvmApi {
     await network.bootstrap(isHTTPSNodesOnly);
     const vm = await VM.create();
 
-    vm.stateManager.getContractStorage = async (address: Address, key: Buffer) => {
-      const val = bnToHex(`0x${key.toString('hex')}`);
+    vm.stateManager.getContractStorage = async (address: Address, key: Uint8Array) => {
+      const val = bytesToHex(key);
       const state = await network.loadScStateByKey(scAddress, val);
       return Buffer.from(state);
     };
@@ -41,7 +40,7 @@ export class EvmApi {
   }
 
   public async scGet(method: string, params: any[]) {
-    const encodedFunction = encodeFunction(method, params, this.abi);
+    const encodedFunction = encodeFunction(method, params, this.abi, true);
 
     if (!this.cache.has(this.scAddress)) {
       const loadedData = await this.network.loadScCode(this.scAddress);
@@ -53,7 +52,7 @@ export class EvmApi {
 
     const getResult = await this.vm.evm.runCall({
       to: contractAddress,
-      data: Buffer.from(encodedFunction, 'hex'),
+      data: hexToBytes(encodedFunction),
       code: data,
     });
 
@@ -69,8 +68,8 @@ export class EvmApi {
 
   // Send trx to chain
   public async scSet(key: AccountKey, method: string, params: any[] = [], amount = 0) {
-    const encodedFunction = encodeFunction(method, params, this.abi);
-    const data = Buffer.from(encodedFunction, 'hex');
+    const encodedFunction = encodeFunction(method, params, this.abi, true);
+    const data = hexToBytes(encodedFunction);
 
     const tx = await TransactionsApi.composeSCMethodCallTX(
       key.address,

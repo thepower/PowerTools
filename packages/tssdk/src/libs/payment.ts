@@ -35,7 +35,7 @@ export const PaymentsApi = {
   },
 
   async getForeignTokens() {
-    const list = await HTTP.get(TOKENS_URL);
+    const list = await HTTP.get(TOKENS_URL());
     return list.data.res;
   },
 };

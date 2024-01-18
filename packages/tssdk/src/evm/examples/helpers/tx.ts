@@ -14,7 +14,7 @@ export const encodeFunction = (
     throw new Error('ABI item not found');
   }
 
-  const paramStringAbi = encodeFunctionCall(abiItem, params).slice(2);
+  const paramStringAbi = encodeFunctionCall(abiItem, params);
   return paramStringAbi;
 };
 

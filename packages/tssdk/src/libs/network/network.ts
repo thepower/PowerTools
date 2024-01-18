@@ -296,9 +296,6 @@ export class NetworkApi {
 
     while (!success) {
       i += 1;
-      /**
-       * @todo move to env
-       */
       parameters.baseURL = `${this.currentNodes[this.nodeIndex].address}/api${actionUrl}`;
       try {
         result = await axios.request(parameters);
@@ -353,11 +350,9 @@ export class NetworkApi {
   }
 
   public async executeCall(address: string, method: string, args: any[], abi: any) {
-    // TODO move to evmContract.scGet
+    const encodedFunction = encodeFunction(method, args, abi, true);
 
-    const encodedFunction = encodeFunction(method, args, abi);
-
-    const data = { call: '0x0', args: [`0x${encodedFunction}`], to: `0x${address}` };
+    const data = { call: '0x0', args: [encodedFunction], to: `0x${address}` };
 
     const response = await this.askBlockchainTo(ChainAction.EXECUTE_CALL, { data });
 
