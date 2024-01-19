@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/tssdk",
-  "version": "1.15.30",
+  "version": "1.15.31",
   "main": "dist/index.js",
   "description": "thepower tssdk",
   "author": "thepower",
@@ -22,7 +22,7 @@
     "@ethereumjs/tx": "^5.1.0",
     "@ethereumjs/util": "^9.0.1",
     "@ethereumjs/vm": "^7.1.0",
-    "@thepowereco/msgpack": "^1.5.3",
+    "@thepowereco/msgpack": "^1.5.4",
     "axios": "^0.27.2",
     "bip32": "1.0.2",
     "bip39": "^3.0.4",
