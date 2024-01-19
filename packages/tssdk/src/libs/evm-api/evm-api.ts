@@ -1,7 +1,6 @@
 import { VM } from '@ethereumjs/vm';
 import { Address, bytesToHex, hexToBytes } from '@ethereumjs/util';
 import { NetworkApi, TransactionsApi } from '../index';
-
 import { AccountKey } from '../../typings';
 import { decodeReturnValue, encodeFunction } from '../../helpers/abi.helper';
 
