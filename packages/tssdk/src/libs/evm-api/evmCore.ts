@@ -1,5 +1,8 @@
 import { VM } from '@ethereumjs/vm';
-import { Address, bytesToHex, hexToBytes } from '@ethereumjs/util';
+import {
+  Address, bytesToHex, hexToBytes,
+} from '@ethereumjs/util';
+import { bnToHex } from '../../helpers/bnHex.helper';
 import { AddressApi, NetworkApi, TransactionsApi } from '../index';
 
 import { AccountKey } from '../../typings';
@@ -106,7 +109,7 @@ export class EvmCore {
     const vm = await VM.create();
 
     vm.stateManager.getContractStorage = async (address: Address, key: Uint8Array) => {
-      const val = bytesToHex(key);
+      const val = bnToHex(bytesToHex(key));
 
       const state = await network.loadScStateByKey(AddressApi.hexToTextAddress(AddressApi.evmAddressToHexAddress(address.toString())), val);
       return Buffer.from(state);

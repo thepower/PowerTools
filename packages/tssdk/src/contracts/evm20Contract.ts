@@ -34,7 +34,7 @@ export class Evm20Contract {
     return symbol;
   }
 
-  public async getDecimals(): Promise<number> {
+  public async getDecimals(): Promise<bigint> {
     const decimals = await this.evmContract.scGet('decimals', []);
     return decimals;
   }
