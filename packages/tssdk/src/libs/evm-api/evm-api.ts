@@ -59,7 +59,7 @@ export class EvmApi {
       throw getResult.execResult.exceptionError;
     }
 
-    const results = decodeReturnValue(method, `0x${Buffer.from(getResult.execResult.returnValue).toString('hex')}`, this.abi);
+    const results = decodeReturnValue(method, bytesToHex(getResult.execResult.returnValue), this.abi);
 
     // eslint-disable-next-line no-underscore-dangle
     return results?.__length__ === 1 ? results[0] : results;
