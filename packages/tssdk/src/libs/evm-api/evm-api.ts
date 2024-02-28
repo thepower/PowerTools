@@ -69,11 +69,12 @@ export class EvmApi {
   public async scSet(key: AccountKey, method: string, params: any[] = [], amount = 0) {
     const encodedFunction = encodeFunction(method, params, this.abi, true);
     const data = hexToBytes(encodedFunction);
+    const dataBuffer = Buffer.from(data);
 
     const tx = await TransactionsApi.composeSCMethodCallTX(
       key.address,
       this.scAddress,
-      ['0x0', [data]],
+      ['0x0', [dataBuffer]],
       '',
       0,
       key.wif,
