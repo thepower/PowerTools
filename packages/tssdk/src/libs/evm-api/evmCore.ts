@@ -62,12 +62,13 @@ export class EvmContract {
     const encodedFunction = encodeFunction(method, params, this.abi, true);
 
     const data = hexToBytes(encodedFunction);
+    const dataBuffer = Buffer.from(data);
 
     const tx = sponsor === '' ?
       await TransactionsApi.composeSCMethodCallTX(
         key.address,
         this.address,
-        ['0x0', [data]],
+        ['0x0', [dataBuffer]],
         '',
         0,
         key.wif,
@@ -79,7 +80,7 @@ export class EvmContract {
       await TransactionsApi.composeSponsorSCMethodCallTX(
         key.address,
         this.address,
-        ['0x0', [data]],
+        ['0x0', [dataBuffer]],
         '',
         0,
         key.wif,

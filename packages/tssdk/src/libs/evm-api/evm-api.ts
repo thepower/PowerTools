@@ -59,7 +59,7 @@ export class EvmApi {
       throw getResult.execResult.exceptionError;
     }
 
-    const results = decodeReturnValue(method, `0x${Buffer.from(getResult.execResult.returnValue).toString('hex')}`, this.abi);
+    const results = decodeReturnValue(method, bytesToHex(getResult.execResult.returnValue), this.abi);
 
     // eslint-disable-next-line no-underscore-dangle
     return results?.__length__ === 1 ? results[0] : results;
@@ -69,11 +69,12 @@ export class EvmApi {
   public async scSet(key: AccountKey, method: string, params: any[] = [], amount = 0) {
     const encodedFunction = encodeFunction(method, params, this.abi, true);
     const data = hexToBytes(encodedFunction);
+    const dataBuffer = Buffer.from(data);
 
     const tx = await TransactionsApi.composeSCMethodCallTX(
       key.address,
       this.scAddress,
-      ['0x0', [data]],
+      ['0x0', [dataBuffer]],
       '',
       0,
       key.wif,
