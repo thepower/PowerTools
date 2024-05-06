@@ -3,7 +3,7 @@ import { decodeParameters, encodeFunctionCall } from 'web3-eth-abi';
 
 export const encodeFunction = (
   method: string,
-  params: any[],
+  params: any,
   abi: any,
   isWithPrefix = false,
 ) => {
@@ -28,6 +28,6 @@ export const decodeReturnValue = (
     throw new Error('ABI item not found');
   }
 
-  const paramStringAbi: any = decodeParameters(abiItem.outputs, returnValue);
+  const paramStringAbi = decodeParameters(abiItem.outputs, returnValue);
   return paramStringAbi;
 };
