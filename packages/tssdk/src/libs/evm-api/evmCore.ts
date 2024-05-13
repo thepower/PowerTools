@@ -44,9 +44,7 @@ export class EvmContract {
     | ExtractAbiFunctionNames<TAbi, 'pure' | 'view'>;
     args: AbiParametersToPrimitiveTypes<TAbiFunction['inputs'], 'inputs'>;
     abi: TAbi;
-  }): Promise<
-    AbiParametersToPrimitiveTypes<TAbiFunction['outputs'], 'outputs'>
-    > {
+  }) {
     const { abi, functionName, args } = config;
     const encodedFunction = encodeFunction(functionName, args, abi, true);
 
@@ -64,15 +62,19 @@ export class EvmContract {
       throw getResult.execResult.exceptionError;
     }
 
-    const results = decodeReturnValue(
+    const decodedValue = decodeReturnValue(
       functionName,
       bytesToHex(getResult.execResult.returnValue),
       abi,
-    );
-    return results as AbiParametersToPrimitiveTypes<
+    ) as AbiParametersToPrimitiveTypes<
     TAbiFunction['outputs'],
     'outputs'
-    >;
+    > & { __length__?: number };
+
+    // eslint-disable-next-line no-underscore-dangle
+    const results = decodedValue?.__length__ === 1 ? decodedValue[0] : decodedValue;
+
+    return results;
   }
 
   public async scSet<

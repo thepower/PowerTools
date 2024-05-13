@@ -182,7 +182,7 @@ export const AddressApi = {
     return result;
   },
 
-  textAddressToEvmAddress(textAddress: string) {
+  textAddressToEvmAddress(textAddress: string): `0x${string}` {
     const hexAddress = AddressApi.textAddressToHex(textAddress);
     return `0x000000000000000000000000${hexAddress}`;
   },

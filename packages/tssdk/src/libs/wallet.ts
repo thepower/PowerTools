@@ -30,7 +30,6 @@ export class WalletApi {
     const wif = keyPair.toWIF();
 
     const transmission = await TransactionsApi.composeRegisterTX(
-      +chain,
       wif,
       '',
     );
@@ -127,17 +126,10 @@ export class WalletApi {
   }
 
   public async createNew(
-    chain: string,
     seedPhrase: string,
     referrer = '',
     wait = false,
   ) {
-    // const nodes = await this.networkApi.getChainNodes(chain, chain);
-
-    // if (Object.keys(nodes.chain_nodes).length === 0) {
-    //   throw 'Can not access chain';
-    // }
-
     const settings = await this.networkApi.getNodeSettings();
 
     const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
@@ -149,7 +141,6 @@ export class WalletApi {
     const wif = keyPair.toWIF();
 
     const transmission = await TransactionsApi.composeRegisterTX(
-      +chain,
       wif,
       referrer,
     );
@@ -323,28 +314,4 @@ export class WalletApi {
 
     return CryptoApi.decryptWalletData(data, password);
   }
-  /*
-    public calculateFee(
-      feeSettings: any,
-      from: string,
-      to: string,
-      token: string,
-      amount: number,
-      message: string,
-      seq: number,
-    ) {
-      const rawFee = TransactionsApi.calculateFee(
-        feeSettings,
-        from,
-        to,
-        token,
-        correctAmount(amount, token, false),
-        message,
-        seq,
-      );
-      return rawFee
-        ? [rawFee[1], correctAmount(rawFee[2], rawFee[1])]
-        : [];
-    }
-    */
 }
