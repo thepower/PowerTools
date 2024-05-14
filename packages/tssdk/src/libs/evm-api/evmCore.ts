@@ -69,12 +69,9 @@ export class EvmContract {
     ) as AbiParametersToPrimitiveTypes<
     TAbiFunction['outputs'],
     'outputs'
-    > & { __length__?: number };
+    >;
 
-    // eslint-disable-next-line no-underscore-dangle
-    const results = decodedValue?.__length__ === 1 ? decodedValue[0] : decodedValue;
-
-    return results;
+    return decodedValue;
   }
 
   public async scSet<

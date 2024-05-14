@@ -8,7 +8,7 @@ import {
   ExtractAbiFunction,
   ExtractAbiFunctionNames,
 } from 'abitype';
-import { AddressApi } from 'libs/address/address';
+import { AddressApi } from '../address/address';
 import { decodeReturnValue, encodeFunction } from '../../helpers/abi.helper';
 import { config as cfg } from '../../config/chain.config';
 import { ChainGlobalConfig, ChainNode } from '../../typings';
@@ -452,12 +452,9 @@ export class NetworkApi {
     ) as AbiParametersToPrimitiveTypes<
     TAbiFunction['outputs'],
     'outputs'
-    > & { __length__?: number };
+    >;
 
-    // eslint-disable-next-line no-underscore-dangle
-    const results = decodedValue?.__length__ === 1 ? decodedValue[0] : decodedValue;
-
-    return results;
+    return decodedValue;
   }
 
   public async getTransactionStatus(txId: string) {
