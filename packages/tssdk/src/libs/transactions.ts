@@ -1,6 +1,8 @@
 import createHash from 'create-hash';
 import { Buffer } from 'safe-buffer';
 import * as msgPack from '@thepowereco/msgpack';
+import { encodeParameters } from 'web3-eth-abi';
+import { hexToBytes } from '@ethereumjs/util';
 import { AddressApi } from './address/address';
 
 const Bitcoin = require('bitcoinjs-lib');
@@ -317,26 +319,34 @@ export const TransactionsApi = {
 
     return this.autoAddFee({ scData, actual }, feeSettings);
   }, */
-  composeDeployTX(
-    address: string,
-    code: any,
-    initParams: any,
-    gasToken: string,
-    gasValue: number,
-    wif: string,
-    vm: 'wasm' | 'evm',
-    feeSettings: any,
-    gasSettings: any,
-    fee?: number,
-    feeToken?: string,
-  ) {
-    // const selfInitParams = [Buffer.from(AddressApi.parseTextAddress(address))];
-    const scCode =
-      vm === 'evm'
-        ? new Uint8Array(
-          code.match(/[\da-f]{2}/gi).map((h: string) => parseInt(h, 16)),
-        )
-        : new Uint8Array(code);
+  composeDeployTX({
+    address,
+    code,
+    initParams,
+    gasToken,
+    gasValue,
+    wif,
+    abi,
+    feeSettings,
+    gasSettings,
+    fee,
+    feeToken,
+  }: {
+    address: string;
+    code: any;
+    initParams: any;
+    gasToken: string;
+    gasValue: number;
+    wif: string;
+    abi: any;
+    feeSettings: any;
+    gasSettings: any;
+    fee?: number;
+    feeToken?: string;
+  }) {
+    const scCode = new Uint8Array(
+      code.match(/[\da-f]{2}/gi).map((h: string) => parseInt(h, 16)),
+    );
 
     let body = {
       k: KIND_DEPLOY,
@@ -346,10 +356,21 @@ export const TransactionsApi = {
       s: +new Date(),
       p: [] as any,
       c: [] as any,
-      e: { code: Buffer.from(scCode), vm, view: [] },
+      e: { code: Buffer.from(scCode), vm: 'evm', view: [] },
     };
-    if (vm === 'wasm') {
-      body.c = ['init', initParams];
+
+    if (initParams.length) {
+      const abiItem = abi?.find((item: any) => item.type === 'constructor');
+
+      if (!abiItem) {
+        throw new Error('ABI item not found');
+      }
+
+      const encodedFunction = encodeParameters(abiItem.inputs, initParams);
+
+      const data = hexToBytes(encodedFunction);
+      const dataBuffer = Buffer.from(data);
+      body.c = ['0x0', [dataBuffer]];
     }
 
     if (gasValue > 0) {
