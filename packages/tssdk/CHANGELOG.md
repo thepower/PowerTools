@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.36...@thepowereco/tssdk@2.0.0) (2024-05-30)
+
+
+### Features
+
+* **tssdk:** added new api method (getWalletSequence) and calculate seq in makeNewTx method ([a04ce9d](https://github.com/thepower/power_hub/commit/a04ce9d84f6a0f7511c29ee0272f040063e2cd3e))
+
+
+### BREAKING CHANGES
+
+* **tssdk:** new method getWalletSequence, calculating seq
+
+
+
+
+
 ## [1.15.36](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.35...@thepowereco/tssdk@1.15.36) (2024-05-17)
 
 **Note:** Version bump only for package @thepowereco/tssdk
