@@ -37,9 +37,9 @@ export default class Upload extends Command {
 
     let acc:RegisteredAccount;
     if (network === 'devnet') {
-      acc = await WalletApi.registerCertainChain(1);
+      acc = await WalletApi.registerCertainChain({ chain: 1 });
     } else {
-      acc = await WalletApi.registerRandomChain(network);
+      acc = await WalletApi.registerRandomChain({ network });
     }
     ux.action.stop();
 

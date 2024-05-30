@@ -7,344 +7,180 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.35](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.34...@thepowereco/tssdk@1.15.35) (2024-05-15)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.34](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.33...@thepowereco/tssdk@1.15.34) (2024-02-28)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.33](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.32...@thepowereco/tssdk@1.15.33) (2024-01-22)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.32](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.31...@thepowereco/tssdk@1.15.32) (2024-01-19)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.31](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.30...@thepowereco/tssdk@1.15.31) (2024-01-19)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.30](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.29...@thepowereco/tssdk@1.15.30) (2024-01-19)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.29](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.28...@thepowereco/tssdk@1.15.29) (2023-12-06)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.28](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.27...@thepowereco/tssdk@1.15.28) (2023-11-04)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.27](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.26...@thepowereco/tssdk@1.15.27) (2023-11-01)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.26](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.25...@thepowereco/tssdk@1.15.26) (2023-10-19)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.25](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.24...@thepowereco/tssdk@1.15.25) (2023-10-16)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.24](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.23...@thepowereco/tssdk@1.15.24) (2023-09-20)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.23](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.22...@thepowereco/tssdk@1.15.23) (2023-09-12)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.22](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.21...@thepowereco/tssdk@1.15.22) (2023-08-17)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.21](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.20...@thepowereco/tssdk@1.15.21) (2023-06-11)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.20](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.19...@thepowereco/tssdk@1.15.20) (2023-05-26)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.19](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.18...@thepowereco/tssdk@1.15.19) (2023-04-26)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.18](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.17...@thepowereco/tssdk@1.15.18) (2023-04-21)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.17](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.16...@thepowereco/tssdk@1.15.17) (2023-04-20)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.16](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.15...@thepowereco/tssdk@1.15.16) (2023-04-19)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.15](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.14...@thepowereco/tssdk@1.15.15) (2023-04-19)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.14](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.13...@thepowereco/tssdk@1.15.14) (2023-04-19)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.13](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.12...@thepowereco/tssdk@1.15.13) (2023-04-18)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.12](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.11...@thepowereco/tssdk@1.15.12) (2023-04-13)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.11](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.10...@thepowereco/tssdk@1.15.11) (2023-04-03)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.10](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.9...@thepowereco/tssdk@1.15.10) (2023-03-01)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.9](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.8...@thepowereco/tssdk@1.15.9) (2023-01-26)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.8](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.7...@thepowereco/tssdk@1.15.8) (2023-01-15)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.7](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.6...@thepowereco/tssdk@1.15.7) (2022-12-22)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [1.15.6](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.5...@thepowereco/tssdk@1.15.6) (2022-12-21)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.15.5](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.4...@thepowereco/tssdk@1.15.5) (2022-11-22)
-
 
 ### Bug Fixes
 
-* **tssdk:** exports fix ([3273bc3](https://github.com/thepower/power_hub/commit/3273bc391fc9b9b5a317d9dc6405e2960eb24372))
-
-
-
-
+- **tssdk:** exports fix ([3273bc3](https://github.com/thepower/power_hub/commit/3273bc391fc9b9b5a317d9dc6405e2960eb24372))
 
 ## [1.15.4](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.3...@thepowereco/tssdk@1.15.4) (2022-11-22)
 
-
 ### Bug Fixes
 
-* **tssdk, cli:** register account refactored ([40d35a0](https://github.com/thepower/power_hub/commit/40d35a0c54a232bc0de5e69e968338a2bdcc73e7))
-
-
-
-
+- **tssdk, cli:** register account refactored ([40d35a0](https://github.com/thepower/power_hub/commit/40d35a0c54a232bc0de5e69e968338a2bdcc73e7))
 
 ## [1.15.3](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.2...@thepowereco/tssdk@1.15.3) (2022-11-22)
 
-
 ### Bug Fixes
 
-* **cli, tssdk:** refactored account reg ([61dab0b](https://github.com/thepower/power_hub/commit/61dab0b0c825fae8daf9572df1705d8aa9c5a9a0))
-
-
-
-
+- **cli, tssdk:** refactored account reg ([61dab0b](https://github.com/thepower/power_hub/commit/61dab0b0c825fae8daf9572df1705d8aa9c5a9a0))
 
 ## [1.15.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.0...@thepowereco/tssdk@1.15.2) (2022-11-10)
 
-
 ### Bug Fixes
 
-* **cicd:** fix ([308d329](https://github.com/thepower/power_hub/commit/308d329b1ffee6031b5191d153b2c6ed92935ad2))
-* **tssdk:** register random chain fix ([08df28f](https://github.com/thepower/power_hub/commit/08df28f75cd5906306a2e7dc5ddac806ad4848d4))
-* **tssdk:** review fixes ([4902113](https://github.com/thepower/power_hub/commit/4902113057e682fcd18dbb489280dc785fbe820e))
-* **tssdk:** ver up ([2fc12ed](https://github.com/thepower/power_hub/commit/2fc12ed789921cb6c4cac491b64f49852106aaf9))
-
-
-
-
+- **cicd:** fix ([308d329](https://github.com/thepower/power_hub/commit/308d329b1ffee6031b5191d153b2c6ed92935ad2))
+- **tssdk:** register random chain fix ([08df28f](https://github.com/thepower/power_hub/commit/08df28f75cd5906306a2e7dc5ddac806ad4848d4))
+- **tssdk:** review fixes ([4902113](https://github.com/thepower/power_hub/commit/4902113057e682fcd18dbb489280dc785fbe820e))
+- **tssdk:** ver up ([2fc12ed](https://github.com/thepower/power_hub/commit/2fc12ed789921cb6c4cac491b64f49852106aaf9))
 
 # [1.15.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.14.2...@thepowereco/tssdk@1.15.0) (2022-11-08)
 
-
 ### Bug Fixes
 
-* **cli:** review fixes ([734531b](https://github.com/thepower/power_hub/commit/734531be0eea85bfc480d080807ac10ac1fdbd70))
-
+- **cli:** review fixes ([734531b](https://github.com/thepower/power_hub/commit/734531be0eea85bfc480d080807ac10ac1fdbd70))
 
 ### Features
 
-* **cli:** register with random chain from network ([2ebcef4](https://github.com/thepower/power_hub/commit/2ebcef44ee943ef44620c59923956e4867bd7060))
-* **tssdk:** register random chain ([143a0d9](https://github.com/thepower/power_hub/commit/143a0d928bf74d3da55a684516014ae2f9e8b919))
-
-
-
-
+- **cli:** register with random chain from network ([2ebcef4](https://github.com/thepower/power_hub/commit/2ebcef44ee943ef44620c59923956e4867bd7060))
+- **tssdk:** random chain ([143a0d9](https://github.com/thepower/power_hub/commit/143a0d928bf74d3da55a684516014ae2f9e8b919))
 
 ## [1.14.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.14.1...@thepowereco/tssdk@1.14.2) (2022-11-04)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [1.14.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.14.0...@thepowereco/tssdk@1.14.1) (2022-11-04)
-
 
 ### Bug Fixes
 
-* **cli:** register fix ([5297bd0](https://github.com/thepower/power_hub/commit/5297bd01b3c941377f3e2187eb269054388ff3df))
-
-
-
-
+- **cli:** register fix ([5297bd0](https://github.com/thepower/power_hub/commit/5297bd01b3c941377f3e2187eb269054388ff3df))
 
 # [1.14.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.13.0...@thepowereco/tssdk@1.14.0) (2022-11-03)
 
-
 ### Features
 
-* **hub:** login page fixes ([306e3eb](https://github.com/thepower/power_hub/commit/306e3ebd2b4267ff757ac5cb2724b08952360e25))
-* **send:** add send trx page ([06b2ee1](https://github.com/thepower/power_hub/commit/06b2ee14f89423aa183885526e56bc8229f245b1))
-
-
-
-
+- **hub:** login page fixes ([306e3eb](https://github.com/thepower/power_hub/commit/306e3ebd2b4267ff757ac5cb2724b08952360e25))
+- **send:** add send trx page ([06b2ee1](https://github.com/thepower/power_hub/commit/06b2ee14f89423aa183885526e56bc8229f245b1))
 
 # [1.13.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.12.1...@thepowereco/tssdk@1.13.0) (2022-11-02)
 

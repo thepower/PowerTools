@@ -39,7 +39,7 @@ export default class TaskList extends Command {
     const { address } = config;
     this.log(color.whiteBright(`Task list for ${address} account`));
 
-    const storageSc = await EvmApi.build(storageScAddress, chainNumber, abiJson.abi);
+    const storageSc = await EvmApi.build({ scAddress: storageScAddress, chain: chainNumber, abiJSON: abiJson.abi });
 
     const tasksCount = await storageSc.scGet(
       'storageTasksCount',

@@ -15,10 +15,20 @@ export class WalletApi {
     this.networkApi = network;
   }
 
-  public static async registerCertainChain(chain: number, customSeed?: string, isHTTPSNodesOnly = false): Promise<RegisteredAccount> {
+  public static async registerCertainChain({
+    chain,
+    customSeed,
+    isHTTPSNodesOnly = true,
+    referrer,
+  }: {
+    chain: number;
+    customSeed?: string;
+    isHTTPSNodesOnly?: boolean;
+    referrer?: string;
+  }): Promise<RegisteredAccount> {
     const seed = customSeed || CryptoApi.generateSeedPhrase();
-    const networkApi = new NetworkApi(chain);
-    await networkApi.bootstrap(isHTTPSNodesOnly);
+    const networkApi = new NetworkApi(chain, isHTTPSNodesOnly);
+    await networkApi.bootstrap();
 
     const settings = await networkApi.getNodeSettings();
     const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
@@ -29,11 +39,7 @@ export class WalletApi {
 
     const wif = keyPair.toWIF();
 
-    const transmission = await TransactionsApi.composeRegisterTX(
-      +chain,
-      wif,
-      '',
-    );
+    const transmission = await TransactionsApi.composeRegisterTX(wif, referrer);
 
     const { txid } = await networkApi.createTransaction({ tx: transmission });
 
@@ -68,9 +74,17 @@ export class WalletApi {
     };
   }
 
-  public static async registerRandomChain(network: NetworkEnum, customSeed?: string): Promise<RegisteredAccount> {
+  public static async registerRandomChain({
+    network,
+    customSeed,
+    referrer,
+  }: {
+    network: NetworkEnum;
+    customSeed?: string;
+    referrer?: string;
+  }): Promise<RegisteredAccount> {
     const chain = await NetworkApi.getRandomChain(network);
-    return WalletApi.registerCertainChain(chain, customSeed);
+    return WalletApi.registerCertainChain({ chain, customSeed, referrer });
   }
 
   private prettifyTx(inputTx: any, block: any) {
@@ -81,8 +95,10 @@ export class WalletApi {
       if (tx.payload) {
         const payment =
           tx.payload.find((elem: any) => elem.purpose === 'transfer') ||
-          tx.payload.find((elem: any) => elem.purpose === 'srcfee' ||
-          tx.payload.find((elem: any) => elem.purpose === 'srcfeehint'));
+          tx.payload.find(
+            (elem: any) => elem.purpose === 'srcfee' ||
+              tx.payload.find((elem: any) => elem.purpose === 'srcfeehint'),
+          );
         if (payment) {
           tx.cur = payment.cur;
           tx.amount = correctAmount(payment.amount, tx.cur);
@@ -126,62 +142,6 @@ export class WalletApi {
     return new Promise((r) => setTimeout(r, ms));
   }
 
-  public async createNew(
-    chain: string,
-    seedPhrase: string,
-    referrer = '',
-    wait = false,
-  ) {
-    // const nodes = await this.networkApi.getChainNodes(chain, chain);
-
-    // if (Object.keys(nodes.chain_nodes).length === 0) {
-    //   throw 'Can not access chain';
-    // }
-
-    const settings = await this.networkApi.getNodeSettings();
-
-    const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
-      seedPhrase,
-      settings.current.allocblock.block,
-      settings.current.allocblock.group,
-    );
-
-    const wif = keyPair.toWIF();
-
-    const transmission = await TransactionsApi.composeRegisterTX(
-      +chain,
-      wif,
-      referrer,
-    );
-
-    const { txid } = await this.networkApi.createTransaction({ tx: transmission });
-
-    if (wait) {
-      let walletAddress = '';
-      let count = 0;
-      while (walletAddress === '') {
-        if (count > 60) {
-          throw 'Timeout';
-        }
-        count += 1;
-        const status = await this.networkApi.getTransactionStatus(txid);
-        if (status?.error) {
-          throw status?.error;
-        }
-        if (status?.ok) {
-          walletAddress = status.res;
-          break;
-        }
-
-        await WalletApi.sleep(500);
-      }
-
-      return { privateKey: wif, address: walletAddress };
-    }
-
-    return { privateKey: wif, txid };
-  }
-
   public async makeNewTx(
     wif: string,
     from: string,
@@ -189,7 +149,6 @@ export class WalletApi {
     token: string,
     inputAmount: number,
     message: string,
-    seq: number,
   ) {
     const amount = correctAmount(inputAmount, token, false);
     const feeSettings = this.networkApi.feeSettings;
@@ -263,15 +222,16 @@ export class WalletApi {
     while (lastBlock !== '0000000000000000' && loadedBlocks < perPage) {
       const block = await this.getBlock(lastBlock, address);
       loadedBlocks += 1;
-      const txs = txsFilter ? Object.fromEntries(Object.entries(block.txs).filter(([key, val]) => txsFilter(key, val))) : Object.entries(block.txs);
+      const txs = txsFilter
+        ? Object.fromEntries(
+          Object.entries(block.txs).filter(([key, val]) => txsFilter(key, val)),
+        )
+        : Object.entries(block.txs);
       const txsKeys = Object.keys(txs);
       if (txsKeys.length) {
         for (const key of txsKeys) {
           const tx = block.txs[key];
-          if (
-            tx.to === address ||
-            tx.from === address
-          ) {
+          if (tx.to === address || tx.from === address) {
             transactionHistory.set(key, tx);
           } else if (tx.address === address) {
             transactionHistory.set(key, {
@@ -297,12 +257,16 @@ export class WalletApi {
     return transactionHistory;
   }
 
-  public getExportData(wif: string, address: string, password: string, hint = '') {
-    return (
-      `${JSON.stringify({ version: 2, hint })
-      }\n${CryptoApi.encryptWalletDataToPEM(wif, address, password)
-      }\n`
-    );
+  public getExportData(
+    wif: string,
+    address: string,
+    password: string,
+    hint = '',
+  ) {
+    return `${JSON.stringify({
+      version: 2,
+      hint,
+    })}\n${CryptoApi.encryptWalletDataToPEM(wif, address, password)}\n`;
   }
 
   public async parseExportData(data: string, password: string) {
@@ -330,28 +294,4 @@ export class WalletApi {
 
     return CryptoApi.decryptWalletData(data, password);
   }
-  /*
-    public calculateFee(
-      feeSettings: any,
-      from: string,
-      to: string,
-      token: string,
-      amount: number,
-      message: string,
-      seq: number,
-    ) {
-      const rawFee = TransactionsApi.calculateFee(
-        feeSettings,
-        from,
-        to,
-        token,
-        correctAmount(amount, token, false),
-        message,
-        seq,
-      );
-      return rawFee
-        ? [rawFee[1], correctAmount(rawFee[2], rawFee[1])]
-        : [];
-    }
-    */
 }

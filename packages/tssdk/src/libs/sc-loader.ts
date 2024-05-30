@@ -2,10 +2,10 @@ import * as msgPack from '@thepowereco/msgpack';
 import { SmartContractWrapper } from './sc-interface/sc-interface';
 import { NetworkApi } from '.';
 
-export const instantiateSC = async (address: string, chain = 8, isHTTPSNodesOnly = false) => {
+export const instantiateSC = async (address: string, chain = 8, isHTTPSNodesOnly = true) => {
   const loadedSC: any = {};
-  const network = new NetworkApi(chain);
-  await network.bootstrap(isHTTPSNodesOnly);
+  const network = new NetworkApi(chain, isHTTPSNodesOnly);
+  await network.bootstrap();
   loadedSC[address] = loadedSC[address] || (await network.loadScCode(address));
   const state = await network.loadScState(address);
   return new SmartContractWrapper(loadedSC[address], state);

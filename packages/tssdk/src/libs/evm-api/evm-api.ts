@@ -24,12 +24,25 @@ export class EvmApi {
     this.abi = abi;
   }
 
-  public static async build(scAddress: string, chain: number, abiJSON: any, isHTTPSNodesOnly = false): Promise<EvmApi> {
-    const network = new NetworkApi(chain);
-    await network.bootstrap(isHTTPSNodesOnly);
+  public static async build({
+    scAddress,
+    chain,
+    abiJSON,
+    isHTTPSNodesOnly = true,
+  }: {
+    scAddress: string;
+    chain: number;
+    abiJSON: any;
+    isHTTPSNodesOnly?: boolean;
+  }): Promise<EvmApi> {
+    const network = new NetworkApi(chain, isHTTPSNodesOnly);
+    await network.bootstrap();
     const vm = await VM.create();
 
-    vm.stateManager.getContractStorage = async (address: Address, key: Uint8Array) => {
+    vm.stateManager.getContractStorage = async (
+      address: Address,
+      key: Uint8Array,
+    ) => {
       const val = bytesToHex(key);
       const state = await network.loadScStateByKey(scAddress, val);
       return Buffer.from(state);
@@ -59,14 +72,23 @@ export class EvmApi {
       throw getResult.execResult.exceptionError;
     }
 
-    const results = decodeReturnValue(method, bytesToHex(getResult.execResult.returnValue), this.abi);
+    const results = decodeReturnValue(
+      method,
+      bytesToHex(getResult.execResult.returnValue),
+      this.abi,
+    );
 
     // eslint-disable-next-line no-underscore-dangle
     return results?.__length__ === 1 ? results[0] : results;
   }
 
   // Send trx to chain
-  public async scSet(key: AccountKey, method: string, params: any[] = [], amount = 0) {
+  public async scSet(
+    key: AccountKey,
+    method: string,
+    params: any[] = [],
+    amount = 0,
+  ) {
     const encodedFunction = encodeFunction(method, params, this.abi, true);
     const data = hexToBytes(encodedFunction);
     const dataBuffer = Buffer.from(data);

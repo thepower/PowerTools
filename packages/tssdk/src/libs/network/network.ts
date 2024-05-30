@@ -1,5 +1,4 @@
 import axios from 'axios';
-import createHash from 'create-hash';
 import Debug from 'debug';
 import { decodeReturnValue, encodeFunction } from '../../helpers/abi.helper';
 import { config as cfg } from '../../config/chain.config';
@@ -8,7 +7,6 @@ import { queueNodes, transformNodeList, transformResponse } from '../../helpers/
 import { ChainAction } from '../../helpers/network.enum';
 import { NoNodesFoundException } from './eceptions/no-nodes-found.exception';
 import { UnknownChainException } from './eceptions/unknown-chain.exception';
-import { HashMismatchException } from './eceptions/hash-mismatch.exception';
 import { ChainUnavailableException } from './eceptions/chain-unavailable.exception';
 import { NoNodesToQueryException } from './eceptions/no-nodes-to-query.exception';
 import { NetworkEnum } from '../../config/network.enum';
@@ -20,7 +18,7 @@ export class NetworkApi {
 
   private currentNodes: ChainNode[] = [];
 
-  private isHTTPSNodesOnly = false;
+  public isHTTPSNodesOnly = true;
 
   private nodeIndex = 0;
 
@@ -28,8 +26,9 @@ export class NetworkApi {
 
   public gasSettings: any;
 
-  constructor(chain: number) {
+  constructor(chain: number, isHTTPSNodesOnly = true) {
     this.currentChain = chain;
+    this.isHTTPSNodesOnly = isHTTPSNodesOnly;
   }
 
   public load(params: { currentChain: number, currentNodes: ChainNode[], nodeIndex: number, feeSettings: any, gasSettings: any }) {
@@ -69,9 +68,9 @@ export class NetworkApi {
     return Number(strChain);
   }
 
-  public async changeChain(chain: number, isHTTPSNodesOnly = false) {
+  public async changeChain(chain: number) {
     this.currentChain = chain;
-    await this.bootstrap(isHTTPSNodesOnly);
+    await this.bootstrap();
   }
 
   private setCurrentConfig = async (newNodes: ChainNode[]) => {
@@ -155,7 +154,11 @@ export class NetworkApi {
     return this.isHTTPSNodesOnly;
   }
 
-  public bootstrap = async (isHTTPSNodesOnly = false) => {
+  public setIsHTTPSNodesOnly(isHTTPSNodesOnly: boolean) {
+    this.isHTTPSNodesOnly = isHTTPSNodesOnly;
+  }
+
+  public bootstrap = async () => {
     if (typeof localStorage !== 'undefined' && localStorage !== null && localStorage.getItem('nodesList')) {
       const stringifiedNodesList = localStorage.getItem('nodesList');
       const chainIdString = localStorage.getItem('chainId');
@@ -176,12 +179,10 @@ export class NetworkApi {
       const chainData = chainInfo.chains[this.currentChain];
 
       if (chainData) {
-        this.isHTTPSNodesOnly = isHTTPSNodesOnly;
-
         const httpsRegExp = /^https:\/\//ig;
 
         const transformedNodeList = transformNodeList(chainData);
-        const nodesList = isHTTPSNodesOnly ? transformedNodeList.filter((node) => httpsRegExp.test(node.address)) : transformedNodeList;
+        const nodesList = this.isHTTPSNodesOnly ? transformedNodeList.filter((node) => httpsRegExp.test(node.address)) : transformedNodeList;
 
         if (!transformedNodeList.length) {
           throw new NoNodesFoundException(this.currentChain);
@@ -196,25 +197,6 @@ export class NetworkApi {
       throw new UnknownChainException(this.currentChain);
     }
   };
-
-  private async loadRemoteSCInterface(interfaceData: any[]) {
-    const [hashData, urlData] = interfaceData;
-    const [hashAlg, hashValue] = hashData.split(':');
-
-    const baseURL = urlData.includes('ipfs') ?
-      `https://ipfs.io/ipfs/${urlData.split('://')[1]}` // TODO: what url is it? move to const (config)
-      : `${urlData}?${+new Date()}`;
-
-    const { data } = await axios.request({ baseURL, responseType: 'arraybuffer' });
-    const binaryCode = new Uint8Array(data);
-    const actualHash = createHash(hashAlg).update(binaryCode).digest().toString('hex');
-
-    if (actualHash !== hashValue) {
-      throw new HashMismatchException();
-    }
-
-    return binaryCode;
-  }
 
   public async sendPreparedTX(tx: any, timeout = 1000) {
     const response = await this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data: { tx } });
