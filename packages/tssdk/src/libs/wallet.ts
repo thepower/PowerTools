@@ -193,7 +193,8 @@ export class WalletApi {
   ) {
     const amount = correctAmount(inputAmount, token, false);
     const feeSettings = this.networkApi.feeSettings;
-
+    const sequence = await this.getWalletSequence(from);
+    const newSequence = sequence + 1;
     const transmission = TransactionsApi.composeSimpleTransferTX(
       feeSettings,
       wif,
@@ -202,7 +203,7 @@ export class WalletApi {
       token,
       amount,
       message,
-      seq,
+      newSequence,
     );
 
     return this.networkApi.sendPreparedTX(transmission);
@@ -241,6 +242,12 @@ export class WalletApi {
       ...walletData,
       amount: correctAmountsObject(walletData.amount),
     };
+  }
+
+  public async getWalletSequence(address: string) {
+    const seq: number = await this.networkApi.getWalletSequence(address);
+
+    return seq;
   }
 
   public async getRawTransactionsHistory(

@@ -83,6 +83,9 @@ export const transformResponse = async (response: any, kind: ChainAction, reques
     case ChainAction.GET_WALLET:
       return { ...response.info, rawDataURL: `${requestParams.baseURL}/${requestParams.url}` };
 
+    case ChainAction.GET_WALLET_SEQUENCE:
+      return response.seq;
+
     case ChainAction.GET_NODE_SETTINGS:
       return response.settings;
     default:

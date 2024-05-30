@@ -116,6 +116,11 @@ export class NetworkApi {
     { chain: this.currentChain, address },
   );
 
+  public getWalletSequence = async (address: string) => this.askBlockchainTo(
+    ChainAction.GET_WALLET_SEQUENCE,
+    { chain: this.currentChain, address },
+  );
+
   public loadScCode = async (address: string) => new Uint8Array(
     await this.askBlockchainTo(
       ChainAction.GET_SC_CODE,
@@ -395,6 +400,11 @@ export class NetworkApi {
       case ChainAction.GET_WALLET:
         actionUrl = '/address';
         requestParams.url = parameters.address;
+        break;
+
+      case ChainAction.GET_WALLET_SEQUENCE:
+        actionUrl = '/address';
+        requestParams.url = `${parameters.address}/seq`;
         break;
 
       case ChainAction.CREATE_TRANSACTION:
