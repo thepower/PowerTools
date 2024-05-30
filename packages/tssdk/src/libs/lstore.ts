@@ -57,30 +57,27 @@ const encodePatches = (patches: Buffer[]) => {
 };
 
 const getLStore = async (address: string, path: string, key: string, network: NetworkApi) => {
-  let workNetwork = network;
+  const workNetwork = network;
   const addressChain = await network.getAddressChain(address);
   const addressChainNumber = addressChain?.chain;
   if (network.getChain() !== addressChainNumber) {
-    workNetwork = new NetworkApi(addressChainNumber);
-    await workNetwork.bootstrap(network.getIsHTTPSNodesOnly());
+    await network.changeChain(addressChainNumber);
   }
   return workNetwork.getLstoreData(address, path + key);
 };
 
 const setLStore = async (account: AccountKey, patches: [string, string, string][], network: NetworkApi) => {
-  let workNetwork = network;
   const addressChain = await network.getAddressChain(account.address);
   const addressChainNumber = addressChain?.chain;
   if (network.getChain() !== addressChainNumber) {
-    workNetwork = new NetworkApi(addressChainNumber);
-    await workNetwork.bootstrap(network.getIsHTTPSNodesOnly());
+    await network.changeChain(addressChainNumber);
   }
 
   const tx = await TransactionsApi.composeStoreTX(
     account.address,
     patches,
     account.wif,
-    workNetwork.feeSettings,
+    network.feeSettings,
   );
   return tx;
 };

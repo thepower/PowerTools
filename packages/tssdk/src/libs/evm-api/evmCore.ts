@@ -50,13 +50,12 @@ export class EvmContract {
     return results?.__length__ === 1 ? results[0] : results;
   }
 
-  public async scSet(key: AccountKey, method: string, params: any[] = [], amount = 0, isHTTPSNodesOnly = false, sponsor = '') {
+  public async scSet(key: AccountKey, method: string, params: any[] = [], amount = 0, sponsor = '') {
     const addressChain = await this.evm.network.getAddressChain(key.address);
     const addressChainNumber = addressChain?.chain;
-    let workNetwork = this.evm.network;
+
     if (this.evm.network.getChain() !== addressChainNumber) {
-      workNetwork = new NetworkApi(addressChainNumber);
-      await workNetwork.bootstrap(isHTTPSNodesOnly);
+      await this.evm.network.changeChain(addressChainNumber);
     }
 
     const encodedFunction = encodeFunction(method, params, this.abi, true);
@@ -74,8 +73,8 @@ export class EvmContract {
         key.wif,
         'SK',
         amount,
-        workNetwork.feeSettings,
-        workNetwork.gasSettings,
+        this.evm.network.feeSettings,
+        this.evm.network.gasSettings,
       ) :
       await TransactionsApi.composeSponsorSCMethodCallTX(
         key.address,
@@ -86,12 +85,12 @@ export class EvmContract {
         key.wif,
         'SK',
         amount,
-        workNetwork.feeSettings,
-        workNetwork.gasSettings,
+        this.evm.network.feeSettings,
+        this.evm.network.gasSettings,
         sponsor,
       );
 
-    const res = await workNetwork.sendTxAndWaitForResponse(tx);
+    const res = await this.evm.network.sendTxAndWaitForResponse(tx);
     return res;
   }
 }

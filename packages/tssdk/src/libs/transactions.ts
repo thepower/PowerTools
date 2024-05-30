@@ -24,132 +24,29 @@ const KIND_DEPLOY = 0x12;
 // const KIND_PATCH = 0x13;
 const KIND_LSTORE = 22;
 
-// tmp unsed
-// const TAG_TIMESTAMP = 0x01;
-// const TAG_CREATE_DURATION = 0x03;
-// const TAG_OTHER = 0xF0;
-// const TAG_PURPOSE = 0xFE;
-// const PURPOSE_DSTFEE = 0x02;
-// const KIND_BLOCK = 0x14;
-
-// const POW_DIFFICULTY_THRESHOLD = 30;
-// const blob = new Blob([ '(',
-//   function () {
-//     onmessage = function (e: MessageEvent) {
-//       // self.importScripts('https://store.thepower.io/sha512.min.js');
-//
-//       function validateHash(hash: any, difficulty: number) {
-//         var index = hash.findIndex((item: any) => item !== 0);
-//         var hashDifficulty = index !== -1 ? index * 8 + (8 - (hash[index].toString(2).length)) : hash.length * 8;
-//         return hashDifficulty >= difficulty;
-//       }
-//
-//       function numToArray(number: number) {
-//         if (number >= 0 && number <= 0x7F) {
-//           return [number];
-//         } else if (number <= 0xFF) {
-//           return [0xCC, number];
-//         } else if (number <= 0xFFFF) {
-//           return [0xCD, (number >> 8) & 255, number & 255];
-//         } else if (number <= 0xFFFFFFFF) {
-//           return [0xCE, (number >>> 24) & 255, (number >>> 16) & 255, (number >>> 8) & 255, number & 255];
-//         }
-//         throw new Error('Nonce generation error');
-//       }
-//
-//       function mergeTypedArrays(a: any, b: any, c: any) {
-//         var d = new a.constructor(a.length + b.length + c.length);
-//         d.set(a);
-//         d.set(b, a.length);
-//         d.set(c, a.length + b.length);
-//         return d;
-//       }
-//
-//       var nonce = 0, hash;
-//       var body = e.data[0];
-//       var offset = e.data[1];
-//       var difficulty = e.data[2];
-//       var part1 = body.slice(0, offset), part2 = body.slice(offset + 1);
-//       do {
-//         nonce++;
-//         let packedBody = mergeTypedArrays(part1, numToArray(nonce), part2);
-//         console.log(packedBody); // TODO: remove this
-//         hash = ''; //window.sha512.array(packedBody); // TODO: Property 'sha512' does not exist on type 'Window & typeof globalThis'.
-//       } while (!validateHash(hash, difficulty));
-//
-//       postMessage(nonce);
-//     };
-//   }.toString(),
-//   ')()'], { type: 'application/javascript' });
-// const blobURL = URL.createObjectURL(blob);
-
-// const worker = new Worker(blobURL);
-// URL.revokeObjectURL(blobURL);
-
-const generateNonce = (
-  body: Uint8Array,
-  offset: number,
-  powDifficulty: number,
-) => '0';
-// if (powDifficulty > POW_DIFFICULTY_THRESHOLD) {
-//   throw new Error('PoW difficulty is too high');
-// }
-// return new Promise((resolve, reject) => {
-//   worker.onmessage = (event: MessageEvent) => {
-//     resolve(event.data);
-//   };
-//   worker.onerror = (event: ErrorEvent) => {
-//     reject(event);
-//   };
-//   worker.postMessage([body, offset, powDifficulty]);
-// });
-
-const getRegisterTxBody = async (
-  chain: number,
-  publicKey: string,
-  timestamp: number,
-  referrer: string,
-  powDifficulty = 16,
-) => {
+const getRegisterTxBody = async ({
+  publicKey,
+  timestamp,
+  referrer,
+}: {
+  publicKey: string;
+  timestamp: number;
+  referrer?: string;
+}) => {
   let body = {
     k: KIND_REGISTER,
     t: timestamp,
-    nonce: '',
     h: createHash('sha256').update(publicKey).digest(),
-    e: { },
+    e: {},
   };
 
   if (referrer) {
     body = { ...body, e: { ...body.e, referrer } };
   }
 
-  const pckd = msgPack.encode(body);
-  const arr = new Uint8Array(pckd);
-  const offset = pckd.indexOf('A56E6F6E636500', 0, 'hex') + 6;
-  try {
-    body.nonce = (await generateNonce(arr, offset, powDifficulty)) as string;
-  } catch (e: any) {
-    throw new Error(e.message);
-  }
-
   return body;
 };
-/*
-const computeFee = (body: any, feeSettings: any) => {
-  if (feeSettings.feeCur && feeSettings.fee && feeSettings.baseEx && feeSettings.kb) {
-    body.p.push([PURPOSE_SRCFEE, feeSettings.feeCur, feeSettings.fee]);
-    let bodySize;
-    do {
-      bodySize = msgPack.encode(body).length;
-      if (bodySize > feeSettings.baseEx) {
-        body.p.find((item: any) => item[0] === PURPOSE_SRCFEE)[2] = feeSettings.fee + Math.floor(((bodySize - feeSettings.baseEx) * feeSettings.kb) / 1024);
-      }
-    } while (bodySize !== msgPack.encode(body).length);
-  }
 
-  return body;
-};
-*/
 const getSimpleTransferTxBody = (
   from: Buffer,
   to: Buffer,
@@ -259,37 +156,18 @@ export const TransactionsApi = {
       .toString('base64');
   },
 
-  async composeRegisterTX(chain: number, wif: string, referrer: string) {
+  async composeRegisterTX(wif: string, referrer?: string) {
     const keyPair = Bitcoin.ECPair.fromWIF(wif);
     const publicKey = keyPair.getPublicKeyBuffer();
     const timestamp = +new Date();
 
     const payload = msgPack.encode(
-      await getRegisterTxBody(chain, publicKey, timestamp, referrer),
+      await getRegisterTxBody({ publicKey, timestamp, referrer }),
     );
     return msgPack
       .encode(wrapAndSignPayload(payload, keyPair, publicKey))
       .toString('base64');
   },
-  /*
-  calculateFee(
-    feeSettings: any,
-    from: string,
-    to: string,
-    token: string,
-    amount: number,
-    message: string,
-    seq: number,
-  ) {
-    const timestamp = +new Date();
-
-    const bufferFrom = Buffer.from(AddressApi.parseTextAddress(from));
-    const bufferTo = Buffer.from(AddressApi.parseTextAddress(to));
-
-    const payload = getSimpleTransferTxBody(bufferFrom, bufferTo, token, amount, message, timestamp, seq, feeSettings);
-    return payload.p.find((item: any) => item[0] === PURPOSE_SRCFEE);
-  },
-*/
   packAndSignTX(tx: any, wif: string) {
     const keyPair = Bitcoin.ECPair.fromWIF(wif);
     const publicKey = keyPair.getPublicKeyBuffer();
@@ -297,28 +175,7 @@ export const TransactionsApi = {
     return msgPack
       .encode(wrapAndSignPayload(payload, keyPair, publicKey))
       .toString('base64');
-  }, /*  prepareTXFromSC(
-    feeSettings: any,
-    address: string,
-    sc: string,
-    seq: string,
-    scData: any,
-    gasToken = 'SK',
-    gasValue = 20000,
-  ) {
-    const timestamp = +new Date();
-    const bufferAddress = Buffer.from(AddressApi.parseTextAddress(address));
-    // sc = Buffer.from(AddressApi.parseTextAddress(sc));
-
-    const actual = scData.k !== KIND_PATCH ? {
-      t: timestamp,
-      s: seq,
-      p: scData.p ? [...scData.p, [PURPOSE_GAS, gasToken, gasValue]] : [[PURPOSE_GAS, gasToken, gasValue]],
-      f: bufferAddress,
-    } : {};
-
-    return this.autoAddFee({ scData, actual }, feeSettings);
-  }, */
+  },
   composeDeployTX({
     address,
     code,
