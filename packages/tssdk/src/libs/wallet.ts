@@ -20,11 +20,13 @@ export class WalletApi {
     customSeed,
     isHTTPSNodesOnly = true,
     referrer,
+    timeout = 60,
   }: {
     chain: number;
     customSeed?: string;
     isHTTPSNodesOnly?: boolean;
     referrer?: string;
+    timeout?: number;
   }): Promise<RegisteredAccount> {
     const seed = customSeed || CryptoApi.generateSeedPhrase();
     const networkApi = new NetworkApi(chain, isHTTPSNodesOnly);
@@ -49,7 +51,7 @@ export class WalletApi {
     if (wait) {
       let count = 0;
       while (address === '') {
-        if (count > 60) {
+        if (count > timeout) {
           throw 'Timeout';
         }
         count += 1;
@@ -62,7 +64,7 @@ export class WalletApi {
           break;
         }
 
-        await WalletApi.sleep(500);
+        await WalletApi.sleep(1000);
       }
     }
 
@@ -78,13 +80,20 @@ export class WalletApi {
     network,
     customSeed,
     referrer,
+    timeout,
   }: {
     network: NetworkEnum;
     customSeed?: string;
     referrer?: string;
+    timeout?: number;
   }): Promise<RegisteredAccount> {
     const chain = await NetworkApi.getRandomChain(network);
-    return WalletApi.registerCertainChain({ chain, customSeed, referrer });
+    return WalletApi.registerCertainChain({
+      chain,
+      customSeed,
+      referrer,
+      timeout,
+    });
   }
 
   private prettifyTx(inputTx: any, block: any) {
