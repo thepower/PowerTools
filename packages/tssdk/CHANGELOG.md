@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.0.0...@thepowereco/tssdk@2.1.0) (2024-05-31)
+
+
+### Features
+
+* **lib wallet:** registerCertainChain: added timeout parameter, sleep 500 => 1000 ([6de95a2](https://github.com/thepower/power_hub/commit/6de95a2fd8cf7340225b515ca03b05b30ced460f))
+
+
+
+
+
 # [2.0.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.36...@thepowereco/tssdk@2.0.0) (2024-05-30)
 
 
