@@ -52,7 +52,7 @@ export class WalletApi {
       let count = 0;
       while (address === '') {
         if (count > timeout) {
-          throw 'Timeout';
+          throw `Timeout: ${txid}`;
         }
         count += 1;
         const status = await networkApi.getTransactionStatus(txid);

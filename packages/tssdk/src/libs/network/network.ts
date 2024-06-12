@@ -339,7 +339,9 @@ export class NetworkApi {
   public async executeCall(address: string, method: string, args: any[], abi: any) {
     const encodedFunction = encodeFunction(method, args, abi, true);
 
-    const data = { call: '0x0', args: [encodedFunction], to: `0x${address}` };
+    const data = {
+      call: '0x0', args: [encodedFunction], to: `0x${address}`, gas: 30_000_000,
+    };
 
     const response = await this.askBlockchainTo(ChainAction.EXECUTE_CALL, { data });
 
