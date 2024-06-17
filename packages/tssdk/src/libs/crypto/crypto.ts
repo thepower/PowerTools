@@ -1,6 +1,5 @@
 import wif from 'wif';
 import { mnemonicToSeed, generateMnemonic, validateMnemonic } from 'bip39';
-import { Buffer as SafeBuffer } from 'safe-buffer';
 import createHash, { algorithm } from 'create-hash';
 import { promises } from 'fs';
 import Crypto, {
@@ -26,7 +25,7 @@ const splitTextToChunks = (text: string): MaybeUndef<string> => (
 );
 
 const textToHex = (text: string): Buffer => (
-  SafeBuffer.from((text.match(/(.{1,2})/g) || []).map((item) => parseInt(item, 16))) as unknown as Buffer
+  Buffer.from((text.match(/(.{1,2})/g) || []).map((item) => parseInt(item, 16))) as unknown as Buffer
 );
 
 const privateKeyPemTemplate = (encryptedKey: Buffer, iv: Buffer, algorithm = AES_CBC_ALGORITHM) => `-----BEGIN EC PRIVATE KEY-----
@@ -45,32 +44,32 @@ ${splitTextToChunks(address.toString('base64'))}
 
 const passwordToKey = (password: string, salt: string, algorithm: algorithm = 'md5') => (
   // @ts-ignore
-  createHash(algorithm).update(SafeBuffer.concat([SafeBuffer.from(password, 'utf8'), SafeBuffer.from(salt)])).digest()
+  createHash(algorithm).update(Buffer.concat([Buffer.from(password, 'utf8'), Buffer.from(salt)])).digest()
 );
 
 const encrypt = (binaryData: Buffer, key: CipherKey, iv: BinaryLike, algorithm: string) => {
   const cipher: CipherGCM = Crypto.createCipheriv(algorithm as CipherGCMTypes, key, iv);
   const encrypted = cipher.update(binaryData as unknown as BinaryLike);
-  return SafeBuffer.concat([
-    encrypted as unknown as SafeBuffer,
-    cipher.final() as unknown as SafeBuffer,
+  return Buffer.concat([
+    encrypted as unknown as Buffer,
+    cipher.final() as unknown as Buffer,
   ]) as unknown as Buffer;
 };
 
 const decrypt = (binaryEncrypted: NodeJS.ArrayBufferView, key: CipherKey, iv: BinaryLike, algorithm: string) => {
   const decipher = Crypto.createDecipheriv(algorithm, key, iv);
   const decrypted = decipher.update(binaryEncrypted);
-  return SafeBuffer.concat([
-    decrypted as unknown as SafeBuffer,
-    decipher.final() as unknown as SafeBuffer,
+  return Buffer.concat([
+    decrypted as unknown as Buffer,
+    decipher.final() as unknown as Buffer,
   ]);
 };
 
 const encryptRawPrivateKeyToPEM = (rawPrivateKey: Buffer, password: string, algorithm: string = AES_CBC_ALGORITHM) => {
-  const binaryData = SafeBuffer.concat(
+  const binaryData = Buffer.concat(
     // eslint-disable-next-line max-len
-    [SafeBuffer.from([0x30, 0x3E, 0x02, 0x01, 0x00, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x0A, 0x04, 0x27, 0x30, 0x25, 0x02, 0x01, 0x01, 0x04]),
-      SafeBuffer.from([rawPrivateKey.length]), rawPrivateKey as unknown as SafeBuffer],
+    [Buffer.from([0x30, 0x3E, 0x02, 0x01, 0x00, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x0A, 0x04, 0x27, 0x30, 0x25, 0x02, 0x01, 0x01, 0x04]),
+      Buffer.from([rawPrivateKey.length]), rawPrivateKey as unknown as Buffer],
   ) as unknown as Buffer;
   const iv: any = Crypto.randomBytes(16);
   const key = passwordToKey(password, iv.slice(0, 8));
@@ -79,9 +78,9 @@ const encryptRawPrivateKeyToPEM = (rawPrivateKey: Buffer, password: string, algo
 
 const encryptAddressToPEM = (address: string, password: string, algorithm: string = AES_CBC_ALGORITHM) => {
   const binaryAddress = AddressApi.parseTextAddress(address);
-  const der = SafeBuffer.concat([
-    SafeBuffer.from([0x30, 0x14, 0x0c, 0x08, 0x50, 0x57, 0x52, 0x5f, 0x41, 0x44, 0x44, 0x52, 0x04, 0x08]),
-    SafeBuffer.from(binaryAddress),
+  const der = Buffer.concat([
+    Buffer.from([0x30, 0x14, 0x0c, 0x08, 0x50, 0x57, 0x52, 0x5f, 0x41, 0x44, 0x44, 0x52, 0x04, 0x08]),
+    Buffer.from(binaryAddress),
   ]) as unknown as Buffer;
   const iv: any = Crypto.randomBytes(16);
   const key = passwordToKey(password, iv.slice(0, 8));
@@ -89,7 +88,7 @@ const encryptAddressToPEM = (address: string, password: string, algorithm: strin
 };
 
 const decryptPrivateKey = (encrypted: any, password: string, iv: string, algorithm = AES_CBC_ALGORITHM) => {
-  const selfEncrypted: any = SafeBuffer.from(encrypted, 'base64');
+  const selfEncrypted: any = Buffer.from(encrypted, 'base64');
   const hexedIv = textToHex(iv);
   // @ts-ignore
   const key = passwordToKey(password, hexedIv.slice(0, 8));
@@ -101,7 +100,7 @@ const decryptPrivateKey = (encrypted: any, password: string, iv: string, algorit
 };
 
 const decryptAddress = (encrypted: any, password: string, iv: string, algorithm: string = AES_CBC_ALGORITHM) => {
-  const selfEncrypted: any = SafeBuffer.from(encrypted, 'base64');
+  const selfEncrypted: any = Buffer.from(encrypted, 'base64');
   const hexedIv = textToHex(iv);
   // @ts-ignore
   const key = passwordToKey(password, hexedIv.slice(0, 8));

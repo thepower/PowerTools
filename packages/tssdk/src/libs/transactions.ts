@@ -1,5 +1,4 @@
 import createHash from 'create-hash';
-import { Buffer } from 'safe-buffer';
 import * as msgPack from '@thepowereco/msgpack';
 import { encodeParameters } from 'web3-eth-abi';
 import { hexToBytes } from '@ethereumjs/util';

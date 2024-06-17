@@ -33,7 +33,6 @@
     "debug": "^4.3.4",
     "ecpair": "^2.0.1",
     "lz4js": "^0.2.0",
-    "safe-buffer": "^5.2.1",
     "solc": "^0.8.14-fixed",
     "stream-browserify": "^3.0.0",
     "tsconfig-paths-webpack-plugin": "^4.1.0",

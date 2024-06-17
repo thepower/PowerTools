@@ -266,7 +266,7 @@ export class WalletApi {
     return transactionHistory;
   }
 
-  public getExportData(
+  public static getExportData(
     wif: string,
     address: string,
     password: string,
@@ -278,7 +278,7 @@ export class WalletApi {
     })}\n${CryptoApi.encryptWalletDataToPEM(wif, address, password)}\n`;
   }
 
-  public async parseExportData(data: string, password: string) {
+  public static parseExportData(data: string, password: string) {
     const firstLine = data.split('\n')[0];
 
     try {
