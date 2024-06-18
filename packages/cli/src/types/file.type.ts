@@ -1,9 +1,6 @@
-export class File {
-  name: string;
-
-  path: string;
-
-  hash: string;
-
-  size: number;
-}
+export type File = {
+  hash: string
+  name: string
+  path: string
+  size: number
+};

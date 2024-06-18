@@ -1,37 +1,50 @@
-Power Ecosystem Command Line Tool
-=================
+# @thepowereco/cli
+
+the power cli
+
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![Version](https://img.shields.io/npm/v/@thepowereco/cli.svg)](https://npmjs.org/package/@thepowereco/cli)
+[![Downloads/week](https://img.shields.io/npm/dw/@thepowereco/cli.svg)](https://npmjs.org/package/@thepowereco/cli)
 
 <!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
+
 # Usage
+
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @thepowereco/cli
 $ tpe COMMAND
 running command...
 $ tpe (--version)
-@thepowereco/cli/1.2.11 darwin-x64 node-v14.18.1
+@thepowereco/cli/0.0.0 linux-x64 node-v21.6.2
 $ tpe --help [COMMAND]
 USAGE
   $ tpe COMMAND
 ...
 ```
+
 <!-- usagestop -->
+
 # Commands
+
 <!-- commands -->
-* [`tpe help [COMMAND]`](#tpe-help-command)
-* [`tpe plugins`](#tpe-plugins)
-* [`tpe plugins:install PLUGIN...`](#tpe-pluginsinstall-plugin)
-* [`tpe plugins:inspect PLUGIN...`](#tpe-pluginsinspect-plugin)
-* [`tpe plugins:install PLUGIN...`](#tpe-pluginsinstall-plugin-1)
-* [`tpe plugins:link PLUGIN`](#tpe-pluginslink-plugin)
-* [`tpe plugins:uninstall PLUGIN...`](#tpe-pluginsuninstall-plugin)
-* [`tpe plugins:uninstall PLUGIN...`](#tpe-pluginsuninstall-plugin-1)
-* [`tpe plugins:uninstall PLUGIN...`](#tpe-pluginsuninstall-plugin-2)
-* [`tpe plugins update`](#tpe-plugins-update)
-* [`tpe upload`](#tpe-upload)
+
+- [`tpe help [COMMAND]`](#tpe-help-command)
+- [`tpe plugins`](#tpe-plugins)
+- [`tpe plugins add PLUGIN`](#tpe-plugins-add-plugin)
+- [`tpe plugins:inspect PLUGIN...`](#tpe-pluginsinspect-plugin)
+- [`tpe plugins install PLUGIN`](#tpe-plugins-install-plugin)
+- [`tpe plugins link PATH`](#tpe-plugins-link-path)
+- [`tpe plugins remove [PLUGIN]`](#tpe-plugins-remove-plugin)
+- [`tpe plugins reset`](#tpe-plugins-reset)
+- [`tpe plugins uninstall [PLUGIN]`](#tpe-plugins-uninstall-plugin)
+- [`tpe plugins unlink [PLUGIN]`](#tpe-plugins-unlink-plugin)
+- [`tpe plugins update`](#tpe-plugins-update)
 
 ## `tpe help [COMMAND]`
 
@@ -39,10 +52,10 @@ Display help for tpe.
 
 ```
 USAGE
-  $ tpe help [COMMAND] [-n]
+  $ tpe help [COMMAND...] [-n]
 
 ARGUMENTS
-  COMMAND  Command to show help for.
+  COMMAND...  Command to show help for.
 
 FLAGS
   -n, --nested-commands  Include all nested commands in the output.
@@ -51,7 +64,7 @@ DESCRIPTION
   Display help for tpe.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.12/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.2/src/commands/help.ts)_
 
 ## `tpe plugins`
 
@@ -59,10 +72,13 @@ List installed plugins.
 
 ```
 USAGE
-  $ tpe plugins [--core]
+  $ tpe plugins [--json] [--core]
 
 FLAGS
   --core  Show core plugins.
+
+GLOBAL FLAGS
+  --json  Format output as json.
 
 DESCRIPTION
   List installed plugins.
@@ -71,44 +87,53 @@ EXAMPLES
   $ tpe plugins
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.1.0/src/commands/plugins/index.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.2/src/commands/plugins/index.ts)_
 
-## `tpe plugins:install PLUGIN...`
+## `tpe plugins add PLUGIN`
 
-Installs a plugin into the CLI.
+Installs a plugin into tpe.
 
 ```
 USAGE
-  $ tpe plugins:install PLUGIN...
+  $ tpe plugins add PLUGIN... [--json] [-f] [-h] [-s | -v]
 
 ARGUMENTS
-  PLUGIN  Plugin to install.
+  PLUGIN...  Plugin to install.
 
 FLAGS
-  -f, --force    Run yarn install with force flag.
+  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
   -h, --help     Show CLI help.
-  -v, --verbose
+  -s, --silent   Silences npm output.
+  -v, --verbose  Show verbose npm output.
+
+GLOBAL FLAGS
+  --json  Format output as json.
 
 DESCRIPTION
-  Installs a plugin into the CLI.
+  Installs a plugin into tpe.
 
-  Can be installed from npm or a git url.
+  Uses npm to install plugins.
 
   Installation of a user-installed plugin will override a core plugin.
 
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
-  the CLI without the need to patch and update the whole CLI.
+  Use the TPE_NPM_LOG_LEVEL environment variable to set the npm loglevel.
+  Use the TPE_NPM_REGISTRY environment variable to set the npm registry.
 
 ALIASES
   $ tpe plugins add
 
 EXAMPLES
-  $ tpe plugins:install myplugin 
+  Install a plugin from npm registry.
 
-  $ tpe plugins:install https://github.com/someuser/someplugin
+    $ tpe plugins add myplugin
 
-  $ tpe plugins:install someuser/someplugin
+  Install a plugin from a github url.
+
+    $ tpe plugins add https://github.com/someuser/someplugin
+
+  Install a plugin from a github slug.
+
+    $ tpe plugins add someuser/someplugin
 ```
 
 ## `tpe plugins:inspect PLUGIN...`
@@ -117,97 +142,113 @@ Displays installation properties of a plugin.
 
 ```
 USAGE
-  $ tpe plugins:inspect PLUGIN...
+  $ tpe plugins inspect PLUGIN...
 
 ARGUMENTS
-  PLUGIN  [default: .] Plugin to inspect.
+  PLUGIN...  [default: .] Plugin to inspect.
 
 FLAGS
   -h, --help     Show CLI help.
   -v, --verbose
+
+GLOBAL FLAGS
+  --json  Format output as json.
 
 DESCRIPTION
   Displays installation properties of a plugin.
 
 EXAMPLES
-  $ tpe plugins:inspect myplugin
+  $ tpe plugins inspect myplugin
 ```
 
-## `tpe plugins:install PLUGIN...`
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.2/src/commands/plugins/inspect.ts)_
 
-Installs a plugin into the CLI.
+## `tpe plugins install PLUGIN`
+
+Installs a plugin into tpe.
 
 ```
 USAGE
-  $ tpe plugins:install PLUGIN...
+  $ tpe plugins install PLUGIN... [--json] [-f] [-h] [-s | -v]
 
 ARGUMENTS
-  PLUGIN  Plugin to install.
+  PLUGIN...  Plugin to install.
 
 FLAGS
-  -f, --force    Run yarn install with force flag.
+  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
   -h, --help     Show CLI help.
-  -v, --verbose
+  -s, --silent   Silences npm output.
+  -v, --verbose  Show verbose npm output.
+
+GLOBAL FLAGS
+  --json  Format output as json.
 
 DESCRIPTION
-  Installs a plugin into the CLI.
+  Installs a plugin into tpe.
 
-  Can be installed from npm or a git url.
+  Uses npm to install plugins.
 
   Installation of a user-installed plugin will override a core plugin.
 
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
-  the CLI without the need to patch and update the whole CLI.
+  Use the TPE_NPM_LOG_LEVEL environment variable to set the npm loglevel.
+  Use the TPE_NPM_REGISTRY environment variable to set the npm registry.
 
 ALIASES
   $ tpe plugins add
 
 EXAMPLES
-  $ tpe plugins:install myplugin 
+  Install a plugin from npm registry.
 
-  $ tpe plugins:install https://github.com/someuser/someplugin
+    $ tpe plugins install myplugin
 
-  $ tpe plugins:install someuser/someplugin
+  Install a plugin from a github url.
+
+    $ tpe plugins install https://github.com/someuser/someplugin
+
+  Install a plugin from a github slug.
+
+    $ tpe plugins install someuser/someplugin
 ```
 
-## `tpe plugins:link PLUGIN`
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.2/src/commands/plugins/install.ts)_
+
+## `tpe plugins link PATH`
 
 Links a plugin into the CLI for development.
 
 ```
 USAGE
-  $ tpe plugins:link PLUGIN
+  $ tpe plugins link PATH [-h] [--install] [-v]
 
 ARGUMENTS
   PATH  [default: .] path to plugin
 
 FLAGS
-  -h, --help     Show CLI help.
+  -h, --help          Show CLI help.
   -v, --verbose
+      --[no-]install  Install dependencies after linking the plugin.
 
 DESCRIPTION
   Links a plugin into the CLI for development.
-
   Installation of a linked plugin will override a user-installed or core plugin.
 
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
-  command will override the user-installed or core plugin implementation. This is useful for development work.
 
 EXAMPLES
-  $ tpe plugins:link myplugin
+  $ tpe plugins link myplugin
 ```
 
-## `tpe plugins:uninstall PLUGIN...`
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.2/src/commands/plugins/link.ts)_
+
+## `tpe plugins remove [PLUGIN]`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ tpe plugins:uninstall PLUGIN...
+  $ tpe plugins remove [PLUGIN...] [-h] [-v]
 
 ARGUMENTS
-  PLUGIN  plugin to uninstall
+  PLUGIN...  plugin to uninstall
 
 FLAGS
   -h, --help     Show CLI help.
@@ -219,18 +260,36 @@ DESCRIPTION
 ALIASES
   $ tpe plugins unlink
   $ tpe plugins remove
+
+EXAMPLES
+  $ tpe plugins remove myplugin
 ```
 
-## `tpe plugins:uninstall PLUGIN...`
+## `tpe plugins reset`
+
+Remove all user-installed and linked plugins.
+
+```
+USAGE
+  $ tpe plugins reset [--hard] [--reinstall]
+
+FLAGS
+  --hard       Delete node_modules and package manager related files in addition to uninstalling plugins.
+  --reinstall  Reinstall all plugins after uninstalling.
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.2/src/commands/plugins/reset.ts)_
+
+## `tpe plugins uninstall [PLUGIN]`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ tpe plugins:uninstall PLUGIN...
+  $ tpe plugins uninstall [PLUGIN...] [-h] [-v]
 
 ARGUMENTS
-  PLUGIN  plugin to uninstall
+  PLUGIN...  plugin to uninstall
 
 FLAGS
   -h, --help     Show CLI help.
@@ -242,18 +301,23 @@ DESCRIPTION
 ALIASES
   $ tpe plugins unlink
   $ tpe plugins remove
+
+EXAMPLES
+  $ tpe plugins uninstall myplugin
 ```
 
-## `tpe plugins:uninstall PLUGIN...`
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.2/src/commands/plugins/uninstall.ts)_
+
+## `tpe plugins unlink [PLUGIN]`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ tpe plugins:uninstall PLUGIN...
+  $ tpe plugins unlink [PLUGIN...] [-h] [-v]
 
 ARGUMENTS
-  PLUGIN  plugin to uninstall
+  PLUGIN...  plugin to uninstall
 
 FLAGS
   -h, --help     Show CLI help.
@@ -265,6 +329,9 @@ DESCRIPTION
 ALIASES
   $ tpe plugins unlink
   $ tpe plugins remove
+
+EXAMPLES
+  $ tpe plugins unlink myplugin
 ```
 
 ## `tpe plugins update`
@@ -283,20 +350,6 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-## `tpe upload`
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.2/src/commands/plugins/update.ts)_
 
-Upload application files to storage
-
-```
-USAGE
-  $ tpe upload
-
-DESCRIPTION
-  Upload application files to storage
-
-EXAMPLES
-  $ cd app_dir && pow-up
-```
-
-_See code: [dist/src/commands/upload/index.ts](https://github.com/thepower/power_hub/blob/v1.2.11/dist/src/commands/upload/index.ts)_
 <!-- commandsstop -->

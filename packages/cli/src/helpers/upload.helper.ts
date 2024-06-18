@@ -1,44 +1,44 @@
 import axios from 'axios';
-import { promises, statSync } from 'fs';
-import { getFileHash } from './calcHash.helper';
-import { File } from '../types/file.type';
+import { promises, statSync } from 'node:fs';
 
+import { File } from '../types/file.type';
+import { getFileHash } from './calc-hash.helper';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const scanDir = async (root: string, dir: string, result: any[] = []) => {
   const files = await promises.readdir(dir);
 
-  for (const file of files) {
-    const fullPath = `${dir}/${file}`;
-    const stat = statSync(fullPath);
+  await Promise.all(
+    files.map(async (file) => {
+      const fullPath = `${dir}/${file}`;
+      const stat = statSync(fullPath);
 
-    if (stat.isDirectory()) {
-      await scanDir(root, fullPath, result);
-    } else {
-      const hash = await getFileHash(fullPath);
-      const pathWithFile = fullPath.replace(`${root}/`, '');
-      const path = pathWithFile.replace(file, '');
-      const fileData: File = {
-        name: file,
-        path: path || '.',
-        hash,
-        size: stat.size,
-      };
+      if (stat.isDirectory()) {
+        await scanDir(root, fullPath, result);
+      } else {
+        const hash = await getFileHash(fullPath);
+        const pathWithFile = fullPath.replace(`${root}/`, '');
+        const path = pathWithFile.replace(file, '');
+        const fileData: File = {
+          hash,
+          name: file,
+          path: path || '.',
+          size: stat.size,
+        };
 
-      result.push(fileData);
-    }
-  }
+        result.push(fileData);
+      }
+    }),
+  );
 
   return result;
 };
 
 export const uploadBinaryData = async (url: string, data: Buffer) => {
-  await axios.put(
-    url,
-    data,
-    {
-      maxContentLength: 100000000,
-      maxBodyLength: 1000000000,
-    },
-  );
+  await axios.put(url, data, {
+    maxBodyLength: 1_000_000_000,
+    maxContentLength: 100_000_000,
+  });
 };
 
 export const uploadTaskManifest = async (storageUrl: string, taskId: string, jsonData: string) => {
