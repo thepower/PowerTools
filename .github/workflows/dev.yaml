@@ -9,8 +9,8 @@ env:
   CI: true
 
 jobs:
-  publish-gpr:
-    name: Publish to GPR
+  publish-gpr-dev:
+    name: Publish to GPR dev
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
