@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 
 import { CliConfig } from '../types/cli-config.type';
 
-const CONFIG_FILE_NAME = 'tp-cli.json';
+export const DEFAULT_CONFIG_FILE_PATH = './tp-cli.json';
 
 const REQUIRED_FIELDS = ['source', 'address', 'projectId', 'wif'] as const;
 
@@ -20,39 +20,35 @@ const validateConfig = (cfg: CliConfig): void => {
   }
 };
 
-const getConfigPath = (): string => resolve(process.cwd(), CONFIG_FILE_NAME);
+export const getConfig = async (configPath: string): Promise<CliConfig | null> => {
+  const path = configPath;
 
-const readConfigFile = async (path: string): Promise<CliConfig> => {
-  const buffer = await fsPromises.readFile(path);
+  const isExistsConfig = existsSync(path);
+  let cfgJSON: CliConfig;
 
-  try {
-    return JSON.parse(buffer.toString()) as CliConfig;
-  } catch {
-    throw new Error(`Invalid config json (${CONFIG_FILE_NAME})`);
+  if (isExistsConfig) {
+    const buffer = await fsPromises.readFile(path);
+
+    try {
+      cfgJSON = JSON.parse(buffer.toString());
+    } catch (e) {
+      throw new Error(`Invalid config json (${path})`);
+    }
+
+    validateConfig(cfgJSON);
+    return cfgJSON;
   }
+  return null;
 };
 
-export const getConfig = async (configPath?: string): Promise<CliConfig> => {
-  const path = configPath || getConfigPath();
-
-  if (!existsSync(path)) {
-    throw new Error(`Config file "${CONFIG_FILE_NAME}" does not exist`);
-  }
-
-  const config = await readConfigFile(path);
-  validateConfig(config);
-
-  return config;
-};
-
-export const setConfigFile = async (config: CliConfig, configPath?: string): Promise<void> => {
+export const setConfigFile = async (config: CliConfig, configPath: string): Promise<void> => {
   const content = JSON.stringify(config, null, 2);
-  const path = configPath || getConfigPath();
+  const path = configPath;
 
   await fsPromises.writeFile(path, content);
 };
 
-export const setConfig = async (configPath?: string): Promise<CliConfig> => {
+export const setConfig = async (configPath: string): Promise<CliConfig> => {
   const { source }: { source: string } = await prompt({
     initial: './dist',
     message: 'Please, enter the source path of your project, e.g., "./dist")',

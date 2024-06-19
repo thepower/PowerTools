@@ -20,7 +20,7 @@ $ npm install -g @thepowereco/cli
 $ tpe COMMAND
 running command...
 $ tpe (--version)
-@thepowereco/cli/1.11.128 linux-x64 node-v18.20.3
+@thepowereco/cli/1.11.128 linux-x64 node-v21.6.2
 $ tpe --help [COMMAND]
 USAGE
   $ tpe COMMAND
@@ -49,8 +49,8 @@ USAGE
 * [`tpe plugins uninstall [PLUGIN]`](#tpe-plugins-uninstall-plugin)
 * [`tpe plugins unlink [PLUGIN]`](#tpe-plugins-unlink-plugin)
 * [`tpe plugins update`](#tpe-plugins-update)
-* [`tpe storage tasklist [CONFIGPATH]`](#tpe-storage-tasklist-configpath)
-* [`tpe storage upload [CONFIGPATH]`](#tpe-storage-upload-configpath)
+* [`tpe storage tasklist`](#tpe-storage-tasklist)
+* [`tpe storage upload`](#tpe-storage-upload)
 * [`tpe update [CHANNEL]`](#tpe-update-channel)
 
 ## `tpe acc get-balance`
@@ -584,16 +584,16 @@ DESCRIPTION
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.2/src/commands/plugins/update.ts)_
 
-## `tpe storage tasklist [CONFIGPATH]`
+## `tpe storage tasklist`
 
 Shows the list of all tasks for the current account
 
 ```
 USAGE
-  $ tpe storage tasklist [CONFIGPATH]
+  $ tpe storage tasklist [-c <value>]
 
-ARGUMENTS
-  CONFIGPATH  Config to read
+FLAGS
+  -c, --configPath=<value>  [default: ./tp-cli.json] Config to read
 
 DESCRIPTION
   Shows the list of all tasks for the current account
@@ -606,16 +606,16 @@ EXAMPLES
 
 _See code: [dist/commands/storage/tasklist.js](https://github.com/thepower/PowerTools/blob/v1.11.128/dist/commands/storage/tasklist.js)_
 
-## `tpe storage upload [CONFIGPATH]`
+## `tpe storage upload`
 
 Upload application files to the storage
 
 ```
 USAGE
-  $ tpe storage upload [CONFIGPATH]
+  $ tpe storage upload [-c <value>]
 
-ARGUMENTS
-  CONFIGPATH  Config to read
+FLAGS
+  -c, --configPath=<value>  [default: ./tp-cli.json] Config to read
 
 DESCRIPTION
   Upload application files to the storage
