@@ -990,7 +990,7 @@
   dependencies:
     "@oclif/core" "^4"
 
-"@oclif/plugin-not-found@^3.2.3":
+"@oclif/plugin-not-found@^3.2.3", "@oclif/plugin-not-found@^3.2.5":
   version "3.2.5"
   resolved "https://registry.yarnpkg.com/@oclif/plugin-not-found/-/plugin-not-found-3.2.5.tgz#f7db68c2684294f4261bdc9b12eee464b4597945"
   integrity sha512-C3YgT46dQpVs0DkXECTVrlg8KeOzLAOXFpmCYMPQQU3siptliep2eESjXrFm9VL+jZijGJjyckwQgn/X5zq1LQ==
