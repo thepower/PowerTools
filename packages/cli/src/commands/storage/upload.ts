@@ -1,4 +1,4 @@
-import { Args, Command } from '@oclif/core';
+import { Flags, Command } from '@oclif/core';
 import { AddressApi, EvmApi } from '@thepowereco/tssdk';
 import { color } from 'json-colorizer';
 import { Listr } from 'listr2';
@@ -7,30 +7,29 @@ import { resolve } from 'node:path';
 import { storageScAddress } from '../../config/cli.config';
 import abiJson from '../../config/scStorageAbi.json';
 import { getHash } from '../../helpers/calc-hash.helper';
-import { getConfig, setConfig } from '../../helpers/config.helper';
+import { DEFAULT_CONFIG_FILE_PATH, getConfig, setConfig } from '../../helpers/config.helper';
 import { scanDir, uploadTaskFile, uploadTaskManifest } from '../../helpers/upload.helper';
-import { CliConfig } from '../../types/cli-config.type';
 
 export default class StorageUpload extends Command {
-  static override args = {
-    configPath: Args.file({ description: 'Config to read' }),
+  static override flags = {
+    configPath: Flags.file({ char: 'c', description: 'Config to read', default: DEFAULT_CONFIG_FILE_PATH }),
   };
 
   static override description = 'Upload application files to the storage';
 
   static override examples = [
-    '<%= config.bin %> <%= command.id %> ./config.json', // Specifying a config file
+    `<%= config.bin %> <%= command.id %> ${DEFAULT_CONFIG_FILE_PATH}`, // Specifying a config file
   ];
 
   async run(): Promise<void> {
-    const { args } = await this.parse(StorageUpload);
-    const { configPath } = args;
+    const { flags } = await this.parse(StorageUpload);
+    const { configPath } = flags;
 
     // Welcome message
     this.log(color.whiteBright('✋️WELCOME TO THE POWER ECOSYSTEM! 💪 🌍'));
 
     // Get the current configuration
-    let config: CliConfig = await getConfig(configPath);
+    let config = await getConfig(configPath);
 
     if (!config) {
       config = await setConfig(configPath);

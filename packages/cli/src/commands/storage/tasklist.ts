@@ -1,37 +1,36 @@
-import { Args, Command, ux } from '@oclif/core';
+import { Flags, Command, ux } from '@oclif/core';
 import { AddressApi, EvmApi } from '@thepowereco/tssdk';
 import Table from 'cli-table3';
 import { color } from 'json-colorizer';
 
 import { storageScAddress } from '../../config/cli.config';
 import abiJson from '../../config/scStorageAbi.json';
-import { getConfig, setConfig } from '../../helpers/config.helper';
-import { CliConfig } from '../../types/cli-config.type';
+import { DEFAULT_CONFIG_FILE_PATH, getConfig, setConfig } from '../../helpers/config.helper';
 import { Task } from '../../types/task.type';
 
 export default class StorageTasklist extends Command {
-  static override args = {
-    configPath: Args.file({ description: 'Config to read' }),
+  static override flags = {
+    configPath: Flags.file({ char: 'c', description: 'Config to read', default: DEFAULT_CONFIG_FILE_PATH }),
   };
 
   static override description = 'Shows the list of all tasks for the current account';
 
   static override examples = [
     '<%= config.bin %> <%= command.id %>', // Basic usage
-    '<%= config.bin %> <%= command.id %> ./config.json', // Specifying a config file
+    `<%= config.bin %> <%= command.id %> ${DEFAULT_CONFIG_FILE_PATH}`, // Specifying a config file
   ];
 
   async run(): Promise<void> {
-    const { args } = await this.parse(StorageTasklist);
-    const { configPath } = args;
+    const { flags } = await this.parse(StorageTasklist);
+    const { configPath } = flags;
 
     // Get the current configuration
-    let config: CliConfig = await getConfig(configPath);
+    let config = await getConfig(configPath);
     const chainNumber = 1; // TODO: Get chain number by address
 
     // If configuration is not found, set a new configuration
     if (!config) {
-      config = await setConfig();
+      config = await setConfig(configPath);
     }
 
     this.log(color.whiteBright('Current CLI configuration:'));
