@@ -30,8 +30,9 @@ jobs:
       - name: Bootstrap lerna
         run: yarn lerna:init
 
-      - name: Publish packages
+      - name: Bump versions and publish packages
         run: |
+          yarn version:ci
           yarn publish:ci --dist-tag dev
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMTOKEN }}
