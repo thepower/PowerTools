@@ -36,6 +36,7 @@
     "@oclif/core": "^4",
     "@oclif/plugin-autocomplete": "^3.1.4",
     "@oclif/plugin-help": "^6",
+    "@oclif/plugin-not-found": "^3.2.5",
     "@oclif/plugin-plugins": "^5",
     "@oclif/plugin-update": "^4.4.2",
     "@thepowereco/tssdk": "^2.1.1",
@@ -76,7 +77,8 @@
       "@oclif/plugin-help",
       "@oclif/plugin-plugins",
       "@oclif/plugin-update",
-      "@oclif/plugin-autocomplete"
+      "@oclif/plugin-autocomplete",
+      "@oclif/plugin-not-found"
     ],
     "topicSeparator": " ",
     "topics": {
