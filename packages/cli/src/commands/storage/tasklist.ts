@@ -3,10 +3,11 @@ import { AddressApi, EvmApi } from '@thepowereco/tssdk';
 import Table from 'cli-table3';
 import { color } from 'json-colorizer';
 
-import { storageScAddress } from '../../config/cli.config';
-import abiJson from '../../config/scStorageAbi.json';
+import cliConfig from '../../config/cli';
+
 import { DEFAULT_CONFIG_FILE_PATH, getConfig, setConfig } from '../../helpers/config.helper';
 import { Task } from '../../types/task.type';
+import abis from '../../abis';
 
 export default class StorageTasklist extends Command {
   static override flags = {
@@ -41,9 +42,9 @@ export default class StorageTasklist extends Command {
 
     // Initialize the smart contract
     const storageSc = await EvmApi.build({
-      abiJSON: abiJson.abi,
+      abiJSON: abis.storage,
       chain: chainNumber,
-      scAddress: storageScAddress,
+      scAddress: cliConfig.storageScAddress,
     });
 
     // Get the count of tasks

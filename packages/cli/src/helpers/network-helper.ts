@@ -6,7 +6,7 @@ export async function initializeNetworkApi({
   chain,
   defaultChain = 1025,
 }: {
-  address: string
+  address?: string
   chain?: number
   defaultChain?: number
 }): Promise<NetworkApi | undefined> {
@@ -14,7 +14,7 @@ export async function initializeNetworkApi({
   if (chain) {
     networkApi = new NetworkApi(chain);
     await networkApi.bootstrap();
-  } else {
+  } else if (address) {
     const defaultNetworkApi = new NetworkApi(defaultChain);
     await defaultNetworkApi.bootstrap();
     const addressChain = await defaultNetworkApi.getAddressChain(address);

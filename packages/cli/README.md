@@ -20,7 +20,7 @@ $ npm install -g @thepowereco/cli
 $ tpe COMMAND
 running command...
 $ tpe (--version)
-@thepowereco/cli/1.11.129 linux-x64 node-v18.20.3
+@thepowereco/cli/1.11.129 linux-x64 node-v21.6.2
 $ tpe --help [COMMAND]
 USAGE
   $ tpe COMMAND
@@ -189,13 +189,13 @@ Deploy a smart contract to the blockchain
 
 ```
 USAGE
-  $ tpe contract deploy -a <value> -b <value> -c <value> -k <value> [-t <value>] [-v <value>] [-i <value>...] [-p
+  $ tpe contract deploy -a <value> -b <value> -k <value> [-c <value>] [-t <value>] [-v <value>] [-i <value>...] [-p
     <value>]
 
 FLAGS
   -a, --abiPath=<value>        (required) Path to the ABI file
   -b, --binPath=<value>        (required) Path to the binary file
-  -c, --chain=<value>          (required) Chain ID to deploy on
+  -c, --chain=<value>          Chain ID to deploy on
   -i, --initParams=<value>...  [default: ] Initialization parameters
   -k, --keyFilePath=<value>    (required) Path to the key file
   -p, --password=<value>       Password for the key file
@@ -221,11 +221,11 @@ Call a method on a deployed smart contract
 
 ```
 USAGE
-  $ tpe contract get -a <value> -d <value> -c <value> -m <value> [-p <value>...]
+  $ tpe contract get -a <value> -d <value> -m <value> [-c <value>] [-p <value>...]
 
 FLAGS
   -a, --abiPath=<value>    (required) Path to the ABI file
-  -c, --chain=<value>      (required) Chain ID
+  -c, --chain=<value>      Chain ID
   -d, --address=<value>    (required) Smart contract address
   -m, --method=<value>     (required) Method name to call
   -p, --params=<value>...  [default: ] Parameters for the method
@@ -249,11 +249,11 @@ Execute a method on a specified smart contract
 
 ```
 USAGE
-  $ tpe contract set -a <value> -d <value> -c <value> -k <value> -m <value> [-r <value>...] [-p <value>]
+  $ tpe contract set -a <value> -d <value> -k <value> -m <value> [-c <value>] [-r <value>...] [-p <value>]
 
 FLAGS
   -a, --abiPath=<value>      (required) Path to the ABI file
-  -c, --chain=<value>        (required) Chain ID
+  -c, --chain=<value>        Chain ID
   -d, --address=<value>      (required) Smart contract address
   -k, --keyFilePath=<value>  (required) Path to the key file
   -m, --method=<value>       (required) Method name to call
