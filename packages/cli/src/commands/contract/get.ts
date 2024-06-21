@@ -1,6 +1,5 @@
 import { Command, Flags, ux } from '@oclif/core';
 import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
-import { colorize } from 'json-colorizer';
 import { readFileSync } from 'node:fs';
 
 import { initializeNetworkApi } from '../../helpers/network-helper';
@@ -19,7 +18,7 @@ export default class ContractGet extends Command {
     address: Flags.string({
       aliases: ['adr'], char: 'd', description: 'Smart contract address', required: true,
     }),
-    chain: Flags.integer({ char: 'c', description: 'Chain ID', required: true }),
+    chain: Flags.integer({ char: 'c', description: 'Chain ID' }),
     method: Flags.string({ char: 'm', description: 'Method name to call', required: true }),
     params: Flags.string({
       char: 'p', default: [], description: 'Parameters for the method', multiple: true,
@@ -55,6 +54,7 @@ export default class ContractGet extends Command {
     const result = await smartContract.scGet(method, formattedParams);
 
     ux.action.stop();
-    this.log(colorize(result));
+
+    this.log(result);
   }
 }
