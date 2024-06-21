@@ -1,6 +1,5 @@
 import { Command, Flags, ux } from '@oclif/core';
 import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
-import { colorize } from 'json-colorizer';
 import { readFileSync } from 'node:fs';
 
 import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
@@ -19,7 +18,7 @@ export default class ContractSet extends Command {
   static override flags = {
     abiPath: Flags.file({ char: 'a', description: 'Path to the ABI file', required: true }),
     address: Flags.string({ char: 'd', description: 'Smart contract address', required: true }),
-    chain: Flags.integer({ char: 'c', description: 'Chain ID', required: true }),
+    chain: Flags.integer({ char: 'c', description: 'Chain ID' }),
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
     method: Flags.string({ char: 'm', description: 'Method name to call', required: true }),
     params: Flags.string({
@@ -61,6 +60,7 @@ export default class ContractSet extends Command {
     const result: any = await smartContract.scSet(importedWallet, method, formattedParams);
 
     ux.action.stop();
-    this.log(colorize(result));
+
+    this.log(result);
   }
 }

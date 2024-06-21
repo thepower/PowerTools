@@ -4,11 +4,12 @@ import { color } from 'json-colorizer';
 import { Listr } from 'listr2';
 import { resolve } from 'node:path';
 
-import { storageScAddress } from '../../config/cli.config';
-import abiJson from '../../config/scStorageAbi.json';
+import cliConfig from '../../config/cli';
+
 import { getHash } from '../../helpers/calc-hash.helper';
 import { DEFAULT_CONFIG_FILE_PATH, getConfig, setConfig } from '../../helpers/config.helper';
 import { scanDir, uploadTaskFile, uploadTaskManifest } from '../../helpers/upload.helper';
+import abis from '../../abis';
 
 export default class StorageUpload extends Command {
   static override flags = {
@@ -45,9 +46,9 @@ export default class StorageUpload extends Command {
 
     // Initialize the smart contract
     const storageSc = await EvmApi.build({
-      abiJSON: abiJson.abi,
+      abiJSON: abis.storage,
       chain: 1,
-      scAddress: storageScAddress,
+      scAddress: cliConfig.storageScAddress,
     });
 
     // Get the task ID by name

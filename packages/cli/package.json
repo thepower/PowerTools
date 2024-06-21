@@ -44,11 +44,13 @@
     "cli-table3": "^0.6.5",
     "enquirer": "^2.4.1",
     "json-colorizer": "^3.0.1",
+    "jsonwebtoken": "^9.0.2",
     "listr2": "^8.2.1"
   },
   "devDependencies": {
     "@oclif/test": "^4",
     "@types/chai": "^4",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/mocha": "^10",
     "@types/node": "^18",
     "@types/supports-color": "^8.1.3",

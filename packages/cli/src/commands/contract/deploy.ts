@@ -1,6 +1,5 @@
 import { Command, Flags, ux } from '@oclif/core';
 import { AddressApi, TransactionsApi } from '@thepowereco/tssdk';
-import { colorize } from 'json-colorizer';
 import { readFileSync } from 'node:fs';
 
 import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
@@ -17,7 +16,7 @@ export default class ContractDeploy extends Command {
   static override flags = {
     abiPath: Flags.file({ char: 'a', description: 'Path to the ABI file', required: true }),
     binPath: Flags.file({ char: 'b', description: 'Path to the binary file', required: true }),
-    chain: Flags.integer({ char: 'c', description: 'Chain ID to deploy on', required: true }),
+    chain: Flags.integer({ char: 'c', description: 'Chain ID to deploy on' }),
     gasToken: Flags.string({ char: 't', default: 'SK', description: 'Token used to pay for gas' }),
     gasValue: Flags.integer({ char: 'v', default: 2_000_000_000, description: 'Gas value for deployment' }),
     initParams: Flags.string({
@@ -70,6 +69,7 @@ export default class ContractDeploy extends Command {
     const result: any = await networkApi.sendPreparedTX(deployTX);
 
     ux.action.stop();
-    this.log(colorize(result));
+
+    this.log(result);
   }
 }

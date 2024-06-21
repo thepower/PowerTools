@@ -44,6 +44,7 @@ export default class AccSendSk extends Command {
     const result: any = await wallet.makeNewTx(importedWallet.wif, importedWallet.address, to, 'SK', amount, message);
 
     ux.action.stop();
+
     this.log(colorize(result));
   }
 }
