@@ -20,7 +20,7 @@ $ npm install -g @thepowereco/cli
 $ tpe COMMAND
 running command...
 $ tpe (--version)
-@thepowereco/cli/1.11.129 linux-x64 node-v21.6.2
+@thepowereco/cli/1.11.130 linux-x64 node-v18.20.3
 $ tpe --help [COMMAND]
 USAGE
   $ tpe COMMAND
@@ -81,7 +81,7 @@ EXAMPLES
   $ tpe acc get-balance --keyFilePath ./path/to/keyfile.pem --password mypassword
 ```
 
-_See code: [dist/commands/acc/get-balance.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/acc/get-balance.js)_
+_See code: [dist/commands/acc/get-balance.js](https://github.com/thepower/PowerTools/blob/v1.11.130/dist/commands/acc/get-balance.js)_
 
 ## `tpe acc register`
 
@@ -120,7 +120,7 @@ EXAMPLES
   Register a new account on a specified chain without saving the data to a file.
 ```
 
-_See code: [dist/commands/acc/register.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/acc/register.js)_
+_See code: [dist/commands/acc/register.js](https://github.com/thepower/PowerTools/blob/v1.11.130/dist/commands/acc/register.js)_
 
 ## `tpe acc send-sk`
 
@@ -150,7 +150,7 @@ EXAMPLES
   $ tpe acc send-sk --amount 100 --to AA100000001677748249 --chain 1 --keyFilePath ./path/to/keyfile.pem
 ```
 
-_See code: [dist/commands/acc/send-sk.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/acc/send-sk.js)_
+_See code: [dist/commands/acc/send-sk.js](https://github.com/thepower/PowerTools/blob/v1.11.130/dist/commands/acc/send-sk.js)_
 
 ## `tpe autocomplete [SHELL]`
 
@@ -213,7 +213,7 @@ EXAMPLES
   $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --chain 1 --keyFilePath ./path/to/keyfile.pem --initParams param1 param2
 ```
 
-_See code: [dist/commands/contract/deploy.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/contract/deploy.js)_
+_See code: [dist/commands/contract/deploy.js](https://github.com/thepower/PowerTools/blob/v1.11.130/dist/commands/contract/deploy.js)_
 
 ## `tpe contract get`
 
@@ -241,7 +241,7 @@ EXAMPLES
   $ tpe contract get --abiPath ./path/to/abi.json --address AA100000001677748249 --chain 1 --method getInfo
 ```
 
-_See code: [dist/commands/contract/get.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/contract/get.js)_
+_See code: [dist/commands/contract/get.js](https://github.com/thepower/PowerTools/blob/v1.11.130/dist/commands/contract/get.js)_
 
 ## `tpe contract set`
 
@@ -273,7 +273,7 @@ EXAMPLES
       --address AA100000001677748249 --chain 1 --keyFilePath ./path/to/keyfile.pem --method setData --params param1 param2
 ```
 
-_See code: [dist/commands/contract/set.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/contract/set.js)_
+_See code: [dist/commands/contract/set.js](https://github.com/thepower/PowerTools/blob/v1.11.130/dist/commands/contract/set.js)_
 
 ## `tpe help [COMMAND]`
 
@@ -604,7 +604,7 @@ EXAMPLES
   $ tpe storage tasklist ./tp-cli.json
 ```
 
-_See code: [dist/commands/storage/tasklist.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/storage/tasklist.js)_
+_See code: [dist/commands/storage/tasklist.js](https://github.com/thepower/PowerTools/blob/v1.11.130/dist/commands/storage/tasklist.js)_
 
 ## `tpe storage upload`
 
@@ -624,7 +624,7 @@ EXAMPLES
   $ tpe storage upload ./tp-cli.json
 ```
 
-_See code: [dist/commands/storage/upload.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/storage/upload.js)_
+_See code: [dist/commands/storage/upload.js](https://github.com/thepower/PowerTools/blob/v1.11.130/dist/commands/storage/upload.js)_
 
 ## `tpe update [CHANNEL]`
 
