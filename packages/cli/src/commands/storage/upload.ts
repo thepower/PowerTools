@@ -1,7 +1,6 @@
 import { Flags, Command } from '@oclif/core';
 import { AddressApi, EvmApi } from '@thepowereco/tssdk';
-import { color } from 'json-colorizer';
-import { Listr } from 'listr2';
+import { Listr, color } from 'listr2';
 import { resolve } from 'node:path';
 
 import cliConfig from '../../config/cli';

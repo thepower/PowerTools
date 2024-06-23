@@ -246,6 +246,12 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "taskId",
+        "type": "uint256"
+      },
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "provider",
@@ -253,15 +259,22 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "taskId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
         "internalType": "enum TaskState",
         "name": "state",
         "type": "uint8"
+      }
+    ],
+    "name": "TaskUpdate",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "taskId",
+        "type": "uint256"
       }
     ],
     "name": "TaskUpdate",
@@ -448,6 +461,11 @@
         "internalType": "bytes",
         "name": "_pubkey",
         "type": "bytes"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_userdata",
+        "type": "bytes32"
       }
     ],
     "name": "mint",
@@ -727,6 +745,29 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "taskId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_pubkey",
+        "type": "bytes"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_userdata",
+        "type": "bytes32"
+      }
+    ],
+    "name": "task_update",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "",
         "type": "uint256"
       }
@@ -767,6 +808,11 @@
         "internalType": "uint256",
         "name": "hold_time",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "userdata",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
