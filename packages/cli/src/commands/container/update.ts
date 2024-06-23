@@ -16,15 +16,15 @@ export default class ContainerUpdate extends Command {
 
   static override flags = {
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
-    password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
-    containerId: Flags.string({
-      char: 'i', default: '', description: 'Id of the container', required: true,
+    password: Flags.string({ char: 'p', default: undefined, description: 'Password for the key file' }),
+    containerId: Flags.integer({
+      char: 'i', description: 'Id of the container', required: true,
     }),
     containerName: Flags.string({
-      char: 'n', default: '', description: 'Name of the container', required: true,
+      char: 'n', description: 'Name of the container', required: true,
     }),
     containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file', required: true }),
-    containerPassword: Flags.string({ char: 's', default: '', description: 'Password for the container key file' }),
+    containerPassword: Flags.string({ char: 's', default: undefined, description: 'Password for the container key file' }),
   };
 
   public async run(): Promise<void> {

@@ -17,12 +17,12 @@ export default class ContainerCreate extends Command {
 
   static override flags = {
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
-    password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
+    password: Flags.string({ char: 'p', default: undefined, description: 'Password for the key file' }),
     containerName: Flags.string({
       char: 'n', default: '', description: 'Name of the container', required: true,
     }),
     containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file' }),
-    containerPassword: Flags.string({ char: 's', default: '', description: 'Password for the container key file' }),
+    containerPassword: Flags.string({ char: 's', default: undefined, description: 'Password for the container key file' }),
   };
 
   public async run(): Promise<void> {
@@ -93,15 +93,5 @@ export default class ContainerCreate extends Command {
     );
 
     console.log({ orderId });
-
-    // const payload = { iat: Math.floor(new Date().getTime() / 1000) };
-
-    // const jwt = jsonwebtoken.sign(payload, privateKeyPem, { algorithm: 'ES256' });
-
-    // console.log('JWT:', jwt);
-
-    // const verify = jsonwebtoken.verify(jwt, publicKeyPem, { algorithms: ['ES256'] });
-
-    // console.log('Verify:', verify);
   }
 }

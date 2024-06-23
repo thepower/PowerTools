@@ -20,8 +20,7 @@ async function uploadFile({
   try {
     const fullPath = `${dir}/${file.name}`;
     const data = promises.readFile(fullPath);
-    console.log({ fullPath });
-    console.log(`${url}/${file.name}`);
+
     const response = await axios({
       method: 'put',
       url: `${url}/${file.name}`,
@@ -29,15 +28,11 @@ async function uploadFile({
         Authorization: `Bearer ${jwt}`,
       },
       data,
-      maxContentLength: Infinity,
-      maxBodyLength: Infinity,
-      validateStatus(status) {
-        return status < 500;
-      },
+      maxContentLength: 100_000_000,
+      maxBodyLength: 1_000_000_000,
     });
 
     console.log(`Uploaded ${file.name}: Status ${response.status}`);
-    console.log({ response });
   } catch (error) {
     console.error('Error uploading files:', error);
   }
@@ -53,7 +48,7 @@ export default class ContainerUpload extends Command {
   static override flags = {
     containerId: Flags.integer({ char: 'i', description: 'Container ID', required: true }),
     containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file', required: true }),
-    containerPassword: Flags.string({ char: 's', default: '', description: 'Password for the container key file' }),
+    containerPassword: Flags.string({ char: 's', default: undefined, description: 'Password for the container key file' }),
     filesPath: Flags.directory({ char: 'p', description: 'Path to the files', required: true }),
   };
 

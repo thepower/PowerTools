@@ -1,5 +1,16 @@
 import crypto from 'crypto';
 
+export enum TaskState { Cancelled, Pending, Deploy, Running, Rejected, HandOver }
+
+export const TaskStateMap = {
+  [TaskState.Cancelled]: 'Cancelled',
+  [TaskState.Pending]: 'Pending',
+  [TaskState.Deploy]: 'Deploy',
+  [TaskState.Running]: 'Running',
+  [TaskState.Rejected]: 'Rejected',
+  [TaskState.HandOver]: 'HandOver',
+};
+
 export function bytesToString(bytesHex: string) {
   // Создаем новую переменную для работы с обрезанным значением
   let hexString = bytesHex;

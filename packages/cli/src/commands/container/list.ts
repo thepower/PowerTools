@@ -4,7 +4,9 @@ import Table from 'cli-table3';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
-import { bytesToString, formatDate } from '../../helpers/container.helper';
+import {
+  TaskState, TaskStateMap, bytesToString, formatDate,
+} from '../../helpers/container.helper';
 
 export default class ContainerList extends Command {
   static override description = '???';
@@ -15,7 +17,7 @@ export default class ContainerList extends Command {
 
   static override flags = {
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
-    password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
+    password: Flags.string({ char: 'p', default: undefined, description: 'Password for the key file' }),
   };
 
   public async run(): Promise<void> {
@@ -66,7 +68,16 @@ export default class ContainerList extends Command {
 
     // Filter tasks by owner and prepare rows for the table
     const rows = containers
-      .map((container) => {
+      .map((container: {
+        id: bigint;
+        pubkey: string;
+        created: bigint;
+        state: TaskState;
+        active_provider: bigint;
+        handover_to_provider: bigint;
+        hold_time: bigint;
+        userdata: string;
+      }) => {
         const {
           id,
           pubkey,
@@ -86,7 +97,7 @@ export default class ContainerList extends Command {
         return [
           id,
           bytesToString(userData),
-          state,
+          TaskStateMap[state],
           publicKeyBase64,
           formatDate(Number(created)),
           activeProvider,
