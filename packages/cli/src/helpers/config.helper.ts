@@ -1,65 +1,93 @@
-import { promises, existsSync } from 'fs';
-import ux from 'cli-ux';
-import { resolve } from 'path';
-import { CliConfig } from '../types/cliConfig.type';
+import { prompt } from 'enquirer';
+import { existsSync, promises as fsPromises } from 'node:fs';
+import { resolve } from 'node:path';
 
-const CONFIG_FILE_NAME = 'tp-cli.json';
+import { CliConfig } from '../types/cli-config.type';
 
-export const validateConfig = (cfg: CliConfig) => {
-  const required = ['source', 'address', 'projectId', 'wif'];
+export const DEFAULT_CONFIG_FILE_PATH = './tp-cli.json';
 
-  for (const field of required) {
+const REQUIRED_FIELDS = ['source', 'address', 'projectId', 'wif'] as const;
+
+const validateConfig = (cfg: CliConfig): void => {
+  for (const field of REQUIRED_FIELDS) {
     if (!cfg[field]) {
       throw new Error(`Config does not contain required field "${field}"`);
     }
   }
 
-  // check if source path exists
-  const isExistsSource = existsSync(cfg.source);
-  if (!isExistsSource) {
+  if (!existsSync(cfg.source)) {
     throw new Error(`Source path "${cfg.source}" does not exist`);
   }
 };
 
-export const getConfig = async (): Promise<CliConfig> => {
-  // TODO: check if the path always correct
-  const path = `./${CONFIG_FILE_NAME}`;
+export const getConfig = async (configPath: string): Promise<CliConfig | null> => {
+  const path = configPath;
+
   const isExistsConfig = existsSync(path);
   let cfgJSON: CliConfig;
 
   if (isExistsConfig) {
-    const buffer = await promises.readFile(path);
+    const buffer = await fsPromises.readFile(path);
 
     try {
       cfgJSON = JSON.parse(buffer.toString());
     } catch (e) {
-      throw new Error(`Invalid config json (${CONFIG_FILE_NAME})`);
+      throw new Error(`Invalid config json (${path})`);
     }
 
     validateConfig(cfgJSON);
+    return cfgJSON;
   }
-
-  return cfgJSON;
+  return null;
 };
 
-export const setConfigFile = async (config: CliConfig) => {
+export const setConfigFile = async (config: CliConfig, configPath: string): Promise<void> => {
   const content = JSON.stringify(config, null, 2);
-  const path = `./${CONFIG_FILE_NAME}`;
-  await promises.writeFile(path, content);
+  const path = configPath;
+
+  await fsPromises.writeFile(path, content);
 };
 
-export const setConfig = async () => {
-  const source = await ux.prompt('Please, enter the source path of your project, ex. "./dist")');
-  await ux.confirm(`Source path = "${resolve(source)}". Continue? (yes/no)`);
+export const setConfig = async (configPath: string): Promise<CliConfig> => {
+  const { source }: { source: string } = await prompt({
+    initial: './dist',
+    message: 'Please, enter the source path of your project, e.g., "./dist")',
+    name: 'source',
+    type: 'input',
+  });
 
-  const projectId = await ux.prompt('Please, enter your project id (must be unique in list of your projects)');
-  const address = await ux.prompt('Please, enter your account address, ex. "AA030000174483048139"');
-  const wif = await ux.prompt('Please, enter your account private key (wif)', { type: 'hide' });
+  await prompt({
+    message: `Source path = "${resolve(source)}". Continue? (yes/no)`,
+    name: 'confirmSource',
+    type: 'confirm',
+  });
 
-  const config = {
-    source, projectId, address, wif,
+  const { projectId }: { projectId: string } = await prompt({
+    message: 'Please, enter your project id (must be unique in the list of your projects)',
+    name: 'projectId',
+    type: 'input',
+  });
+
+  const { address }: { address: string } = await prompt({
+    message: 'Please, enter your account address, e.g., "AA030000174483048139"',
+    name: 'address',
+    type: 'input',
+  });
+
+  const { wif }: { wif: string } = await prompt({
+    message: 'Please, enter your account private key (wif)',
+    name: 'address',
+    type: 'password',
+  });
+
+  const config: CliConfig = {
+    address,
+    projectId,
+    source,
+    wif,
   };
-  await setConfigFile(config);
+
+  await setConfigFile(config, configPath);
 
   return config;
 };

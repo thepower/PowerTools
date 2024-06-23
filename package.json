@@ -9,6 +9,7 @@
     "cm": "git add . && git commit",
     "bootstrap": "npx lerna bootstrap",
     "publish:ci": "lerna publish from-package --yes --no-verify-access",
+    "publish:canary": "lerna publish --canary --dist-tag dev --preid dev.$(git rev-parse --short HEAD) --force-publish \"*\" --no-verify-access --yes",
     "version:ci": "lerna version --yes --conventional-commits",
     "prepare": "husky install"
   },
