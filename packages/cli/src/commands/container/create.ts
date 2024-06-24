@@ -9,20 +9,21 @@ import abis from '../../abis';
 import { createCompactPublicKey, stringToBytes32 } from '../../helpers/container.helper';
 
 export default class ContainerCreate extends Command {
-  static override description = '???';
+  static override description = 'Create a new container with a given name and key pair';
 
   static override examples = [
-    '???',
+    '<%= config.bin %> <%= command.id %> -k ./key.pem -p mypassword -n "NewContainer" -s containerpassword',
+    '<%= config.bin %> <%= command.id %> -k ./key.pem --password mypassword --containerName "NewContainer" --containerPassword containerpassword',
   ];
 
   static override flags = {
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
-    password: Flags.string({ char: 'p', default: undefined, description: 'Password for the key file' }),
+    password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
     containerName: Flags.string({
       char: 'n', default: '', description: 'Name of the container', required: true,
     }),
-    containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file' }),
-    containerPassword: Flags.string({ char: 's', default: undefined, description: 'Password for the container key file' }),
+    // containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file' }),
+    containerPassword: Flags.string({ char: 's', default: '', description: 'Password for the container key file' }),
   };
 
   public async run(): Promise<void> {
@@ -53,6 +54,7 @@ export default class ContainerCreate extends Command {
     // } else {
 
     // }
+
     const { publicKey: publicKeyPem, privateKey: privateKeyPem } = crypto.generateKeyPairSync('ec', {
       namedCurve: 'P-256',
       publicKeyEncoding: {

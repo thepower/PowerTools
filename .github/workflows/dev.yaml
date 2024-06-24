@@ -32,7 +32,7 @@ jobs:
 
       - name: Publish packages
         run: |
-          yarn publish:canary
+          yarn publish:dev
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMTOKEN }}
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
