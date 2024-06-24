@@ -93,17 +93,23 @@ export class EvmApi {
     const data = hexToBytes(encodedFunction);
     const dataBuffer = Buffer.from(data);
 
+    const sequence = await this.network.getWalletSequence(this.scAddress);
+    const newSequence = sequence + 1;
+
     const tx = await TransactionsApi.composeSCMethodCallTX(
-      key.address,
-      this.scAddress,
-      ['0x0', [dataBuffer]],
-      '',
-      0,
-      key.wif,
-      'SK',
-      amount,
-      this.network.feeSettings,
-      this.network.gasSettings,
+      {
+        address: key.address,
+        sc: this.scAddress,
+        toCall: ['0x0', [dataBuffer]],
+        gasToken: '',
+        gasValue: 0,
+        wif: key.wif,
+        amountToken: 'SK',
+        amountValue: amount,
+        seq: newSequence,
+        feeSettings: this.network.feeSettings,
+        gasSettings: this.network.gasSettings,
+      },
     );
 
     return this.network.sendTxAndWaitForResponse(tx);

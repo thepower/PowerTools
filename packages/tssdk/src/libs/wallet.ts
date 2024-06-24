@@ -164,14 +164,16 @@ export class WalletApi {
     const sequence = await this.getWalletSequence(from);
     const newSequence = sequence + 1;
     const transmission = TransactionsApi.composeSimpleTransferTX(
-      feeSettings,
-      wif,
-      from,
-      to,
-      token,
-      amount,
-      message,
-      newSequence,
+      {
+        feeSettings,
+        wif,
+        from,
+        to,
+        token,
+        amount,
+        message,
+        seq: newSequence,
+      },
     );
 
     return this.networkApi.sendPreparedTX(transmission);
