@@ -19,7 +19,7 @@ async function uploadFile({
 }:{ url: string, jwt: string, dir: string, file: File }) {
   try {
     const fullPath = `${dir}/${file.name}`;
-    const data = promises.readFile(fullPath);
+    const data = await promises.readFile(fullPath);
 
     const response = await axios({
       method: 'put',
@@ -39,16 +39,17 @@ async function uploadFile({
 }
 
 export default class ContainerUpload extends Command {
-  static override description = '???';
+  static override description = 'Upload files to a container';
 
   static override examples = [
-    '???',
+    '<%= config.bin %> <%= command.id %> --containerId 123 --containerKeyFilePath ./key.pem --containerPassword mypassword --filesPath ./files',
+    '<%= config.bin %> <%= command.id %> -i 123 -f ./key.pem -s mypassword -p ./files',
   ];
 
   static override flags = {
     containerId: Flags.integer({ char: 'i', description: 'Container ID', required: true }),
     containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file', required: true }),
-    containerPassword: Flags.string({ char: 's', default: undefined, description: 'Password for the container key file' }),
+    containerPassword: Flags.string({ char: 's', default: '', description: 'Password for the container key file' }),
     filesPath: Flags.directory({ char: 'p', description: 'Path to the files', required: true }),
   };
 

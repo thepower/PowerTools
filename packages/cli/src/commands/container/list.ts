@@ -9,15 +9,16 @@ import {
 } from '../../helpers/container.helper';
 
 export default class ContainerList extends Command {
-  static override description = '???';
+  static override description = 'List containers owned by a user';
 
   static override examples = [
-    '???',
+    '<%= config.bin %> <%= command.id %> -k ./key.pem -p mypassword',
+    '<%= config.bin %> <%= command.id %> -k ./key.pem --password mypassword',
   ];
 
   static override flags = {
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
-    password: Flags.string({ char: 'p', default: undefined, description: 'Password for the key file' }),
+    password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
   };
 
   public async run(): Promise<void> {

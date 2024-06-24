@@ -20,7 +20,7 @@ $ npm install -g @thepowereco/cli
 $ tpe COMMAND
 running command...
 $ tpe (--version)
-@thepowereco/cli/1.11.129 linux-x64 node-v18.20.3
+@thepowereco/cli/1.11.129 linux-x64 node-v22.2.0
 $ tpe --help [COMMAND]
 USAGE
   $ tpe COMMAND
@@ -35,6 +35,11 @@ USAGE
 * [`tpe acc register`](#tpe-acc-register)
 * [`tpe acc send-sk`](#tpe-acc-send-sk)
 * [`tpe autocomplete [SHELL]`](#tpe-autocomplete-shell)
+* [`tpe container actions`](#tpe-container-actions)
+* [`tpe container create`](#tpe-container-create)
+* [`tpe container list`](#tpe-container-list)
+* [`tpe container update`](#tpe-container-update)
+* [`tpe container upload`](#tpe-container-upload)
 * [`tpe contract deploy`](#tpe-contract-deploy)
 * [`tpe contract get`](#tpe-contract-get)
 * [`tpe contract set`](#tpe-contract-set)
@@ -183,19 +188,135 @@ EXAMPLES
 
 _See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v3.1.4/src/commands/autocomplete/index.ts)_
 
+## `tpe container actions`
+
+describe the command here
+
+```
+USAGE
+  $ tpe container actions -m <value> -f <value> [-p <value>...] [-s <value>]
+
+FLAGS
+  -f, --containerKeyFilePath=<value>  (required) Path to the container key file
+  -m, --method=<value>                (required) ???
+  -p, --params=<value>...             [default: ] ???
+  -s, --containerPassword=<value>     Password for the container key file
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ tpe container actions
+```
+
+_See code: [dist/commands/container/actions.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/container/actions.js)_
+
+## `tpe container create`
+
+???
+
+```
+USAGE
+  $ tpe container create -k <value> -n <value> [-p <value>] [-f <value>] [-s <value>]
+
+FLAGS
+  -f, --containerKeyFilePath=<value>  Path to the container key file
+  -k, --keyFilePath=<value>           (required) Path to the key file
+  -n, --containerName=<value>         (required) Name of the container
+  -p, --password=<value>              Password for the key file
+  -s, --containerPassword=<value>     Password for the container key file
+
+DESCRIPTION
+  ???
+
+EXAMPLES
+  ???
+```
+
+_See code: [dist/commands/container/create.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/container/create.js)_
+
+## `tpe container list`
+
+???
+
+```
+USAGE
+  $ tpe container list -k <value> [-p <value>]
+
+FLAGS
+  -k, --keyFilePath=<value>  (required) Path to the key file
+  -p, --password=<value>     Password for the key file
+
+DESCRIPTION
+  ???
+
+EXAMPLES
+  ???
+```
+
+_See code: [dist/commands/container/list.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/container/list.js)_
+
+## `tpe container update`
+
+???
+
+```
+USAGE
+  $ tpe container update -k <value> -i <value> -n <value> -f <value> [-p <value>] [-s <value>]
+
+FLAGS
+  -f, --containerKeyFilePath=<value>  (required) Path to the container key file
+  -i, --containerId=<value>           (required) Id of the container
+  -k, --keyFilePath=<value>           (required) Path to the key file
+  -n, --containerName=<value>         (required) Name of the container
+  -p, --password=<value>              Password for the key file
+  -s, --containerPassword=<value>     Password for the container key file
+
+DESCRIPTION
+  ???
+
+EXAMPLES
+  ???
+```
+
+_See code: [dist/commands/container/update.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/container/update.js)_
+
+## `tpe container upload`
+
+???
+
+```
+USAGE
+  $ tpe container upload -i <value> -f <value> -p <value> [-s <value>]
+
+FLAGS
+  -f, --containerKeyFilePath=<value>  (required) Path to the container key file
+  -i, --containerId=<value>           (required) Container ID
+  -p, --filesPath=<value>             (required) Path to the files
+  -s, --containerPassword=<value>     Password for the container key file
+
+DESCRIPTION
+  ???
+
+EXAMPLES
+  ???
+```
+
+_See code: [dist/commands/container/upload.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/container/upload.js)_
+
 ## `tpe contract deploy`
 
 Deploy a smart contract to the blockchain
 
 ```
 USAGE
-  $ tpe contract deploy -a <value> -b <value> -c <value> -k <value> [-t <value>] [-v <value>] [-i <value>...] [-p
+  $ tpe contract deploy -a <value> -b <value> -k <value> [-c <value>] [-t <value>] [-v <value>] [-i <value>...] [-p
     <value>]
 
 FLAGS
   -a, --abiPath=<value>        (required) Path to the ABI file
   -b, --binPath=<value>        (required) Path to the binary file
-  -c, --chain=<value>          (required) Chain ID to deploy on
+  -c, --chain=<value>          Chain ID to deploy on
   -i, --initParams=<value>...  [default: ] Initialization parameters
   -k, --keyFilePath=<value>    (required) Path to the key file
   -p, --password=<value>       Password for the key file
@@ -221,11 +342,11 @@ Call a method on a deployed smart contract
 
 ```
 USAGE
-  $ tpe contract get -a <value> -d <value> -c <value> -m <value> [-p <value>...]
+  $ tpe contract get -a <value> -d <value> -m <value> [-c <value>] [-p <value>...]
 
 FLAGS
   -a, --abiPath=<value>    (required) Path to the ABI file
-  -c, --chain=<value>      (required) Chain ID
+  -c, --chain=<value>      Chain ID
   -d, --address=<value>    (required) Smart contract address
   -m, --method=<value>     (required) Method name to call
   -p, --params=<value>...  [default: ] Parameters for the method
@@ -249,11 +370,11 @@ Execute a method on a specified smart contract
 
 ```
 USAGE
-  $ tpe contract set -a <value> -d <value> -c <value> -k <value> -m <value> [-r <value>...] [-p <value>]
+  $ tpe contract set -a <value> -d <value> -k <value> -m <value> [-c <value>] [-r <value>...] [-p <value>]
 
 FLAGS
   -a, --abiPath=<value>      (required) Path to the ABI file
-  -c, --chain=<value>        (required) Chain ID
+  -c, --chain=<value>        Chain ID
   -d, --address=<value>      (required) Smart contract address
   -k, --keyFilePath=<value>  (required) Path to the key file
   -m, --method=<value>       (required) Method name to call
