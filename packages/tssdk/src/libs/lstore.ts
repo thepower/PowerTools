@@ -69,15 +69,22 @@ const getLStore = async (address: string, path: string, key: string, network: Ne
 const setLStore = async (account: AccountKey, patches: [string, string, string][], network: NetworkApi) => {
   const addressChain = await network.getAddressChain(account.address);
   const addressChainNumber = addressChain?.chain;
+
   if (network.getChain() !== addressChainNumber) {
     await network.changeChain(addressChainNumber);
   }
 
+  const sequence = await network.getWalletSequence(account.address);
+  const newSequence = sequence + 1;
+
   const tx = await TransactionsApi.composeStoreTX(
-    account.address,
-    patches,
-    account.wif,
-    network.feeSettings,
+    {
+      address: account.address,
+      patches,
+      wif: account.wif,
+      seq: newSequence,
+      feeSettings: network.feeSettings,
+    },
   );
   return tx;
 };

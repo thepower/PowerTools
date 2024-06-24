@@ -51,11 +51,15 @@ export default class ContractDeploy extends Command {
     // Format initialization parameters
     const formattedInitParams = initParams.map((param) => (AddressApi.isTextAddressValid(param) ? AddressApi.textAddressToEvmAddress(param) : param));
 
+    const sequence = await networkApi.getWalletSequence(importedWallet.address);
+    const newSequence = sequence + 1;
+
     // Compose the deployment transaction
     const deployTX = TransactionsApi.composeDeployTX({
       abi,
       address: importedWallet.address,
       code,
+      seq: newSequence,
       feeSettings: networkApi.feeSettings,
       gasSettings: networkApi.gasSettings,
       gasToken,

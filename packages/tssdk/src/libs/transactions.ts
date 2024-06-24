@@ -46,15 +46,23 @@ const getRegisterTxBody = async ({
   return body;
 };
 
-const getSimpleTransferTxBody = (
-  from: Buffer,
-  to: Buffer,
-  token: string,
-  amount: number,
-  msg: string,
-  timestamp: number,
-  seq: number,
-) => {
+const getSimpleTransferTxBody = ({
+  from,
+  to,
+  token,
+  amount,
+  msg,
+  timestamp,
+  seq,
+}: {
+  from: Buffer;
+  to: Buffer;
+  token: string;
+  amount: number;
+  msg: string;
+  timestamp: number;
+  seq: number;
+}) => {
   const body = {
     k: KIND_GENERIC,
     t: timestamp,
@@ -117,32 +125,46 @@ export const TransactionsApi = {
     return keyPair.verify(hash, ecsig);
   },
 
-  composeSimpleTransferTX(
-    feeSettings: any,
-    wif: string,
-    from: string,
-    to: string,
-    token: string,
-    amount: number,
-    message: string,
-    seq: number,
-    fee?: number,
-    feeToken?: string,
-  ) {
+  composeSimpleTransferTX({
+    feeSettings,
+    wif,
+    from,
+    to,
+    token,
+    amount,
+    message,
+    seq,
+    fee,
+    feeToken,
+  }: {
+    feeSettings: any;
+    wif: string;
+    from: string;
+    to: string;
+    token: string;
+    amount: number;
+    message: string;
+    seq: number;
+    fee?: number;
+    feeToken?: string;
+  }) {
     const keyPair = Bitcoin.ECPair.fromWIF(wif);
     const publicKey = keyPair.getPublicKeyBuffer();
     const timestamp = +new Date();
 
     const bufferFrom = Buffer.from(AddressApi.parseTextAddress(from));
     const bufferTo = Buffer.from(AddressApi.parseTextAddress(to));
+
     let body = getSimpleTransferTxBody(
-      bufferFrom,
-      bufferTo,
-      token,
-      amount,
-      message,
-      timestamp,
-      seq,
+      {
+        from: bufferFrom,
+        to: bufferTo,
+        token,
+        amount,
+        msg: message,
+        timestamp,
+        seq,
+      },
     );
     if (feeToken && fee) {
       body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
@@ -183,6 +205,7 @@ export const TransactionsApi = {
     gasValue,
     wif,
     abi,
+    seq,
     feeSettings,
     gasSettings,
     fee,
@@ -195,6 +218,7 @@ export const TransactionsApi = {
     gasValue: number;
     wif: string;
     abi: any;
+    seq: number;
     feeSettings: any;
     gasSettings: any;
     fee?: number;
@@ -209,7 +233,7 @@ export const TransactionsApi = {
       t: +new Date(),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       to: Buffer.from(AddressApi.parseTextAddress(address)),
-      s: +new Date(),
+      s: seq,
       p: [] as any,
       c: [] as any,
       e: { code: Buffer.from(scCode), vm: 'evm', view: [] },
@@ -275,21 +299,36 @@ export const TransactionsApi = {
     return bsig.subarray(index + 2, index + 2 + bsig[index + 1]);
   },
 
-  composeSCMethodCallTX(
-    address: string,
-    sc: string,
-    toCall: [string, [any]],
-    gasToken: string,
-    gasValue: number,
-    wif: string,
-    amountToken: string,
-    amountValue: number,
-    feeSettings: any,
-    gasSettings: any,
-    fee?: number,
-    feeToken?: string,
-  ) {
-    const body = this.composeSCMethodCallTxBody(
+  composeSCMethodCallTX({
+    address,
+    sc,
+    toCall,
+    gasToken,
+    gasValue,
+    wif,
+    amountToken,
+    amountValue,
+    seq,
+    feeSettings,
+    gasSettings,
+    fee,
+    feeToken,
+  }: {
+    address: string;
+    sc: string;
+    toCall: [string, [any]];
+    gasToken: string;
+    gasValue: number;
+    wif: string;
+    amountToken: string;
+    amountValue: number;
+    seq: number;
+    feeSettings: any;
+    gasSettings: any;
+    fee?: number;
+    feeToken?: string;
+  }) {
+    const body = this.composeSCMethodCallTxBody({
       address,
       sc,
       toCall,
@@ -297,27 +336,37 @@ export const TransactionsApi = {
       gasValue,
       amountToken,
       amountValue,
+      seq,
       feeSettings,
       gasSettings,
       fee,
       feeToken,
-    );
+    });
     return this.packAndSignTX(body, wif);
   },
 
-  composeStoreTX(
-    address: string,
-    patches: any,
-    wif: string,
-    feeSettings: any,
-    fee?: number,
-    feeToken?: string,
-  ) {
+  composeStoreTX({
+    address,
+    patches,
+    wif,
+    seq,
+    feeSettings,
+    fee,
+    feeToken,
+  }: {
+    address: string;
+    patches: any;
+    wif: string;
+    seq: number;
+    feeSettings: any;
+    fee?: number;
+    feeToken?: string;
+  }) {
     let body = {
       k: KIND_LSTORE,
       t: +new Date(),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
-      s: +new Date(),
+      s: seq,
       p: [] as any,
       pa: msgPack.encode(patches.map((i: any) => msgPack.encode(i))),
     };
@@ -359,19 +408,33 @@ export const TransactionsApi = {
     return body;
   },
 
-  composeSCMethodCallTxBody(
-    address: string,
-    sc: string,
-    toCall: [string, [any]],
-    gasToken: string,
-    gasValue: number,
-    amountToken: string,
-    amountValue: number,
-    feeSettings: any,
-    gasSettings: any,
-    fee?: number,
-    feeToken?: string,
-  ) {
+  composeSCMethodCallTxBody({
+    address,
+    sc,
+    toCall,
+    gasToken,
+    gasValue,
+    amountToken,
+    amountValue,
+    seq,
+    feeSettings,
+    gasSettings,
+    fee,
+    feeToken,
+  }: {
+    address: string;
+    sc: string;
+    toCall: [string, [any]];
+    gasToken: string;
+    gasValue: number;
+    amountToken: string;
+    amountValue: number;
+    seq: number;
+    feeSettings: any;
+    gasSettings: any;
+    fee?: number;
+    feeToken?: string;
+  }) {
     const PURPOSE: any[] = [];
     if (amountValue) {
       PURPOSE.push([PURPOSE_TRANSFER, amountToken, amountValue]);
@@ -381,7 +444,7 @@ export const TransactionsApi = {
       t: +new Date(),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       to: Buffer.from(AddressApi.parseTextAddress(sc)),
-      s: +new Date(),
+      s: seq,
       p: PURPOSE,
       c: toCall,
     };
@@ -400,22 +463,38 @@ export const TransactionsApi = {
   },
 
   // sponsor
-  composeSponsorSCMethodCallTX(
-    address: string,
-    sc: string,
-    toCall: [string, [any]],
-    gasToken: string,
-    gasValue: number,
-    wif: string,
-    amountToken: string,
-    amountValue: number,
-    feeSettings: any,
-    gasSettings: any,
-    sponsor: string,
-    fee?: number,
-    feeToken?: string,
-  ) {
-    const body = this.composeSCMethodCallTxBody(
+  composeSponsorSCMethodCallTX({
+    address,
+    sc,
+    toCall,
+    gasToken,
+    gasValue,
+    wif,
+    amountToken,
+    amountValue,
+    seq,
+    feeSettings,
+    gasSettings,
+    sponsor,
+    fee,
+    feeToken,
+  }: {
+    address: string;
+    sc: string;
+    toCall: [string, [any]];
+    gasToken: string;
+    gasValue: number;
+    wif: string;
+    amountToken: string;
+    amountValue: number;
+    seq: number;
+    feeSettings: any;
+    gasSettings: any;
+    sponsor: string;
+    fee?: number;
+    feeToken?: string;
+  }) {
+    const body = this.composeSCMethodCallTxBody({
       address,
       sc,
       toCall,
@@ -423,11 +502,12 @@ export const TransactionsApi = {
       gasValue,
       amountToken,
       amountValue,
+      seq,
       feeSettings,
       gasSettings,
       fee,
       feeToken,
-    );
+    });
 
     body.p.forEach((item) => {
       if (item[0] === PURPOSE_SRCFEE) {

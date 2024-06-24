@@ -63,31 +63,40 @@ export class EvmContract {
     const data = hexToBytes(encodedFunction);
     const dataBuffer = Buffer.from(data);
 
+    const sequence = await this.evm.network.getWalletSequence(key.address);
+    const newSequence = sequence + 1;
+
     const tx = sponsor === '' ?
       await TransactionsApi.composeSCMethodCallTX(
-        key.address,
-        this.address,
-        ['0x0', [dataBuffer]],
-        '',
-        0,
-        key.wif,
-        'SK',
-        amount,
-        this.evm.network.feeSettings,
-        this.evm.network.gasSettings,
+        {
+          address: key.address,
+          sc: this.address,
+          toCall: ['0x0', [dataBuffer]],
+          gasToken: '',
+          gasValue: 0,
+          wif: key.wif,
+          amountToken: 'SK',
+          amountValue: amount,
+          seq: newSequence,
+          feeSettings: this.evm.network.feeSettings,
+          gasSettings: this.evm.network.gasSettings,
+        },
       ) :
       await TransactionsApi.composeSponsorSCMethodCallTX(
-        key.address,
-        this.address,
-        ['0x0', [dataBuffer]],
-        '',
-        0,
-        key.wif,
-        'SK',
-        amount,
-        this.evm.network.feeSettings,
-        this.evm.network.gasSettings,
-        sponsor,
+        {
+          address: key.address,
+          sc: this.address,
+          toCall: ['0x0', [dataBuffer]],
+          gasToken: '',
+          gasValue: 0,
+          wif: key.wif,
+          amountToken: 'SK',
+          amountValue: amount,
+          seq: newSequence,
+          feeSettings: this.evm.network.feeSettings,
+          gasSettings: this.evm.network.gasSettings,
+          sponsor,
+        },
       );
 
     const res = await this.evm.network.sendTxAndWaitForResponse(tx);
