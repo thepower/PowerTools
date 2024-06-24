@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.131](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.11.130...@thepowereco/cli@1.11.131) (2024-06-24)
+
+
+### Bug Fixes
+
+* added seq to other set methods ([de00573](https://github.com/thepower/PowerTools/commit/de00573c09ed0b99e9703ffc0348e325d8671834))
+
+
+
+
+
 ## [1.11.130](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.11.129...@thepowereco/cli@1.11.130) (2024-06-21)
 
 **Note:** Version bump only for package @thepowereco/cli

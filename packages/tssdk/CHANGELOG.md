@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.1...@thepowereco/tssdk@2.1.2) (2024-06-24)
+
+
+### Bug Fixes
+
+* added seq to other set methods ([de00573](https://github.com/thepower/power_hub/commit/de00573c09ed0b99e9703ffc0348e325d8671834))
+
+
+
+
+
 ## [2.1.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.0...@thepowereco/tssdk@2.1.1) (2024-06-17)
 
 **Note:** Version bump only for package @thepowereco/tssdk
