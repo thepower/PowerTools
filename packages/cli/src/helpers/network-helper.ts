@@ -9,7 +9,7 @@ export async function initializeNetworkApi({
   address?: string
   chain?: number
   defaultChain?: number
-}): Promise<NetworkApi | undefined> {
+}) {
   let networkApi: NetworkApi | undefined;
   if (chain) {
     networkApi = new NetworkApi(chain);
@@ -22,6 +22,10 @@ export async function initializeNetworkApi({
       networkApi = new NetworkApi(addressChain.chain);
       await networkApi.bootstrap();
     }
+  }
+
+  if (!networkApi) {
+    throw new Error('No network found.');
   }
 
   return networkApi;

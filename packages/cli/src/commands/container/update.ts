@@ -1,4 +1,4 @@
-import { Command, Flags } from '@oclif/core';
+import { Flags } from '@oclif/core';
 import crypto from 'crypto';
 import { readFileSync } from 'node:fs';
 import { EvmContract, EvmCore } from '@thepowereco/tssdk';
@@ -6,8 +6,9 @@ import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
 import { createCompactPublicKey, stringToBytes32 } from '../../helpers/container.helper';
+import { BaseCommand } from '../../baseCommand';
 
-export default class ContainerUpdate extends Command {
+export default class ContainerUpdate extends BaseCommand {
   static override description = 'Update container details';
 
   static override examples = [
@@ -27,28 +28,27 @@ export default class ContainerUpdate extends Command {
     }),
     containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file', required: true }),
     containerPassword: Flags.string({ char: 's', default: '', description: 'Password for the container key file' }),
+    ordersScAddress: Flags.string({
+      char: 'a', default: cliConfig.ordersScAddress, description: 'Orders smart contract address',
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContainerUpdate);
     const {
-      keyFilePath, password, containerId, containerKeyFilePath, containerName, containerPassword,
+      keyFilePath, password, containerId, containerKeyFilePath, containerName, containerPassword, ordersScAddress,
     } = flags;
     const containerKeyFile = readFileSync(containerKeyFilePath, 'utf8');
-
-    // Initialize network API
-    const networkApi = await initializeNetworkApi({ chain: 1 });
-
-    if (!networkApi) {
-      throw new Error('No network found.');
-    }
 
     // Load wallet
     const importedWallet = loadWallet(keyFilePath, password);
 
+    // Initialize network API
+    const networkApi = await initializeNetworkApi({ address: importedWallet.address });
+
     // Initialize EVM and contract
     const evmCore = await EvmCore.build(networkApi);
-    const ordersContract = await EvmContract.build(evmCore, cliConfig.ordersScAddress, abis.order);
+    const ordersContract = await EvmContract.build(evmCore, ordersScAddress, abis.order);
 
     const privateKeyPem = crypto.createPrivateKey({
       key: containerKeyFile, type: 'pkcs8', format: 'pem', passphrase: containerPassword,
@@ -57,12 +57,6 @@ export default class ContainerUpdate extends Command {
     const jwkPublicKey = crypto.createPublicKey(privateKeyPem).export({ format: 'jwk' });
 
     const compactPublicKey = createCompactPublicKey(jwkPublicKey);
-
-    console.log({ compactPublicKey });
-
-    console.log('Private Key: Pem', privateKeyPem);
-
-    console.log('Compact Public Key:', compactPublicKey?.base64);
 
     await ordersContract.scSet(
       importedWallet,

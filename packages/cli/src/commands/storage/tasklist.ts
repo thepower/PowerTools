@@ -1,17 +1,23 @@
-import { Flags, Command, ux } from '@oclif/core';
+import { Flags, ux } from '@oclif/core';
 import { AddressApi, EvmApi } from '@thepowereco/tssdk';
 import Table from 'cli-table3';
-import { color } from 'json-colorizer';
 
+import color from '@oclif/color';
 import cliConfig from '../../config/cli';
 
 import { DEFAULT_CONFIG_FILE_PATH, getConfig, setConfig } from '../../helpers/config.helper';
 import { Task } from '../../types/task.type';
 import abis from '../../abis';
+import { BaseCommand } from '../../baseCommand';
+import { initializeNetworkApi } from '../../helpers/network-helper';
 
-export default class StorageTasklist extends Command {
+export default class StorageTasklist extends BaseCommand {
   static override flags = {
+    bootstrapChain: Flags.integer({ char: 'b', default: 1025, description: 'Default chain ID' }),
     configPath: Flags.file({ char: 'c', description: 'Config to read', default: DEFAULT_CONFIG_FILE_PATH }),
+    storageScAddress: Flags.string({
+      char: 'a', default: cliConfig.storageScAddress, description: 'Storage smart contract address',
+    }),
   };
 
   static override description = 'Shows the list of all tasks for the current account';
@@ -23,11 +29,10 @@ export default class StorageTasklist extends Command {
 
   async run(): Promise<void> {
     const { flags } = await this.parse(StorageTasklist);
-    const { configPath } = flags;
+    const { bootstrapChain, configPath, storageScAddress } = flags;
 
     // Get the current configuration
     let config = await getConfig(configPath);
-    const chainNumber = 1; // TODO: Get chain number by address
 
     // If configuration is not found, set a new configuration
     if (!config) {
@@ -40,11 +45,16 @@ export default class StorageTasklist extends Command {
     const { address } = config;
     this.log(color.whiteBright(`Task list for ${address} account`));
 
+    // Initialize network API
+    const networkApi = await initializeNetworkApi({ address, defaultChain: bootstrapChain });
+
+    const addressChain = await networkApi.getAddressChain(address);
+
     // Initialize the smart contract
     const storageSc = await EvmApi.build({
       abiJSON: abis.storage,
-      chain: chainNumber,
-      scAddress: cliConfig.storageScAddress,
+      chain: addressChain?.chain,
+      scAddress: storageScAddress,
     });
 
     // Get the count of tasks

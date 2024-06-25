@@ -1,4 +1,4 @@
-import { Command, Flags, ux } from '@oclif/core';
+import { Flags, ux } from '@oclif/core';
 import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
 import Table from 'cli-table3';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
@@ -7,8 +7,9 @@ import abis from '../../abis';
 import {
   TaskState, TaskStateMap, bytesToString, formatDate,
 } from '../../helpers/container.helper';
+import { BaseCommand } from '../../baseCommand';
 
-export default class ContainerList extends Command {
+export default class ContainerList extends BaseCommand {
   static override description = 'List containers owned by a user';
 
   static override examples = [
@@ -19,99 +20,85 @@ export default class ContainerList extends Command {
   static override flags = {
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
     password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
+    ordersScAddress: Flags.string({
+      char: 'a', default: cliConfig.ordersScAddress, description: 'Orders smart contract address',
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContainerList);
-    const {
-      keyFilePath, password,
-    } = flags;
+    const { keyFilePath, password, ordersScAddress } = flags;
 
     ux.action.start('Loading');
 
-    // Initialize network API
-    const networkApi = await initializeNetworkApi({ chain: 1 });
-
-    if (!networkApi) {
-      throw new Error('No network found.');
-    }
-
+    // Initialize network API and wallet
     const importedWallet = loadWallet(keyFilePath, password);
+    const networkApi = await initializeNetworkApi({ address: importedWallet.address });
 
-    // Initialize EVM and contract
+    // Initialize EVM core and orders contract
     const evmCore = await EvmCore.build(networkApi);
-    const ordersContract = await EvmContract.build(evmCore, cliConfig.ordersScAddress, abis.order);
+    const ordersContract = await EvmContract.build(evmCore, ordersScAddress, abis.order);
 
+    // Fetch containers count
     const containersCount = await ordersContract.scGet(
       'balanceOf',
       [AddressApi.textAddressToEvmAddress(importedWallet.address)],
     );
 
-    console.log({ containersCount });
-
+    // Fetch all containers owned by the user
     const containers = await Promise.all(
-      [...Array(containersCount)].map(async (_, index) => {
+      Array.from({ length: containersCount }, async (_, index) => {
         const tokenId = await ordersContract.scGet('tokenOfOwnerByIndex', [
           AddressApi.textAddressToEvmAddress(importedWallet.address),
           index,
         ]);
-        const container = await ordersContract.scGet('tasks', [tokenId]);
-        return container;
+        return ordersContract.scGet('tasks', [tokenId]);
       }),
     );
 
-    console.log({ containers });
-
-    // Create a table for displaying the tasks
+    // Prepare table for displaying the tasks
     const table = new Table({
-      head: ['Id', 'Name', 'Status', 'Pubkey', 'Created', 'Active provider', 'handoverToProvider', 'Hold time'],
+      head: ['Id', 'Name', 'Status', 'Pubkey', 'Created', 'Active provider', 'Handover To Provider', 'Hold time'],
     });
 
-    // Filter tasks by owner and prepare rows for the table
-    const rows = containers
-      .map((container: {
-        id: bigint;
-        pubkey: string;
-        created: bigint;
-        state: TaskState;
-        active_provider: bigint;
-        handover_to_provider: bigint;
-        hold_time: bigint;
-        userdata: string;
-      }) => {
-        const {
-          id,
-          pubkey,
-          created,
-          state,
-          active_provider: activeProvider,
-          handover_to_provider: handoverToProvider,
-          hold_time: holdTime,
-          userdata: userData,
-        } = container;
+    // Process and add container data to the table
+    containers.forEach((container: {
+      id: bigint;
+      pubkey: string;
+      created: bigint;
+      state: TaskState;
+      active_provider: bigint;
+      handover_to_provider: bigint;
+      hold_time: bigint;
+      userdata: string;
+    }) => {
+      const {
+        id, pubkey, created, state,
+        active_provider: activeProvider,
+        handover_to_provider: handoverToProvider,
+        hold_time: holdTime,
+        userdata: userData,
+      } = container;
 
-        const publicKeyBase64 = Buffer.from(pubkey.slice(2), 'hex').toString('base64')
-          .replace(/\+/g, '-')
-          .replace(/\//g, '_')
-          .replace(/=+$/, '');
+      const publicKeyBase64 = Buffer.from(pubkey.slice(2), 'hex').toString('base64')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
 
-        return [
-          id,
-          bytesToString(userData),
-          TaskStateMap[state],
-          publicKeyBase64,
-          formatDate(Number(created)),
-          activeProvider,
-          handoverToProvider,
-          holdTime,
-        ];
-      });
-
-    table.push(...rows);
+      table.push([
+        id,
+        bytesToString(userData),
+        TaskStateMap[state],
+        publicKeyBase64,
+        formatDate(Number(created)),
+        activeProvider,
+        handoverToProvider,
+        holdTime,
+      ]);
+    });
 
     ux.action.stop();
 
-    // Display the table
     this.log(table.toString());
   }
 }

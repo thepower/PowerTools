@@ -1,14 +1,16 @@
-import { Command, Flags } from '@oclif/core';
+import { Flags } from '@oclif/core';
 import crypto from 'crypto';
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
+import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
 import { createCompactPublicKey, stringToBytes32 } from '../../helpers/container.helper';
+import { BaseCommand } from '../../baseCommand';
 
-export default class ContainerCreate extends Command {
+export default class ContainerCreate extends BaseCommand {
   static override description = 'Create a new container with a given name and key pair';
 
   static override examples = [
@@ -22,71 +24,34 @@ export default class ContainerCreate extends Command {
     containerName: Flags.string({
       char: 'n', default: '', description: 'Name of the container', required: true,
     }),
-    // containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file' }),
+    containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file' }),
     containerPassword: Flags.string({ char: 's', default: '', description: 'Password for the container key file' }),
+    ordersScAddress: Flags.string({
+      char: 'a', default: cliConfig.ordersScAddress, description: 'Orders smart contract address',
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContainerCreate);
     const {
-      keyFilePath, password,
-      //  containerKeyFilePath,
-      containerName, containerPassword,
+      keyFilePath, password, containerKeyFilePath, containerName, containerPassword, ordersScAddress,
     } = flags;
 
-    // Initialize network API
-    const networkApi = await initializeNetworkApi({ chain: 1 });
-
-    if (!networkApi) {
-      throw new Error('No network found.');
-    }
-
-    // Load wallet
     const importedWallet = loadWallet(keyFilePath, password);
-
-    // Initialize EVM and contract
+    const networkApi = await this.initializeNetwork(importedWallet.address);
     const evmCore = await EvmCore.build(networkApi);
-    const ordersContract = await EvmContract.build(evmCore, cliConfig.ordersScAddress, abis.order);
+    const ordersContract = await EvmContract.build(evmCore, ordersScAddress, abis.order);
 
-    // if(containerKeyFilePath) {
-    //   const containerKeyFile = readFileSync(keyFilePath, 'utf8');
-
-    // } else {
-
-    // }
-
-    const { publicKey: publicKeyPem, privateKey: privateKeyPem } = crypto.generateKeyPairSync('ec', {
-      namedCurve: 'P-256',
-      publicKeyEncoding: {
-        type: 'spki',
-        format: 'pem',
-      },
-      privateKeyEncoding: {
-        type: 'pkcs8',
-        format: 'pem',
-      },
-    });
+    const { privateKeyPem, publicKeyPem } = containerKeyFilePath
+      ? this.loadContainerKeys(containerKeyFilePath, containerPassword)
+      : this.generateKeys(containerPassword);
 
     const jwkPublicKey = crypto.createPublicKey(publicKeyPem).export({ format: 'jwk' });
-    const encryptedOrNotPrivateKey = crypto.createPrivateKey(privateKeyPem).export({
-      type: 'pkcs8',
-      format: 'pem',
-      cipher: containerPassword ? 'aes-256-cbc' : undefined,
-      passphrase: containerPassword || undefined,
-    });
-
     const compactPublicKey = createCompactPublicKey(jwkPublicKey);
 
-    console.log('Public Key Pem:', publicKeyPem);
-    console.log('Private Key: Pem', privateKeyPem);
-
-    writeFileSync(
-      path.join(process.cwd(), containerName ?
-        `container_${containerName}_private_key_${compactPublicKey?.base64}.pem` :
-        `container_private_key_${compactPublicKey?.base64}.pem`),
-      encryptedOrNotPrivateKey,
-    );
-    console.log('Compact Public Key:', compactPublicKey?.base64);
+    if (!containerKeyFilePath && compactPublicKey?.base64) {
+      this.savePrivateKey(privateKeyPem, containerName, compactPublicKey.base64, containerPassword);
+    }
 
     const orderId = await ordersContract.scSet(
       importedWallet,
@@ -94,6 +59,63 @@ export default class ContainerCreate extends Command {
       [AddressApi.textAddressToEvmAddress(importedWallet.address), Buffer.from(compactPublicKey?.buffer!), stringToBytes32(containerName)],
     );
 
-    console.log({ orderId });
+    this.log(color.green(`Container ${containerName} created with order ID: ${orderId}`));
+  }
+
+  private async initializeNetwork(address: string) {
+    const networkApi = await initializeNetworkApi({ address });
+
+    return networkApi;
+  }
+
+  private loadContainerKeys(containerKeyFilePath: string, containerPassword: string) {
+    const containerKeyFile = readFileSync(containerKeyFilePath, 'utf8');
+    const privateKeyPem = crypto.createPrivateKey({
+      key: containerKeyFile,
+      type: 'pkcs8',
+      format: 'pem',
+      passphrase: containerPassword || undefined,
+    }).export({ type: 'pkcs8', format: 'pem' });
+
+    const publicKeyPem = crypto.createPublicKey({
+      key: containerKeyFile,
+      type: 'spki',
+      format: 'pem',
+    }).export({ type: 'spki', format: 'pem' });
+
+    return { privateKeyPem, publicKeyPem };
+  }
+
+  private generateKeys(containerPassword: string) {
+    const { publicKey, privateKey } = crypto.generateKeyPairSync('ec', {
+      namedCurve: 'P-256',
+      publicKeyEncoding: { type: 'spki', format: 'pem' },
+      privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
+    });
+
+    const privateKeyPem = crypto.createPrivateKey(privateKey).export({
+      type: 'pkcs8',
+      format: 'pem',
+      cipher: containerPassword ? 'aes-256-cbc' : undefined,
+      passphrase: containerPassword || undefined,
+    });
+
+    return { privateKeyPem, publicKeyPem: publicKey };
+  }
+
+  private savePrivateKey(privateKeyPem: string | Buffer, containerName: string, compactPublicKeyBase64: string, containerPassword: string) {
+    const fileName = containerName
+      ? `container_${containerName}_private_key_${compactPublicKeyBase64}.pem`
+      : `container_private_key_${compactPublicKeyBase64}.pem`;
+
+    const filePath = path.join(process.cwd(), fileName);
+    const encryptedOrNotPrivateKey = crypto.createPrivateKey(privateKeyPem).export({
+      type: 'pkcs8',
+      format: 'pem',
+      cipher: containerPassword ? 'aes-256-cbc' : undefined,
+      passphrase: containerPassword || undefined,
+    });
+
+    writeFileSync(filePath, encryptedOrNotPrivateKey);
   }
 }
