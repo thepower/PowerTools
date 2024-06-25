@@ -1,11 +1,10 @@
-import { Flags, ux } from '@oclif/core';
+import { Command, Flags, ux } from '@oclif/core';
 import { AddressApi, TransactionsApi } from '@thepowereco/tssdk';
 import { readFileSync } from 'node:fs';
 
 import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
-import { BaseCommand } from '../../baseCommand';
 
-export default class ContractDeploy extends BaseCommand {
+export default class ContractDeploy extends Command {
   static override description = 'Deploy a smart contract to the blockchain';
 
   static override examples = [

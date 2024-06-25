@@ -1,4 +1,4 @@
-import { Flags, ux } from '@oclif/core';
+import { Command, Flags, ux } from '@oclif/core';
 import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
 import Table from 'cli-table3';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
@@ -7,9 +7,8 @@ import abis from '../../abis';
 import {
   TaskState, TaskStateMap, bytesToString, formatDate,
 } from '../../helpers/container.helper';
-import { BaseCommand } from '../../baseCommand';
 
-export default class ContainerList extends BaseCommand {
+export default class ContainerList extends Command {
   static override description = 'List containers owned by a user';
 
   static override examples = [
@@ -100,5 +99,9 @@ export default class ContainerList extends BaseCommand {
     ux.action.stop();
 
     this.log(table.toString());
+  }
+
+  async catch(err: Error & { exitCode?: number }): Promise<any> {
+    console.log({ err });
   }
 }

@@ -1,4 +1,4 @@
-import { Flags, Command } from '@oclif/core';
+import { Command, Flags } from '@oclif/core';
 import { AddressApi, EvmApi } from '@thepowereco/tssdk';
 import { Listr } from 'listr2';
 import { resolve } from 'node:path';

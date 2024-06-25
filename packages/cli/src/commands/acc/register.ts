@@ -1,11 +1,10 @@
 import { color } from '@oclif/color';
-import { Flags, ux } from '@oclif/core';
+import { Command, Flags, ux } from '@oclif/core';
 import { NetworkApi, NetworkEnum, WalletApi } from '@thepowereco/tssdk';
 import { prompt } from 'enquirer';
 import { colorize } from 'json-colorizer';
 import { writeFileSync } from 'node:fs';
 import * as path from 'node:path';
-import { BaseCommand } from '../../baseCommand';
 
 interface AccountData {
   address: string
@@ -26,7 +25,7 @@ interface RegisterFlags {
 
 const networks = [NetworkEnum.devnet, NetworkEnum.testnet, NetworkEnum.appchain];
 
-export default class AccRegister extends BaseCommand {
+export default class AccRegister extends Command {
   static override description = 'Register a new account on the specified blockchain or network';
 
   static examples = [
