@@ -348,11 +348,11 @@ DESCRIPTION
   Deploy a smart contract to the blockchain
 
 EXAMPLES
-  $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --chain 1 --keyFilePath ./path/to/keyfile.pem --password mypassword
+  $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --password mypassword
 
-  $ tpe contract deploy -a ./path/to/abi.json -b ./path/to/bin -c 1 -k ./path/to/keyfile.pem -p mypassword --gasToken SK --gasValue 2000000000
+  $ tpe contract deploy -a ./path/to/abi.json -b ./path/to/bin -k ./path/to/keyfile.pem -p mypassword --gasToken SK --gasValue 2000000000
 
-  $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --chain 1 --keyFilePath ./path/to/keyfile.pem --initParams param1 param2
+  $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --initParams param1 param2
 ```
 
 _See code: [dist/commands/contract/deploy.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/contract/deploy.js)_
@@ -375,11 +375,11 @@ DESCRIPTION
   Call a method on a deployed smart contract
 
 EXAMPLES
-  $ tpe contract get --abiPath ./path/to/abi.json --address AA100000001677748249 --chain 1 --method getBalance --params 0x456...
+  $ tpe contract get --abiPath ./path/to/abi.json --address AA100000001677748249 --method getBalance --params 0x456...
 
-  $ tpe contract get -a ./path/to/abi.json -d AA100000001677748249 -c 1 -m getBalance -p 0x456...
+  $ tpe contract get -a ./path/to/abi.json -d AA100000001677748249 -m getBalance -p 0x456...
 
-  $ tpe contract get --abiPath ./path/to/abi.json --address AA100000001677748249 --chain 1 --method getInfo
+  $ tpe contract get --abiPath ./path/to/abi.json --address AA100000001677748249 --method getInfo
 ```
 
 _See code: [dist/commands/contract/get.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/contract/get.js)_
@@ -405,12 +405,12 @@ DESCRIPTION
 
 EXAMPLES
   $ tpe contract set --abiPath ./path/to/abi.json 
-      --address AA100000001677748249 --chain 1 --keyFilePath ./path/to/keyfile.pem --method set --params value1 value2 --password mypassword
+      --address AA100000001677748249 --keyFilePath ./path/to/keyfile.pem --method set --params value1 value2 --password mypassword
 
-  $ tpe contract set -a ./path/to/abi.json -d AA100000001677748249 -c 1 -k ./path/to/keyfile.pem -m set -r value1 value2 -p mypassword
+  $ tpe contract set -a ./path/to/abi.json -d AA100000001677748249 -k ./path/to/keyfile.pem -m set -r value1 value2 -p mypassword
 
   $ tpe contract set --abiPath ./path/to/abi.json 
-      --address AA100000001677748249 --chain 1 --keyFilePath ./path/to/keyfile.pem --method setData --params param1 param2
+      --address AA100000001677748249 --keyFilePath ./path/to/keyfile.pem --method setData --params param1 param2
 ```
 
 _See code: [dist/commands/contract/set.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/contract/set.js)_
