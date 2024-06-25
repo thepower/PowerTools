@@ -1,11 +1,10 @@
-import { Flags, ux } from '@oclif/core';
+import { Command, Flags, ux } from '@oclif/core';
 import crypto from 'crypto';
 import { readFileSync } from 'node:fs';
 import axios from 'axios';
 import jsonwebtoken from 'jsonwebtoken';
 import { colorize } from 'json-colorizer';
 import cliConfig from '../../config/cli';
-import { BaseCommand } from '../../baseCommand';
 
 async function jsonRpcRequest({
   url, method, params = [], jwt,
@@ -49,7 +48,7 @@ function parseValue(input: any) {
   return input;
 }
 
-export default class ContainerActions extends BaseCommand {
+export default class ContainerActions extends Command {
   static override description = 'Perform various container actions';
 
   static override examples = [

@@ -1,4 +1,4 @@
-import { Flags } from '@oclif/core';
+import { Command, Flags } from '@oclif/core';
 import crypto from 'crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -8,9 +8,8 @@ import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
 import { createCompactPublicKey, stringToBytes32 } from '../../helpers/container.helper';
-import { BaseCommand } from '../../baseCommand';
 
-export default class ContainerCreate extends BaseCommand {
+export default class ContainerCreate extends Command {
   static override description = 'Create a new container with a given name and key pair';
 
   static override examples = [

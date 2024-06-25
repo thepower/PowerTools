@@ -1,4 +1,4 @@
-import { Flags } from '@oclif/core';
+import { Command, Flags } from '@oclif/core';
 import crypto from 'crypto';
 import { readFileSync } from 'node:fs';
 import { EvmContract, EvmCore } from '@thepowereco/tssdk';
@@ -6,9 +6,8 @@ import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
 import { createCompactPublicKey, stringToBytes32 } from '../../helpers/container.helper';
-import { BaseCommand } from '../../baseCommand';
 
-export default class ContainerUpdate extends BaseCommand {
+export default class ContainerUpdate extends Command {
   static override description = 'Update container details';
 
   static override examples = [

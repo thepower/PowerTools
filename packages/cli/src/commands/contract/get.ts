@@ -1,11 +1,10 @@
-import { Flags, ux } from '@oclif/core';
+import { Command, Flags, ux } from '@oclif/core';
 import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
 import { readFileSync } from 'node:fs';
 
 import { initializeNetworkApi } from '../../helpers/network-helper';
-import { BaseCommand } from '../../baseCommand';
 
-export default class ContractGet extends BaseCommand {
+export default class ContractGet extends Command {
   static override description = 'Call a method on a deployed smart contract';
 
   static override examples = [

@@ -1,4 +1,4 @@
-import { Flags, ux } from '@oclif/core';
+import { Command, Flags, ux } from '@oclif/core';
 import { AddressApi, EvmApi } from '@thepowereco/tssdk';
 import Table from 'cli-table3';
 
@@ -8,10 +8,9 @@ import cliConfig from '../../config/cli';
 import { DEFAULT_CONFIG_FILE_PATH, getConfig, setConfig } from '../../helpers/config.helper';
 import { Task } from '../../types/task.type';
 import abis from '../../abis';
-import { BaseCommand } from '../../baseCommand';
 import { initializeNetworkApi } from '../../helpers/network-helper';
 
-export default class StorageTasklist extends BaseCommand {
+export default class StorageTasklist extends Command {
   static override flags = {
     bootstrapChain: Flags.integer({ char: 'b', default: 1025, description: 'Default chain ID' }),
     configPath: Flags.file({ char: 'c', description: 'Config to read', default: DEFAULT_CONFIG_FILE_PATH }),
@@ -64,7 +63,7 @@ export default class StorageTasklist extends BaseCommand {
 
     // Fetch the list of tasks
     const list: Task[] = await Promise.all(
-      Array.from({ length: Number(tasksCount) }).map(async (_, index) => {
+      Array.from({ length: tasksCount }).map(async (_, index) => {
         const task = await storageSc.scGet('getTask', [index + 1]);
         return { ...task, id: index + 1 };
       }),
