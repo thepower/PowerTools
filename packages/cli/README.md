@@ -64,24 +64,23 @@ Get the balance of a wallet address
 
 ```
 USAGE
-  $ tpe acc get-balance [-a <value> | -k <value>] [-c <value>] [-d <value>] [-p <value>]
+  $ tpe acc get-balance [-a <value> | -k <value>] [-b <value>] [-p <value>]
 
 FLAGS
-  -a, --address=<value>       Wallet address
-  -c, --chain=<value>         Chain ID
-  -d, --defaultChain=<value>  [default: 1025] Default chain ID
-  -k, --keyFilePath=<value>   Path to the key file
-  -p, --password=<value>      Password for the key file
+  -a, --address=<value>         Wallet address
+  -b, --bootstrapChain=<value>  [default: 1025] Bootstrap chain ID
+  -k, --keyFilePath=<value>     Path to the key file
+  -p, --password=<value>        Password for the key file
 
 DESCRIPTION
   Get the balance of a wallet address
 
 EXAMPLES
-  $ tpe acc get-balance --address AA100000001677748249 --chain 1
+  $ tpe acc get-balance --address AA100000001677748249
 
-  $ tpe acc get-balance -a AA100000001677748249 -c 1
+  $ tpe acc get-balance -a AA100000001677748249
 
-  $ tpe acc get-balance --address AA100000001677748249 --defaultChain 1025
+  $ tpe acc get-balance --address AA100000001677748249 --bootstrapChain 1025
 
   $ tpe acc get-balance --keyFilePath ./path/to/keyfile.pem --password mypassword
 ```
@@ -133,16 +132,15 @@ Send SK tokens to a specified address
 
 ```
 USAGE
-  $ tpe acc send-sk -a <value> -k <value> -t <value> [-c <value>] [-d <value>] [-m <value>] [-p <value>]
+  $ tpe acc send-sk -a <value> -k <value> -t <value> [-b <value>] [-m <value>] [-p <value>]
 
 FLAGS
-  -a, --amount=<value>        (required) Amount to send
-  -c, --chain=<value>         Chain ID
-  -d, --defaultChain=<value>  [default: 1025] Default chain ID
-  -k, --keyFilePath=<value>   (required) Path to the key file
-  -m, --message=<value>       Message to include
-  -p, --password=<value>      Password for the key file
-  -t, --to=<value>            (required) Recipient address
+  -a, --amount=<value>          (required) Amount to send
+  -b, --bootstrapChain=<value>  [default: 1025] Default chain ID
+  -k, --keyFilePath=<value>     (required) Path to the key file
+  -m, --message=<value>         Message to include
+  -p, --password=<value>        Password for the key file
+  -t, --to=<value>              (required) Recipient address
 
 DESCRIPTION
   Send SK tokens to a specified address
@@ -152,7 +150,7 @@ EXAMPLES
 
   $ tpe acc send-sk -a 100 -t AA100000001677748249 -k ./path/to/keyfile.pem -p mypassword
 
-  $ tpe acc send-sk --amount 100 --to AA100000001677748249 --chain 1 --keyFilePath ./path/to/keyfile.pem
+  $ tpe acc send-sk --amount 100 --to AA100000001677748249 --keyFilePath ./path/to/keyfile.pem
 ```
 
 _See code: [dist/commands/acc/send-sk.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/acc/send-sk.js)_
@@ -190,7 +188,7 @@ _See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomp
 
 ## `tpe container actions`
 
-describe the command here
+Perform various container actions
 
 ```
 USAGE
@@ -198,28 +196,39 @@ USAGE
 
 FLAGS
   -f, --containerKeyFilePath=<value>  (required) Path to the container key file
-  -m, --method=<value>                (required) ???
-  -p, --params=<value>...             [default: ] ???
+  -m, --method=<value>                (required) Method to call on the container
+  -p, --params=<value>...             [default: ] Parameters for the method
   -s, --containerPassword=<value>     Password for the container key file
 
 DESCRIPTION
-  describe the command here
+  Perform various container actions
 
 EXAMPLES
-  $ tpe container actions
+  $ tpe container actions -m "container_start" -p 1234 -f ./path/to/keyfile.pem -s mypassword
+
+  $ tpe container actions -m "container_stop" -p 1234 -f ./path/to/keyfile.pem -s mypassword
+
+  $ tpe container actions -m "container_destroy" -p 1234 -f ./path/to/keyfile.pem -s mypassword
+
+  $ tpe container actions -m "container_handover" -p 1234 -f ./path/to/keyfile.pem -s mypassword
+
+  $ tpe container actions -m "container_getPort" -p 1 web 5000 -f ./path/to/keyfile.pem -s mypassword
+
+  $ tpe container actions -m "container_getLogs" -p 1 -f ./path/to/keyfile.pem -s mypassword
 ```
 
 _See code: [dist/commands/container/actions.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/container/actions.js)_
 
 ## `tpe container create`
 
-???
+Create a new container with a given name and key pair
 
 ```
 USAGE
-  $ tpe container create -k <value> -n <value> [-p <value>] [-f <value>] [-s <value>]
+  $ tpe container create -k <value> -n <value> [-p <value>] [-f <value>] [-s <value>] [-a <value>]
 
 FLAGS
+  -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
   -f, --containerKeyFilePath=<value>  Path to the container key file
   -k, --keyFilePath=<value>           (required) Path to the key file
   -n, --containerName=<value>         (required) Name of the container
@@ -227,44 +236,50 @@ FLAGS
   -s, --containerPassword=<value>     Password for the container key file
 
 DESCRIPTION
-  ???
+  Create a new container with a given name and key pair
 
 EXAMPLES
-  ???
+  $ tpe container create -k ./key.pem -p mypassword -n "NewContainer" -s containerpassword
+
+  $ tpe container create -k ./key.pem --password mypassword --containerName "NewContainer" --containerPassword containerpassword
 ```
 
 _See code: [dist/commands/container/create.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/container/create.js)_
 
 ## `tpe container list`
 
-???
+List containers owned by a user
 
 ```
 USAGE
-  $ tpe container list -k <value> [-p <value>]
+  $ tpe container list -k <value> [-p <value>] [-a <value>]
 
 FLAGS
-  -k, --keyFilePath=<value>  (required) Path to the key file
-  -p, --password=<value>     Password for the key file
+  -a, --ordersScAddress=<value>  [default: AA100000001677749450] Orders smart contract address
+  -k, --keyFilePath=<value>      (required) Path to the key file
+  -p, --password=<value>         Password for the key file
 
 DESCRIPTION
-  ???
+  List containers owned by a user
 
 EXAMPLES
-  ???
+  $ tpe container list -k ./key.pem -p mypassword
+
+  $ tpe container list -k ./key.pem --password mypassword
 ```
 
 _See code: [dist/commands/container/list.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/container/list.js)_
 
 ## `tpe container update`
 
-???
+Update container details
 
 ```
 USAGE
-  $ tpe container update -k <value> -i <value> -n <value> -f <value> [-p <value>] [-s <value>]
+  $ tpe container update -k <value> -i <value> -n <value> -f <value> [-p <value>] [-s <value>] [-a <value>]
 
 FLAGS
+  -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
   -f, --containerKeyFilePath=<value>  (required) Path to the container key file
   -i, --containerId=<value>           (required) Id of the container
   -k, --keyFilePath=<value>           (required) Path to the key file
@@ -273,33 +288,41 @@ FLAGS
   -s, --containerPassword=<value>     Password for the container key file
 
 DESCRIPTION
-  ???
+  Update container details
 
 EXAMPLES
-  ???
+  $ tpe container update -k ./key.pem -p mypassword -i 123 -n "New Container Name" -f ./containerKey.pem -s containerpassword
+
+  $ tpe container update -k ./key.pem --password mypassword --containerId 123 
+      --containerName "New Container Name" --containerKeyFilePath ./containerKey.pem --containerPassword containerpassword
 ```
 
 _See code: [dist/commands/container/update.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/container/update.js)_
 
 ## `tpe container upload`
 
-???
+Upload files to a container
 
 ```
 USAGE
-  $ tpe container upload -i <value> -f <value> -p <value> [-s <value>]
+  $ tpe container upload -k <value> -i <value> -f <value> -t <value> [-p <value>] [-s <value>] [-a <value>]
 
 FLAGS
+  -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
   -f, --containerKeyFilePath=<value>  (required) Path to the container key file
   -i, --containerId=<value>           (required) Container ID
-  -p, --filesPath=<value>             (required) Path to the files
+  -k, --keyFilePath=<value>           (required) Path to the key file
+  -p, --password=<value>              Password for the key file
   -s, --containerPassword=<value>     Password for the container key file
+  -t, --filesPath=<value>             (required) Path to the files
 
 DESCRIPTION
-  ???
+  Upload files to a container
 
 EXAMPLES
-  ???
+  $ tpe container upload --containerId 123 --containerKeyFilePath ./key.pem --containerPassword mypassword --filesPath ./files
+
+  $ tpe container upload -i 123 -f ./key.pem -s mypassword -p ./files
 ```
 
 _See code: [dist/commands/container/upload.js](https://github.com/thepower/PowerTools/blob/v1.11.129/dist/commands/container/upload.js)_
@@ -310,13 +333,11 @@ Deploy a smart contract to the blockchain
 
 ```
 USAGE
-  $ tpe contract deploy -a <value> -b <value> -k <value> [-c <value>] [-t <value>] [-v <value>] [-i <value>...] [-p
-    <value>]
+  $ tpe contract deploy -a <value> -b <value> -k <value> [-t <value>] [-v <value>] [-i <value>...] [-p <value>]
 
 FLAGS
   -a, --abiPath=<value>        (required) Path to the ABI file
   -b, --binPath=<value>        (required) Path to the binary file
-  -c, --chain=<value>          Chain ID to deploy on
   -i, --initParams=<value>...  [default: ] Initialization parameters
   -k, --keyFilePath=<value>    (required) Path to the key file
   -p, --password=<value>       Password for the key file
@@ -342,11 +363,10 @@ Call a method on a deployed smart contract
 
 ```
 USAGE
-  $ tpe contract get -a <value> -d <value> -m <value> [-c <value>] [-p <value>...]
+  $ tpe contract get -a <value> -d <value> -m <value> [-p <value>...]
 
 FLAGS
   -a, --abiPath=<value>    (required) Path to the ABI file
-  -c, --chain=<value>      Chain ID
   -d, --address=<value>    (required) Smart contract address
   -m, --method=<value>     (required) Method name to call
   -p, --params=<value>...  [default: ] Parameters for the method
@@ -370,11 +390,10 @@ Execute a method on a specified smart contract
 
 ```
 USAGE
-  $ tpe contract set -a <value> -d <value> -k <value> -m <value> [-c <value>] [-r <value>...] [-p <value>]
+  $ tpe contract set -a <value> -d <value> -k <value> -m <value> [-r <value>...] [-p <value>]
 
 FLAGS
   -a, --abiPath=<value>      (required) Path to the ABI file
-  -c, --chain=<value>        Chain ID
   -d, --address=<value>      (required) Smart contract address
   -k, --keyFilePath=<value>  (required) Path to the key file
   -m, --method=<value>       (required) Method name to call
@@ -711,10 +730,12 @@ Shows the list of all tasks for the current account
 
 ```
 USAGE
-  $ tpe storage tasklist [-c <value>]
+  $ tpe storage tasklist [-b <value>] [-c <value>] [-a <value>]
 
 FLAGS
-  -c, --configPath=<value>  [default: ./tp-cli.json] Config to read
+  -a, --storageScAddress=<value>  [default: AA100000001677723663] Storage smart contract address
+  -b, --bootstrapChain=<value>    [default: 1025] Default chain ID
+  -c, --configPath=<value>        [default: ./tp-cli.json] Config to read
 
 DESCRIPTION
   Shows the list of all tasks for the current account
@@ -733,10 +754,12 @@ Upload application files to the storage
 
 ```
 USAGE
-  $ tpe storage upload [-c <value>]
+  $ tpe storage upload [-b <value>] [-c <value>] [-a <value>]
 
 FLAGS
-  -c, --configPath=<value>  [default: ./tp-cli.json] Config to read
+  -a, --storageScAddress=<value>  [default: AA100000001677723663] Storage smart contract address
+  -b, --bootstrapChain=<value>    [default: 1025] Default chain ID for bootstrap
+  -c, --configPath=<value>        [default: ./tp-cli.json] Config to read
 
 DESCRIPTION
   Upload application files to the storage

@@ -1,7 +1,8 @@
 import { Flags, Command } from '@oclif/core';
 import { AddressApi, EvmApi } from '@thepowereco/tssdk';
-import { Listr, color } from 'listr2';
+import { Listr } from 'listr2';
 import { resolve } from 'node:path';
+import color from '@oclif/color';
 
 import cliConfig from '../../config/cli';
 
@@ -9,10 +10,15 @@ import { getHash } from '../../helpers/calc-hash.helper';
 import { DEFAULT_CONFIG_FILE_PATH, getConfig, setConfig } from '../../helpers/config.helper';
 import { scanDir, uploadTaskFile, uploadTaskManifest } from '../../helpers/upload.helper';
 import abis from '../../abis';
+import { initializeNetworkApi } from '../../helpers/network-helper';
 
 export default class StorageUpload extends Command {
   static override flags = {
+    bootstrapChain: Flags.integer({ char: 'b', default: 1025, description: 'Default chain ID for bootstrap' }),
     configPath: Flags.file({ char: 'c', description: 'Config to read', default: DEFAULT_CONFIG_FILE_PATH }),
+    storageScAddress: Flags.string({
+      char: 'a', default: cliConfig.storageScAddress, description: 'Storage smart contract address',
+    }),
   };
 
   static override description = 'Upload application files to the storage';
@@ -23,10 +29,7 @@ export default class StorageUpload extends Command {
 
   async run(): Promise<void> {
     const { flags } = await this.parse(StorageUpload);
-    const { configPath } = flags;
-
-    // Welcome message
-    this.log(color.whiteBright('✋️WELCOME TO THE POWER ECOSYSTEM! 💪 🌍'));
+    const { bootstrapChain, configPath, storageScAddress } = flags;
 
     // Get the current configuration
     let config = await getConfig(configPath);
@@ -43,11 +46,16 @@ export default class StorageUpload extends Command {
     } = config;
     const dir = resolve(source);
 
+    // Initialize network API
+    const networkApi = await initializeNetworkApi({ address, defaultChain: bootstrapChain });
+
+    const addressChain = await networkApi.getAddressChain(address);
+
     // Initialize the smart contract
     const storageSc = await EvmApi.build({
       abiJSON: abis.storage,
-      chain: 1,
-      scAddress: cliConfig.storageScAddress,
+      chain: addressChain?.chain,
+      scAddress: storageScAddress,
     });
 
     // Get the task ID by name
