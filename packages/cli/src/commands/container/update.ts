@@ -1,4 +1,4 @@
-import { Flags } from '@oclif/core';
+import { Flags, ux } from '@oclif/core';
 import crypto from 'crypto';
 import { readFileSync } from 'node:fs';
 import { EvmContract, EvmCore } from '@thepowereco/tssdk';
@@ -44,6 +44,8 @@ export default class ContainerUpdate extends BaseCommand {
     // Load wallet
     const importedWallet = loadWallet(keyFilePath, password);
 
+    ux.action.start('Loading');
+
     // Initialize network API
     const networkApi = await initializeNetworkApi({ address: importedWallet.address });
 
@@ -64,6 +66,7 @@ export default class ContainerUpdate extends BaseCommand {
       'task_update',
       [containerId, compactPublicKey?.buffer, stringToBytes32(containerName)],
     );
+    ux.action.stop();
 
     this.log(color.green(`Container ${containerName} updated with ID: ${containerId}`));
   }

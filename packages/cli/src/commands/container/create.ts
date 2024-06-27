@@ -1,4 +1,4 @@
-import { Flags } from '@oclif/core';
+import { Flags, ux } from '@oclif/core';
 import crypto from 'crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -37,6 +37,8 @@ export default class ContainerCreate extends BaseCommand {
       keyFilePath, password, containerKeyFilePath, containerName, containerPassword, ordersScAddress,
     } = flags;
 
+    ux.action.start('Loading');
+
     const importedWallet = loadWallet(keyFilePath, password);
     const networkApi = await this.initializeNetwork(importedWallet.address);
     const evmCore = await EvmCore.build(networkApi);
@@ -58,6 +60,8 @@ export default class ContainerCreate extends BaseCommand {
       'mint',
       [AddressApi.textAddressToEvmAddress(importedWallet.address), Buffer.from(compactPublicKey?.buffer!), stringToBytes32(containerName)],
     );
+
+    ux.action.stop();
 
     if (orderId) {
       this.log(color.green(`Container ${containerName} created with order ID: ${orderId}`));
