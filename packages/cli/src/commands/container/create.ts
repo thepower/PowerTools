@@ -1,15 +1,16 @@
-import { Command, Flags } from '@oclif/core';
+import { Flags } from '@oclif/core';
 import crypto from 'crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
 import color from '@oclif/color';
-import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
+import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
 import { createCompactPublicKey, stringToBytes32 } from '../../helpers/container.helper';
+import { BaseCommand } from '../../baseCommand';
 
-export default class ContainerCreate extends Command {
+export default class ContainerCreate extends BaseCommand {
   static override description = 'Create a new container with a given name and key pair';
 
   static override examples = [

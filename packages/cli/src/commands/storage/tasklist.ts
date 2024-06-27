@@ -8,7 +8,7 @@ import cliConfig from '../../config/cli';
 import { DEFAULT_CONFIG_FILE_PATH, getConfig, setConfig } from '../../helpers/config.helper';
 import { Task } from '../../types/task.type';
 import abis from '../../abis';
-import { initializeNetworkApi } from '../../helpers/network-helper';
+import { initializeNetworkApi } from '../../helpers/network.helper';
 
 export default class StorageTasklist extends Command {
   static override flags = {

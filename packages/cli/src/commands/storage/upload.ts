@@ -10,7 +10,7 @@ import { getHash } from '../../helpers/calc-hash.helper';
 import { DEFAULT_CONFIG_FILE_PATH, getConfig, setConfig } from '../../helpers/config.helper';
 import { scanDir, uploadTaskFile, uploadTaskManifest } from '../../helpers/upload.helper';
 import abis from '../../abis';
-import { initializeNetworkApi } from '../../helpers/network-helper';
+import { initializeNetworkApi } from '../../helpers/network.helper';
 
 export default class StorageUpload extends Command {
   static override flags = {

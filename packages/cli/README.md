@@ -192,12 +192,12 @@ Perform various container actions
 
 ```
 USAGE
-  $ tpe container actions -m <value> -f <value> [-p <value>...] [-s <value>]
+  $ tpe container actions -m <value> -f <value> [-p <value>] [-s <value>]
 
 FLAGS
   -f, --containerKeyFilePath=<value>  (required) Path to the container key file
   -m, --method=<value>                (required) Method to call on the container
-  -p, --params=<value>...             [default: ] Parameters for the method
+  -p, --params=<value>                Parameters for the method
   -s, --containerPassword=<value>     Password for the container key file
 
 DESCRIPTION
@@ -305,10 +305,13 @@ Upload files to a container
 
 ```
 USAGE
-  $ tpe container upload -k <value> -i <value> -f <value> -t <value> [-p <value>] [-s <value>] [-a <value>]
+  $ tpe container upload -k <value> -i <value> -f <value> -t <value> [-p <value>] [-s <value>] [-c] [-a <value>] [-b
+    <value>]
 
 FLAGS
   -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
+  -b, --providerScAddress=<value>     [default: AA100000001677749552] Provider smart contract address
+  -c, --chooseProvider                Choose provider
   -f, --containerKeyFilePath=<value>  (required) Path to the container key file
   -i, --containerId=<value>           (required) Container ID
   -k, --keyFilePath=<value>           (required) Path to the key file
@@ -333,16 +336,16 @@ Deploy a smart contract to the blockchain
 
 ```
 USAGE
-  $ tpe contract deploy -a <value> -b <value> -k <value> [-t <value>] [-v <value>] [-i <value>...] [-p <value>]
+  $ tpe contract deploy -a <value> -b <value> -k <value> [-t <value>] [-v <value>] [-i <value>] [-p <value>]
 
 FLAGS
-  -a, --abiPath=<value>        (required) Path to the ABI file
-  -b, --binPath=<value>        (required) Path to the binary file
-  -i, --initParams=<value>...  [default: ] Initialization parameters
-  -k, --keyFilePath=<value>    (required) Path to the key file
-  -p, --password=<value>       Password for the key file
-  -t, --gasToken=<value>       [default: SK] Token used to pay for gas
-  -v, --gasValue=<value>       [default: 2000000000] Gas value for deployment
+  -a, --abiPath=<value>      (required) Path to the ABI file
+  -b, --binPath=<value>      (required) Path to the binary file
+  -i, --initParams=<value>   Initialization parameters
+  -k, --keyFilePath=<value>  (required) Path to the key file
+  -p, --password=<value>     Password for the key file
+  -t, --gasToken=<value>     [default: SK] Token used to pay for gas
+  -v, --gasValue=<value>     [default: 2000000000] Gas value for deployment
 
 DESCRIPTION
   Deploy a smart contract to the blockchain
@@ -363,13 +366,13 @@ Call a method on a deployed smart contract
 
 ```
 USAGE
-  $ tpe contract get -a <value> -d <value> -m <value> [-p <value>...]
+  $ tpe contract get -a <value> -d <value> -m <value> [-p <value>]
 
 FLAGS
-  -a, --abiPath=<value>    (required) Path to the ABI file
-  -d, --address=<value>    (required) Smart contract address
-  -m, --method=<value>     (required) Method name to call
-  -p, --params=<value>...  [default: ] Parameters for the method
+  -a, --abiPath=<value>  (required) Path to the ABI file
+  -d, --address=<value>  (required) Smart contract address
+  -m, --method=<value>   (required) Method name to call
+  -p, --params=<value>   Parameters for the method
 
 DESCRIPTION
   Call a method on a deployed smart contract
@@ -390,7 +393,7 @@ Execute a method on a specified smart contract
 
 ```
 USAGE
-  $ tpe contract set -a <value> -d <value> -k <value> -m <value> [-r <value>...] [-p <value>]
+  $ tpe contract set -a <value> -d <value> -k <value> -m <value> [-r <value>] [-p <value>]
 
 FLAGS
   -a, --abiPath=<value>      (required) Path to the ABI file
@@ -398,7 +401,7 @@ FLAGS
   -k, --keyFilePath=<value>  (required) Path to the key file
   -m, --method=<value>       (required) Method name to call
   -p, --password=<value>     Password for the key file
-  -r, --params=<value>...    [default: ] Parameters for the method
+  -r, --params=<value>       Parameters for the method
 
 DESCRIPTION
   Execute a method on a specified smart contract

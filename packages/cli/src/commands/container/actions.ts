@@ -1,10 +1,12 @@
-import { Command, Flags, ux } from '@oclif/core';
+import { Flags, ux } from '@oclif/core';
 import crypto from 'crypto';
 import { readFileSync } from 'node:fs';
 import axios from 'axios';
 import jsonwebtoken from 'jsonwebtoken';
 import { colorize } from 'json-colorizer';
 import cliConfig from '../../config/cli';
+import { BaseCommand } from '../../baseCommand';
+import { ParamsParser } from '../../helpers/params-parser.helper';
 
 async function jsonRpcRequest({
   url, method, params = [], jwt,
@@ -27,36 +29,15 @@ async function jsonRpcRequest({
   return response.data;
 }
 
-function parseValue(input: any) {
-  const numberValue = Number(input);
-  if (!Number.isNaN(numberValue)) {
-    return numberValue;
-  }
-
-  const lowerInput = input.toLowerCase();
-  if (lowerInput === 'true') {
-    return true;
-  }
-  if (lowerInput === 'false') {
-    return false;
-  }
-
-  if (lowerInput === 'null') {
-    return null;
-  }
-
-  return input;
-}
-
-export default class ContainerActions extends Command {
+export default class ContainerActions extends BaseCommand {
   static override description = 'Perform various container actions';
 
   static override examples = [
-    '<%= config.bin %> <%= command.id %> -m "container_start" -p 1234 -f ./path/to/keyfile.pem -s mypassword',
-    '<%= config.bin %> <%= command.id %> -m "container_stop" -p 1234 -f ./path/to/keyfile.pem -s mypassword',
-    '<%= config.bin %> <%= command.id %> -m "container_destroy" -p 1234 -f ./path/to/keyfile.pem -s mypassword',
-    '<%= config.bin %> <%= command.id %> -m "container_handover" -p 1234 -f ./path/to/keyfile.pem -s mypassword',
-    '<%= config.bin %> <%= command.id %> -m "container_getPort" -p 1 web 5000 -f ./path/to/keyfile.pem -s mypassword',
+    '<%= config.bin %> <%= command.id %> -m "container_start" -p 1 -f ./path/to/keyfile.pem -s mypassword',
+    '<%= config.bin %> <%= command.id %> -m "container_stop" -p 1 -f ./path/to/keyfile.pem -s mypassword',
+    '<%= config.bin %> <%= command.id %> -m "container_destroy" -p 1 -f ./path/to/keyfile.pem -s mypassword',
+    '<%= config.bin %> <%= command.id %> -m "container_handover" -p 1 -f ./path/to/keyfile.pem -s mypassword',
+    '<%= config.bin %> <%= command.id %> -m "container_getPort" -p "1 web 5000" -f ./path/to/keyfile.pem -s mypassword',
     '<%= config.bin %> <%= command.id %> -m "container_getLogs" -p 1 -f ./path/to/keyfile.pem -s mypassword',
   ];
 
@@ -65,8 +46,6 @@ export default class ContainerActions extends Command {
     params: Flags.string({
       char: 'p',
       description: 'Parameters for the method',
-      multiple: true,
-      default: [],
     }),
     containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file', required: true }),
     containerPassword: Flags.string({ char: 's', default: '', description: 'Password for the container key file' }),
@@ -80,6 +59,11 @@ export default class ContainerActions extends Command {
       containerKeyFilePath,
       containerPassword,
     } = flags;
+
+    const paramsParser = new ParamsParser();
+
+    const parsedParams = params && paramsParser.parse(params);
+
     const containerKeyFile = readFileSync(containerKeyFilePath, 'utf8');
 
     const privateKeyPem = crypto.createPrivateKey({
@@ -90,14 +74,12 @@ export default class ContainerActions extends Command {
 
     const jwt = jsonwebtoken.sign(payload, privateKeyPem, { algorithm: 'ES256' });
 
-    const parsedParams = params.map((input) => parseValue(input));
-
     ux.action.start('Requesting');
 
     const response = await jsonRpcRequest({
       url: `${cliConfig.containersUploadBaseUrl}/jsonrpc`,
       method,
-      params: parsedParams,
+      params: parsedParams || [],
       jwt,
     });
 

@@ -1,10 +1,11 @@
-import { Command, Flags, ux } from '@oclif/core';
+import { Flags, ux } from '@oclif/core';
 import { WalletApi } from '@thepowereco/tssdk';
 import { colorize } from 'json-colorizer';
 
-import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
+import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
+import { BaseCommand } from '../../baseCommand';
 
-export default class AccSendSk extends Command {
+export default class AccSendSk extends BaseCommand {
   static override description = 'Send SK tokens to a specified address';
 
   static override examples = [
