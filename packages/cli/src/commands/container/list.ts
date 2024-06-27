@@ -53,7 +53,6 @@ export default class ContainerList extends BaseCommand {
           AddressApi.textAddressToEvmAddress(importedWallet.address),
           index,
         ]);
-        console.log({ tokenId });
         return ordersContract.scGet('tasks', [tokenId]);
       }),
     );
@@ -106,9 +105,5 @@ export default class ContainerList extends BaseCommand {
     } else {
       this.log(color.red('No containers found'));
     }
-  }
-
-  async catch(err: Error & { exitCode?: number }): Promise<any> {
-    console.log({ err });
   }
 }
