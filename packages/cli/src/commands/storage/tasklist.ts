@@ -92,7 +92,10 @@ export default class StorageTasklist extends Command {
 
     ux.action.stop();
 
-    // Display the table
-    this.log(table.toString());
+    if (rows.length) {
+      this.log(table.toString());
+    } else {
+      this.log(color.red('No tasks found'));
+    }
   }
 }

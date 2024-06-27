@@ -2,6 +2,7 @@ import { Flags, ux } from '@oclif/core';
 import { WalletApi } from '@thepowereco/tssdk';
 import { colorize } from 'json-colorizer';
 
+import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import { BaseCommand } from '../../baseCommand';
 
@@ -48,6 +49,11 @@ export default class AccGetBalance extends BaseCommand {
     const result = await wallet.loadBalance(walletAddress);
 
     ux.action.stop();
-    this.log(colorize(result));
+
+    if (result) {
+      this.log(colorize(result));
+    } else {
+      this.log(color.red('No result.'));
+    }
   }
 }

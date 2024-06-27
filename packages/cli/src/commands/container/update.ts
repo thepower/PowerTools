@@ -2,6 +2,7 @@ import { Flags } from '@oclif/core';
 import crypto from 'crypto';
 import { readFileSync } from 'node:fs';
 import { EvmContract, EvmCore } from '@thepowereco/tssdk';
+import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
@@ -63,5 +64,7 @@ export default class ContainerUpdate extends BaseCommand {
       'task_update',
       [containerId, compactPublicKey?.buffer, stringToBytes32(containerName)],
     );
+
+    this.log(color.green(`Container ${containerName} updated with ID: ${containerId}`));
   }
 }

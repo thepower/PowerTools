@@ -1,6 +1,7 @@
 import { Flags, ux } from '@oclif/core';
 import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
 import Table from 'cli-table3';
+import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
@@ -100,7 +101,11 @@ export default class ContainerList extends BaseCommand {
 
     ux.action.stop();
 
-    this.log(table.toString());
+    if (table.length) {
+      this.log(table.toString());
+    } else {
+      this.log(color.red('No containers found'));
+    }
   }
 
   async catch(err: Error & { exitCode?: number }): Promise<any> {

@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import axios from 'axios';
 import jsonwebtoken from 'jsonwebtoken';
 import { colorize } from 'json-colorizer';
+import color from '@oclif/color';
 import cliConfig from '../../config/cli';
 import { BaseCommand } from '../../baseCommand';
 import { ParamsParser } from '../../helpers/params-parser.helper';
@@ -85,6 +86,10 @@ export default class ContainerActions extends BaseCommand {
 
     ux.action.stop();
 
-    this.log(colorize(response.result));
+    if (response.result) {
+      this.log(colorize(response.result));
+    } else {
+      this.log(color.red('No result.'));
+    }
   }
 }

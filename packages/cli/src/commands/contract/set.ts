@@ -2,6 +2,7 @@ import { Flags, ux } from '@oclif/core';
 import { EvmContract, EvmCore } from '@thepowereco/tssdk';
 import { readFileSync } from 'node:fs';
 
+import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import { BaseCommand } from '../../baseCommand';
 import { ParamsParser } from '../../helpers/params-parser.helper';
@@ -59,6 +60,10 @@ export default class ContractSet extends BaseCommand {
 
     ux.action.stop();
 
-    this.log(result);
+    if (result) {
+      this.log(result);
+    } else {
+      this.log(color.red('No result'));
+    }
   }
 }

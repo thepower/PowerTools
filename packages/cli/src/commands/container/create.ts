@@ -59,7 +59,11 @@ export default class ContainerCreate extends BaseCommand {
       [AddressApi.textAddressToEvmAddress(importedWallet.address), Buffer.from(compactPublicKey?.buffer!), stringToBytes32(containerName)],
     );
 
-    this.log(color.green(`Container ${containerName} created with order ID: ${orderId}`));
+    if (orderId) {
+      this.log(color.green(`Container ${containerName} created with order ID: ${orderId}`));
+    } else {
+      this.log(color.red(`Container ${containerName} creation failed`));
+    }
   }
 
   private async initializeNetwork(address: string) {
