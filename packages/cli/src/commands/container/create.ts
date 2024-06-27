@@ -1,15 +1,16 @@
-import { Command, Flags } from '@oclif/core';
+import { Flags, ux } from '@oclif/core';
 import crypto from 'crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
 import color from '@oclif/color';
-import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
+import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
 import { createCompactPublicKey, stringToBytes32 } from '../../helpers/container.helper';
+import { BaseCommand } from '../../baseCommand';
 
-export default class ContainerCreate extends Command {
+export default class ContainerCreate extends BaseCommand {
   static override description = 'Create a new container with a given name and key pair';
 
   static override examples = [
@@ -36,6 +37,8 @@ export default class ContainerCreate extends Command {
       keyFilePath, password, containerKeyFilePath, containerName, containerPassword, ordersScAddress,
     } = flags;
 
+    ux.action.start('Loading');
+
     const importedWallet = loadWallet(keyFilePath, password);
     const networkApi = await this.initializeNetwork(importedWallet.address);
     const evmCore = await EvmCore.build(networkApi);
@@ -58,7 +61,13 @@ export default class ContainerCreate extends Command {
       [AddressApi.textAddressToEvmAddress(importedWallet.address), Buffer.from(compactPublicKey?.buffer!), stringToBytes32(containerName)],
     );
 
-    this.log(color.green(`Container ${containerName} created with order ID: ${orderId}`));
+    ux.action.stop();
+
+    if (orderId) {
+      this.log(color.green(`Container ${containerName} created with order ID: ${orderId}`));
+    } else {
+      this.log(color.red(`Container ${containerName} creation failed`));
+    }
   }
 
   private async initializeNetwork(address: string) {

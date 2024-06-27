@@ -1,14 +1,16 @@
-import { Command, Flags, ux } from '@oclif/core';
+import { Flags, ux } from '@oclif/core';
 import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
 import Table from 'cli-table3';
-import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
+import color from '@oclif/color';
+import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
 import {
   TaskState, TaskStateMap, bytesToString, formatDate,
 } from '../../helpers/container.helper';
+import { BaseCommand } from '../../baseCommand';
 
-export default class ContainerList extends Command {
+export default class ContainerList extends BaseCommand {
   static override description = 'List containers owned by a user';
 
   static override examples = [
@@ -46,11 +48,12 @@ export default class ContainerList extends Command {
 
     // Fetch all containers owned by the user
     const containers = await Promise.all(
-      Array.from({ length: containersCount }, async (_, index) => {
+      Array.from({ length: Number(containersCount) }, async (_, index) => {
         const tokenId = await ordersContract.scGet('tokenOfOwnerByIndex', [
           AddressApi.textAddressToEvmAddress(importedWallet.address),
           index,
         ]);
+        console.log({ tokenId });
         return ordersContract.scGet('tasks', [tokenId]);
       }),
     );
@@ -98,7 +101,11 @@ export default class ContainerList extends Command {
 
     ux.action.stop();
 
-    this.log(table.toString());
+    if (table.length) {
+      this.log(table.toString());
+    } else {
+      this.log(color.red('No containers found'));
+    }
   }
 
   async catch(err: Error & { exitCode?: number }): Promise<any> {

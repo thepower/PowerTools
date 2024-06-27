@@ -1,16 +1,19 @@
-import { Command, Flags, ux } from '@oclif/core';
-import { AddressApi, TransactionsApi } from '@thepowereco/tssdk';
+import { Flags, ux } from '@oclif/core';
+import { TransactionsApi } from '@thepowereco/tssdk';
 import { readFileSync } from 'node:fs';
 
-import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
+import color from '@oclif/color';
+import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
+import { BaseCommand } from '../../baseCommand';
+import { ParamsParser } from '../../helpers/params-parser.helper';
 
-export default class ContractDeploy extends Command {
+export default class ContractDeploy extends BaseCommand {
   static override description = 'Deploy a smart contract to the blockchain';
 
   static override examples = [
     '<%= config.bin %> <%= command.id %> --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --password mypassword',
     '<%= config.bin %> <%= command.id %> -a ./path/to/abi.json -b ./path/to/bin -k ./path/to/keyfile.pem -p mypassword --gasToken SK --gasValue 2000000000',
-    '<%= config.bin %> <%= command.id %> --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --initParams param1 param2',
+    '<%= config.bin %> <%= command.id %> --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --initParams "param1 param2"',
   ];
 
   static override flags = {
@@ -19,7 +22,7 @@ export default class ContractDeploy extends Command {
     gasToken: Flags.string({ char: 't', default: 'SK', description: 'Token used to pay for gas' }),
     gasValue: Flags.integer({ char: 'v', default: 2_000_000_000, description: 'Gas value for deployment' }),
     initParams: Flags.string({
-      char: 'i', default: [], description: 'Initialization parameters', multiple: true,
+      char: 'i', description: 'Initialization parameters',
     }),
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
     password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
@@ -30,7 +33,9 @@ export default class ContractDeploy extends Command {
     const {
       abiPath, binPath, gasToken, gasValue, initParams, keyFilePath, password,
     } = flags;
+    const paramsParser = new ParamsParser();
 
+    const parsedParams = initParams && paramsParser.parse(initParams);
     // Read and parse the ABI and binary files
     const abi = JSON.parse(readFileSync(abiPath, 'utf8'));
     const code = readFileSync(binPath, 'utf8');
@@ -42,9 +47,6 @@ export default class ContractDeploy extends Command {
 
     // Initialize network API
     const networkApi = await initializeNetworkApi({ address: importedWallet.address });
-
-    // Format initialization parameters
-    const formattedInitParams = initParams.map((param) => (AddressApi.isTextAddressValid(param) ? AddressApi.textAddressToEvmAddress(param) : param));
 
     const sequence = await networkApi.getWalletSequence(importedWallet.address);
     const newSequence = sequence + 1;
@@ -59,7 +61,7 @@ export default class ContractDeploy extends Command {
       gasSettings: networkApi.gasSettings,
       gasToken,
       gasValue,
-      initParams: formattedInitParams,
+      initParams: parsedParams || [],
       wif: importedWallet.wif,
     });
 
@@ -69,6 +71,10 @@ export default class ContractDeploy extends Command {
 
     ux.action.stop();
 
-    this.log(result);
+    if (result) {
+      this.log(result);
+    } else {
+      this.log(color.red('No result'));
+    }
   }
 }

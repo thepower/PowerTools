@@ -1,13 +1,15 @@
-import { Command, Flags } from '@oclif/core';
+import { Flags, ux } from '@oclif/core';
 import crypto from 'crypto';
 import { readFileSync } from 'node:fs';
 import { EvmContract, EvmCore } from '@thepowereco/tssdk';
-import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
+import color from '@oclif/color';
+import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
 import { createCompactPublicKey, stringToBytes32 } from '../../helpers/container.helper';
+import { BaseCommand } from '../../baseCommand';
 
-export default class ContainerUpdate extends Command {
+export default class ContainerUpdate extends BaseCommand {
   static override description = 'Update container details';
 
   static override examples = [
@@ -42,6 +44,8 @@ export default class ContainerUpdate extends Command {
     // Load wallet
     const importedWallet = loadWallet(keyFilePath, password);
 
+    ux.action.start('Loading');
+
     // Initialize network API
     const networkApi = await initializeNetworkApi({ address: importedWallet.address });
 
@@ -62,5 +66,8 @@ export default class ContainerUpdate extends Command {
       'task_update',
       [containerId, compactPublicKey?.buffer, stringToBytes32(containerName)],
     );
+    ux.action.stop();
+
+    this.log(color.green(`Container ${containerName} updated with ID: ${containerId}`));
   }
 }

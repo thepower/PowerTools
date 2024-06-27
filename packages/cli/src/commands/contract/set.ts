@@ -1,18 +1,21 @@
-import { Command, Flags, ux } from '@oclif/core';
-import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
+import { Flags, ux } from '@oclif/core';
+import { EvmContract, EvmCore } from '@thepowereco/tssdk';
 import { readFileSync } from 'node:fs';
 
-import { initializeNetworkApi, loadWallet } from '../../helpers/network-helper';
+import color from '@oclif/color';
+import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
+import { BaseCommand } from '../../baseCommand';
+import { ParamsParser } from '../../helpers/params-parser.helper';
 
-export default class ContractSet extends Command {
+export default class ContractSet extends BaseCommand {
   static override description = 'Execute a method on a specified smart contract';
 
   static override examples = [
     `<%= config.bin %> <%= command.id %> --abiPath ./path/to/abi.json 
-    --address AA100000001677748249 --keyFilePath ./path/to/keyfile.pem --method set --params value1 value2 --password mypassword`,
-    '<%= config.bin %> <%= command.id %> -a ./path/to/abi.json -d AA100000001677748249 -k ./path/to/keyfile.pem -m set -r value1 value2 -p mypassword',
+    --address AA100000001677748249 --keyFilePath ./path/to/keyfile.pem --method set --params value1 --password mypassword`,
+    '<%= config.bin %> <%= command.id %> -a ./path/to/abi.json -d AA100000001677748249 -k ./path/to/keyfile.pem -m set -r "value1 value2" -p mypassword',
     `<%= config.bin %> <%= command.id %> --abiPath ./path/to/abi.json 
-    --address AA100000001677748249 --keyFilePath ./path/to/keyfile.pem --method setData --params param1 param2`,
+    --address AA100000001677748249 --keyFilePath ./path/to/keyfile.pem --method setData --params "0x456 1 2 [1,2] {a: 1, b: 2} 1n"`,
   ];
 
   static override flags = {
@@ -21,7 +24,7 @@ export default class ContractSet extends Command {
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
     method: Flags.string({ char: 'm', description: 'Method name to call', required: true }),
     params: Flags.string({
-      char: 'r', default: [], description: 'Parameters for the method', multiple: true,
+      char: 'r', description: 'Parameters for the method',
     }),
     password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
   };
@@ -31,7 +34,9 @@ export default class ContractSet extends Command {
     const {
       abiPath, address, keyFilePath, method, params, password,
     } = flags;
+    const paramsParser = new ParamsParser();
 
+    const parsedParams = params && paramsParser.parse(params);
     // Load ABI from file
     const abi = JSON.parse(readFileSync(abiPath, 'utf8'));
 
@@ -48,14 +53,17 @@ export default class ContractSet extends Command {
     const smartContract = await EvmContract.build(evmCore, address, abi);
 
     // Format parameters
-    const formattedParams = params.map((param) => (AddressApi.isTextAddressValid(param) ? AddressApi.textAddressToEvmAddress(param) : param));
 
     // Execute the smart contract method
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result: any = await smartContract.scSet(importedWallet, method, formattedParams);
+    const result: any = await smartContract.scSet(importedWallet, method, parsedParams || []);
 
     ux.action.stop();
 
-    this.log(result);
+    if (result) {
+      this.log(result);
+    } else {
+      this.log(color.red('No result'));
+    }
   }
 }
