@@ -1,4 +1,7 @@
+import { ux } from '@oclif/core';
 import crypto from 'crypto';
+import { readFileSync } from 'node:fs';
+import { prompt } from 'enquirer';
 
 export enum TaskState { Cancelled, Pending, Deploy, Running, Rejected, HandOver }
 
@@ -88,4 +91,28 @@ export function formatDate(timestamp: number) {
 
   const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
   return formattedDate;
+}
+
+export async function importContainerKey(containerKeyFilePath: string, containerPassword: string) {
+  const containerKeyFile = readFileSync(containerKeyFilePath, 'utf8');
+
+  try {
+    const privateKeyPem = crypto.createPrivateKey({
+      key: containerKeyFile, type: 'pkcs8', format: 'pem', passphrase: containerPassword,
+    });
+
+    return privateKeyPem;
+  } catch (error) {
+    ux.action.stop();
+    const { password }: { password: string } = await prompt({
+      message: 'Please, enter your account keyFile password',
+      name: 'password',
+      type: 'password',
+    });
+    const privateKeyPem = crypto.createPrivateKey({
+      key: containerKeyFile, type: 'pkcs8', format: 'pem', passphrase: password,
+    });
+    ux.action.start('Loading');
+    return privateKeyPem;
+  }
 }

@@ -1,6 +1,7 @@
 import { NetworkApi, WalletApi } from '@thepowereco/tssdk';
 import { readFileSync } from 'node:fs';
 import { prompt } from 'enquirer';
+import { ux } from '@oclif/core';
 
 export async function initializeNetworkApi({
   address,
@@ -38,11 +39,13 @@ export async function loadWallet(keyFilePath: string, password: string) {
   try {
     return WalletApi.parseExportData(importedData, password);
   } catch (error) {
+    ux.action.stop();
     const { password }: { password: string } = await prompt({
       message: 'Please, enter your account keyFile password',
       name: 'password',
       type: 'password',
     });
+    ux.action.start('Loading');
     return WalletApi.parseExportData(importedData, password);
   }
 }

@@ -4,6 +4,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
 import color from '@oclif/color';
+import { prompt } from 'enquirer';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
@@ -53,7 +54,7 @@ export default class ContainerCreate extends BaseCommand {
     const ordersContract = await EvmContract.build(evmCore, ordersScAddress, abis.order);
 
     const { privateKeyPem, publicKeyPem } = containerKeyFilePath
-      ? this.loadContainerKeys(containerKeyFilePath, containerPassword)
+      ? await this.loadContainerKeys(containerKeyFilePath, containerPassword)
       : this.generateKeys(containerPassword);
 
     const jwkPublicKey = crypto.createPublicKey(publicKeyPem).export({ format: 'jwk' });
@@ -89,22 +90,42 @@ export default class ContainerCreate extends BaseCommand {
     return networkApi;
   }
 
-  private loadContainerKeys(containerKeyFilePath: string, containerPassword: string) {
+  private async loadContainerKeys(containerKeyFilePath: string, containerPassword: string) {
     const containerKeyFile = readFileSync(containerKeyFilePath, 'utf8');
-    const privateKeyPem = crypto.createPrivateKey({
-      key: containerKeyFile,
-      type: 'pkcs8',
-      format: 'pem',
-      passphrase: containerPassword || undefined,
-    }).export({ type: 'pkcs8', format: 'pem' });
 
-    const publicKeyPem = crypto.createPublicKey({
-      key: containerKeyFile,
-      type: 'spki',
-      format: 'pem',
-    }).export({ type: 'spki', format: 'pem' });
-
-    return { privateKeyPem, publicKeyPem };
+    try {
+      const privateKeyPem = crypto.createPrivateKey({
+        key: containerKeyFile,
+        type: 'pkcs8',
+        format: 'pem',
+        passphrase: containerPassword || undefined,
+      }).export({ type: 'pkcs8', format: 'pem' });
+      const publicKeyPem = crypto.createPublicKey({
+        key: containerKeyFile,
+        type: 'spki',
+        format: 'pem',
+      }).export({ type: 'spki', format: 'pem' });
+      return { privateKeyPem, publicKeyPem };
+    } catch (error) {
+      const { password }: { password: string } = await prompt({
+        message: 'Please, enter your account keyFile password',
+        name: 'password',
+        type: 'password',
+      });
+      const privateKeyPem = crypto.createPrivateKey({
+        key: containerKeyFile,
+        type: 'pkcs8',
+        format: 'pem',
+        passphrase: password,
+      }).export({ type: 'pkcs8', format: 'pem' });
+      const publicKeyPem = crypto.createPublicKey({
+        key: containerKeyFile,
+        type: 'spki',
+        format: 'pem',
+      }).export({ type: 'spki', format: 'pem' });
+      ux.action.start('Loading');
+      return { privateKeyPem, publicKeyPem };
+    }
   }
 
   private generateKeys(containerPassword: string) {
