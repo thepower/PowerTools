@@ -5,6 +5,8 @@ import { colorize } from 'json-colorizer';
 import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import { BaseCommand } from '../../baseCommand';
+import { TxStatus } from '../../types/tx-status.type';
+import cliConfig from '../../config/cli';
 
 export default class AccSendSk extends BaseCommand {
   static override description = 'Send SK tokens to a specified address';
@@ -20,7 +22,9 @@ export default class AccSendSk extends BaseCommand {
     bootstrapChain: Flags.integer({ char: 'b', default: 1025, description: 'Default chain ID' }),
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
     message: Flags.string({ char: 'm', default: '', description: 'Message to include' }),
-    password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
+    password: Flags.string({
+      char: 'p', default: '', description: 'Password for the key file (env: KEY_FILE_PASSWORD)', env: 'KEY_FILE_PASSWORD',
+    }),
     to: Flags.string({ char: 't', description: 'Recipient address', required: true }),
   };
 
@@ -32,7 +36,7 @@ export default class AccSendSk extends BaseCommand {
 
     ux.action.start('Loading');
 
-    const importedWallet = loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password);
     const networkApi = await initializeNetworkApi({ address: importedWallet.address, defaultChain: bootstrapChain });
 
     if (!networkApi) {
@@ -44,10 +48,13 @@ export default class AccSendSk extends BaseCommand {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = await wallet.makeNewTx(importedWallet.wif, importedWallet.address, to, 'SK', amount, message);
 
+    const { txId } = result as TxStatus;
+
     ux.action.stop();
 
-    if (result) {
+    if (txId) {
       this.log(colorize(result));
+      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${txId}`));
     } else {
       this.log(color.red('No result.'));
     }

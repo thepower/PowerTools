@@ -8,6 +8,7 @@ import cliConfig from '../../config/cli';
 import abis from '../../abis';
 import { createCompactPublicKey, stringToBytes32 } from '../../helpers/container.helper';
 import { BaseCommand } from '../../baseCommand';
+import { TxStatus } from '../../types/tx-status.type';
 
 export default class ContainerUpdate extends BaseCommand {
   static override description = 'Update container details';
@@ -20,7 +21,9 @@ export default class ContainerUpdate extends BaseCommand {
 
   static override flags = {
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
-    password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
+    password: Flags.string({
+      char: 'p', default: '', description: 'Password for the key file (env: KEY_FILE_PASSWORD)', env: 'KEY_FILE_PASSWORD',
+    }),
     containerId: Flags.integer({
       char: 'i', description: 'Id of the container', required: true,
     }),
@@ -28,21 +31,26 @@ export default class ContainerUpdate extends BaseCommand {
       char: 'n', description: 'Name of the container', required: true,
     }),
     containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file', required: true }),
-    containerPassword: Flags.string({ char: 's', default: '', description: 'Password for the container key file' }),
+    containerPassword: Flags.string({
+      char: 's', default: '', description: 'Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)', env: 'CONTAINER_KEY_FILE_PASSWORD',
+    }),
     ordersScAddress: Flags.string({
       char: 'a', default: cliConfig.ordersScAddress, description: 'Orders smart contract address',
+    }),
+    sponsorAddress: Flags.string({
+      char: 'r', description: 'Address of the sponsor',
     }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContainerUpdate);
     const {
-      keyFilePath, password, containerId, containerKeyFilePath, containerName, containerPassword, ordersScAddress,
+      keyFilePath, password, containerId, containerKeyFilePath, containerName, containerPassword, ordersScAddress, sponsorAddress,
     } = flags;
     const containerKeyFile = readFileSync(containerKeyFilePath, 'utf8');
 
     // Load wallet
-    const importedWallet = loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password);
 
     ux.action.start('Loading');
 
@@ -61,13 +69,23 @@ export default class ContainerUpdate extends BaseCommand {
 
     const compactPublicKey = createCompactPublicKey(jwkPublicKey);
 
-    await ordersContract.scSet(
+    const taskUpdateResponse = await ordersContract.scSet(
       importedWallet,
       'task_update',
       [containerId, compactPublicKey?.buffer, stringToBytes32(containerName)],
+      undefined,
+      sponsorAddress,
     );
+
+    const { txId } = taskUpdateResponse as TxStatus;
+
     ux.action.stop();
 
-    this.log(color.green(`Container ${containerName} updated with ID: ${containerId}`));
+    if (txId) {
+      this.log(color.green(`Container ${containerName} updated with ID: ${containerId}`));
+      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${txId}`));
+    } else {
+      this.log(color.red('No result.'));
+    }
   }
 }

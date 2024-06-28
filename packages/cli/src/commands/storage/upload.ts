@@ -1,5 +1,7 @@
 import { Command, Flags } from '@oclif/core';
-import { AddressApi, EvmApi } from '@thepowereco/tssdk';
+import {
+  AddressApi, EvmContract, EvmCore,
+} from '@thepowereco/tssdk';
 import { Listr } from 'listr2';
 import { resolve } from 'node:path';
 import color from '@oclif/color';
@@ -10,7 +12,7 @@ import { getHash } from '../../helpers/calc-hash.helper';
 import { DEFAULT_CONFIG_FILE_PATH, getConfig, setConfig } from '../../helpers/config.helper';
 import { scanDir, uploadTaskFile, uploadTaskManifest } from '../../helpers/upload.helper';
 import abis from '../../abis';
-import { initializeNetworkApi } from '../../helpers/network.helper';
+import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 
 export default class StorageUpload extends Command {
   static override flags = {
@@ -18,6 +20,12 @@ export default class StorageUpload extends Command {
     configPath: Flags.file({ char: 'c', description: 'Config to read', default: DEFAULT_CONFIG_FILE_PATH }),
     storageScAddress: Flags.string({
       char: 'a', default: cliConfig.storageScAddress, description: 'Storage smart contract address',
+    }),
+    password: Flags.string({
+      char: 'p', default: '', description: 'Password for the key file (env: KEY_FILE_PASSWORD)', env: 'KEY_FILE_PASSWORD',
+    }),
+    sponsorAddress: Flags.string({
+      char: 's', description: 'Address of the sponsor',
     }),
   };
 
@@ -29,7 +37,9 @@ export default class StorageUpload extends Command {
 
   async run(): Promise<void> {
     const { flags } = await this.parse(StorageUpload);
-    const { bootstrapChain, configPath, storageScAddress } = flags;
+    const {
+      bootstrapChain, configPath, storageScAddress, password, sponsorAddress,
+    } = flags;
 
     // Get the current configuration
     let config = await getConfig(configPath);
@@ -42,21 +52,17 @@ export default class StorageUpload extends Command {
     this.log(color.cyan(JSON.stringify(config, null, 2)));
 
     const {
-      address, projectId, source, wif,
+      address, projectId, source, keyFilePath,
     } = config;
     const dir = resolve(source);
 
     // Initialize network API
     const networkApi = await initializeNetworkApi({ address, defaultChain: bootstrapChain });
 
-    const addressChain = await networkApi.getAddressChain(address);
-
     // Initialize the smart contract
-    const storageSc = await EvmApi.build({
-      abiJSON: abis.storage,
-      chain: addressChain?.chain,
-      scAddress: storageScAddress,
-    });
+
+    const evmCore = await EvmCore.build(networkApi);
+    const storageSc = await EvmContract.build(evmCore, storageScAddress, abis.storage);
 
     // Get the task ID by name
     let taskId = await storageSc.scGet('taskIdByName', [AddressApi.textAddressToEvmAddress(address), projectId]);
@@ -73,11 +79,14 @@ export default class StorageUpload extends Command {
 
       const expire = 60 * 60 * 24 * 30; // One month
 
+      const importedWallet = await loadWallet(keyFilePath, password);
+
       await storageSc.scSet(
-        { address, wif },
+        importedWallet,
         'addTask',
         [projectId, manifestHash, expire, totalSize],
         1, // TODO: Change to normal amount
+        sponsorAddress,
       );
 
       taskId = await storageSc.scGet('taskIdByName', [AddressApi.textAddressToEvmAddress(address), projectId]);
