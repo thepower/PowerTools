@@ -49,7 +49,9 @@ export default class ContainerActions extends BaseCommand {
       description: 'Parameters for the method',
     }),
     containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file', required: true }),
-    containerPassword: Flags.string({ char: 's', default: '', description: 'Password for the container key file' }),
+    containerPassword: Flags.string({
+      char: 's', default: '', description: 'Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)', env: 'CONTAINER_KEY_FILE_PASSWORD',
+    }),
   };
 
   public async run(): Promise<void> {

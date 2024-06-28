@@ -9,6 +9,7 @@ import cliConfig from '../../config/cli';
 import abis from '../../abis';
 import { createCompactPublicKey, stringToBytes32 } from '../../helpers/container.helper';
 import { BaseCommand } from '../../baseCommand';
+import { TxStatus } from '../../types/tx-status.type';
 
 export default class ContainerCreate extends BaseCommand {
   static override description = 'Create a new container with a given name and key pair';
@@ -20,26 +21,33 @@ export default class ContainerCreate extends BaseCommand {
 
   static override flags = {
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
-    password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
+    password: Flags.string({
+      char: 'p', default: '', description: 'Password for the key file (env: KEY_FILE_PASSWORD)', env: 'KEY_FILE_PASSWORD',
+    }),
     containerName: Flags.string({
       char: 'n', default: '', description: 'Name of the container', required: true,
     }),
     containerKeyFilePath: Flags.file({ char: 'f', description: 'Path to the container key file' }),
-    containerPassword: Flags.string({ char: 's', default: '', description: 'Password for the container key file' }),
+    containerPassword: Flags.string({
+      char: 's', default: '', description: 'Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)', env: 'CONTAINER_KEY_FILE_PASSWORD',
+    }),
     ordersScAddress: Flags.string({
       char: 'a', default: cliConfig.ordersScAddress, description: 'Orders smart contract address',
+    }),
+    sponsorAddress: Flags.string({
+      char: 'r', description: 'Address of the sponsor',
     }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContainerCreate);
     const {
-      keyFilePath, password, containerKeyFilePath, containerName, containerPassword, ordersScAddress,
+      keyFilePath, password, containerKeyFilePath, containerName, containerPassword, ordersScAddress, sponsorAddress,
     } = flags;
 
     ux.action.start('Loading');
 
-    const importedWallet = loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password);
     const networkApi = await this.initializeNetwork(importedWallet.address);
     const evmCore = await EvmCore.build(networkApi);
     const ordersContract = await EvmContract.build(evmCore, ordersScAddress, abis.order);
@@ -55,16 +63,21 @@ export default class ContainerCreate extends BaseCommand {
       this.savePrivateKey(privateKeyPem, containerName, compactPublicKey.base64, containerPassword);
     }
 
-    const orderId = await ordersContract.scSet(
+    const mintResponse = await ordersContract.scSet(
       importedWallet,
       'mint',
       [AddressApi.textAddressToEvmAddress(importedWallet.address), Buffer.from(compactPublicKey?.buffer!), stringToBytes32(containerName)],
+      undefined,
+      sponsorAddress,
     );
+
+    const { retval, txId } = mintResponse as TxStatus;
 
     ux.action.stop();
 
-    if (orderId) {
-      this.log(color.green(`Container ${containerName} created with order ID: ${orderId}`));
+    if (txId) {
+      this.log(color.green(`Container ${containerName} created with order ID: ${retval}`));
+      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${txId}`));
     } else {
       this.log(color.red(`Container ${containerName} creation failed`));
     }

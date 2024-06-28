@@ -61,7 +61,8 @@ export default class ContainerUpload extends BaseCommand {
     password: Flags.string({
       char: 'p',
       default: '',
-      description: 'Password for the key file',
+      description: 'Password for the key file (env: KEY_FILE_PASSWORD)',
+      env: 'KEY_FILE_PASSWORD',
     }),
     containerId: Flags.integer({
       char: 'i',
@@ -76,7 +77,8 @@ export default class ContainerUpload extends BaseCommand {
     containerPassword: Flags.string({
       char: 's',
       default: '',
-      description: 'Password for the container key file',
+      description: 'Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)',
+      env: 'CONTAINER_KEY_FILE_PASSWORD',
     }),
     filesPath: Flags.directory({
       char: 't',
@@ -114,7 +116,7 @@ export default class ContainerUpload extends BaseCommand {
       providerScAddress,
     } = flags;
     const containerKeyFile = readFileSync(containerKeyFilePath, 'utf8');
-    const importedWallet = loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password);
 
     // Initialize network API
     const networkApi = await initializeNetworkApi({

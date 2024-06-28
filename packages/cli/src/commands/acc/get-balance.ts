@@ -22,7 +22,9 @@ export default class AccGetBalance extends BaseCommand {
     }),
     bootstrapChain: Flags.integer({ char: 'b', default: 1025, description: 'Bootstrap chain ID' }),
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', exclusive: ['address'] }),
-    password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
+    password: Flags.string({
+      char: 'p', default: '', description: 'Password for the key file (env: KEY_FILE_PASSWORD)', env: 'KEY_FILE_PASSWORD',
+    }),
   };
 
   public async run(): Promise<void> {
@@ -35,7 +37,7 @@ export default class AccGetBalance extends BaseCommand {
 
     let walletAddress = address;
     if (keyFilePath) {
-      const importedWallet = loadWallet(keyFilePath, password);
+      const importedWallet = await loadWallet(keyFilePath, password);
       walletAddress = importedWallet.address;
     }
 

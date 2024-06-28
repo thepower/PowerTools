@@ -20,7 +20,9 @@ export default class ContainerList extends BaseCommand {
 
   static override flags = {
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
-    password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
+    password: Flags.string({
+      char: 'p', default: '', description: 'Password for the key file (env: KEY_FILE_PASSWORD)', env: 'KEY_FILE_PASSWORD',
+    }),
     ordersScAddress: Flags.string({
       char: 'a', default: cliConfig.ordersScAddress, description: 'Orders smart contract address',
     }),
@@ -33,7 +35,7 @@ export default class ContainerList extends BaseCommand {
     ux.action.start('Loading');
 
     // Initialize network API and wallet
-    const importedWallet = loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password);
     const networkApi = await initializeNetworkApi({ address: importedWallet.address });
 
     // Initialize EVM core and orders contract

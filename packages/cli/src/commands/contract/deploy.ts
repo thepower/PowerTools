@@ -6,6 +6,8 @@ import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import { BaseCommand } from '../../baseCommand';
 import { ParamsParser } from '../../helpers/params-parser.helper';
+import { TxStatus } from '../../types/tx-status.type';
+import cliConfig from '../../config/cli';
 
 export default class ContractDeploy extends BaseCommand {
   static override description = 'Deploy a smart contract to the blockchain';
@@ -25,7 +27,9 @@ export default class ContractDeploy extends BaseCommand {
       char: 'i', description: 'Initialization parameters',
     }),
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
-    password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
+    password: Flags.string({
+      char: 'p', default: '', description: 'Password for the key file (env: KEY_FILE_PASSWORD)', env: 'KEY_FILE_PASSWORD',
+    }),
   };
 
   public async run(): Promise<void> {
@@ -43,7 +47,7 @@ export default class ContractDeploy extends BaseCommand {
     ux.action.start('Loading');
 
     // Load wallet
-    const importedWallet = loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password);
 
     // Initialize network API
     const networkApi = await initializeNetworkApi({ address: importedWallet.address });
@@ -69,10 +73,13 @@ export default class ContractDeploy extends BaseCommand {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = await networkApi.sendPreparedTX(deployTX);
 
+    const { txId } = result as TxStatus;
+
     ux.action.stop();
 
-    if (result) {
+    if (txId) {
       this.log(result);
+      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${txId}`));
     } else {
       this.log(color.red('No result'));
     }

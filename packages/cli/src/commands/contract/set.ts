@@ -6,6 +6,8 @@ import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import { BaseCommand } from '../../baseCommand';
 import { ParamsParser } from '../../helpers/params-parser.helper';
+import { TxStatus } from '../../types/tx-status.type';
+import cliConfig from '../../config/cli';
 
 export default class ContractSet extends BaseCommand {
   static override description = 'Execute a method on a specified smart contract';
@@ -26,7 +28,12 @@ export default class ContractSet extends BaseCommand {
     params: Flags.string({
       char: 'r', description: 'Parameters for the method',
     }),
-    password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
+    password: Flags.string({
+      char: 'p', default: '', description: 'Password for the key file (env: KEY_FILE_PASSWORD)', env: 'KEY_FILE_PASSWORD',
+    }),
+    sponsorAddress: Flags.string({
+      char: 's', description: 'Address of the sponsor',
+    }),
   };
 
   public async run(): Promise<void> {
@@ -43,7 +50,7 @@ export default class ContractSet extends BaseCommand {
     ux.action.start('Loading');
 
     // Load wallet
-    const importedWallet = loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password);
 
     // Initialize network API
     const networkApi = await initializeNetworkApi({ address: importedWallet.address });
@@ -56,12 +63,15 @@ export default class ContractSet extends BaseCommand {
 
     // Execute the smart contract method
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result: any = await smartContract.scSet(importedWallet, method, parsedParams || []);
+    const setResult: any = await smartContract.scSet(importedWallet, method, parsedParams || []);
+
+    const { txId } = setResult as TxStatus;
 
     ux.action.stop();
 
-    if (result) {
-      this.log(result);
+    if (txId) {
+      this.log(setResult);
+      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${txId}`));
     } else {
       this.log(color.red('No result'));
     }
