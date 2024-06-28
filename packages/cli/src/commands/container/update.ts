@@ -1,12 +1,11 @@
 import { Flags, ux } from '@oclif/core';
 import crypto from 'crypto';
-import { readFileSync } from 'node:fs';
 import { EvmContract, EvmCore } from '@thepowereco/tssdk';
 import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
-import { createCompactPublicKey, stringToBytes32 } from '../../helpers/container.helper';
+import { createCompactPublicKey, importContainerKey, stringToBytes32 } from '../../helpers/container.helper';
 import { BaseCommand } from '../../baseCommand';
 import { TxStatus } from '../../types/tx-status.type';
 
@@ -47,12 +46,11 @@ export default class ContainerUpdate extends BaseCommand {
     const {
       keyFilePath, password, containerId, containerKeyFilePath, containerName, containerPassword, ordersScAddress, sponsorAddress,
     } = flags;
-    const containerKeyFile = readFileSync(containerKeyFilePath, 'utf8');
+
+    ux.action.start('Loading');
 
     // Load wallet
     const importedWallet = await loadWallet(keyFilePath, password);
-
-    ux.action.start('Loading');
 
     // Initialize network API
     const networkApi = await initializeNetworkApi({ address: importedWallet.address });
@@ -61,9 +59,7 @@ export default class ContainerUpdate extends BaseCommand {
     const evmCore = await EvmCore.build(networkApi);
     const ordersContract = await EvmContract.build(evmCore, ordersScAddress, abis.order);
 
-    const privateKeyPem = crypto.createPrivateKey({
-      key: containerKeyFile, type: 'pkcs8', format: 'pem', passphrase: containerPassword,
-    });
+    const privateKeyPem = await importContainerKey(containerKeyFilePath, containerPassword);
 
     const jwkPublicKey = crypto.createPublicKey(privateKeyPem).export({ format: 'jwk' });
 

@@ -1,6 +1,4 @@
 import { Flags, ux } from '@oclif/core';
-import crypto from 'crypto';
-import { readFileSync } from 'node:fs';
 import axios from 'axios';
 import jsonwebtoken from 'jsonwebtoken';
 import { colorize } from 'json-colorizer';
@@ -8,6 +6,7 @@ import color from '@oclif/color';
 import cliConfig from '../../config/cli';
 import { BaseCommand } from '../../baseCommand';
 import { ParamsParser } from '../../helpers/params-parser.helper';
+import { importContainerKey } from '../../helpers/container.helper';
 
 async function jsonRpcRequest({
   url, method, params = [], jwt,
@@ -67,11 +66,7 @@ export default class ContainerActions extends BaseCommand {
 
     const parsedParams = params && paramsParser.parse(params);
 
-    const containerKeyFile = readFileSync(containerKeyFilePath, 'utf8');
-
-    const privateKeyPem = crypto.createPrivateKey({
-      key: containerKeyFile, type: 'pkcs8', format: 'pem', passphrase: containerPassword,
-    });
+    const privateKeyPem = await importContainerKey(containerKeyFilePath, containerPassword);
 
     const payload = { iat: Math.floor(new Date().getTime() / 1000) };
 

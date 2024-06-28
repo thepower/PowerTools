@@ -1,7 +1,6 @@
 import { Flags } from '@oclif/core';
-import crypto from 'crypto';
 import jsonwebtoken from 'jsonwebtoken';
-import { promises, readFileSync } from 'node:fs';
+import { promises } from 'node:fs';
 import { prompt } from 'enquirer';
 import { EvmContract, EvmCore } from '@thepowereco/tssdk';
 import axios from 'axios';
@@ -11,6 +10,7 @@ import cliConfig from '../../config/cli';
 import abis from '../../abis';
 import { scanDir } from '../../helpers/upload.helper';
 import { BaseCommand } from '../../baseCommand';
+import { importContainerKey } from '../../helpers/container.helper';
 
 async function uploadFile({
   url,
@@ -115,7 +115,6 @@ export default class ContainerUpload extends BaseCommand {
       ordersScAddress,
       providerScAddress,
     } = flags;
-    const containerKeyFile = readFileSync(containerKeyFilePath, 'utf8');
     const importedWallet = await loadWallet(keyFilePath, password);
 
     // Initialize network API
@@ -125,12 +124,7 @@ export default class ContainerUpload extends BaseCommand {
 
     // Initialize EVM and contract
 
-    const privateKeyPem = crypto.createPrivateKey({
-      key: containerKeyFile,
-      type: 'pkcs8',
-      format: 'pem',
-      passphrase: containerPassword,
-    });
+    const privateKeyPem = await importContainerKey(containerKeyFilePath, containerPassword);
 
     const payload = { iat: Math.floor(new Date().getTime() / 1000) };
 
