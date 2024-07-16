@@ -151,30 +151,41 @@ export class WalletApi {
     return new Promise((r) => setTimeout(r, ms));
   }
 
-  public async makeNewTx(
-    wif: string,
-    from: string,
-    to: string,
-    token: string,
-    inputAmount: number,
-    message: string,
-  ) {
+  public async makeNewTx({
+    wif,
+    from,
+    to,
+    token,
+    inputAmount,
+    message,
+    gasValue,
+    gasToken,
+  }: {
+    wif: string;
+    from: string;
+    to: string;
+    token: string;
+    inputAmount: number;
+    message: string;
+    gasValue?: number;
+    gasToken?: string;
+  }) {
     const amount = correctAmount(inputAmount, token, false);
     const feeSettings = this.networkApi.feeSettings;
     const sequence = await this.getWalletSequence(from);
     const newSequence = sequence + 1;
-    const transmission = TransactionsApi.composeSimpleTransferTX(
-      {
-        feeSettings,
-        wif,
-        from,
-        to,
-        token,
-        amount,
-        message,
-        seq: newSequence,
-      },
-    );
+    const transmission = TransactionsApi.composeSimpleTransferTX({
+      feeSettings,
+      wif,
+      from,
+      to,
+      token,
+      amount,
+      message,
+      seq: newSequence,
+      gasValue,
+      gasToken,
+    });
 
     return this.networkApi.sendPreparedTX(transmission);
   }

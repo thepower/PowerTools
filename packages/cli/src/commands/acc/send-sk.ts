@@ -21,12 +21,15 @@ export default class AccSendSk extends Command {
     message: Flags.string({ char: 'm', default: '', description: 'Message to include' }),
     password: Flags.string({ char: 'p', default: '', description: 'Password for the key file' }),
     to: Flags.string({ char: 't', description: 'Recipient address', required: true }),
+    token: Flags.string({ char: 'e', default: 'SK', description: 'Token to send' }),
+    gasToken: Flags.string({ char: 'g', description: 'Token used to pay for gas' }),
+    gasValue: Flags.integer({ char: 'v', description: 'Gas value for deployment' }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(AccSendSk);
     const {
-      amount, chain, defaultChain, keyFilePath, message, password, to,
+      amount, chain, defaultChain, keyFilePath, message, password, to, token, gasToken, gasValue,
     } = flags;
 
     ux.action.start('Loading');
@@ -41,7 +44,16 @@ export default class AccSendSk extends Command {
     const wallet = new WalletApi(networkApi);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result: any = await wallet.makeNewTx(importedWallet.wif, importedWallet.address, to, 'SK', amount, message);
+    const result: any = await wallet.makeNewTx({
+      wif: importedWallet.wif,
+      from: importedWallet.address,
+      to,
+      token,
+      inputAmount: amount,
+      message,
+      gasToken,
+      gasValue,
+    });
 
     ux.action.stop();
 
