@@ -136,6 +136,8 @@ export const TransactionsApi = {
     seq,
     fee,
     feeToken,
+    gasValue,
+    gasToken,
   }: {
     feeSettings: any;
     wif: string;
@@ -147,6 +149,8 @@ export const TransactionsApi = {
     seq: number;
     fee?: number;
     feeToken?: string;
+    gasValue?: number;
+    gasToken?: string;
   }) {
     const keyPair = Bitcoin.ECPair.fromWIF(wif);
     const publicKey = keyPair.getPublicKeyBuffer();
@@ -166,6 +170,9 @@ export const TransactionsApi = {
         seq,
       },
     );
+    if (gasValue && gasToken) {
+      body.p.push([PURPOSE_GAS, gasToken, gasValue]);
+    }
     if (feeToken && fee) {
       body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
     } else {
