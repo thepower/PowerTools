@@ -170,7 +170,7 @@ export const TransactionsApi = {
         seq,
       },
     );
-    if (gasValue && gasToken) {
+    if (gasToken && gasValue !== undefined) {
       body.p.push([PURPOSE_GAS, gasToken, gasValue]);
     }
     if (feeToken && fee) {
