@@ -117,18 +117,33 @@ export const TransactionsApi = {
     return keyPair.verify(hash, ecsig);
   },
 
-  composeSimpleTransferTX(
-    feeSettings: any,
-    wif: string,
-    from: string,
-    to: string,
-    token: string,
-    amount: number,
-    message: string,
-    seq: number,
-    fee?: number,
-    feeToken?: string,
-  ) {
+  composeSimpleTransferTX({
+    feeSettings,
+    wif,
+    from,
+    to,
+    token,
+    amount,
+    message,
+    seq,
+    fee,
+    feeToken,
+    gasValue,
+    gasToken,
+  }: {
+    feeSettings: any;
+    wif: string;
+    from: string;
+    to: string;
+    token: string;
+    amount: number;
+    message: string;
+    seq: number;
+    fee?: number;
+    feeToken?: string;
+    gasValue?: number;
+    gasToken?: string;
+  }) {
     const keyPair = Bitcoin.ECPair.fromWIF(wif);
     const publicKey = keyPair.getPublicKeyBuffer();
     const timestamp = +new Date();
@@ -144,6 +159,9 @@ export const TransactionsApi = {
       timestamp,
       seq,
     );
+    if (gasValue && gasToken) {
+      body.p.push([PURPOSE_GAS, gasToken, gasValue]);
+    }
     if (feeToken && fee) {
       body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
     } else {
