@@ -20,7 +20,7 @@ $ npm install -g @thepowereco/cli
 $ tpe COMMAND
 running command...
 $ tpe (--version)
-@thepowereco/cli/1.11.129 linux-x64 node-v22.2.0
+@thepowereco/cli/1.11.129 linux-x64 node-v22.4.1
 $ tpe --help [COMMAND]
 USAGE
   $ tpe COMMAND
@@ -70,7 +70,7 @@ FLAGS
   -a, --address=<value>         Wallet address
   -b, --bootstrapChain=<value>  [default: 1025] Bootstrap chain ID
   -k, --keyFilePath=<value>     Path to the key file
-  -p, --password=<value>        Password for the key file
+  -p, --password=<value>        Password for the key file (env: KEY_FILE_PASSWORD)
 
 DESCRIPTION
   Get the balance of a wallet address
@@ -132,15 +132,19 @@ Send SK tokens to a specified address
 
 ```
 USAGE
-  $ tpe acc send-sk -a <value> -k <value> -t <value> [-b <value>] [-m <value>] [-p <value>]
+  $ tpe acc send-sk -a <value> -k <value> -t <value> [-b <value>] [-m <value>] [-p <value>] [-e <value>] [-g
+    <value>] [-v <value>]
 
 FLAGS
   -a, --amount=<value>          (required) Amount to send
   -b, --bootstrapChain=<value>  [default: 1025] Default chain ID
+  -e, --token=<value>           [default: SK] Token to send
+  -g, --gasToken=<value>        Token used to pay for gas
   -k, --keyFilePath=<value>     (required) Path to the key file
   -m, --message=<value>         Message to include
-  -p, --password=<value>        Password for the key file
+  -p, --password=<value>        Password for the key file (env: KEY_FILE_PASSWORD)
   -t, --to=<value>              (required) Recipient address
+  -v, --gasValue=<value>        Gas value for deployment
 
 DESCRIPTION
   Send SK tokens to a specified address
@@ -198,7 +202,7 @@ FLAGS
   -f, --containerKeyFilePath=<value>  (required) Path to the container key file
   -m, --method=<value>                (required) Method to call on the container
   -p, --params=<value>                Parameters for the method
-  -s, --containerPassword=<value>     Password for the container key file
+  -s, --containerPassword=<value>     Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)
 
 DESCRIPTION
   Perform various container actions
@@ -225,15 +229,16 @@ Create a new container with a given name and key pair
 
 ```
 USAGE
-  $ tpe container create -k <value> -n <value> [-p <value>] [-f <value>] [-s <value>] [-a <value>]
+  $ tpe container create -k <value> -n <value> [-p <value>] [-f <value>] [-s <value>] [-a <value>] [-r <value>]
 
 FLAGS
   -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
   -f, --containerKeyFilePath=<value>  Path to the container key file
   -k, --keyFilePath=<value>           (required) Path to the key file
   -n, --containerName=<value>         (required) Name of the container
-  -p, --password=<value>              Password for the key file
-  -s, --containerPassword=<value>     Password for the container key file
+  -p, --password=<value>              Password for the key file (env: KEY_FILE_PASSWORD)
+  -r, --sponsorAddress=<value>        Address of the sponsor
+  -s, --containerPassword=<value>     Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)
 
 DESCRIPTION
   Create a new container with a given name and key pair
@@ -257,7 +262,7 @@ USAGE
 FLAGS
   -a, --ordersScAddress=<value>  [default: AA100000001677749450] Orders smart contract address
   -k, --keyFilePath=<value>      (required) Path to the key file
-  -p, --password=<value>         Password for the key file
+  -p, --password=<value>         Password for the key file (env: KEY_FILE_PASSWORD)
 
 DESCRIPTION
   List containers owned by a user
@@ -276,7 +281,8 @@ Update container details
 
 ```
 USAGE
-  $ tpe container update -k <value> -i <value> -n <value> -f <value> [-p <value>] [-s <value>] [-a <value>]
+  $ tpe container update -k <value> -i <value> -n <value> -f <value> [-p <value>] [-s <value>] [-a <value>] [-r
+    <value>]
 
 FLAGS
   -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
@@ -284,8 +290,9 @@ FLAGS
   -i, --containerId=<value>           (required) Id of the container
   -k, --keyFilePath=<value>           (required) Path to the key file
   -n, --containerName=<value>         (required) Name of the container
-  -p, --password=<value>              Password for the key file
-  -s, --containerPassword=<value>     Password for the container key file
+  -p, --password=<value>              Password for the key file (env: KEY_FILE_PASSWORD)
+  -r, --sponsorAddress=<value>        Address of the sponsor
+  -s, --containerPassword=<value>     Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)
 
 DESCRIPTION
   Update container details
@@ -315,8 +322,8 @@ FLAGS
   -f, --containerKeyFilePath=<value>  (required) Path to the container key file
   -i, --containerId=<value>           (required) Container ID
   -k, --keyFilePath=<value>           (required) Path to the key file
-  -p, --password=<value>              Password for the key file
-  -s, --containerPassword=<value>     Password for the container key file
+  -p, --password=<value>              Password for the key file (env: KEY_FILE_PASSWORD)
+  -s, --containerPassword=<value>     Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)
   -t, --filesPath=<value>             (required) Path to the files
 
 DESCRIPTION
@@ -343,7 +350,7 @@ FLAGS
   -b, --binPath=<value>      (required) Path to the binary file
   -i, --initParams=<value>   Initialization parameters
   -k, --keyFilePath=<value>  (required) Path to the key file
-  -p, --password=<value>     Password for the key file
+  -p, --password=<value>     Password for the key file (env: KEY_FILE_PASSWORD)
   -t, --gasToken=<value>     [default: SK] Token used to pay for gas
   -v, --gasValue=<value>     [default: 2000000000] Gas value for deployment
 
@@ -400,7 +407,7 @@ FLAGS
   -d, --address=<value>         (required) Smart contract address
   -k, --keyFilePath=<value>     (required) Path to the key file
   -m, --method=<value>          (required) Method name to call
-  -p, --password=<value>        Password for the key file
+  -p, --password=<value>        Password for the key file (env: KEY_FILE_PASSWORD)
   -r, --params=<value>          Parameters for the method
   -s, --sponsorAddress=<value>  Address of the sponsor
 
@@ -758,12 +765,14 @@ Upload application files to the storage
 
 ```
 USAGE
-  $ tpe storage upload [-b <value>] [-c <value>] [-a <value>]
+  $ tpe storage upload [-b <value>] [-c <value>] [-a <value>] [-p <value>] [-s <value>]
 
 FLAGS
   -a, --storageScAddress=<value>  [default: AA100000001677723663] Storage smart contract address
   -b, --bootstrapChain=<value>    [default: 1025] Default chain ID for bootstrap
   -c, --configPath=<value>        [default: ./tp-cli.json] Config to read
+  -p, --password=<value>          Password for the key file (env: KEY_FILE_PASSWORD)
+  -s, --sponsorAddress=<value>    Address of the sponsor
 
 DESCRIPTION
   Upload application files to the storage

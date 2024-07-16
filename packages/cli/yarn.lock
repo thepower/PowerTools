@@ -1783,10 +1783,10 @@
     int64-buffer "^0.1.9"
     isarray "^1.0.0"
 
-"@thepowereco/tssdk@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@thepowereco/tssdk/-/tssdk-2.1.2.tgz#e73948a28547c7269b946b012feaa39d07c62f71"
-  integrity sha512-U3iwA5hRPX+2qc7yq9n+ik+iEzIiCVcUSEryFnSEVLk0SSbwC2072JBeIW9z4BAJuZmSHR/d/QnpiNxUvGHhKg==
+"@thepowereco/tssdk@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@thepowereco/tssdk/-/tssdk-2.1.4.tgz#e3f8248e1c25b03e11bdfa7fc6ccf60aa36dfb19"
+  integrity sha512-EYNncvr93tnlnSeOZ+no6nSiV8r0wRmHzdKOFXl9/ySuUr817TMexuRYnkIw/8KHKCyptg5T2k1OCbaw5gYX4w==
   dependencies:
     "@ethereumjs/common" "^4.1.0"
     "@ethereumjs/tx" "^5.1.0"
