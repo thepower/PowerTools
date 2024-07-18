@@ -23,6 +23,7 @@
     "@ethereumjs/util": "^9.0.1",
     "@ethereumjs/vm": "^7.1.0",
     "@thepowereco/msgpack": "^1.5.4",
+    "abitype": "^1.0.2",
     "axios": "^0.27.2",
     "bip32": "1.0.2",
     "bip39": "^3.0.4",
@@ -37,7 +38,7 @@
     "stream-browserify": "^3.0.0",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
     "util": "^0.12.4",
-    "web3-eth-abi": "^4.1.4",
+    "viem": "^2.17.5",
     "webpack-node-externals": "^3.0.0",
     "wif": "^2.0.6"
   },

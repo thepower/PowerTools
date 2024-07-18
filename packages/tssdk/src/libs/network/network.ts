@@ -1,9 +1,19 @@
 import axios from 'axios';
 import Debug from 'debug';
+import {
+  Abi,
+} from 'abitype';
+import { EncodeFunctionDataParameters } from 'viem/utils';
+import { ContractFunctionName } from 'viem/_types/types/contract';
+import { AddressApi } from '../address/address';
 import { decodeReturnValue, encodeFunction } from '../../helpers/abi.helper';
 import { config as cfg } from '../../config/chain.config';
 import { ChainGlobalConfig, ChainNode } from '../../typings';
-import { queueNodes, transformNodeList, transformResponse } from '../../helpers/network.helper';
+import {
+  queueNodes,
+  transformNodeList,
+  transformResponse,
+} from '../../helpers/network.helper';
 import { ChainAction } from '../../helpers/network.enum';
 import { NoNodesFoundException } from './eceptions/no-nodes-found.exception';
 import { UnknownChainException } from './eceptions/unknown-chain.exception';
@@ -31,26 +41,40 @@ export class NetworkApi {
     this.isHTTPSNodesOnly = isHTTPSNodesOnly;
   }
 
-  public load(params: { currentChain: number, currentNodes: ChainNode[], nodeIndex: number, feeSettings: any, gasSettings: any }) {
+  public load(params: {
+    currentChain: number;
+    currentNodes: ChainNode[];
+    nodeIndex: number;
+    feeSettings: any;
+    gasSettings: any;
+  }) {
     Object.assign(this, params);
   }
 
   public upload() {
     const {
       currentChain, currentNodes, nodeIndex, feeSettings, gasSettings,
-    } = this;
+    } =
+      this;
     return {
-      currentChain, currentNodes, nodeIndex, feeSettings, gasSettings,
+      currentChain,
+      currentNodes,
+      nodeIndex,
+      feeSettings,
+      gasSettings,
     };
   }
 
   public static async getChainGlobalConfig(): Promise<ChainGlobalConfig> {
-    const baseURL = 'https://raw.githubusercontent.com/thepower/all_chains/main/config.json';
+    const baseURL =
+      'https://raw.githubusercontent.com/thepower/all_chains/main/config.json';
     const { data } = await axios.request({ baseURL });
     return data;
   }
 
-  public static async getNetworkChains(networkName: NetworkEnum): Promise<number[]> {
+  public static async getNetworkChains(
+    networkName: NetworkEnum,
+  ): Promise<number[]> {
     const chainGlobalConfig = await NetworkApi.getChainGlobalConfig();
     const networks = chainGlobalConfig.settings;
     const chainArray = networks[networkName];
@@ -62,9 +86,12 @@ export class NetworkApi {
     return chainArray;
   }
 
-  public static async getRandomChain(networkName: NetworkEnum): Promise<number> {
+  public static async getRandomChain(
+    networkName: NetworkEnum,
+  ): Promise<number> {
     const chainArray = await NetworkApi.getNetworkChains(networkName);
-    const strChain: string = chainArray[Math.floor(Math.random() * chainArray.length)].toString();
+    const strChain: string =
+      chainArray[Math.floor(Math.random() * chainArray.length)].toString();
     return Number(strChain);
   }
 
@@ -91,29 +118,32 @@ export class NetworkApi {
   }
 
   public async getFeeSettings() {
-    const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {});
+    const settings = await this.askBlockchainTo(
+      ChainAction.GET_NODE_SETTINGS,
+      {},
+    );
     return this.calculateFeeSettings(settings);
   }
 
-  public getBlockHash = async (height: number) => this.askBlockchainTo(
-    ChainAction.GET_BLOCK_HASH,
-    { chain: this.currentChain, height },
-  );
+  public getBlockHash = async (height: number) => this.askBlockchainTo(ChainAction.GET_BLOCK_HASH, {
+    chain: this.currentChain,
+    height,
+  });
 
-  public getBlock = async (hash = 'last') => this.askBlockchainTo(
-    ChainAction.GET_BLOCK,
-    { chain: this.currentChain, hash },
-  );
+  public getBlock = async (hash = 'last') => this.askBlockchainTo(ChainAction.GET_BLOCK, {
+    chain: this.currentChain,
+    hash,
+  });
 
-  public getBlockInfo = async (hash = 'last') => this.askBlockchainTo(
-    ChainAction.GET_BLOCK_INFO,
-    { chain: this.currentChain, hash },
-  );
+  public getBlockInfo = async (hash = 'last') => this.askBlockchainTo(ChainAction.GET_BLOCK_INFO, {
+    chain: this.currentChain,
+    hash,
+  });
 
-  public getWallet = async (address: string) => this.askBlockchainTo(
-    ChainAction.GET_WALLET,
-    { chain: this.currentChain, address },
-  );
+  public getWallet = async (address: string) => this.askBlockchainTo(ChainAction.GET_WALLET, {
+    chain: this.currentChain,
+    address,
+  });
 
   public getWalletSequence = async (address: string) => this.askBlockchainTo(
     ChainAction.GET_WALLET_SEQUENCE,
@@ -121,30 +151,32 @@ export class NetworkApi {
   );
 
   public loadScCode = async (address: string) => new Uint8Array(
-    await this.askBlockchainTo(
-      ChainAction.GET_SC_CODE,
-      { chain: this.currentChain, address },
-    ),
+    await this.askBlockchainTo(ChainAction.GET_SC_CODE, {
+      chain: this.currentChain,
+      address,
+    }),
   );
 
   public loadScState = async (address: string) => new Uint8Array(
-    await this.askBlockchainTo(
-      ChainAction.GET_SC_STATE,
-      { chain: this.currentChain, address },
-    ),
+    await this.askBlockchainTo(ChainAction.GET_SC_STATE, {
+      chain: this.currentChain,
+      address,
+    }),
   );
 
   public loadScStateByKey = async (address: string, key: string) => new Uint8Array(
-    await this.askBlockchainTo(
-      ChainAction.GET_SC_STATE_BY_KEY,
-      { chain: this.currentChain, address, key },
-    ),
+    await this.askBlockchainTo(ChainAction.GET_SC_STATE_BY_KEY, {
+      chain: this.currentChain,
+      address,
+      key,
+    }),
   );
 
-  public getLstoreData = async (address: string, path: string) => this.askBlockchainTo(
-    ChainAction.GET_LSTORE,
-    { chain: this.currentChain, address, path },
-  );
+  public getLstoreData = async (address: string, path: string) => this.askBlockchainTo(ChainAction.GET_LSTORE, {
+    chain: this.currentChain,
+    address,
+    path,
+  });
 
   public getChain() {
     return this.currentChain;
@@ -199,7 +231,10 @@ export class NetworkApi {
   };
 
   public async sendPreparedTX(tx: any, timeout = 1000) {
-    const response = await this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data: { tx } });
+    const response = await this.askBlockchainTo(
+      ChainAction.CREATE_TRANSACTION,
+      { data: { tx } },
+    );
     return this.checkTransaction(response.txid, timeout);
   }
 
@@ -234,14 +269,26 @@ export class NetworkApi {
     const check = () => setTimeout(async () => {
       try {
         callCount += 1;
-        const status = await this.askBlockchainTo(ChainAction.GET_TRANSACTION_STATUS, { txId });
+        const status = await this.askBlockchainTo(
+          ChainAction.GET_TRANSACTION_STATUS,
+          { txId },
+        );
 
         if (status) {
           if (status?.error || 'revert' in status) {
-            reject(new Error(`${txId}: ${status?.res} ${status?.revert || 'revert with no data'}`));
+            reject(
+              new Error(
+                `${txId}: ${status?.res} ${
+                  status?.revert || 'revert with no data'
+                }`,
+              ),
+            );
           } else if (status.retval) {
             resolve({
-              txId, res: status.res, block: status.block, retval: status.retval,
+              txId,
+              res: status.res,
+              block: status.block,
+              retval: status.retval,
             });
           } else {
             resolve({ txId, res: status.res, block: status.block });
@@ -261,11 +308,17 @@ export class NetworkApi {
 
   private incrementNodeIndex = async () => {
     this.nodeIndex += 1;
-    if (this.nodeIndex >= this.currentNodes.length || this.currentNodes[this.nodeIndex].time === cfg.maxNodeResponseTime) {
+    if (
+      this.nodeIndex >= this.currentNodes.length ||
+      this.currentNodes[this.nodeIndex].time === cfg.maxNodeResponseTime
+    ) {
       this.currentNodes = await queueNodes(this.currentNodes, 5000);
       this.nodeIndex = 0;
 
-      if (this.nodeIndex >= this.currentNodes.length || this.currentNodes[this.nodeIndex].time === cfg.maxNodeResponseTime) {
+      if (
+        this.nodeIndex >= this.currentNodes.length ||
+        this.currentNodes[this.nodeIndex].time === cfg.maxNodeResponseTime
+      ) {
         throw new ChainUnavailableException();
       }
     }
@@ -283,7 +336,9 @@ export class NetworkApi {
 
     while (!success) {
       i += 1;
-      parameters.baseURL = `${this.currentNodes[this.nodeIndex].address}/api${actionUrl}`;
+      parameters.baseURL = `${
+        this.currentNodes[this.nodeIndex].address
+      }/api${actionUrl}`;
       try {
         result = await axios.request(parameters);
         success = true;
@@ -336,19 +391,42 @@ export class NetworkApi {
     return this.askBlockchainTo(ChainAction.CREATE_TRANSACTION, { data });
   }
 
-  public async executeCall(address: string, method: string, args: any[], abi: any) {
-    const encodedFunction = encodeFunction(method, args, abi, true);
+  public async executeCall<
+  const TAbi extends Abi | readonly unknown[],
+  TFunctionName extends ContractFunctionName<TAbi> | undefined = undefined,
+>(
+    parameters: EncodeFunctionDataParameters<TAbi, TFunctionName>,
+    {
+      address,
 
-    const data = { call: '0x0', args: [encodedFunction], to: `0x${address}` };
+    }: {
+      address: string;
+    },
+  ) {
+    const { abi, functionName, args = [] } = parameters as EncodeFunctionDataParameters;
 
-    const response = await this.askBlockchainTo(ChainAction.EXECUTE_CALL, { data });
+    const addressHex = AddressApi.textAddressToHex(address);
+
+    const encodedFunction = encodeFunction({ functionName, args, abi });
+
+    const data = { call: '0x0', args: [encodedFunction], to: `0x${addressHex}` };
+
+    const response = await this.askBlockchainTo(ChainAction.EXECUTE_CALL, {
+      data,
+    });
 
     if (response.result !== 'return') throw new Error(`${response.result}: ${response?.signature}`);
 
-    const results = decodeReturnValue(method, response.bin, abi);
+    const decodedValue = decodeReturnValue(
+      {
+        functionName,
+        data: response.bin,
+        abi,
+        args,
+      },
+    );
 
-    // eslint-disable-next-line no-underscore-dangle
-    return results?.__length__ === 1 ? results[0] : results;
+    return decodedValue;
   }
 
   public async getTransactionStatus(txId: string) {
@@ -455,7 +533,10 @@ export class NetworkApi {
   }
 
   private async loadFeeGasSettings() {
-    const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {});
+    const settings = await this.askBlockchainTo(
+      ChainAction.GET_NODE_SETTINGS,
+      {},
+    );
     this.feeSettings = this.calculateFeeSettings(settings);
     this.gasSettings = this.calculateGasSettings(settings);
   }
