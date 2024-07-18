@@ -23,7 +23,7 @@
     "@ethereumjs/util": "^9.0.1",
     "@ethereumjs/vm": "^7.1.0",
     "@thepowereco/msgpack": "^1.5.4",
-    "axios": "^0.27.2",
+    "axios": "^1.7.2",
     "bip32": "1.0.2",
     "bip39": "^3.0.4",
     "bitcoinjs-lib": "3.3.2",
