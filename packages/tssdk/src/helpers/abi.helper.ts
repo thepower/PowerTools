@@ -29,5 +29,6 @@ export const decodeReturnValue = (
   }
 
   const paramStringAbi: any = decodeParameters(abiItem.outputs, returnValue);
+
   return paramStringAbi;
 };
