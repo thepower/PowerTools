@@ -4,7 +4,8 @@ import {
   Abi,
 } from 'abitype';
 import { EncodeFunctionDataParameters } from 'viem/utils';
-import { ContractFunctionName } from 'viem/_types/types/contract';
+import { ContractFunctionArgs, ContractFunctionName } from 'viem/_types/types/contract';
+import { AbiStateMutability, DecodeFunctionResultReturnType } from 'viem';
 import { AddressApi } from '../address/address';
 import { decodeReturnValue, encodeFunction } from '../../helpers/abi.helper';
 import { config as cfg } from '../../config/chain.config';
@@ -394,6 +395,19 @@ export class NetworkApi {
   public async executeCall<
   const TAbi extends Abi | readonly unknown[],
   TFunctionName extends ContractFunctionName<TAbi> | undefined = undefined,
+  const TArgs extends ContractFunctionArgs<
+  TAbi,
+  AbiStateMutability,
+  TFunctionName extends ContractFunctionName<TAbi>
+    ? TFunctionName
+    : ContractFunctionName<TAbi>
+  > = ContractFunctionArgs<
+  TAbi,
+  AbiStateMutability,
+  TFunctionName extends ContractFunctionName<TAbi>
+    ? TFunctionName
+    : ContractFunctionName<TAbi>
+  >,
 >(
     parameters: EncodeFunctionDataParameters<TAbi, TFunctionName>,
     {
@@ -426,7 +440,7 @@ export class NetworkApi {
       },
     );
 
-    return decodedValue;
+    return decodedValue as DecodeFunctionResultReturnType<TAbi, TFunctionName, TArgs>;
   }
 
   public async getTransactionStatus(txId: string) {
