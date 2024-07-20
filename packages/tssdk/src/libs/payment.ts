@@ -1,4 +1,4 @@
-const HTTP = require('axios');
+import HTTP from 'axios';
 
 /**
  * @todo move to env
