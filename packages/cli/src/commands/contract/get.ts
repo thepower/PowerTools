@@ -52,7 +52,7 @@ export default class ContractGet extends BaseCommand {
     const result = await smartContract.scGet({ abi, args: parsedParams || [], functionName: method });
 
     ux.action.stop();
-    console.log({ result });
+
     if (result !== undefined) {
       this.log(result as any);
     } else {
