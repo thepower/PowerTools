@@ -58,14 +58,23 @@ export class ParamsParser {
   parseArray(arrayStr: string): ParsedItem[] {
     const newArrayStr = arrayStr.slice(1, -1).trim();
 
-    // Handle nested arrays
+    // Handle nested arrays and objects
     let nestedLevel = 0;
     let currentItem = '';
     const items: string[] = [];
+    let isInsideString = false;
 
     for (const char of newArrayStr) {
-      if (char === '[') nestedLevel += 1;
-      if (char === ']') nestedLevel -= 1;
+      if (char === '\'' && !isInsideString) {
+        isInsideString = true;
+      } else if (char === '\'' && isInsideString) {
+        isInsideString = false;
+      }
+
+      if (!isInsideString) {
+        if (char === '[' || char === '{') nestedLevel += 1;
+        if (char === ']' || char === '}') nestedLevel -= 1;
+      }
 
       if (char === ',' && nestedLevel === 0) {
         items.push(currentItem.trim());
@@ -89,30 +98,21 @@ export class ParamsParser {
 
     keyValuePairs.forEach((pair) => {
       const [key, value] = pair.split(':').map((str) => str.trim());
-      obj[key] = this.parseItem(value);
+      const cleanedKey = key.startsWith('\'') && key.endsWith('\'') ? key.slice(1, -1) : key;
+      obj[cleanedKey] = this.parseItem(value);
     });
 
     return obj;
   }
 
-  public parse(input: string) {
-    const items: string[] = [];
-    let currentItem = '';
-    let nestedLevel = 0;
+  public parse(input: string): ParsedItem[] {
+    const trimmedInput = input.trim();
 
-    for (const char of input) {
-      if (char === '[' || char === '{') nestedLevel += 1;
-      if (char === ']' || char === '}') nestedLevel -= 1;
-
-      if (char === ' ' && nestedLevel === 0) {
-        items.push(currentItem.trim());
-        currentItem = '';
-      } else {
-        currentItem += char;
-      }
+    if (this.arrayRegex.test(trimmedInput)) {
+      return this.parseArray(trimmedInput);
+    } if (this.objectRegex.test(trimmedInput)) {
+      return [this.parseObject(trimmedInput)];
     }
-    if (currentItem) items.push(currentItem.trim());
-
-    return items.map((item) => this.parseItem(item));
+    return [this.parseItem(trimmedInput)];
   }
 }

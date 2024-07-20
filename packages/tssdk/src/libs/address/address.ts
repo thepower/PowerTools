@@ -1,3 +1,4 @@
+import { getAddress } from 'viem';
 import { AddressScopeEnum } from '../../typings';
 import { BadAddressException } from './exceptions/bad-address.exception';
 import { InvalidChecksumException } from './exceptions/invalid-checksum.exception';
@@ -184,7 +185,7 @@ export const AddressApi = {
 
   textAddressToEvmAddress(textAddress: string): `0x${string}` {
     const hexAddress = AddressApi.textAddressToHex(textAddress);
-    return `0x000000000000000000000000${hexAddress}`;
+    return getAddress(`0x000000000000000000000000${hexAddress}`);
   },
   evmAddressToHexAddress(evmHexAddress: string) {
     const arr = evmHexAddress.split('0x000000000000000000000000');

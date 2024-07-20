@@ -94,22 +94,20 @@ export default class ContractSet extends BaseCommand {
 
     // Execute the smart contract method
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const setResult: any = await smartContract.scSet(
+    const setResult: TxStatus = await smartContract.scSet(
       { abi, args: parsedParams, functionName: method },
       { key: importedWallet, sponsor: sponsorAddress, amount },
     );
 
-    const { txId } = setResult as TxStatus;
-
     ux.action.stop();
 
-    if (txId) {
-      this.log(setResult);
+    if (setResult?.txId) {
+      // this.log(setResult);
       this.log(
         color.yellow(
           `Transaction: ${
             cliConfig.explorerUrl
-          }/${networkApi.getChain()}/transaction/${txId}`,
+          }/${networkApi.getChain()}/transaction/${setResult.txId}`,
         ),
       );
     } else {
