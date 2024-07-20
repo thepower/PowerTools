@@ -1,11 +1,11 @@
 import createHash from 'create-hash';
 import * as msgPack from '@thepowereco/msgpack';
 import {
-  Abi,
-  encodeDeployData,
+  encodeAbiParameters,
   EncodeDeployDataParameters,
   hexToBytes,
-} from 'viem';
+} from 'viem/utils';
+import { Abi } from 'abitype';
 import { AddressApi } from './address/address';
 
 const Bitcoin = require('bitcoinjs-lib');
@@ -230,9 +230,8 @@ export const TransactionsApi = {
     },
   ) {
     const { abi, args, bytecode } = parameters as EncodeDeployDataParameters;
-
     const scCode = new Uint8Array(
-      (bytecode.slice(2).match(/[\da-f]{2}/gi) ?? []).map((h: string) => parseInt(h, 16)),
+      (bytecode.match(/[\da-f]{2}/gi) || []).map((h: string) => parseInt(h, 16)),
     );
 
     let body = {
@@ -247,11 +246,19 @@ export const TransactionsApi = {
     };
 
     if (args?.length) {
-      const encodedFunction = encodeDeployData({ abi, bytecode, args });
+      const abiItem = abi?.find((item: any) => item.type === 'constructor');
 
-      const data = hexToBytes(encodedFunction);
-      const dataBuffer = Buffer.from(data);
-      body.c = ['0x0', [dataBuffer]];
+      if (!abiItem) {
+        throw new Error('ABI item not found');
+      }
+
+      if (('inputs' in abiItem) && abiItem.inputs) {
+        const encodedFunction = encodeAbiParameters(abiItem.inputs, args);
+
+        const data = hexToBytes(encodedFunction);
+        const dataBuffer = Buffer.from(data);
+        body.c = ['0x0', [dataBuffer]];
+      }
     }
 
     if (gasValue > 0) {

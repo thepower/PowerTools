@@ -1,16 +1,19 @@
-import { Command, Flags, ux } from '@oclif/core';
-import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
+import { Flags, ux } from '@oclif/core';
+import { EvmContract, EvmCore } from '@thepowereco/tssdk';
 import { readFileSync } from 'node:fs';
 
-import { initializeNetworkApi } from '../../helpers/network-helper';
+import color from '@oclif/color';
+import { initializeNetworkApi } from '../../helpers/network.helper';
+import { BaseCommand } from '../../baseCommand';
+import { ParamsParser } from '../../helpers/params-parser.helper';
 
-export default class ContractGet extends Command {
+export default class ContractGet extends BaseCommand {
   static override description = 'Call a method on a deployed smart contract';
 
   static override examples = [
-    '<%= config.bin %> <%= command.id %> --abiPath ./path/to/abi.json --address AA100000001677748249 --chain 1 --method getBalance --params 0x456...',
-    '<%= config.bin %> <%= command.id %> -a ./path/to/abi.json -d AA100000001677748249 -c 1 -m getBalance -p 0x456...',
-    '<%= config.bin %> <%= command.id %> --abiPath ./path/to/abi.json --address AA100000001677748249 --chain 1 --method getInfo',
+    '<%= config.bin %> <%= command.id %> --abiPath ./path/to/abi.json --address AA100000001677748249 --method getBalance --params "0x456 1 2 [1,2] {a: 1, b: 2} 1n"',
+    '<%= config.bin %> <%= command.id %> -a ./path/to/abi.json -d AA100000001677748249 -m getBalance -p "0x456 1 2 [1,2] {a: 1, b: 2} 1n"',
+    '<%= config.bin %> <%= command.id %> --abiPath ./path/to/abi.json --address AA100000001677748249 --method getInfo',
   ];
 
   static override flags = {
@@ -18,18 +21,20 @@ export default class ContractGet extends Command {
     address: Flags.string({
       aliases: ['adr'], char: 'd', description: 'Smart contract address', required: true,
     }),
-    chain: Flags.integer({ char: 'c', description: 'Chain ID' }),
     method: Flags.string({ char: 'm', description: 'Method name to call', required: true }),
     params: Flags.string({
-      char: 'p', default: [], description: 'Parameters for the method', multiple: true,
+      char: 'p', description: 'Parameters for the method',
     }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContractGet);
     const {
-      abiPath, address, chain, method, params,
+      abiPath, address, method, params,
     } = flags;
+    const paramsParser = new ParamsParser();
+
+    const parsedParams = params && paramsParser.parse(params);
 
     // Load ABI from file
     const abi = JSON.parse(readFileSync(abiPath, 'utf8'));
@@ -37,24 +42,21 @@ export default class ContractGet extends Command {
     ux.action.start('Loading');
 
     // Initialize network API
-    const networkApi = await initializeNetworkApi({ address, chain });
-
-    if (!networkApi) {
-      throw new Error('No network found.');
-    }
+    const networkApi = await initializeNetworkApi({ address });
 
     // Initialize EVM and contract
     const evmCore = await EvmCore.build(networkApi);
-    const smartContract = await EvmContract.build(evmCore, address, abi);
-
-    // Format parameters
-    const formattedParams = params.map((param) => (AddressApi.isTextAddressValid(param) ? AddressApi.textAddressToEvmAddress(param) : param));
+    const smartContract = await EvmContract.build(evmCore, address);
 
     // Execute the smart contract method
-    const result = await smartContract.scGet(method, formattedParams);
+    const result = await smartContract.scGet({ abi, args: parsedParams || [], functionName: method });
 
     ux.action.stop();
-
-    this.log(result);
+    console.log({ result });
+    if (result !== undefined) {
+      this.log(result as any);
+    } else {
+      this.log(color.red('No result'));
+    }
   }
 }

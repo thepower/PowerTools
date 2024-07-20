@@ -2,10 +2,10 @@ import axios from 'axios';
 import Debug from 'debug';
 import {
   Abi,
+  AbiStateMutability,
 } from 'abitype';
-import { EncodeFunctionDataParameters } from 'viem/utils';
+import { DecodeFunctionResultReturnType, EncodeFunctionDataParameters } from 'viem/utils';
 import { ContractFunctionArgs, ContractFunctionName } from 'viem/_types/types/contract';
-import { AbiStateMutability, DecodeFunctionResultReturnType } from 'viem';
 import { AddressApi } from '../address/address';
 import { decodeReturnValue, encodeFunction } from '../../helpers/abi.helper';
 import { config as cfg } from '../../config/chain.config';

@@ -1,8 +1,6 @@
 import { VM } from '@ethereumjs/vm';
 import { Address } from '@ethereumjs/util';
-import {
-  Abi,
-} from 'abitype';
+import { Abi } from 'abitype';
 import {
   encodeFunctionData,
   EncodeFunctionDataParameters,
@@ -11,7 +9,10 @@ import {
   DecodeFunctionResultReturnType,
 } from 'viem/utils';
 
-import { ContractFunctionArgs, ContractFunctionName } from 'viem/_types/types/contract';
+import {
+  ContractFunctionArgs,
+  ContractFunctionName,
+} from 'viem/_types/types/contract';
 import { AbiStateMutability } from 'viem';
 import { encodeFunction, decodeReturnValue } from '../../helpers/abi.helper';
 import { bnToHex } from '../../helpers/bnHex.helper';
@@ -43,6 +44,19 @@ export class EvmContract {
   public async scGet<
     const TAbi extends Abi | readonly unknown[],
     TFunctionName extends ContractFunctionName<TAbi> | undefined = undefined,
+    const TArgs extends ContractFunctionArgs<
+    TAbi,
+    AbiStateMutability,
+    TFunctionName extends ContractFunctionName<TAbi>
+      ? TFunctionName
+      : ContractFunctionName<TAbi>
+    > = ContractFunctionArgs<
+    TAbi,
+    AbiStateMutability,
+    TFunctionName extends ContractFunctionName<TAbi>
+      ? TFunctionName
+      : ContractFunctionName<TAbi>
+    >,
   >(parameters: EncodeFunctionDataParameters<TAbi, TFunctionName>) {
     const { args, abi, functionName } =
       parameters as EncodeFunctionDataParameters;
@@ -74,26 +88,30 @@ export class EvmContract {
       args,
     });
 
-    return decodedValue;
+    return decodedValue as DecodeFunctionResultReturnType<
+    TAbi,
+    TFunctionName,
+    TArgs
+    >;
   }
 
   public async scSet<
-  const TAbi extends Abi | readonly unknown[],
-  TFunctionName extends ContractFunctionName<TAbi> | undefined = undefined,
-  const TArgs extends ContractFunctionArgs<
-  TAbi,
-  AbiStateMutability,
-  TFunctionName extends ContractFunctionName<TAbi>
-    ? TFunctionName
-    : ContractFunctionName<TAbi>
-  > = ContractFunctionArgs<
-  TAbi,
-  AbiStateMutability,
-  TFunctionName extends ContractFunctionName<TAbi>
-    ? TFunctionName
-    : ContractFunctionName<TAbi>
-  >,
->(
+    const TAbi extends Abi | readonly unknown[],
+    TFunctionName extends ContractFunctionName<TAbi> | undefined = undefined,
+    const TArgs extends ContractFunctionArgs<
+    TAbi,
+    AbiStateMutability,
+    TFunctionName extends ContractFunctionName<TAbi>
+      ? TFunctionName
+      : ContractFunctionName<TAbi>
+    > = ContractFunctionArgs<
+    TAbi,
+    AbiStateMutability,
+    TFunctionName extends ContractFunctionName<TAbi>
+      ? TFunctionName
+      : ContractFunctionName<TAbi>
+    >,
+  >(
     parameters: EncodeFunctionDataParameters<TAbi, TFunctionName>,
     {
       key,
@@ -105,7 +123,11 @@ export class EvmContract {
       sponsor?: string;
     },
   ) {
-    const { abi, functionName, args = [] } = parameters as EncodeFunctionDataParameters;
+    const {
+      abi,
+      functionName,
+      args = [],
+    } = parameters as EncodeFunctionDataParameters;
 
     const addressChain = await this.evm.network.getAddressChain(key.address);
     const addressChainNumber = addressChain?.chain;
@@ -158,7 +180,9 @@ export class EvmContract {
 
     const res = await this.evm.network.sendTxAndWaitForResponse(tx);
 
-    return res as TxResponse<DecodeFunctionResultReturnType<TAbi, TFunctionName, TArgs>>;
+    return res as TxResponse<
+    DecodeFunctionResultReturnType<TAbi, TFunctionName, TArgs>
+    >;
   }
 }
 
