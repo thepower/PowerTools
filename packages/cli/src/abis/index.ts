@@ -1,5 +1,5 @@
-import storage from './storage.json';
-import order from './order.json';
-import provider from './provider.json';
+import storage from './storage';
+import order from './order';
+import provider from './provider';
 
 export default { storage, order, provider };

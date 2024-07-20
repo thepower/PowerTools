@@ -6,7 +6,7 @@ import { CliConfig } from '../types/cli-config.type';
 
 export const DEFAULT_CONFIG_FILE_PATH = './tp-cli.json';
 
-const REQUIRED_FIELDS = ['source', 'address', 'projectId', 'wif'] as const;
+const REQUIRED_FIELDS = ['source', 'address', 'projectId', 'keyFilePath'] as const;
 
 const validateConfig = (cfg: CliConfig): void => {
   for (const field of REQUIRED_FIELDS) {
@@ -74,17 +74,17 @@ export const setConfig = async (configPath: string): Promise<CliConfig> => {
     type: 'input',
   });
 
-  const { wif }: { wif: string } = await prompt({
-    message: 'Please, enter your account private key (wif)',
-    name: 'address',
-    type: 'password',
+  const { keyFilePath }: { keyFilePath: string } = await prompt({
+    message: 'Please, enter the source path of your keyFile, e.g.)',
+    name: 'keyFilePath',
+    type: 'input',
   });
 
   const config: CliConfig = {
     address,
     projectId,
     source,
-    wif,
+    keyFilePath,
   };
 
   await setConfigFile(config, configPath);

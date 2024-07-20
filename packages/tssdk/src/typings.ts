@@ -59,3 +59,10 @@ export interface ChainConfig {
   chainRequestTimeout: number;
   maxNodeResponseTime: number;
 }
+
+export type TxResponse<T> = {
+  txId: string,
+  res: string,
+  block: string,
+  retval: T
+};

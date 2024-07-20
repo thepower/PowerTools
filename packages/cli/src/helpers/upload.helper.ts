@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { promises, statSync } from 'node:fs';
 
-import { File } from '../types/file.type';
 import { getFileHash } from './calc-hash.helper';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,7 +18,7 @@ export const scanDir = async (root: string, dir: string, result: any[] = []) => 
         const hash = await getFileHash(fullPath);
         const pathWithFile = fullPath.replace(`${root}/`, '');
         const path = pathWithFile.replace(file, '');
-        const fileData: File = {
+        const fileData = {
           hash,
           name: file,
           path: path || '.',
