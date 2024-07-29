@@ -1,10 +1,16 @@
-import wif from 'wif';
+import * as wif from 'wif';
 import { mnemonicToSeed, generateMnemonic, validateMnemonic } from 'bip39';
 import createHash, { algorithm } from 'create-hash';
 import { promises } from 'fs';
 import Crypto, {
   BinaryLike, CipherGCM, CipherGCMTypes, CipherKey,
 } from 'crypto';
+import {
+  ECPairFactory, ECPairAPI,
+} from 'ecpair';
+import BIP32Factory from 'bip32';
+
+import * as ecc from 'tiny-secp256k1';
 import { AddressApi } from '../address/address';
 import {
   PKCS5PEMInfoType, Maybe, MaybeUndef, AccountKey,
@@ -13,8 +19,8 @@ import { UnknownCurveException } from './exceptions/unknown-curve.exception';
 import { ParseWholePemException } from './exceptions/parse-whole-pem.exception';
 import { FileIsCorruptException } from './exceptions/file-is-corrupt.exception';
 
-const bip32 = require('bip32');
-const Bitcoin = require('bitcoinjs-lib');
+const ECPair: ECPairAPI = ECPairFactory(ecc);
+const bip32 = BIP32Factory(ecc);
 
 const DERIVATION_PATH_BASE = 'm/44';
 const COIN = '31337';
@@ -163,11 +169,11 @@ export const CryptoApi = {
     const derivationPath = `${DERIVATION_PATH_BASE}/${COIN}'/0'/${group}'/${block}'`;
     const rootKey = node.derivePath(derivationPath);
 
-    return Bitcoin.ECPair.fromWIF(rootKey.toWIF());
+    return ECPair.fromWIF(rootKey.toWIF());
   },
 
   generateKeyPairFromWIF(wif: string) {
-    return Bitcoin.ECPair.fromWIF(wif);
+    return ECPair.fromWIF(wif);
   },
 
   async loadKey(fileName: string, password: string): Promise<AccountKey> {
@@ -184,7 +190,7 @@ export const CryptoApi = {
   },
 
   encryptWalletDataToPEM(myWIF: string, address: string, password: string) {
-    const decoded = wif.decode(myWIF);
+    const decoded = wif.decode(myWIF, 128);
     return `${encryptRawPrivateKeyToPEM(decoded.privateKey as Buffer, password)}\n${encryptAddressToPEM(address, password)}`;
   },
 
@@ -199,21 +205,22 @@ export const CryptoApi = {
     const privateKeyData = sections.find((item) => item.type !== undefined);
     const address = decryptAddress(addressData?.data, password, addressData?.ivsalt!);
     const privateKey = decryptPrivateKey(privateKeyData?.data, password, privateKeyData?.ivsalt!);
+
     return {
       address,
-      wif: wif.encode(128, textToHex(privateKey), true),
+      wif: wif.encode({ version: 128, privateKey: textToHex(privateKey), compressed: true }),
     };
   },
 
   encryptWif(myWIF: string, password: string) {
-    const decoded = wif.decode(myWIF);
-    return encryptRawPrivateKeyToPEM(decoded.privateKey, password);
+    const decoded = wif.decode(myWIF, 128);
+    return encryptRawPrivateKeyToPEM(Buffer.from(decoded.privateKey), password);
   },
 
   decryptWif(encrypted: string, password: string) {
     const parsedPEM = parsePKCS5PEM(encrypted);
     const privateKey = decryptPrivateKey(parsedPEM.data, password, parsedPEM.ivsalt!);
-    return wif.encode(128, textToHex(privateKey), true);
+    return wif.encode({ version: 128, privateKey: textToHex(privateKey), compressed: true });
   },
 
   validateMnemonic(mnemonic: string) {
