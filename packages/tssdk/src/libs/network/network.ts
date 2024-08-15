@@ -146,10 +146,16 @@ export class NetworkApi {
     address,
   });
 
-  public getWalletSequence = async (address: string) => this.askBlockchainTo(
-    ChainAction.GET_WALLET_SEQUENCE,
-    { chain: this.currentChain, address },
-  );
+  public getWalletSequence = async (address: string) => {
+    try {
+      return await this.askBlockchainTo(
+        ChainAction.GET_WALLET_SEQUENCE,
+        { chain: this.currentChain, address },
+      );
+    } catch {
+      return Date.now();
+    }
+  };
 
   public loadScCode = async (address: string) => new Uint8Array(
     await this.askBlockchainTo(ChainAction.GET_SC_CODE, {
