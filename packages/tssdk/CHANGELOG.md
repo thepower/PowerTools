@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.7](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.6...@thepowereco/tssdk@2.1.7) (2024-08-15)
+
+
+### Bug Fixes
+
+* updating dependencies, removed unused code ([fb903a2](https://github.com/thepower/power_hub/commit/fb903a2642a1d4a412ccb74b637a5f618e02c469))
+* yarn.lock ([7e65775](https://github.com/thepower/power_hub/commit/7e65775118ac7db40e2d0a385537c1338b753932))
+* yarn.lock ([ef6c721](https://github.com/thepower/power_hub/commit/ef6c72103716f3fc1f08d6311a1302bbb95f57d4))
+* yarn.lock ([480abfa](https://github.com/thepower/power_hub/commit/480abfaf26a1352cc5072856557b1ee85269a156))
+
+
+
+
+
 ## [2.1.6](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.5...@thepowereco/tssdk@2.1.6) (2024-07-18)
 
 
