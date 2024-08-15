@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.136](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.11.135...@thepowereco/cli@1.11.136) (2024-08-15)
+
+
+### Bug Fixes
+
+* yarn.lock ([7e65775](https://github.com/thepower/PowerTools/commit/7e65775118ac7db40e2d0a385537c1338b753932))
+* yarn.lock ([ef6c721](https://github.com/thepower/PowerTools/commit/ef6c72103716f3fc1f08d6311a1302bbb95f57d4))
+
+
+
+
+
 ## [1.11.135](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.11.134...@thepowereco/cli@1.11.135) (2024-07-18)
 
 **Note:** Version bump only for package @thepowereco/cli

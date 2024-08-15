@@ -6,9 +6,16 @@ import {
   hexToBytes,
 } from 'viem/utils';
 import { Abi } from 'abitype';
+
+import {
+  ECPairFactory, ECPairAPI,
+  ECPairInterface,
+} from 'ecpair';
+import * as ecc from 'tiny-secp256k1';
+import * as bip66 from 'bip66';
 import { AddressApi } from './address/address';
 
-const Bitcoin = require('bitcoinjs-lib');
+const ECPair: ECPairAPI = ECPairFactory(ecc);
 
 const TAG_PUBLIC_KEY = 0x02;
 const TAG_SIGNATURE = 0xff;
@@ -31,7 +38,7 @@ const getRegisterTxBody = async ({
   timestamp,
   referrer,
 }: {
-  publicKey: string;
+  publicKey: Buffer;
   timestamp: number;
   referrer?: string;
 }) => {
@@ -79,25 +86,28 @@ const getSimpleTransferTxBody = ({
   return body;
 };
 
-const wrapAndSignPayload = (payload: any, keyPair: any, publicKey: string) => {
+const wrapAndSignPayload = (payload: any, keyPair: ECPairInterface, publicKey: Buffer) => {
   const extraData = new Uint8Array(publicKey.length + 2);
   extraData.set([TAG_PUBLIC_KEY]);
   extraData.set([publicKey.length], 1);
-  // @ts-ignore
   extraData.set(publicKey, 2);
 
   const toSign = new Uint8Array(extraData.length + payload.length);
   toSign.set(extraData);
   toSign.set(payload, extraData.length);
 
-  const signature = keyPair
-    .sign(createHash('sha256').update(toSign).digest())
-    .toDER();
+  const signatureBuffer = keyPair
+    .sign(createHash('sha256').update(toSign).digest(), true);
 
-  const sig = new Uint8Array(signature.length + 2);
+  const r = signatureBuffer.slice(0, 32);
+  const s = signatureBuffer.slice(32, 64);
+
+  const derSignature = bip66.encode(r, s);
+
+  const sig = new Uint8Array(derSignature.length + 2);
   sig.set([TAG_SIGNATURE]);
-  sig.set([signature.length], 1);
-  sig.set(signature, 2);
+  sig.set([derSignature.length], 1);
+  sig.set(derSignature, 2);
 
   const bsig = new Uint8Array(sig.length + extraData.length);
   bsig.set(sig);
@@ -112,22 +122,6 @@ const wrapAndSignPayload = (payload: any, keyPair: any, publicKey: string) => {
 };
 
 export const TransactionsApi = {
-  isSingleSignatureValid(data: any, bsig: any) {
-    const publicKey = this.extractTaggedDataFromBSig(TAG_PUBLIC_KEY, bsig);
-    const signature = this.extractTaggedDataFromBSig(TAG_SIGNATURE, bsig);
-    const ecsig = Bitcoin.ECSignature.fromDER(signature);
-    const keyPair = Bitcoin.ECPair.fromPublicKeyBuffer(Buffer.from(publicKey));
-
-    const extraData = bsig.subarray(signature.length + 2);
-
-    const dataToHash = new Uint8Array(extraData.length + data.length);
-    dataToHash.set(extraData);
-    dataToHash.set(data, extraData.length);
-    const hash = createHash('sha256').update(dataToHash).digest();
-
-    return keyPair.verify(hash, ecsig);
-  },
-
   composeSimpleTransferTX({
     feeSettings,
     wif,
@@ -155,8 +149,12 @@ export const TransactionsApi = {
     gasValue?: number;
     gasToken?: string;
   }) {
-    const keyPair = Bitcoin.ECPair.fromWIF(wif);
-    const publicKey = keyPair.getPublicKeyBuffer();
+    const keyPair = ECPair.fromWIF(wif);
+
+    const publicKey = keyPair.publicKey;
+
+    if (!publicKey) throw new Error('publicKey not found');
+
     const timestamp = +new Date();
 
     const bufferFrom = Buffer.from(AddressApi.parseTextAddress(from));
@@ -180,15 +178,18 @@ export const TransactionsApi = {
       body = this.autoAddFee(body, feeSettings);
     }
     const payload = msgPack.encode(body);
+
     return msgPack
       .encode(wrapAndSignPayload(payload, keyPair, publicKey))
       .toString('base64');
   },
 
   async composeRegisterTX(wif: string, referrer?: string) {
-    const keyPair = Bitcoin.ECPair.fromWIF(wif);
-    const publicKey = keyPair.getPublicKeyBuffer();
+    const keyPair = ECPair.fromWIF(wif);
+    const publicKey = keyPair.publicKey;
     const timestamp = +new Date();
+
+    if (!publicKey) throw new Error('publicKey not found');
 
     const payload = msgPack.encode(
       await getRegisterTxBody({ publicKey, timestamp, referrer }),
@@ -198,8 +199,11 @@ export const TransactionsApi = {
       .toString('base64');
   },
   packAndSignTX(tx: any, wif: string) {
-    const keyPair = Bitcoin.ECPair.fromWIF(wif);
-    const publicKey = keyPair.getPublicKeyBuffer();
+    const keyPair = ECPair.fromWIF(wif);
+    const publicKey = keyPair.publicKey;
+
+    if (!publicKey) throw new Error('publicKey not found');
+
     const payload = msgPack.encode(tx);
     return msgPack
       .encode(wrapAndSignPayload(payload, keyPair, publicKey))
@@ -283,20 +287,6 @@ export const TransactionsApi = {
     selfTx = msgPack.decode(selfTx);
     tx.body = msgPack.decode(tx.body);
     return tx;
-  },
-
-  listValidTxSignatures(tx: any) {
-    let selfTx = tx;
-    if (!Buffer.isBuffer(selfTx)) {
-      selfTx = Buffer.from(selfTx, 'base64');
-    }
-    selfTx = msgPack.decode(selfTx);
-    const { body, sig } = selfTx;
-
-    const validSignatures = sig.filter((signature: any) => this.isSingleSignatureValid(body, signature));
-    const invalidSignaturesCount = sig.length - validSignatures.length;
-
-    return { validSignatures, invalidSignaturesCount };
   },
 
   extractTaggedDataFromBSig(tag: any, bsig: any) {

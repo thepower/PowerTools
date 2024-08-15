@@ -1,14 +1,11 @@
 export {
   NetworkApi,
   AddressApi,
-  instantiateSC,
   PaymentsApi,
   CryptoApi,
   TransactionsApi,
   LStoreApi,
   WalletApi,
-  SmartContractWrapper,
-  loadScLocal,
   EvmCore,
   EvmContract,
 } from './libs';
