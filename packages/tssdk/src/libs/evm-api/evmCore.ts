@@ -148,9 +148,9 @@ export class EvmContract {
     const data = hexToBytes(encodedFunction);
     const dataBuffer = Buffer.from(data);
 
-    const tx =
-      sponsor === ''
-        ? await TransactionsApi.composeSCMethodCallTX({
+    const tx = sponsor === '' ?
+      TransactionsApi.composeSCMethodCallTX(
+        {
           address: key.address,
           sc: this.address,
           toCall: ['0x0', [dataBuffer]],
@@ -162,8 +162,10 @@ export class EvmContract {
           amountValue: amount,
           feeSettings: this.evm.network.feeSettings,
           gasSettings: this.evm.network.gasSettings,
-        })
-        : await TransactionsApi.composeSponsorSCMethodCallTX({
+        },
+      ) :
+      TransactionsApi.composeSponsorSCMethodCallTX(
+        {
           address: key.address,
           sc: this.address,
           toCall: ['0x0', [dataBuffer]],
@@ -176,7 +178,8 @@ export class EvmContract {
           feeSettings: this.evm.network.feeSettings,
           gasSettings: this.evm.network.gasSettings,
           sponsor,
-        });
+        },
+      );
 
     const res = await this.evm.network.sendTxAndWaitForResponse(tx);
 

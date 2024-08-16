@@ -41,7 +41,7 @@ export class WalletApi {
 
     const wif = keyPair.toWIF();
 
-    const transmission = await TransactionsApi.composeRegisterTX(wif, referrer);
+    const transmission = TransactionsApi.composeRegisterTX(wif, referrer);
 
     const { txid } = await networkApi.createTransaction({ tx: transmission });
 
@@ -173,7 +173,7 @@ export class WalletApi {
     const amount = correctAmount(inputAmount, token, false);
     const feeSettings = this.networkApi.feeSettings;
     const sequence = await this.getWalletSequence(from);
-    const newSequence = sequence + 1;
+    const newSequence = BigInt(sequence + 1);
     const transmission = TransactionsApi.composeSimpleTransferTX({
       feeSettings,
       wif,

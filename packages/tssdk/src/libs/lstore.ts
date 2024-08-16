@@ -1,27 +1,19 @@
-import * as msgPack from '@thepowereco/msgpack';
+import { msgPackEncoder } from '../utils/msgpack';
 import { NetworkApi, TransactionsApi } from '.';
 import { AccountKey } from '../typings';
-
-const codec = msgPack.createCodec({
-  usemap: true,
-});
-
-const options = { codec };
 
 type PatchType = 'list_add' | 'list_del' | 'lists_cleanup' | 'member' | 'nonmember' | 'set' | 'delete' | 'compare' | 'exist' | 'nonexist';
 
 const createPatch = (path: string[], type: PatchType, value: number | string) => {
   const th = Buffer.from('83C40174', 'hex');
-  const tv = msgPack.encode(Buffer.from(new TextEncoder().encode(type)), options);
+  const tv = msgPackEncoder.encode(Buffer.from(new TextEncoder().encode(type)));
   const ph = Buffer.from('C40170', 'hex');
-  const pv = msgPack.encode(
+  const pv = msgPackEncoder.encode(
     path.map((i) => (typeof i === 'string' ? Buffer.from(new TextEncoder().encode(i)) : i)),
-    options,
   );
   const vh = Buffer.from('C40176', 'hex');
-  const vv = msgPack.encode(
+  const vv = msgPackEncoder.encode(
     typeof value === 'string' ? Buffer.from(new TextEncoder().encode(value)) : value,
-    options,
   );
   const res = Buffer.from([...th, ...tv, ...ph, ...pv, ...vh, ...vv]);
   return res;
@@ -77,7 +69,7 @@ const setLStore = async (account: AccountKey, patches: [string, string, string][
   const sequence = await network.getWalletSequence(account.address);
   const newSequence = sequence + 1;
 
-  const tx = await TransactionsApi.composeStoreTX(
+  const tx = TransactionsApi.composeStoreTX(
     {
       address: account.address,
       patches,
