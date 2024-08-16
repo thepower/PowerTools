@@ -137,7 +137,7 @@ export class EvmContract {
     }
 
     const sequence = await this.evm.network.getWalletSequence(key.address);
-    const newSequence = sequence + 1;
+    const newSequence = BigInt(sequence + 1);
 
     const encodedFunction = encodeFunctionData({
       abi,
