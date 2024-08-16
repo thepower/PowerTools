@@ -1,13 +1,13 @@
 import createHash from 'create-hash';
-import * as msgPack from '@thepowereco/msgpack';
 import { encodeParameters } from 'web3-eth-abi';
 import { hexToBytes } from '@ethereumjs/util';
 import {
   ECPairFactory, ECPairAPI,
   ECPairInterface,
 } from 'ecpair';
-import * as ecc from 'tiny-secp256k1';
+import ecc from '@bitcoinerlab/secp256k1';
 import * as bip66 from 'bip66';
+import { msgPackEncoder } from 'utils/msgpack';
 import { AddressApi } from './address/address';
 
 const ECPair: ECPairAPI = ECPairFactory(ecc);
@@ -28,13 +28,13 @@ const KIND_DEPLOY = 0x12;
 // const KIND_PATCH = 0x13;
 const KIND_LSTORE = 22;
 
-const getRegisterTxBody = async ({
+const getRegisterTxBody = ({
   publicKey,
   timestamp,
   referrer,
 }: {
   publicKey: Buffer;
-  timestamp: number;
+  timestamp: bigint;
   referrer?: string;
 }) => {
   let body = {
@@ -65,8 +65,8 @@ const getSimpleTransferTxBody = ({
   token: string;
   amount: number;
   msg: string;
-  timestamp: number;
-  seq: number;
+  timestamp: bigint;
+  seq: bigint;
 }) => {
   const body = {
     k: KIND_GENERIC,
@@ -138,7 +138,7 @@ export const TransactionsApi = {
     token: string;
     amount: number;
     message: string;
-    seq: number;
+    seq: bigint;
     fee?: number;
     feeToken?: string;
     gasValue?: number;
@@ -150,7 +150,7 @@ export const TransactionsApi = {
 
     if (!publicKey) throw new Error('publicKey not found');
 
-    const timestamp = +new Date();
+    const timestamp = BigInt(Date.now());
 
     const bufferFrom = Buffer.from(AddressApi.parseTextAddress(from));
     const bufferTo = Buffer.from(AddressApi.parseTextAddress(to));
@@ -174,24 +174,24 @@ export const TransactionsApi = {
     } else {
       body = this.autoAddFee(body, feeSettings);
     }
-    const payload = msgPack.encode(body);
+    const payload = msgPackEncoder.encode(body);
 
-    return msgPack
+    return msgPackEncoder
       .encode(wrapAndSignPayload(payload, keyPair, publicKey))
       .toString('base64');
   },
 
-  async composeRegisterTX(wif: string, referrer?: string) {
+  composeRegisterTX(wif: string, referrer?: string) {
     const keyPair = ECPair.fromWIF(wif);
     const publicKey = keyPair.publicKey;
-    const timestamp = +new Date();
+    const timestamp = BigInt(Date.now());
 
     if (!publicKey) throw new Error('publicKey not found');
 
-    const payload = msgPack.encode(
-      await getRegisterTxBody({ publicKey, timestamp, referrer }),
+    const payload = msgPackEncoder.encode(
+      getRegisterTxBody({ publicKey, timestamp, referrer }),
     );
-    return msgPack
+    return msgPackEncoder
       .encode(wrapAndSignPayload(payload, keyPair, publicKey))
       .toString('base64');
   },
@@ -201,8 +201,8 @@ export const TransactionsApi = {
 
     if (!publicKey) throw new Error('publicKey not found');
 
-    const payload = msgPack.encode(tx);
-    return msgPack
+    const payload = msgPackEncoder.encode(tx);
+    return msgPackEncoder
       .encode(wrapAndSignPayload(payload, keyPair, publicKey))
       .toString('base64');
   },
@@ -227,7 +227,7 @@ export const TransactionsApi = {
     gasValue: number;
     wif: string;
     abi: any;
-    seq: number;
+    seq: bigint;
     feeSettings: any;
     gasSettings: any;
     fee?: number;
@@ -239,7 +239,7 @@ export const TransactionsApi = {
 
     let body = {
       k: KIND_DEPLOY,
-      t: +new Date(),
+      t: BigInt(Date.now()),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       to: Buffer.from(AddressApi.parseTextAddress(address)),
       s: seq,
@@ -281,8 +281,8 @@ export const TransactionsApi = {
     if (!Buffer.isBuffer(selfTx)) {
       selfTx = Buffer.from(selfTx, 'base64');
     }
-    selfTx = msgPack.decode(selfTx);
-    tx.body = msgPack.decode(tx.body);
+    selfTx = msgPackEncoder.decode(selfTx);
+    tx.body = msgPackEncoder.decode(tx.body);
     return tx;
   },
 
@@ -317,7 +317,7 @@ export const TransactionsApi = {
     wif: string;
     amountToken: string;
     amountValue: number;
-    seq: number;
+    seq: bigint;
     feeSettings: any;
     gasSettings: any;
     fee?: number;
@@ -352,18 +352,18 @@ export const TransactionsApi = {
     address: string;
     patches: any;
     wif: string;
-    seq: number;
+    seq: bigint;
     feeSettings: any;
     fee?: number;
     feeToken?: string;
   }) {
     let body = {
       k: KIND_LSTORE,
-      t: +new Date(),
+      t: BigInt(Date.now()),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       s: seq,
       p: [] as any,
-      pa: msgPack.encode(patches.map((i: any) => msgPack.encode(i))),
+      pa: msgPackEncoder.encode(patches.map((i: any) => msgPackEncoder.encode(i))),
     };
     if (feeToken && fee) {
       body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
@@ -384,7 +384,7 @@ export const TransactionsApi = {
       body.p.push([PURPOSE_SRCFEE, feeSettings.feeCur, feeSettings.fee]);
       let bodySize;
       do {
-        bodySize = msgPack.encode(body).length;
+        bodySize = msgPackEncoder.encode(body).length;
         if (bodySize > feeSettings.baseEx) {
           body.p.find((item: any) => item[0] === PURPOSE_SRCFEE)[2] =
             feeSettings.fee +
@@ -392,7 +392,7 @@ export const TransactionsApi = {
               ((bodySize - feeSettings.baseEx) * feeSettings.kb) / 1024,
             );
         }
-      } while (bodySize !== msgPack.encode(body).length);
+      } while (bodySize !== msgPackEncoder.encode(body).length);
     }
 
     return body;
@@ -424,7 +424,7 @@ export const TransactionsApi = {
     gasValue: number;
     amountToken: string;
     amountValue: number;
-    seq: number;
+    seq: bigint;
     feeSettings: any;
     gasSettings: any;
     fee?: number;
@@ -436,7 +436,7 @@ export const TransactionsApi = {
     }
     let body = {
       k: KIND_GENERIC,
-      t: +new Date(),
+      t: BigInt(Date.now()),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       to: Buffer.from(AddressApi.parseTextAddress(sc)),
       s: seq,
@@ -482,7 +482,7 @@ export const TransactionsApi = {
     wif: string;
     amountToken: string;
     amountValue: number;
-    seq: number;
+    seq: bigint;
     feeSettings: any;
     gasSettings: any;
     sponsor: string;
