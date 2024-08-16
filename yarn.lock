@@ -2358,11 +2358,6 @@ concat-stream@^2.0.0:
     readable-stream "^3.0.2"
     typedarray "^0.0.6"
 
-concurrency@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/concurrency/-/concurrency-0.1.4.tgz"
-  integrity sha1-MrRZC1s5lBpNc52vXWoQCAws8x8=
-
 config-chain@^1.1.12:
   version "1.1.13"
   resolved "https://registry.yarnpkg.com/config-chain/-/config-chain-1.1.13.tgz"
