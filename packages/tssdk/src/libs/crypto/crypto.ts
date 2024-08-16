@@ -10,7 +10,7 @@ import {
 } from 'ecpair';
 import BIP32Factory from 'bip32';
 
-import * as ecc from 'tiny-secp256k1';
+import ecc from '@bitcoinerlab/secp256k1';
 import { AddressApi } from '../address/address';
 import {
   PKCS5PEMInfoType, Maybe, MaybeUndef, AccountKey,

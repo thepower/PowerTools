@@ -18,11 +18,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@bitcoinerlab/secp256k1": "^1.1.1",
     "@ethereumjs/common": "^4.1.0",
     "@ethereumjs/tx": "^5.1.0",
     "@ethereumjs/util": "^9.0.1",
     "@ethereumjs/vm": "^7.1.0",
-    "@thepowereco/msgpack": "^1.5.4",
     "axios": "^1.7.2",
     "bip32": "^4.0.0",
     "bip39": "^3.1.0",
@@ -30,7 +30,7 @@
     "create-hash": "^1.2.0",
     "debug": "^4.3.4",
     "ecpair": "^2.1.0",
-    "tiny-secp256k1": "^2.2.3",
+    "msgpackr": "^1.11.0",
     "web3-eth-abi": "^4.1.4",
     "wif": "^5.0.0"
   },

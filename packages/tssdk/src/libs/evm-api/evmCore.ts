@@ -67,7 +67,7 @@ export class EvmContract {
     const newSequence = sequence + 1;
 
     const tx = sponsor === '' ?
-      await TransactionsApi.composeSCMethodCallTX(
+      TransactionsApi.composeSCMethodCallTX(
         {
           address: key.address,
           sc: this.address,
@@ -82,7 +82,7 @@ export class EvmContract {
           gasSettings: this.evm.network.gasSettings,
         },
       ) :
-      await TransactionsApi.composeSponsorSCMethodCallTX(
+      TransactionsApi.composeSponsorSCMethodCallTX(
         {
           address: key.address,
           sc: this.address,

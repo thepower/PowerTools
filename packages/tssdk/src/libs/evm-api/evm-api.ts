@@ -96,7 +96,7 @@ export class EvmApi {
     const sequence = await this.network.getWalletSequence(this.scAddress);
     const newSequence = sequence + 1;
 
-    const tx = await TransactionsApi.composeSCMethodCallTX(
+    const tx = TransactionsApi.composeSCMethodCallTX(
       {
         address: key.address,
         sc: this.scAddress,
