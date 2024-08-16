@@ -7,7 +7,7 @@ import {
 } from 'ecpair';
 import ecc from '@bitcoinerlab/secp256k1';
 import * as bip66 from 'bip66';
-import { msgPackEncoder } from 'utils/msgpack';
+import { msgPackEncoder } from '../utils/msgpack';
 import { AddressApi } from './address/address';
 
 const ECPair: ECPairAPI = ECPairFactory(ecc);
