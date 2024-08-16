@@ -1,4 +1,4 @@
-import { msgPackEncoder } from 'utils/msgpack';
+import { msgPackEncoder } from '../utils/msgpack';
 import { NetworkApi, TransactionsApi } from '.';
 import { AccountKey } from '../typings';
 
