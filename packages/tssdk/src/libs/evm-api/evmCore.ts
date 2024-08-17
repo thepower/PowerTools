@@ -1,10 +1,7 @@
-import { VM } from '@ethereumjs/vm';
-import { Address } from '@ethereumjs/util';
 import { Abi } from 'abitype';
 import {
   encodeFunctionData,
   EncodeFunctionDataParameters,
-  bytesToHex,
   hexToBytes,
   DecodeFunctionResultReturnType,
 } from 'viem/utils';
@@ -14,31 +11,18 @@ import {
   ContractFunctionName,
 } from 'viem/_types/types/contract';
 import { AbiStateMutability } from 'viem';
-import { encodeFunction, decodeReturnValue } from '../../helpers/abi.helper';
-import { bnToHex } from '../../helpers/bnHex.helper';
-import { AddressApi, NetworkApi, TransactionsApi } from '../index';
+import { NetworkApi, TransactionsApi } from '../index';
 
 import { AccountKey, TxResponse } from '../../typings';
 
 export class EvmContract {
-  private evm: EvmCore;
+  private network: NetworkApi;
 
   private address: string;
 
-  private code: Uint8Array;
-
-  constructor(vmc: EvmCore, address: string, code: Uint8Array) {
+  constructor(network: NetworkApi, address: string) {
+    this.network = network;
     this.address = address;
-    this.evm = vmc;
-    this.code = code;
-  }
-
-  public static async build(
-    evmCore: EvmCore,
-    address: string,
-  ): Promise<EvmContract> {
-    const code = await evmCore.network.loadScCode(address);
-    return new EvmContract(evmCore, address, code);
   }
 
   public async scGet<
@@ -61,34 +45,7 @@ export class EvmContract {
     const { args, abi, functionName } =
       parameters as EncodeFunctionDataParameters;
 
-    const encodedFunction = encodeFunction({
-      abi,
-      functionName,
-      args,
-    });
-
-    const contractAddress = Address.fromString(
-      AddressApi.textAddressToEvmAddress(this.address),
-    );
-
-    const getResult = await this.evm.vm.evm.runCall({
-      to: contractAddress,
-      data: hexToBytes(encodedFunction),
-      code: this.code,
-    });
-
-    if (getResult.execResult.exceptionError) {
-      throw getResult.execResult.exceptionError;
-    }
-
-    const decodedValue = decodeReturnValue({
-      functionName,
-      abi,
-      data: bytesToHex(getResult.execResult.returnValue),
-      args,
-    });
-
-    return decodedValue as DecodeFunctionResultReturnType<
+    return this.network.executeCall({ args, abi, functionName }, { address: this.address }) as DecodeFunctionResultReturnType<
     TAbi,
     TFunctionName,
     TArgs
@@ -129,14 +86,14 @@ export class EvmContract {
       args = [],
     } = parameters as EncodeFunctionDataParameters;
 
-    const addressChain = await this.evm.network.getAddressChain(key.address);
+    const addressChain = await this.network.getAddressChain(key.address);
     const addressChainNumber = addressChain?.chain;
 
-    if (this.evm.network.getChain() !== addressChainNumber) {
-      await this.evm.network.changeChain(addressChainNumber);
+    if (this.network.getChain() !== addressChainNumber) {
+      await this.network.changeChain(addressChainNumber);
     }
 
-    const sequence = await this.evm.network.getWalletSequence(key.address);
+    const sequence = await this.network.getWalletSequence(key.address);
     const newSequence = BigInt(sequence + 1);
 
     const encodedFunction = encodeFunctionData({
@@ -160,8 +117,8 @@ export class EvmContract {
           seq: newSequence,
           amountToken: 'SK',
           amountValue: amount,
-          feeSettings: this.evm.network.feeSettings,
-          gasSettings: this.evm.network.gasSettings,
+          feeSettings: this.network.feeSettings,
+          gasSettings: this.network.gasSettings,
         },
       ) :
       TransactionsApi.composeSponsorSCMethodCallTX(
@@ -175,48 +132,16 @@ export class EvmContract {
           seq: newSequence,
           amountToken: 'SK',
           amountValue: amount,
-          feeSettings: this.evm.network.feeSettings,
-          gasSettings: this.evm.network.gasSettings,
+          feeSettings: this.network.feeSettings,
+          gasSettings: this.network.gasSettings,
           sponsor,
         },
       );
 
-    const res = await this.evm.network.sendTxAndWaitForResponse(tx);
+    const res = await this.network.sendTxAndWaitForResponse(tx);
 
     return res as TxResponse<
     DecodeFunctionResultReturnType<TAbi, TFunctionName, TArgs>
     >;
-  }
-}
-
-export class EvmCore {
-  public vm: VM;
-
-  public network: NetworkApi;
-
-  constructor(vm: VM, network: NetworkApi) {
-    this.network = network;
-    this.vm = vm;
-  }
-
-  public static async build(network: NetworkApi): Promise<EvmCore> {
-    const vm = await VM.create();
-
-    vm.stateManager.getContractStorage = async (
-      address: Address,
-      key: Uint8Array,
-    ) => {
-      const val = bnToHex(bytesToHex(key));
-
-      const state = await network.loadScStateByKey(
-        AddressApi.hexToTextAddress(
-          AddressApi.evmAddressToHexAddress(address.toString()),
-        ),
-        val,
-      );
-      return Buffer.from(state);
-    };
-
-    return new EvmCore(vm, network);
   }
 }

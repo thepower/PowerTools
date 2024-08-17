@@ -2,7 +2,7 @@ import { Flags, ux } from '@oclif/core';
 import crypto from 'crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
+import { AddressApi, EvmContract } from '@thepowereco/tssdk';
 import color from '@oclif/color';
 import { prompt } from 'enquirer';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
@@ -50,8 +50,7 @@ export default class ContainerCreate extends BaseCommand {
 
     const importedWallet = await loadWallet(keyFilePath, password);
     const networkApi = await this.initializeNetwork(importedWallet.address);
-    const evmCore = await EvmCore.build(networkApi);
-    const ordersContract = await EvmContract.build(evmCore, ordersScAddress);
+    const ordersContract = new EvmContract(networkApi, ordersScAddress);
 
     const { privateKeyPem, publicKeyPem } = containerKeyFilePath
       ? await this.loadContainerKeys(containerKeyFilePath, containerPassword)

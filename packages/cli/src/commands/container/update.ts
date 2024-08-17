@@ -1,6 +1,6 @@
 import { Flags, ux } from '@oclif/core';
 import crypto from 'crypto';
-import { EvmContract, EvmCore } from '@thepowereco/tssdk';
+import { EvmContract } from '@thepowereco/tssdk';
 import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import cliConfig from '../../config/cli';
@@ -58,8 +58,7 @@ export default class ContainerUpdate extends BaseCommand {
     const networkApi = await initializeNetworkApi({ address: importedWallet.address });
 
     // Initialize EVM and contract
-    const evmCore = await EvmCore.build(networkApi);
-    const ordersContract = await EvmContract.build(evmCore, ordersScAddress);
+    const ordersContract = new EvmContract(networkApi, ordersScAddress);
 
     const privateKeyPem = await importContainerKey(containerKeyFilePath, containerPassword);
 

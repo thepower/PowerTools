@@ -1,5 +1,5 @@
 import { Flags, ux } from '@oclif/core';
-import { AddressApi, EvmContract, EvmCore } from '@thepowereco/tssdk';
+import { AddressApi, EvmContract } from '@thepowereco/tssdk';
 import Table from 'cli-table3';
 import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
@@ -39,8 +39,7 @@ export default class ContainerList extends BaseCommand {
     const networkApi = await initializeNetworkApi({ address: importedWallet.address });
 
     // Initialize EVM core and orders contract
-    const evmCore = await EvmCore.build(networkApi);
-    const ordersContract = await EvmContract.build(evmCore, ordersScAddress);
+    const ordersContract = new EvmContract(networkApi, ordersScAddress);
 
     const containersCount = await ordersContract.scGet(
       { abi: abis.order, functionName: 'balanceOf', args: [AddressApi.textAddressToEvmAddress(importedWallet.address)] },
