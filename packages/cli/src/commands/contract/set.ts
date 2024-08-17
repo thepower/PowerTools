@@ -1,5 +1,5 @@
 import { Flags, ux } from '@oclif/core';
-import { EvmContract, EvmCore } from '@thepowereco/tssdk';
+import { EvmContract } from '@thepowereco/tssdk';
 import { readFileSync } from 'node:fs';
 
 import color from '@oclif/color';
@@ -84,8 +84,7 @@ export default class ContractSet extends BaseCommand {
     });
 
     // Initialize EVM and contract
-    const evmCore = await EvmCore.build(networkApi);
-    const smartContract = await EvmContract.build(evmCore, address);
+    const smartContract = new EvmContract(networkApi, address);
 
     if (!parsedParams) {
       this.log(color.red('No params'));

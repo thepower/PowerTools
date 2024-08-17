@@ -1,7 +1,6 @@
 import { Command, Flags, ux } from '@oclif/core';
 import {
-  // AddressApi,
-  EvmContract, EvmCore,
+  EvmContract,
 } from '@thepowereco/tssdk';
 // import Table from 'cli-table3';
 
@@ -52,8 +51,7 @@ export default class StorageTasklist extends Command {
     const networkApi = await initializeNetworkApi({ address, defaultChain: bootstrapChain });
     // const addressChain = await networkApi.getAddressChain(address);
 
-    const evmCore = await EvmCore.build(networkApi);
-    const storageSc = await EvmContract.build(evmCore, storageScAddress);
+    const storageSc = new EvmContract(networkApi, storageScAddress);
 
     // Get the count of tasks
     const tasksCount = await storageSc.scGet({ abi: abis.storage, functionName: 'storageTasksCount', args: [] });

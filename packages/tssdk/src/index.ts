@@ -6,7 +6,6 @@ export {
   TransactionsApi,
   LStoreApi,
   WalletApi,
-  EvmCore,
   EvmContract,
 } from './libs';
 

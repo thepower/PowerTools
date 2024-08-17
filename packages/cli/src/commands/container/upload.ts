@@ -2,7 +2,7 @@ import { Flags } from '@oclif/core';
 import jsonwebtoken from 'jsonwebtoken';
 import { promises } from 'node:fs';
 import { prompt } from 'enquirer';
-import { EvmContract, EvmCore } from '@thepowereco/tssdk';
+import { EvmContract } from '@thepowereco/tssdk';
 import axios from 'axios';
 import { Listr, color } from 'listr2';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
@@ -134,13 +134,12 @@ export default class ContainerUpload extends BaseCommand {
 
     const files = await scanDir(filesPath, filesPath);
 
-    const evmCore = await EvmCore.build(networkApi);
-    const ordersContract = await EvmContract.build(
-      evmCore,
+    const ordersContract = new EvmContract(
+      networkApi,
       ordersScAddress,
     );
-    const providerContract = await EvmContract.build(
-      evmCore,
+    const providerContract = new EvmContract(
+      networkApi,
       providerScAddress,
     );
 

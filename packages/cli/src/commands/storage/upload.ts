@@ -1,6 +1,6 @@
 import { Command, Flags } from '@oclif/core';
 import {
-  AddressApi, EvmContract, EvmCore,
+  AddressApi, EvmContract,
 } from '@thepowereco/tssdk';
 import { Listr } from 'listr2';
 import { resolve } from 'node:path';
@@ -61,11 +61,9 @@ export default class StorageUpload extends Command {
 
     // Initialize the smart contract
 
-    const evmCore = await EvmCore.build(networkApi);
-    const storageSc = await EvmContract.build(evmCore, storageScAddress);
+    const storageSc = new EvmContract(networkApi, storageScAddress);
 
     // Get the task ID by name
-    // let taskId = await storageSc.scGet('taskIdByName', [AddressApi.textAddressToEvmAddress(address), projectId]);
     let taskId = await storageSc.scGet({ abi: abis.storage, functionName: 'taskIdByName', args: [AddressApi.textAddressToEvmAddress(address), projectId] });
 
     // Scan directory and create manifest JSON string
