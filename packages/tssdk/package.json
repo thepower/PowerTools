@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/tssdk",
-  "version": "2.1.9",
+  "version": "2.2.0",
   "main": "dist/index.js",
   "description": "thepower tssdk",
   "author": "thepower",
@@ -31,9 +31,9 @@
     "create-hash": "^1.2.0",
     "debug": "^4.3.4",
     "ecpair": "^2.1.0",
+    "msgpackr": "^1.11.0",
     "tiny-secp256k1": "^2.2.3",
     "viem": "^2.19.6",
-    "msgpackr": "^1.11.0",
     "wif": "^5.0.0"
   },
   "devDependencies": {

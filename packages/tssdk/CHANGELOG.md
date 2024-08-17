@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.9...@thepowereco/tssdk@2.2.0) (2024-08-17)
+
+
+### Features
+
+* smart contract methods types ([19b4928](https://github.com/thepower/power_hub/commit/19b4928d9a594b30fa91aa39311a01778ac7e090))
+
+
+
+
+
 ## [2.1.9](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.8...@thepowereco/tssdk@2.1.9) (2024-08-16)
 
 
