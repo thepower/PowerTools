@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.2.0...@thepowereco/tssdk@2.2.1) (2024-08-17)
+
+
+### Bug Fixes
+
+* removed ethereumjs ([e63230a](https://github.com/thepower/power_hub/commit/e63230a098152453a5be5bbb305738cf53648a16))
+
+
+
+
+
 # [2.2.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.9...@thepowereco/tssdk@2.2.0) (2024-08-17)
 
 

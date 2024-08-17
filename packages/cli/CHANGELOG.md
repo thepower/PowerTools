@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.140](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.11.139...@thepowereco/cli@1.11.140) (2024-08-17)
+
+
+### Bug Fixes
+
+* removed ethereumjs ([e63230a](https://github.com/thepower/PowerTools/commit/e63230a098152453a5be5bbb305738cf53648a16))
+
+
+
+
+
 ## [1.11.139](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.11.138...@thepowereco/cli@1.11.139) (2024-08-17)
 
 **Note:** Version bump only for package @thepowereco/cli
