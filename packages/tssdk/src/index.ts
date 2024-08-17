@@ -5,13 +5,10 @@ export {
   CryptoApi,
   TransactionsApi,
   LStoreApi,
-  EvmApi,
   WalletApi,
   EvmCore,
   EvmContract,
 } from './libs';
-
-export { Evm20Contract, Evm721Contract } from './contracts';
 
 export { msgPackEncoder } from './utils/msgpack';
 

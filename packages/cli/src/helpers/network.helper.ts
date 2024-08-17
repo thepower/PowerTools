@@ -1,5 +1,7 @@
 import { NetworkApi, WalletApi } from '@thepowereco/tssdk';
 import { readFileSync } from 'node:fs';
+import { prompt } from 'enquirer';
+import { ux } from '@oclif/core';
 
 export async function initializeNetworkApi({
   address,
@@ -9,7 +11,7 @@ export async function initializeNetworkApi({
   address?: string
   chain?: number
   defaultChain?: number
-}): Promise<NetworkApi | undefined> {
+}) {
   let networkApi: NetworkApi | undefined;
   if (chain) {
     networkApi = new NetworkApi(chain);
@@ -18,17 +20,32 @@ export async function initializeNetworkApi({
     const defaultNetworkApi = new NetworkApi(defaultChain);
     await defaultNetworkApi.bootstrap();
     const addressChain = await defaultNetworkApi.getAddressChain(address);
-    if (addressChain?.chain) {
+    if (addressChain?.chain && addressChain.chain !== defaultChain) {
       networkApi = new NetworkApi(addressChain.chain);
       await networkApi.bootstrap();
     }
   }
 
+  if (!networkApi) {
+    throw new Error('No network found.');
+  }
+
   return networkApi;
 }
 
-export function loadWallet(keyFilePath: string, password: string) {
+export async function loadWallet(keyFilePath: string, password: string) {
   const importedData = readFileSync(keyFilePath, 'utf8');
 
-  return WalletApi.parseExportData(importedData, password);
+  try {
+    return WalletApi.parseExportData(importedData, password);
+  } catch (error) {
+    ux.action.stop();
+    const { password }: { password: string } = await prompt({
+      message: 'Please, enter your account keyFile password',
+      name: 'password',
+      type: 'password',
+    });
+    ux.action.start('Loading');
+    return WalletApi.parseExportData(importedData, password);
+  }
 }

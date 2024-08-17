@@ -35,6 +35,11 @@ USAGE
 * [`tpe acc register`](#tpe-acc-register)
 * [`tpe acc send-sk`](#tpe-acc-send-sk)
 * [`tpe autocomplete [SHELL]`](#tpe-autocomplete-shell)
+* [`tpe container actions`](#tpe-container-actions)
+* [`tpe container create`](#tpe-container-create)
+* [`tpe container list`](#tpe-container-list)
+* [`tpe container update`](#tpe-container-update)
+* [`tpe container upload`](#tpe-container-upload)
 * [`tpe contract deploy`](#tpe-contract-deploy)
 * [`tpe contract get`](#tpe-contract-get)
 * [`tpe contract set`](#tpe-contract-set)
@@ -59,24 +64,23 @@ Get the balance of a wallet address
 
 ```
 USAGE
-  $ tpe acc get-balance [-a <value> | -k <value>] [-c <value>] [-d <value>] [-p <value>]
+  $ tpe acc get-balance [-a <value> | -k <value>] [-b <value>] [-p <value>]
 
 FLAGS
-  -a, --address=<value>       Wallet address
-  -c, --chain=<value>         Chain ID
-  -d, --defaultChain=<value>  [default: 1025] Default chain ID
-  -k, --keyFilePath=<value>   Path to the key file
-  -p, --password=<value>      Password for the key file
+  -a, --address=<value>         Wallet address
+  -b, --bootstrapChain=<value>  [default: 1025] Bootstrap chain ID
+  -k, --keyFilePath=<value>     Path to the key file
+  -p, --password=<value>        Password for the key file (env: KEY_FILE_PASSWORD)
 
 DESCRIPTION
   Get the balance of a wallet address
 
 EXAMPLES
-  $ tpe acc get-balance --address AA100000001677748249 --chain 1
+  $ tpe acc get-balance --address AA100000001677748249
 
-  $ tpe acc get-balance -a AA100000001677748249 -c 1
+  $ tpe acc get-balance -a AA100000001677748249
 
-  $ tpe acc get-balance --address AA100000001677748249 --defaultChain 1025
+  $ tpe acc get-balance --address AA100000001677748249 --bootstrapChain 1025
 
   $ tpe acc get-balance --keyFilePath ./path/to/keyfile.pem --password mypassword
 ```
@@ -128,20 +132,19 @@ Send SK tokens to a specified address
 
 ```
 USAGE
-  $ tpe acc send-sk -a <value> -k <value> -t <value> [-c <value>] [-d <value>] [-m <value>] [-p <value>] [-e
-    <value>] [-g <value>] [-v <value>]
+  $ tpe acc send-sk -a <value> -k <value> -t <value> [-b <value>] [-m <value>] [-p <value>] [-e <value>] [-g
+    <value>] [-v <value>]
 
 FLAGS
-  -a, --amount=<value>        (required) Amount to send
-  -c, --chain=<value>         Chain ID
-  -d, --defaultChain=<value>  [default: 1025] Default chain ID
-  -e, --token=<value>         [default: SK] Token to send
-  -g, --gasToken=<value>      Token used to pay for gas
-  -k, --keyFilePath=<value>   (required) Path to the key file
-  -m, --message=<value>       Message to include
-  -p, --password=<value>      Password for the key file
-  -t, --to=<value>            (required) Recipient address
-  -v, --gasValue=<value>      Gas value for deployment
+  -a, --amount=<value>          (required) Amount to send
+  -b, --bootstrapChain=<value>  [default: 1025] Default chain ID
+  -e, --token=<value>           [default: SK] Token to send
+  -g, --gasToken=<value>        Token used to pay for gas
+  -k, --keyFilePath=<value>     (required) Path to the key file
+  -m, --message=<value>         Message to include
+  -p, --password=<value>        Password for the key file (env: KEY_FILE_PASSWORD)
+  -t, --to=<value>              (required) Recipient address
+  -v, --gasValue=<value>        Gas value for deployment
 
 DESCRIPTION
   Send SK tokens to a specified address
@@ -151,7 +154,7 @@ EXAMPLES
 
   $ tpe acc send-sk -a 100 -t AA100000001677748249 -k ./path/to/keyfile.pem -p mypassword
 
-  $ tpe acc send-sk --amount 100 --to AA100000001677748249 --chain 1 --keyFilePath ./path/to/keyfile.pem
+  $ tpe acc send-sk --amount 100 --to AA100000001677748249 --keyFilePath ./path/to/keyfile.pem
 ```
 
 _See code: [dist/commands/acc/send-sk.js](https://github.com/thepower/PowerTools/blob/v1.11.138/dist/commands/acc/send-sk.js)_
@@ -187,34 +190,179 @@ EXAMPLES
 
 _See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v3.1.4/src/commands/autocomplete/index.ts)_
 
+## `tpe container actions`
+
+Perform various container actions
+
+```
+USAGE
+  $ tpe container actions -m <value> -f <value> [-p <value>] [-s <value>]
+
+FLAGS
+  -f, --containerKeyFilePath=<value>  (required) Path to the container key file
+  -m, --method=<value>                (required) Method to call on the container
+  -p, --params=<value>                Parameters for the method
+  -s, --containerPassword=<value>     Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)
+
+DESCRIPTION
+  Perform various container actions
+
+EXAMPLES
+  $ tpe container actions -m "container_start" -p 1 -f ./path/to/keyfile.pem -s mypassword
+
+  $ tpe container actions -m "container_stop" -p 1 -f ./path/to/keyfile.pem -s mypassword
+
+  $ tpe container actions -m "container_destroy" -p 1 -f ./path/to/keyfile.pem -s mypassword
+
+  $ tpe container actions -m "container_handover" -p 1 -f ./path/to/keyfile.pem -s mypassword
+
+  $ tpe container actions -m "container_getPort" -p "1 web 5000" -f ./path/to/keyfile.pem -s mypassword
+
+  $ tpe container actions -m "container_getLogs" -p 1 -f ./path/to/keyfile.pem -s mypassword
+```
+
+_See code: [dist/commands/container/actions.js](https://github.com/thepower/PowerTools/blob/v1.11.133/dist/commands/container/actions.js)_
+
+## `tpe container create`
+
+Create a new container with a given name and key pair
+
+```
+USAGE
+  $ tpe container create -k <value> -n <value> [-p <value>] [-f <value>] [-s <value>] [-a <value>] [-r <value>]
+
+FLAGS
+  -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
+  -f, --containerKeyFilePath=<value>  Path to the container key file
+  -k, --keyFilePath=<value>           (required) Path to the key file
+  -n, --containerName=<value>         (required) Name of the container
+  -p, --password=<value>              Password for the key file (env: KEY_FILE_PASSWORD)
+  -r, --sponsorAddress=<value>        Address of the sponsor
+  -s, --containerPassword=<value>     Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)
+
+DESCRIPTION
+  Create a new container with a given name and key pair
+
+EXAMPLES
+  $ tpe container create -k ./key.pem -p mypassword -n "NewContainer" -s containerpassword
+
+  $ tpe container create -k ./key.pem --password mypassword --containerName "NewContainer" --containerPassword containerpassword
+```
+
+_See code: [dist/commands/container/create.js](https://github.com/thepower/PowerTools/blob/v1.11.133/dist/commands/container/create.js)_
+
+## `tpe container list`
+
+List containers owned by a user
+
+```
+USAGE
+  $ tpe container list -k <value> [-p <value>] [-a <value>]
+
+FLAGS
+  -a, --ordersScAddress=<value>  [default: AA100000001677749450] Orders smart contract address
+  -k, --keyFilePath=<value>      (required) Path to the key file
+  -p, --password=<value>         Password for the key file (env: KEY_FILE_PASSWORD)
+
+DESCRIPTION
+  List containers owned by a user
+
+EXAMPLES
+  $ tpe container list -k ./key.pem -p mypassword
+
+  $ tpe container list -k ./key.pem --password mypassword
+```
+
+_See code: [dist/commands/container/list.js](https://github.com/thepower/PowerTools/blob/v1.11.133/dist/commands/container/list.js)_
+
+## `tpe container update`
+
+Update container details
+
+```
+USAGE
+  $ tpe container update -k <value> -i <value> -n <value> -f <value> [-p <value>] [-s <value>] [-a <value>] [-r
+    <value>]
+
+FLAGS
+  -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
+  -f, --containerKeyFilePath=<value>  (required) Path to the container key file
+  -i, --containerId=<value>           (required) Id of the container
+  -k, --keyFilePath=<value>           (required) Path to the key file
+  -n, --containerName=<value>         (required) Name of the container
+  -p, --password=<value>              Password for the key file (env: KEY_FILE_PASSWORD)
+  -r, --sponsorAddress=<value>        Address of the sponsor
+  -s, --containerPassword=<value>     Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)
+
+DESCRIPTION
+  Update container details
+
+EXAMPLES
+  $ tpe container update -k ./key.pem -p mypassword -i 123 -n "New Container Name" -f ./containerKey.pem -s containerpassword
+
+  $ tpe container update -k ./key.pem --password mypassword --containerId 123 
+      --containerName "New Container Name" --containerKeyFilePath ./containerKey.pem --containerPassword containerpassword
+```
+
+_See code: [dist/commands/container/update.js](https://github.com/thepower/PowerTools/blob/v1.11.133/dist/commands/container/update.js)_
+
+## `tpe container upload`
+
+Upload files to a container
+
+```
+USAGE
+  $ tpe container upload -k <value> -i <value> -f <value> -t <value> [-p <value>] [-s <value>] [-c] [-a <value>] [-b
+    <value>]
+
+FLAGS
+  -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
+  -b, --providerScAddress=<value>     [default: AA100000001677749552] Provider smart contract address
+  -c, --chooseProvider                Choose provider
+  -f, --containerKeyFilePath=<value>  (required) Path to the container key file
+  -i, --containerId=<value>           (required) Container ID
+  -k, --keyFilePath=<value>           (required) Path to the key file
+  -p, --password=<value>              Password for the key file (env: KEY_FILE_PASSWORD)
+  -s, --containerPassword=<value>     Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)
+  -t, --filesPath=<value>             (required) Path to the files
+
+DESCRIPTION
+  Upload files to a container
+
+EXAMPLES
+  $ tpe container upload --containerId 123 --containerKeyFilePath ./key.pem --containerPassword mypassword --filesPath ./files
+
+  $ tpe container upload -i 123 -f ./key.pem -s mypassword -p ./files
+```
+
+_See code: [dist/commands/container/upload.js](https://github.com/thepower/PowerTools/blob/v1.11.133/dist/commands/container/upload.js)_
+
 ## `tpe contract deploy`
 
 Deploy a smart contract to the blockchain
 
 ```
 USAGE
-  $ tpe contract deploy -a <value> -b <value> -k <value> [-c <value>] [-t <value>] [-v <value>] [-i <value>...] [-p
-    <value>]
+  $ tpe contract deploy -a <value> -b <value> -k <value> [-t <value>] [-v <value>] [-i <value>] [-p <value>]
 
 FLAGS
-  -a, --abiPath=<value>        (required) Path to the ABI file
-  -b, --binPath=<value>        (required) Path to the binary file
-  -c, --chain=<value>          Chain ID to deploy on
-  -i, --initParams=<value>...  [default: ] Initialization parameters
-  -k, --keyFilePath=<value>    (required) Path to the key file
-  -p, --password=<value>       Password for the key file
-  -t, --gasToken=<value>       [default: SK] Token used to pay for gas
-  -v, --gasValue=<value>       [default: 2000000000] Gas value for deployment
+  -a, --abiPath=<value>      (required) Path to the ABI file
+  -b, --binPath=<value>      (required) Path to the binary file
+  -i, --initParams=<value>   Initialization parameters
+  -k, --keyFilePath=<value>  (required) Path to the key file
+  -p, --password=<value>     Password for the key file (env: KEY_FILE_PASSWORD)
+  -t, --gasToken=<value>     [default: SK] Token used to pay for gas
+  -v, --gasValue=<value>     [default: 2000000000] Gas value for deployment
 
 DESCRIPTION
   Deploy a smart contract to the blockchain
 
 EXAMPLES
-  $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --chain 1 --keyFilePath ./path/to/keyfile.pem --password mypassword
+  $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --password mypassword
 
-  $ tpe contract deploy -a ./path/to/abi.json -b ./path/to/bin -c 1 -k ./path/to/keyfile.pem -p mypassword --gasToken SK --gasValue 2000000000
+  $ tpe contract deploy -a ./path/to/abi.json -b ./path/to/bin -k ./path/to/keyfile.pem -p mypassword --gasToken SK --gasValue 2000000000
 
-  $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --chain 1 --keyFilePath ./path/to/keyfile.pem --initParams param1 param2
+  $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --initParams "param1 param2"
 ```
 
 _See code: [dist/commands/contract/deploy.js](https://github.com/thepower/PowerTools/blob/v1.11.138/dist/commands/contract/deploy.js)_
@@ -225,24 +373,23 @@ Call a method on a deployed smart contract
 
 ```
 USAGE
-  $ tpe contract get -a <value> -d <value> -m <value> [-c <value>] [-p <value>...]
+  $ tpe contract get -a <value> -d <value> -m <value> [-p <value>]
 
 FLAGS
-  -a, --abiPath=<value>    (required) Path to the ABI file
-  -c, --chain=<value>      Chain ID
-  -d, --address=<value>    (required) Smart contract address
-  -m, --method=<value>     (required) Method name to call
-  -p, --params=<value>...  [default: ] Parameters for the method
+  -a, --abiPath=<value>  (required) Path to the ABI file
+  -d, --address=<value>  (required) Smart contract address
+  -m, --method=<value>   (required) Method name to call
+  -p, --params=<value>   Parameters for the method
 
 DESCRIPTION
   Call a method on a deployed smart contract
 
 EXAMPLES
-  $ tpe contract get --abiPath ./path/to/abi.json --address AA100000001677748249 --chain 1 --method getBalance --params 0x456...
+  $ tpe contract get --abiPath ./path/to/abi.json --address AA100000001677748249 --method getBalance --params "0x456 1 2 [1,2] {a: 1, b: 2} 1n"
 
-  $ tpe contract get -a ./path/to/abi.json -d AA100000001677748249 -c 1 -m getBalance -p 0x456...
+  $ tpe contract get -a ./path/to/abi.json -d AA100000001677748249 -m getBalance -p "0x456 1 2 [1,2] {a: 1, b: 2} 1n"
 
-  $ tpe contract get --abiPath ./path/to/abi.json --address AA100000001677748249 --chain 1 --method getInfo
+  $ tpe contract get --abiPath ./path/to/abi.json --address AA100000001677748249 --method getInfo
 ```
 
 _See code: [dist/commands/contract/get.js](https://github.com/thepower/PowerTools/blob/v1.11.138/dist/commands/contract/get.js)_
@@ -253,28 +400,30 @@ Execute a method on a specified smart contract
 
 ```
 USAGE
-  $ tpe contract set -a <value> -d <value> -k <value> -m <value> [-c <value>] [-r <value>...] [-p <value>]
+  $ tpe contract set -a <value> -d <value> -k <value> -m <value> [-r <value>] [-n <value>] [-p <value>] [-s
+    <value>]
 
 FLAGS
-  -a, --abiPath=<value>      (required) Path to the ABI file
-  -c, --chain=<value>        Chain ID
-  -d, --address=<value>      (required) Smart contract address
-  -k, --keyFilePath=<value>  (required) Path to the key file
-  -m, --method=<value>       (required) Method name to call
-  -p, --password=<value>     Password for the key file
-  -r, --params=<value>...    [default: ] Parameters for the method
+  -a, --abiPath=<value>         (required) Path to the ABI file
+  -d, --address=<value>         (required) Smart contract address
+  -k, --keyFilePath=<value>     (required) Path to the key file
+  -m, --method=<value>          (required) Method name to call
+  -n, --amount=<value>          Amount of tokens to send
+  -p, --password=<value>        Password for the key file (env: KEY_FILE_PASSWORD)
+  -r, --params=<value>          Parameters for the method
+  -s, --sponsorAddress=<value>  Address of the sponsor
 
 DESCRIPTION
   Execute a method on a specified smart contract
 
 EXAMPLES
   $ tpe contract set --abiPath ./path/to/abi.json 
-      --address AA100000001677748249 --chain 1 --keyFilePath ./path/to/keyfile.pem --method set --params value1 value2 --password mypassword
+      --address AA100000001677748249 --keyFilePath ./path/to/keyfile.pem --method set --params value1 --password mypassword
 
-  $ tpe contract set -a ./path/to/abi.json -d AA100000001677748249 -c 1 -k ./path/to/keyfile.pem -m set -r value1 value2 -p mypassword
+  $ tpe contract set -a ./path/to/abi.json -d AA100000001677748249 -k ./path/to/keyfile.pem -m set -r "value1 value2" -p mypassword
 
   $ tpe contract set --abiPath ./path/to/abi.json 
-      --address AA100000001677748249 --chain 1 --keyFilePath ./path/to/keyfile.pem --method setData --params param1 param2
+      --address AA100000001677748249 --keyFilePath ./path/to/keyfile.pem --method setData --params "0x456 1 2 [1,2] {a: 1, b: 2} 1n"
 ```
 
 _See code: [dist/commands/contract/set.js](https://github.com/thepower/PowerTools/blob/v1.11.138/dist/commands/contract/set.js)_
@@ -594,10 +743,12 @@ Shows the list of all tasks for the current account
 
 ```
 USAGE
-  $ tpe storage tasklist [-c <value>]
+  $ tpe storage tasklist [-b <value>] [-c <value>] [-a <value>]
 
 FLAGS
-  -c, --configPath=<value>  [default: ./tp-cli.json] Config to read
+  -a, --storageScAddress=<value>  [default: AA100000001677723663] Storage smart contract address
+  -b, --bootstrapChain=<value>    [default: 1025] Default chain ID
+  -c, --configPath=<value>        [default: ./tp-cli.json] Config to read
 
 DESCRIPTION
   Shows the list of all tasks for the current account
@@ -616,10 +767,14 @@ Upload application files to the storage
 
 ```
 USAGE
-  $ tpe storage upload [-c <value>]
+  $ tpe storage upload [-b <value>] [-c <value>] [-a <value>] [-p <value>] [-s <value>]
 
 FLAGS
-  -c, --configPath=<value>  [default: ./tp-cli.json] Config to read
+  -a, --storageScAddress=<value>  [default: AA100000001677723663] Storage smart contract address
+  -b, --bootstrapChain=<value>    [default: 1025] Default chain ID for bootstrap
+  -c, --configPath=<value>        [default: ./tp-cli.json] Config to read
+  -p, --password=<value>          Password for the key file (env: KEY_FILE_PASSWORD)
+  -s, --sponsorAddress=<value>    Address of the sponsor
 
 DESCRIPTION
   Upload application files to the storage

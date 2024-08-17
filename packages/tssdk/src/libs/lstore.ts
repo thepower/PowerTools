@@ -67,7 +67,7 @@ const setLStore = async (account: AccountKey, patches: [string, string, string][
   }
 
   const sequence = await network.getWalletSequence(account.address);
-  const newSequence = sequence + 1;
+  const newSequence = BigInt(sequence + 1);
 
   const tx = TransactionsApi.composeStoreTX(
     {

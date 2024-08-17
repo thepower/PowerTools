@@ -1,17 +1,25 @@
-import { Flags, Command, ux } from '@oclif/core';
-import { AddressApi, EvmApi } from '@thepowereco/tssdk';
-import Table from 'cli-table3';
-import { color } from 'json-colorizer';
+import { Command, Flags, ux } from '@oclif/core';
+import {
+  // AddressApi,
+  EvmContract, EvmCore,
+} from '@thepowereco/tssdk';
+// import Table from 'cli-table3';
 
+import color from '@oclif/color';
 import cliConfig from '../../config/cli';
 
 import { DEFAULT_CONFIG_FILE_PATH, getConfig, setConfig } from '../../helpers/config.helper';
-import { Task } from '../../types/task.type';
+// import { Task } from '../../types/task.type';
 import abis from '../../abis';
+import { initializeNetworkApi } from '../../helpers/network.helper';
 
 export default class StorageTasklist extends Command {
   static override flags = {
+    bootstrapChain: Flags.integer({ char: 'b', default: 1025, description: 'Default chain ID' }),
     configPath: Flags.file({ char: 'c', description: 'Config to read', default: DEFAULT_CONFIG_FILE_PATH }),
+    storageScAddress: Flags.string({
+      char: 'a', default: cliConfig.storageScAddress, description: 'Storage smart contract address',
+    }),
   };
 
   static override description = 'Shows the list of all tasks for the current account';
@@ -23,11 +31,10 @@ export default class StorageTasklist extends Command {
 
   async run(): Promise<void> {
     const { flags } = await this.parse(StorageTasklist);
-    const { configPath } = flags;
+    const { bootstrapChain, configPath, storageScAddress } = flags;
 
     // Get the current configuration
     let config = await getConfig(configPath);
-    const chainNumber = 1; // TODO: Get chain number by address
 
     // If configuration is not found, set a new configuration
     if (!config) {
@@ -38,52 +45,64 @@ export default class StorageTasklist extends Command {
     this.log(color.cyan(JSON.stringify(config, null, 2)));
 
     const { address } = config;
+
     this.log(color.whiteBright(`Task list for ${address} account`));
 
-    // Initialize the smart contract
-    const storageSc = await EvmApi.build({
-      abiJSON: abis.storage,
-      chain: chainNumber,
-      scAddress: cliConfig.storageScAddress,
-    });
+    // Initialize network API
+    const networkApi = await initializeNetworkApi({ address, defaultChain: bootstrapChain });
+    // const addressChain = await networkApi.getAddressChain(address);
+
+    const evmCore = await EvmCore.build(networkApi);
+    const storageSc = await EvmContract.build(evmCore, storageScAddress);
 
     // Get the count of tasks
-    const tasksCount = await storageSc.scGet('storageTasksCount', []);
-
+    const tasksCount = await storageSc.scGet({ abi: abis.storage, functionName: 'storageTasksCount', args: [] });
+    console.log({ tasksCount });
     ux.action.start('Loading');
 
     // Fetch the list of tasks
-    const list: Task[] = await Promise.all(
-      Array.from({ length: Number(tasksCount) }).map(async (_, index) => {
-        const task = await storageSc.scGet('getTask', [index + 1]);
-        return { ...task, id: index + 1 };
-      }),
-    );
+    // const list = await Promise.all(
+    //   Array.from({ length: Number(tasksCount) }).map(async (_, index) => {
+    //     try {
+    //       const task = await storageSc.scGet('getTask', [index + 1]);
+    //       console.log({ task });
+    //       return { ...task, id: index + 1 };
+    //     } catch (error) {
+    //       console.log({ error });
+    //       return null;
+    //     }
+    //   }),
+    // );
+
+    // console.log({ list });
 
     // Create a table for displaying the tasks
-    const table = new Table({
-      head: ['Id', 'Name', 'Status', 'Hash', 'Size', 'TaskTime', 'Expire', 'Uploader'],
-    });
+    // const table = new Table({
+    //   head: ['Id', 'Name', 'Status', 'Hash', 'Size', 'TaskTime', 'Expire', 'Uploader'],
+    // });
 
-    // Filter tasks by owner and prepare rows for the table
-    const rows = list
-      .filter((task) => task.owner.toString() === AddressApi.textAddressToEvmAddress(address).toString())
-      .map((task) => [
-        task.id,
-        task.name,
-        task.status.toString(),
-        task.hash.toString(),
-        task.size.toString(),
-        task.taskTime.toString(),
-        task.expire.toString(),
-        task.uploader.toString(),
-      ]);
+    // // Filter tasks by owner and prepare rows for the table
+    // const rows = list
+    //   .filter((task) => task.owner.toString() === AddressApi.textAddressToEvmAddress(address).toString())
+    //   .map((task) => [
+    //     task.id,
+    //     task.name,
+    //     task.status.toString(),
+    //     task.hash.toString(),
+    //     task.size.toString(),
+    //     task.taskTime.toString(),
+    //     task.expire.toString(),
+    //     task.uploader.toString(),
+    //   ]);
 
-    table.push(...rows);
+    // table.push(...rows);
 
-    ux.action.stop();
-
-    // Display the table
-    this.log(table.toString());
+    // ux.action.stop();
+    // console.log({ list });
+    // if (rows.length) {
+    //   this.log(table.toString());
+    // } else {
+    //   this.log(color.red('No tasks found'));
+    // }
   }
 }

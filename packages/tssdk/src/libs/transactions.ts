@@ -1,6 +1,11 @@
 import createHash from 'create-hash';
-import { encodeParameters } from 'web3-eth-abi';
-import { hexToBytes } from '@ethereumjs/util';
+import {
+  encodeAbiParameters,
+  EncodeDeployDataParameters,
+  hexToBytes,
+} from 'viem/utils';
+import { Abi } from 'abitype';
+
 import {
   ECPairFactory, ECPairAPI,
   ECPairInterface,
@@ -155,17 +160,15 @@ export const TransactionsApi = {
     const bufferFrom = Buffer.from(AddressApi.parseTextAddress(from));
     const bufferTo = Buffer.from(AddressApi.parseTextAddress(to));
 
-    let body = getSimpleTransferTxBody(
-      {
-        from: bufferFrom,
-        to: bufferTo,
-        token,
-        amount,
-        msg: message,
-        timestamp,
-        seq,
-      },
-    );
+    let body = getSimpleTransferTxBody({
+      from: bufferFrom,
+      to: bufferTo,
+      token,
+      amount,
+      msg: message,
+      timestamp,
+      seq,
+    });
     if (gasToken && gasValue !== undefined) {
       body.p.push([PURPOSE_GAS, gasToken, gasValue]);
     }
@@ -206,35 +209,33 @@ export const TransactionsApi = {
       .encode(wrapAndSignPayload(payload, keyPair, publicKey))
       .toString('base64');
   },
-  composeDeployTX({
-    address,
-    code,
-    initParams,
-    gasToken,
-    gasValue,
-    wif,
-    abi,
-    seq,
-    feeSettings,
-    gasSettings,
-    fee,
-    feeToken,
-  }: {
-    address: string;
-    code: any;
-    initParams: any;
-    gasToken: string;
-    gasValue: number;
-    wif: string;
-    abi: any;
-    seq: bigint;
-    feeSettings: any;
-    gasSettings: any;
-    fee?: number;
-    feeToken?: string;
-  }) {
+  composeDeployTX<const TAbi extends Abi | readonly unknown[]>(
+    parameters: EncodeDeployDataParameters<TAbi>,
+    {
+      address,
+      gasToken,
+      gasValue,
+      wif,
+      seq,
+      feeSettings,
+      gasSettings,
+      fee,
+      feeToken,
+    }: {
+      address: string;
+      gasToken: string;
+      gasValue: number;
+      wif: string;
+      seq: bigint;
+      feeSettings: any;
+      gasSettings: any;
+      fee?: number;
+      feeToken?: string;
+    },
+  ) {
+    const { abi, args, bytecode } = parameters as EncodeDeployDataParameters;
     const scCode = new Uint8Array(
-      code.match(/[\da-f]{2}/gi).map((h: string) => parseInt(h, 16)),
+      (bytecode.match(/[\da-f]{2}/gi) || []).map((h: string) => parseInt(h, 16)),
     );
 
     let body = {
@@ -248,18 +249,20 @@ export const TransactionsApi = {
       e: { code: Buffer.from(scCode), vm: 'evm', view: [] },
     };
 
-    if (initParams.length) {
+    if (args?.length) {
       const abiItem = abi?.find((item: any) => item.type === 'constructor');
 
       if (!abiItem) {
         throw new Error('ABI item not found');
       }
 
-      const encodedFunction = encodeParameters(abiItem.inputs, initParams);
+      if (('inputs' in abiItem) && abiItem.inputs) {
+        const encodedFunction = encodeAbiParameters(abiItem.inputs, args);
 
-      const data = hexToBytes(encodedFunction);
-      const dataBuffer = Buffer.from(data);
-      body.c = ['0x0', [dataBuffer]];
+        const data = hexToBytes(encodedFunction);
+        const dataBuffer = Buffer.from(data);
+        body.c = ['0x0', [dataBuffer]];
+      }
     }
 
     if (gasValue > 0) {
