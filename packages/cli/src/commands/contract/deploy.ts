@@ -35,9 +35,9 @@ export default class ContractDeploy extends BaseCommand {
       default: 'SK',
       description: 'Token used to pay for gas',
     }),
-    gasValue: Flags.integer({
+    gasValue: Flags.string({
       char: 'v',
-      default: 2_000_000_000,
+      default: '2000000000',
       description: 'Gas value for deployment',
     }),
     initParams: Flags.string({
@@ -98,7 +98,7 @@ export default class ContractDeploy extends BaseCommand {
           feeSettings: networkApi.feeSettings,
           gasSettings: networkApi.gasSettings,
           gasToken,
-          gasValue,
+          gasValue: BigInt(gasValue),
           wif: importedWallet.wif,
         },
       );

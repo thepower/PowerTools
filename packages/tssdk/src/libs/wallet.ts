@@ -165,12 +165,11 @@ export class WalletApi {
     from: string;
     to: string;
     token: string;
-    inputAmount: number;
+    inputAmount: bigint;
     message: string;
-    gasValue?: number;
+    gasValue?: bigint;
     gasToken?: string;
   }) {
-    const amount = correctAmount(inputAmount, token, false);
     const feeSettings = this.networkApi.feeSettings;
     const sequence = await this.getWalletSequence(from);
     const newSequence = BigInt(sequence + 1);
@@ -180,7 +179,7 @@ export class WalletApi {
       from,
       to,
       token,
-      amount,
+      amount: inputAmount,
       message,
       seq: newSequence,
       gasValue,

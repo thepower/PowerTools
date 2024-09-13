@@ -27,6 +27,9 @@ export default class AccSendSk extends BaseCommand {
     }),
     to: Flags.string({ char: 't', description: 'Recipient address', required: true }),
     token: Flags.string({ char: 'e', default: 'SK', description: 'Token to send' }),
+    decimals: Flags.integer({
+      char: 'd', default: 9, description: 'Decimals of the token',
+    }),
     gasToken: Flags.string({ char: 'g', description: 'Token used to pay for gas' }),
     gasValue: Flags.integer({ char: 'v', description: 'Gas value for deployment' }),
   };
@@ -41,6 +44,7 @@ export default class AccSendSk extends BaseCommand {
       password,
       to,
       token,
+      decimals,
       gasToken,
       gasValue,
     } = flags;
@@ -62,10 +66,10 @@ export default class AccSendSk extends BaseCommand {
       from: importedWallet.address,
       to,
       token,
-      inputAmount: amount,
+      inputAmount: BigInt(amount) * BigInt(10 ** decimals),
       message,
       gasToken,
-      gasValue,
+      gasValue: gasValue ? BigInt(gasValue) : undefined,
     });
 
     const { txId } = result as TxStatus;

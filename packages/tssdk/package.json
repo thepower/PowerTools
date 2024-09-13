@@ -13,8 +13,7 @@
     "service": "nodemon",
     "start": "node dist/index.js",
     "release": "standard-version",
-    "prepare": "yarn build",
-    "start:example": "ts-node src/evm/examples/loadScNew.ts"
+    "prepare": "yarn build"
   },
   "license": "MIT",
   "dependencies": {
@@ -44,16 +43,16 @@
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
   },
-  "homepage": "https://github.com/thepower/power_hub#readme",
+  "homepage": "https://github.com/thepower/PowerTools#readme",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thepower/power_hub.git"
+    "url": "git+https://github.com/thepower/PowerTools.git"
   },
   "bugs": {
-    "url": "https://github.com/thepower/power_hub/issues"
+    "url": "https://github.com/thepower/PowerTools/issues"
   },
   "gitHead": "720fd16dbec75fe4c963dbcee1d551bab08089c0"
 }

@@ -72,11 +72,11 @@ export class EvmContract {
     parameters: EncodeFunctionDataParameters<TAbi, TFunctionName>,
     {
       key,
-      amount = 0,
+      amount = 0n,
       sponsor = '',
     }: {
       key: AccountKey;
-      amount?: number;
+      amount?: bigint;
       sponsor?: string;
     },
   ) {
@@ -112,7 +112,7 @@ export class EvmContract {
           sc: this.address,
           toCall: ['0x0', [dataBuffer]],
           gasToken: '',
-          gasValue: 0,
+          gasValue: 0n,
           wif: key.wif,
           seq: newSequence,
           amountToken: 'SK',
@@ -127,7 +127,7 @@ export class EvmContract {
           sc: this.address,
           toCall: ['0x0', [dataBuffer]],
           gasToken: '',
-          gasValue: 0,
+          gasValue: 0n,
           wif: key.wif,
           seq: newSequence,
           amountToken: 'SK',
