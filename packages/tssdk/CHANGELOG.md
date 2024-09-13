@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.2](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.1...@thepowereco/tssdk@2.2.2) (2024-09-13)
+
+
+### Bug Fixes
+
+* amount bug fixed, small fixes ([a95296c](https://github.com/thepower/PowerTools/commit/a95296caf3eef13cc5dfb8893e51117219d4db90))
+
+
+
+
+
 ## [2.2.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.2.0...@thepowereco/tssdk@2.2.1) (2024-08-17)
 
 
