@@ -68,7 +68,7 @@ const getSimpleTransferTxBody = ({
   from: Buffer;
   to: Buffer;
   token: string;
-  amount: number;
+  amount: bigint;
   msg: string;
   timestamp: bigint;
   seq: bigint;
@@ -141,12 +141,12 @@ export const TransactionsApi = {
     from: string;
     to: string;
     token: string;
-    amount: number;
+    amount: bigint;
     message: string;
     seq: bigint;
-    fee?: number;
+    fee?: bigint;
     feeToken?: string;
-    gasValue?: number;
+    gasValue?: bigint;
     gasToken?: string;
   }) {
     const keyPair = ECPair.fromWIF(wif);
@@ -172,7 +172,7 @@ export const TransactionsApi = {
     if (gasToken && gasValue !== undefined) {
       body.p.push([PURPOSE_GAS, gasToken, gasValue]);
     }
-    if (feeToken && fee) {
+    if (feeToken && fee !== undefined) {
       body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
     } else {
       body = this.autoAddFee(body, feeSettings);
@@ -224,12 +224,12 @@ export const TransactionsApi = {
     }: {
       address: string;
       gasToken: string;
-      gasValue: number;
+      gasValue: bigint;
       wif: string;
       seq: bigint;
       feeSettings: any;
       gasSettings: any;
-      fee?: number;
+      fee?: bigint;
       feeToken?: string;
     },
   ) {
@@ -265,7 +265,7 @@ export const TransactionsApi = {
       }
     }
 
-    if (gasValue > 0) {
+    if (gasValue > 0n) {
       body.p.push([PURPOSE_GAS, gasToken, gasValue]);
     } else {
       body = this.autoAddGas(body, gasSettings);
@@ -316,14 +316,14 @@ export const TransactionsApi = {
     sc: string;
     toCall: [string, [any]];
     gasToken: string;
-    gasValue: number;
+    gasValue: bigint;
     wif: string;
     amountToken: string;
-    amountValue: number;
+    amountValue: bigint;
     seq: bigint;
     feeSettings: any;
     gasSettings: any;
-    fee?: number;
+    fee?: bigint;
     feeToken?: string;
   }) {
     const body = this.composeSCMethodCallTxBody({
@@ -357,7 +357,7 @@ export const TransactionsApi = {
     wif: string;
     seq: bigint;
     feeSettings: any;
-    fee?: number;
+    fee?: bigint;
     feeToken?: string;
   }) {
     let body = {
@@ -391,9 +391,9 @@ export const TransactionsApi = {
         if (bodySize > feeSettings.baseEx) {
           body.p.find((item: any) => item[0] === PURPOSE_SRCFEE)[2] =
             feeSettings.fee +
-            Math.floor(
-              ((bodySize - feeSettings.baseEx) * feeSettings.kb) / 1024,
-            );
+          Math.floor(
+            ((bodySize - feeSettings.baseEx) * feeSettings.kb) / 1024,
+          );
         }
       } while (bodySize !== msgPackEncoder.encode(body).length);
     }
@@ -402,7 +402,7 @@ export const TransactionsApi = {
   },
 
   autoAddGas(body: any, gasSettings: any) {
-    body.p.push([PURPOSE_GAS, 'SK', 2000000000]);
+    body.p.push([PURPOSE_GAS, 'SK', 2000000000n]);
     return body;
   },
 
@@ -424,13 +424,13 @@ export const TransactionsApi = {
     sc: string;
     toCall: [string, [any]];
     gasToken: string;
-    gasValue: number;
+    gasValue: bigint;
     amountToken: string;
-    amountValue: number;
+    amountValue: bigint;
     seq: bigint;
     feeSettings: any;
     gasSettings: any;
-    fee?: number;
+    fee?: bigint;
     feeToken?: string;
   }) {
     const PURPOSE: any[] = [];
@@ -446,7 +446,7 @@ export const TransactionsApi = {
       p: PURPOSE,
       c: toCall,
     };
-    if (gasValue > 0) {
+    if (gasValue > 0n) {
       body.p.push([PURPOSE_GAS, gasToken, gasValue]);
     } else {
       body = this.autoAddGas(body, gasSettings);
@@ -481,15 +481,15 @@ export const TransactionsApi = {
     sc: string;
     toCall: [string, [any]];
     gasToken: string;
-    gasValue: number;
+    gasValue: bigint;
     wif: string;
     amountToken: string;
-    amountValue: number;
+    amountValue: bigint;
     seq: bigint;
     feeSettings: any;
     gasSettings: any;
     sponsor: string;
-    fee?: number;
+    fee?: bigint;
     feeToken?: string;
   }) {
     const body = this.composeSCMethodCallTxBody({

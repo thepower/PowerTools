@@ -90,7 +90,7 @@ export default class StorageUpload extends Command {
 
       await storageSc.scSet({
         abi: abis.storage, functionName: 'addTask', args: [projectId, manifestHash, expire, totalSize],
-      }, { sponsor: sponsorAddress, amount: 1, key: importedWallet });
+      }, { sponsor: sponsorAddress, amount: 1n, key: importedWallet });
 
       taskId = await storageSc.scGet({ abi: abis.storage, functionName: 'taskIdByName', args: [AddressApi.textAddressToEvmAddress(address), projectId] });
 

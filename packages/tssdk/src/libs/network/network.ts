@@ -418,7 +418,6 @@ export class NetworkApi {
     parameters: EncodeFunctionDataParameters<TAbi, TFunctionName>,
     {
       address,
-
     }: {
       address: string;
     },

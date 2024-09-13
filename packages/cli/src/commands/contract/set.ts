@@ -46,7 +46,7 @@ export default class ContractSet extends BaseCommand {
       char: 'r',
       description: 'Parameters for the method',
     }),
-    amount: Flags.integer({
+    amount: Flags.string({
       char: 'n',
       description: 'Amount of tokens to send',
     }),
@@ -95,7 +95,7 @@ export default class ContractSet extends BaseCommand {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const setResult: TxStatus = await smartContract.scSet(
       { abi, args: parsedParams, functionName: method },
-      { key: importedWallet, sponsor: sponsorAddress, amount },
+      { key: importedWallet, sponsor: sponsorAddress, amount: amount ? BigInt(amount) : undefined },
     );
 
     ux.action.stop();

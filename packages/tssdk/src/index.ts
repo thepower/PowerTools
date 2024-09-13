@@ -1,7 +1,6 @@
 export {
   NetworkApi,
   AddressApi,
-  PaymentsApi,
   CryptoApi,
   TransactionsApi,
   LStoreApi,
