@@ -145,7 +145,7 @@ export default class ContainerUpload extends BaseCommand {
 
     const tasks = await ordersContract.scGet({ abi: abis.order, functionName: 'tasks', args: [BigInt(containerId)] });
 
-    const activeProvider = tasks[4];
+    const activeProvider = tasks?.[4];
 
     let activeProviderUrl: string | undefined;
 
