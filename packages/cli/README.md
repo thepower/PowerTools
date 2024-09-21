@@ -20,7 +20,7 @@ $ npm install -g @thepowereco/cli
 $ tpe COMMAND
 running command...
 $ tpe (--version)
-@thepowereco/cli/1.11.141 linux-x64 node-v18.20.4
+@thepowereco/cli/1.11.141 linux-x64 node-v22.7.0
 $ tpe --help [COMMAND]
 USAGE
   $ tpe COMMAND
@@ -54,6 +54,9 @@ USAGE
 * [`tpe plugins uninstall [PLUGIN]`](#tpe-plugins-uninstall-plugin)
 * [`tpe plugins unlink [PLUGIN]`](#tpe-plugins-unlink-plugin)
 * [`tpe plugins update`](#tpe-plugins-update)
+* [`tpe provider create`](#tpe-provider-create)
+* [`tpe provider list`](#tpe-provider-list)
+* [`tpe provider set-url`](#tpe-provider-set-url)
 * [`tpe storage tasklist`](#tpe-storage-tasklist)
 * [`tpe storage upload`](#tpe-storage-upload)
 * [`tpe update [CHANNEL]`](#tpe-update-channel)
@@ -737,6 +740,87 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.2/src/commands/plugins/update.ts)_
+
+## `tpe provider create`
+
+Create a new provider with a given name and key pair
+
+```
+USAGE
+  $ tpe provider create -k <value> -n <value> [-p <value>] [-a <value>] [-r <value>]
+
+FLAGS
+  -a, --providersScAddress=<value>  [default: AA100000001677749552] Provider smart contract address
+  -k, --keyFilePath=<value>         (required) Path to the key file
+  -n, --providerName=<value>        (required) Name of the provider
+  -p, --password=<value>            Password for the key file (env: KEY_FILE_PASSWORD)
+  -r, --sponsorAddress=<value>      Address of the sponsor
+
+DESCRIPTION
+  Create a new provider with a given name and key pair
+
+EXAMPLES
+  $ tpe provider create -k ./key.pem -p mypassword -n "NewProvider" -s containerpassword
+
+  $ tpe provider create -k ./key.pem --password mypassword --containerName "NewProvider" --containerPassword containerpassword
+```
+
+_See code: [dist/commands/provider/create.js](https://github.com/thepower/PowerTools/blob/v1.11.141/dist/commands/provider/create.js)_
+
+## `tpe provider list`
+
+List all providers or filter by key file or address
+
+```
+USAGE
+  $ tpe provider list [-k <value> | -r <value>] [-p <value>] [-a <value>] [-o <value>]
+
+FLAGS
+  -a, --providersScAddress=<value>  [default: AA100000001677749552] Providers smart contract address
+  -k, --keyFilePath=<value>         Path to the key file (used for filtering by owner)
+  -o, --ordersScAddress=<value>     [default: AA100000001677749450] Orders smart contract address
+  -p, --password=<value>            Password for the key file (env: KEY_FILE_PASSWORD)
+  -r, --address=<value>             Filter by address
+
+DESCRIPTION
+  List all providers or filter by key file or address
+
+EXAMPLES
+  $ tpe provider list -k ./key.pem -p mypassword
+
+  $ tpe provider list --address 0x123...abc
+```
+
+_See code: [dist/commands/provider/list.js](https://github.com/thepower/PowerTools/blob/v1.11.141/dist/commands/provider/list.js)_
+
+## `tpe provider set-url`
+
+Set or update the URL for a specific provider using the provider ID. Requires a key file for authentication.
+
+```
+USAGE
+  $ tpe provider set-url -k <value> -i <value> -u <value> [-p <value>] [-a <value>] [-r <value>]
+
+FLAGS
+  -a, --ordersScAddress=<value>  [default: AA100000001677749450] Orders smart contract address
+  -i, --providerId=<value>       (required) Id of the provider
+  -k, --keyFilePath=<value>      (required) Path to the key file
+  -p, --password=<value>         Password for the key file (env: KEY_FILE_PASSWORD)
+  -r, --sponsorAddress=<value>   Address of the sponsor
+  -u, --providerUrl=<value>      (required) Url of the provider
+
+DESCRIPTION
+  Set or update the URL for a specific provider using the provider ID. Requires a key file for authentication.
+
+EXAMPLES
+  $ tpe provider set-url -k ./key.pem -p mypassword -i 123 -u "https://provider.example.com"
+
+  $ tpe provider set-url --keyFilePath ./key.pem --password mypassword --providerId 123 --providerUrl "https://provider.example.com"
+
+  $ tpe provider set-url -k ./key.pem -i 123 -u "https://provider.example.com" --sponsorAddress 0xSponsorAddress
+```
+
+_See code: [dist/commands/provider/set-url.js](https://github.com/thepower/PowerTools/blob/v1.11.141/dist/commands/provider/set-url.js)_
 
 ## `tpe storage tasklist`
 
