@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.12.0](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.11.141...@thepowereco/cli@1.12.0) (2024-09-21)
+
+
+### Bug Fixes
+
+* **yarn.lock:** fixed yarn.lock ([572d856](https://github.com/thepower/PowerTools/commit/572d856b4bd8ef5d2b452a5909dc18e66be6dce5))
+
+
+### Features
+
+* **provider:** creating a provider, updating its url, getting a list of providers ([895f3da](https://github.com/thepower/PowerTools/commit/895f3da71e214220ae9560d0f4b1a2be4c044c95))
+
+
+
+
+
 ## [1.11.141](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.11.140...@thepowereco/cli@1.11.141) (2024-09-13)
 
 
