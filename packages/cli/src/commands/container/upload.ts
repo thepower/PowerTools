@@ -153,14 +153,15 @@ export default class ContainerUpload extends BaseCommand {
       const providersCount = await providerContract.scGet({ abi: abis.provider, functionName: 'totalSupply', args: [] });
 
       const providers = await Promise.all(
-        [...Array(providersCount)].map(async (_, index) => {
+        Array.from({ length: Number(providersCount) }, (async (_, index) => {
           const tokenIdBigint = await providerContract.scGet({ abi: abis.provider, functionName: 'tokenByIndex', args: [BigInt(index)] });
+
           const tokenId = String(tokenIdBigint);
 
           const name = await providerContract.scGet({ abi: abis.provider, functionName: 'name', args: [tokenIdBigint] });
 
           return { name, tokenId };
-        }),
+        })),
       );
 
       const { providerId }: { providerId: number } = await prompt({
