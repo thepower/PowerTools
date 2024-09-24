@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.1](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.12.0...@thepowereco/cli@1.12.1) (2024-09-24)
+
+
+### Bug Fixes
+
+* **container/upload:** fixed providers list ([b4b60b5](https://github.com/thepower/PowerTools/commit/b4b60b512e517260404af9403e0e0413f46564d3))
+
+
+
+
+
 # [1.12.0](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.11.141...@thepowereco/cli@1.12.0) (2024-09-21)
 
 
