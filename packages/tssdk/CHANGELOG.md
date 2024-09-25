@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.3](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.2...@thepowereco/tssdk@2.2.3) (2024-09-25)
+
+
+### Bug Fixes
+
+* **cli,tssdk:** cli error handling, fixed TxResponse type ([774c93d](https://github.com/thepower/PowerTools/commit/774c93d3a4adaa792c2d62f91520349ed068d0ff))
+
+
+
+
+
 ## [2.2.2](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.1...@thepowereco/tssdk@2.2.2) (2024-09-13)
 
 
