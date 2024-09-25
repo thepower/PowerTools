@@ -5,7 +5,6 @@ import { colorize } from 'json-colorizer';
 import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import { BaseCommand } from '../../baseCommand';
-import { TxStatus } from '../../types/tx-status.type';
 import cliConfig from '../../config/cli';
 
 export default class AccSendSk extends BaseCommand {
@@ -72,13 +71,11 @@ export default class AccSendSk extends BaseCommand {
       gasValue: gasValue ? BigInt(gasValue) : undefined,
     });
 
-    const { txId } = result as TxStatus;
-
     ux.action.stop();
 
-    if (txId) {
+    if (result?.txId) {
       this.log(colorize(result));
-      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${txId}`));
+      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${result.txId}`));
     } else {
       this.log(color.red('No result.'));
     }

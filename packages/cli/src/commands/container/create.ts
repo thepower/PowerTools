@@ -10,7 +10,6 @@ import cliConfig from '../../config/cli';
 import abis from '../../abis';
 import { createCompactPublicKey, stringToBytes32 } from '../../helpers/container.helper';
 import { BaseCommand } from '../../baseCommand';
-import { TxStatus } from '../../types/tx-status.type';
 
 export default class ContainerCreate extends BaseCommand {
   static override description = 'Create a new container with a given name and key pair';
@@ -73,13 +72,11 @@ export default class ContainerCreate extends BaseCommand {
       ],
     }, { key: importedWallet, sponsor: sponsorAddress });
 
-    const { retval, txId } = mintResponse as TxStatus;
-
     ux.action.stop();
 
-    if (txId) {
-      this.log(color.green(`Container ${containerName} created with order ID: ${retval}`));
-      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${txId}`));
+    if (mintResponse?.txId) {
+      this.log(color.green(`Container ${containerName} created with order ID: ${mintResponse.retval}`));
+      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${mintResponse.txId}`));
     } else {
       this.log(color.red(`Container ${containerName} creation failed`));
     }

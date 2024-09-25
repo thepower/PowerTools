@@ -7,7 +7,6 @@ import { colorize } from 'json-colorizer';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import { BaseCommand } from '../../baseCommand';
 import { ParamsParser } from '../../helpers/params-parser.helper';
-import { TxStatus } from '../../types/tx-status.type';
 import cliConfig from '../../config/cli';
 
 export default class ContractDeploy extends BaseCommand {
@@ -58,71 +57,66 @@ export default class ContractDeploy extends BaseCommand {
   };
 
   public async run(): Promise<void> {
-    try {
-      const { flags } = await this.parse(ContractDeploy);
-      const {
-        abiPath,
-        binPath,
-        gasToken,
-        gasValue,
-        initParams,
-        keyFilePath,
-        password,
-      } = flags;
-      const paramsParser = new ParamsParser();
+    const { flags } = await this.parse(ContractDeploy);
+    const {
+      abiPath,
+      binPath,
+      gasToken,
+      gasValue,
+      initParams,
+      keyFilePath,
+      password,
+    } = flags;
+    const paramsParser = new ParamsParser();
 
-      const parsedParams = initParams && paramsParser.parse(initParams);
-      // Read and parse the ABI and binary files
-      const abi = JSON.parse(readFileSync(abiPath, 'utf8'));
-      const code = readFileSync(binPath, 'utf8');
+    const parsedParams = initParams && paramsParser.parse(initParams);
+    // Read and parse the ABI and binary files
+    const abi = JSON.parse(readFileSync(abiPath, 'utf8'));
+    const code = readFileSync(binPath, 'utf8');
 
-      ux.action.start('Loading');
+    ux.action.start('Loading');
 
-      // Load wallet
-      const importedWallet = await loadWallet(keyFilePath, password);
+    // Load wallet
+    const importedWallet = await loadWallet(keyFilePath, password);
 
-      // Initialize network API
-      const networkApi = await initializeNetworkApi({
+    // Initialize network API
+    const networkApi = await initializeNetworkApi({
+      address: importedWallet.address,
+    });
+
+    const sequence = await networkApi.getWalletSequence(importedWallet.address);
+    const newSequence = sequence + 1;
+
+    // Compose the deployment transaction
+    const deployTX = TransactionsApi.composeDeployTX(
+      { abi, bytecode: `0x${code}`, args: parsedParams || [] },
+      {
         address: importedWallet.address,
-      });
+        seq: newSequence,
+        feeSettings: networkApi.feeSettings,
+        gasSettings: networkApi.gasSettings,
+        gasToken,
+        gasValue: BigInt(gasValue),
+        wif: importedWallet.wif,
+      },
+    );
 
-      const sequence = await networkApi.getWalletSequence(importedWallet.address);
-      const newSequence = sequence + 1;
+    // Send the prepared transaction
+    const result: any = await networkApi.sendPreparedTX(deployTX);
 
-      // Compose the deployment transaction
-      const deployTX = TransactionsApi.composeDeployTX(
-        { abi, bytecode: `0x${code}`, args: parsedParams || [] },
-        {
-          address: importedWallet.address,
-          seq: newSequence,
-          feeSettings: networkApi.feeSettings,
-          gasSettings: networkApi.gasSettings,
-          gasToken,
-          gasValue: BigInt(gasValue),
-          wif: importedWallet.wif,
-        },
+    ux.action.stop();
+
+    if (result?.txId) {
+      this.log(colorize(result));
+      this.log(
+        color.yellow(
+          `Transaction: ${
+            cliConfig.explorerUrl
+          }/${networkApi.getChain()}/transaction/${result.txId}`,
+        ),
       );
-
-      // Send the prepared transaction
-      const result: any = await networkApi.sendPreparedTX(deployTX);
-
-      const { txId } = result as TxStatus;
-      ux.action.stop();
-
-      if (txId) {
-        this.log(colorize(result));
-        this.log(
-          color.yellow(
-            `Transaction: ${
-              cliConfig.explorerUrl
-            }/${networkApi.getChain()}/transaction/${txId}`,
-          ),
-        );
-      } else {
-        this.log(color.red('No result'));
-      }
-    } catch (error) {
-      console.log(error);
+    } else {
+      this.log(color.red('No result'));
     }
   }
 }
