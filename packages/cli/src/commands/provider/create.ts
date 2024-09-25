@@ -51,13 +51,11 @@ export default class ProviderCreate extends BaseCommand {
       ],
     }, { key: importedWallet, sponsor: sponsorAddress });
 
-    const { retval, txId } = mintResponse;
-
     ux.action.stop();
 
-    if (txId) {
-      this.log(color.green(`Container ${providerName} created with order ID: ${retval}`));
-      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${txId}`));
+    if (mintResponse?.txId) {
+      this.log(color.green(`Container ${providerName} created with order ID: ${mintResponse.retval}`));
+      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${mintResponse.txId}`));
     } else {
       this.log(color.red(`Container ${providerName} creation failed`));
     }

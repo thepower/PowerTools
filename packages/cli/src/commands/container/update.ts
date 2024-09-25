@@ -9,7 +9,6 @@ import {
   createCompactPublicKey, importContainerKey, stringToBytes32,
 } from '../../helpers/container.helper';
 import { BaseCommand } from '../../baseCommand';
-import { TxStatus } from '../../types/tx-status.type';
 
 export default class ContainerUpdate extends BaseCommand {
   static override description = 'Update container details';
@@ -73,13 +72,11 @@ export default class ContainerUpdate extends BaseCommand {
       { key: importedWallet, sponsor: sponsorAddress },
     );
 
-    const { txId } = taskUpdateResponse as TxStatus;
-
     ux.action.stop();
 
-    if (txId) {
+    if (taskUpdateResponse?.txId) {
       this.log(color.green(`Container ${containerName} updated with ID: ${containerId}`));
-      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${txId}`));
+      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${taskUpdateResponse.txId}`));
     } else {
       this.log(color.red('No result.'));
     }

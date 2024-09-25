@@ -6,7 +6,6 @@ import color from '@oclif/color';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import { BaseCommand } from '../../baseCommand';
 import { ParamsParser } from '../../helpers/params-parser.helper';
-import { TxStatus } from '../../types/tx-status.type';
 import cliConfig from '../../config/cli';
 
 export default class ContractSet extends BaseCommand {
@@ -93,7 +92,7 @@ export default class ContractSet extends BaseCommand {
 
     // Execute the smart contract method
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const setResult: TxStatus = await smartContract.scSet(
+    const setResult = await smartContract.scSet(
       { abi, args: parsedParams, functionName: method },
       { key: importedWallet, sponsor: sponsorAddress, amount: amount ? BigInt(amount) : undefined },
     );

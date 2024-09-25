@@ -55,13 +55,11 @@ export default class ProviderSetUrl extends BaseCommand {
       ],
     }, { key: importedWallet, sponsor: sponsorAddress });
 
-    const { txId } = setUrlResponse;
-
     ux.action.stop();
 
-    if (txId) {
+    if (setUrlResponse?.txId) {
       this.log(color.green(`Provider url ${providerUrl} updated with provider ID: ${providerId}`));
-      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${txId}`));
+      this.log(color.yellow(`Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${setUrlResponse.txId}`));
     } else {
       this.log(color.red(`Provider url ${providerUrl} updating failed`));
     }

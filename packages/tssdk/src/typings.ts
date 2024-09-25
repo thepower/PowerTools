@@ -15,17 +15,17 @@ export type PKCS5PEMInfoType = {
 };
 
 export interface RawNodes {
-  [key: string] : {
+  [key: string]: {
     host: string[];
     ip: string[];
-  }
+  };
 }
 
 export interface ChainNode {
   address: string;
   nodeId: string;
   time?: number;
-  height?: number
+  height?: number;
 }
 
 export interface AccountKey {
@@ -41,15 +41,15 @@ export interface RegisteredAccount {
 }
 
 export interface ChainBootstrapConfig {
-  [key: number] : RawNodes;
+  [key: number]: RawNodes;
 }
 
 export interface ChainNetwork {
-  [key: string] : number[];
+  [key: string]: number[];
 }
 
 export interface ChainGlobalConfig {
-  chains: ChainBootstrapConfig,
+  chains: ChainBootstrapConfig;
   settings: ChainNetwork;
 }
 
@@ -61,8 +61,8 @@ export interface ChainConfig {
 }
 
 export type TxResponse<T> = {
-  txId: string,
-  res: string,
-  block: string,
-  retval: T
+  txId?: string;
+  res?: string;
+  block?: string;
+  retval?: T;
 };
