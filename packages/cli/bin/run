@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import {run, handle, flush} from '@oclif/core'
+const { run, handle, flush } = require('@oclif/core');
 
-await run(process.argv.slice(2), import.meta.url)
-  .catch(async (error) => handle(error))
-  .finally(async () => flush())
+run(process.argv.slice(2))
+  .catch((error) => handle(error))
+  .finally(() => flush());
