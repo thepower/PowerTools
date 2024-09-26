@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.3](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.12.2...@thepowereco/cli@1.12.3) (2024-09-26)
+
+
+### Bug Fixes
+
+* **cli/run:** attemt to fix cli run ([9d32819](https://github.com/thepower/PowerTools/commit/9d32819a6acb7e45ddda0fbb9bd8b48af0424477))
+
+
+
+
+
 ## [1.12.2](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.12.1...@thepowereco/cli@1.12.2) (2024-09-25)
 
 
