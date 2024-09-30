@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.4](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.12.3...@thepowereco/cli@1.12.4) (2024-09-30)
+
+
+### Bug Fixes
+
+* **cli/container/upload:** trycatch removed ([1fe3e09](https://github.com/thepower/PowerTools/commit/1fe3e095de74eb0b6699cc81aa7a28b48559cdf9))
+
+
+
+
+
 ## [1.12.3](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.12.2...@thepowereco/cli@1.12.3) (2024-09-26)
 
 
