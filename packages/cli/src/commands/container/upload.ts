@@ -23,25 +23,20 @@ async function uploadFile({
   dir: string;
   file: File;
 }) {
-  try {
-    const fullPath = `${dir}/${file.name}`;
-    const data = await promises.readFile(fullPath);
+  const fullPath = `${dir}/${file.name}`;
+  const data = await promises.readFile(fullPath);
 
-    const response = await axios({
-      method: 'put',
-      url: `${url}/${file.name}`,
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-      data,
-      maxContentLength: 100_000_000,
-      maxBodyLength: 1_000_000_000,
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error uploading files:', error);
-    return null;
-  }
+  const response = await axios({
+    method: 'put',
+    url: `${url}/${file.name}`,
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+    data,
+    maxContentLength: 100_000_000,
+    maxBodyLength: 1_000_000_000,
+  });
+  return response.data;
 }
 
 export default class ContainerUpload extends BaseCommand {
@@ -77,7 +72,8 @@ export default class ContainerUpload extends BaseCommand {
     containerPassword: Flags.string({
       char: 's',
       default: '',
-      description: 'Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)',
+      description:
+        'Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)',
       env: 'CONTAINER_KEY_FILE_PASSWORD',
     }),
     filesPath: Flags.directory({
@@ -124,7 +120,10 @@ export default class ContainerUpload extends BaseCommand {
 
     // Initialize EVM and contract
 
-    const privateKeyPem = await importContainerKey(containerKeyFilePath, containerPassword);
+    const privateKeyPem = await importContainerKey(
+      containerKeyFilePath,
+      containerPassword,
+    );
 
     const payload = { iat: Math.floor(new Date().getTime() / 1000) };
 
@@ -134,34 +133,44 @@ export default class ContainerUpload extends BaseCommand {
 
     const files = await scanDir(filesPath, filesPath);
 
-    const ordersContract = new EvmContract(
-      networkApi,
-      ordersScAddress,
-    );
-    const providerContract = new EvmContract(
-      networkApi,
-      providerScAddress,
-    );
+    const ordersContract = new EvmContract(networkApi, ordersScAddress);
+    const providerContract = new EvmContract(networkApi, providerScAddress);
 
-    const tasks = await ordersContract.scGet({ abi: abis.order, functionName: 'tasks', args: [BigInt(containerId)] });
+    const tasks = await ordersContract.scGet({
+      abi: abis.order,
+      functionName: 'tasks',
+      args: [BigInt(containerId)],
+    });
 
     const activeProvider = tasks?.[4];
 
     let activeProviderUrl: string | undefined;
 
     if (!activeProvider || chooseProvider) {
-      const providersCount = await providerContract.scGet({ abi: abis.provider, functionName: 'totalSupply', args: [] });
+      const providersCount = await providerContract.scGet({
+        abi: abis.provider,
+        functionName: 'totalSupply',
+        args: [],
+      });
 
       const providers = await Promise.all(
-        Array.from({ length: Number(providersCount) }, (async (_, index) => {
-          const tokenIdBigint = await providerContract.scGet({ abi: abis.provider, functionName: 'tokenByIndex', args: [BigInt(index)] });
+        Array.from({ length: Number(providersCount) }, async (_, index) => {
+          const tokenIdBigint = await providerContract.scGet({
+            abi: abis.provider,
+            functionName: 'tokenByIndex',
+            args: [BigInt(index)],
+          });
 
           const tokenId = String(tokenIdBigint);
 
-          const name = await providerContract.scGet({ abi: abis.provider, functionName: 'name', args: [tokenIdBigint] });
+          const name = await providerContract.scGet({
+            abi: abis.provider,
+            functionName: 'name',
+            args: [tokenIdBigint],
+          });
 
           return { name, tokenId };
-        })),
+        }),
       );
 
       const { providerId }: { providerId: number } = await prompt({
@@ -174,11 +183,19 @@ export default class ContainerUpload extends BaseCommand {
         type: 'select',
       });
 
-      const providerUrl = await ordersContract.scGet({ abi: abis.order, functionName: 'urls', args: [BigInt(providerId)] });
+      const providerUrl = await ordersContract.scGet({
+        abi: abis.order,
+        functionName: 'urls',
+        args: [BigInt(providerId)],
+      });
 
       activeProviderUrl = providerUrl;
     } else {
-      const providerUrl = await ordersContract.scGet({ abi: abis.order, functionName: 'urls', args: [activeProvider] });
+      const providerUrl = await ordersContract.scGet({
+        abi: abis.order,
+        functionName: 'urls',
+        args: [activeProvider],
+      });
 
       activeProviderUrl = providerUrl;
     }
@@ -197,7 +214,9 @@ export default class ContainerUpload extends BaseCommand {
             file,
           });
         },
-        title: color.whiteBright(`Uploading ${file.name}, size: ${file.size} bytes`),
+        title: color.whiteBright(
+          `Uploading ${file.name}, size: ${file.size} bytes`,
+        ),
       })),
     );
 
