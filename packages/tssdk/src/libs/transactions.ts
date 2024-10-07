@@ -17,21 +17,25 @@ import { AddressApi } from './address/address';
 
 const ECPair: ECPairAPI = ECPairFactory(ecc);
 
-const TAG_PUBLIC_KEY = 0x02;
-const TAG_SIGNATURE = 0xff;
+export enum TransactionTags {
+  PUBLIC_KEY = 0x02,
+  SIGNATURE = 0xff,
+}
 
-const PURPOSE_TRANSFER = 0x00;
-const PURPOSE_SRCFEE = 0x01;
-const PURPOSE_GAS = 0x03;
+export enum TransactionPurpose {
+  TRANSFER = 0x00,
+  SRCFEE = 0x01,
+  GAS = 0x03,
+  SPONSOR_SRCFEE = 0x21,
+  SPONSOR_GAS = 0x23,
+}
 
-const PURPOSE_SPONSOR_SRCFEE = 0x21;
-const PURPOSE_SPONSOR_GAS = 0x23;
-
-const KIND_GENERIC = 0x10;
-const KIND_REGISTER = 0x11;
-const KIND_DEPLOY = 0x12;
-// const KIND_PATCH = 0x13;
-const KIND_LSTORE = 22;
+export enum TransactionKind {
+  GENERIC = 0x10,
+  REGISTER = 0x11,
+  DEPLOY = 0x12,
+  LSTORE = 0x16,
+}
 
 const getRegisterTxBody = ({
   publicKey,
@@ -43,7 +47,7 @@ const getRegisterTxBody = ({
   referrer?: string;
 }) => {
   let body = {
-    k: KIND_REGISTER,
+    k: TransactionKind.REGISTER,
     t: timestamp,
     h: createHash('sha256').update(publicKey).digest(),
     e: {},
@@ -74,12 +78,12 @@ const getSimpleTransferTxBody = ({
   seq: bigint;
 }) => {
   const body = {
-    k: KIND_GENERIC,
+    k: TransactionKind.GENERIC,
     t: timestamp,
     f: from,
     to,
     s: seq,
-    p: token && amount ? [[PURPOSE_TRANSFER, token, amount]] : [],
+    p: token && amount ? [[TransactionPurpose.TRANSFER, token, amount]] : [],
     e: msg ? { msg } : {},
   };
 
@@ -88,7 +92,7 @@ const getSimpleTransferTxBody = ({
 
 const wrapAndSignPayload = (payload: any, keyPair: ECPairInterface, publicKey: Buffer) => {
   const extraData = new Uint8Array(publicKey.length + 2);
-  extraData.set([TAG_PUBLIC_KEY]);
+  extraData.set([TransactionTags.PUBLIC_KEY]);
   extraData.set([publicKey.length], 1);
   extraData.set(publicKey, 2);
 
@@ -105,7 +109,7 @@ const wrapAndSignPayload = (payload: any, keyPair: ECPairInterface, publicKey: B
   const derSignature = bip66.encode(r, s);
 
   const sig = new Uint8Array(derSignature.length + 2);
-  sig.set([TAG_SIGNATURE]);
+  sig.set([TransactionTags.SIGNATURE]);
   sig.set([derSignature.length], 1);
   sig.set(derSignature, 2);
 
@@ -170,10 +174,10 @@ export const TransactionsApi = {
       seq,
     });
     if (gasToken && gasValue !== undefined) {
-      body.p.push([PURPOSE_GAS, gasToken, gasValue]);
+      body.p.push([TransactionPurpose.GAS, gasToken, gasValue]);
     }
     if (feeToken && fee !== undefined) {
-      body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
+      body.p.push([TransactionPurpose.SRCFEE, feeToken, fee]);
     } else {
       body = this.autoAddFee(body, feeSettings);
     }
@@ -239,7 +243,7 @@ export const TransactionsApi = {
     );
 
     let body = {
-      k: KIND_DEPLOY,
+      k: TransactionKind.DEPLOY,
       t: BigInt(Date.now()),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       to: Buffer.from(AddressApi.parseTextAddress(address)),
@@ -266,12 +270,12 @@ export const TransactionsApi = {
     }
 
     if (gasValue > 0n) {
-      body.p.push([PURPOSE_GAS, gasToken, gasValue]);
+      body.p.push([TransactionPurpose.GAS, gasToken, gasValue]);
     } else {
       body = this.autoAddGas(body, gasSettings);
     }
     if (feeToken && fee) {
-      body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
+      body.p.push([TransactionPurpose.SRCFEE, feeToken, fee]);
     } else {
       body = this.autoAddFee(body, feeSettings);
     }
@@ -361,7 +365,7 @@ export const TransactionsApi = {
     feeToken?: string;
   }) {
     let body = {
-      k: KIND_LSTORE,
+      k: TransactionKind.LSTORE,
       t: BigInt(Date.now()),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       s: seq,
@@ -369,7 +373,7 @@ export const TransactionsApi = {
       pa: msgPackEncoder.encode(patches.map((i: any) => msgPackEncoder.encode(i))),
     };
     if (feeToken && fee) {
-      body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
+      body.p.push([TransactionPurpose.SRCFEE, feeToken, fee]);
     } else {
       body = this.autoAddFee(body, feeSettings);
     }
@@ -384,12 +388,12 @@ export const TransactionsApi = {
       feeSettings.baseEx &&
       feeSettings.kb
     ) {
-      body.p.push([PURPOSE_SRCFEE, feeSettings.feeCur, feeSettings.fee]);
+      body.p.push([TransactionPurpose.SRCFEE, feeSettings.feeCur, feeSettings.fee]);
       let bodySize;
       do {
         bodySize = msgPackEncoder.encode(body).length;
         if (bodySize > feeSettings.baseEx) {
-          body.p.find((item: any) => item[0] === PURPOSE_SRCFEE)[2] =
+          body.p.find((item: any) => item[0] === TransactionPurpose.SRCFEE)[2] =
             feeSettings.fee +
           Math.floor(
             ((bodySize - feeSettings.baseEx) * feeSettings.kb) / 1024,
@@ -402,7 +406,7 @@ export const TransactionsApi = {
   },
 
   autoAddGas(body: any, gasSettings: any) {
-    body.p.push([PURPOSE_GAS, 'SK', 2000000000n]);
+    body.p.push([TransactionPurpose.GAS, 'SK', 2000000000n]);
     return body;
   },
 
@@ -435,10 +439,10 @@ export const TransactionsApi = {
   }) {
     const PURPOSE: any[] = [];
     if (amountValue) {
-      PURPOSE.push([PURPOSE_TRANSFER, amountToken, amountValue]);
+      PURPOSE.push([TransactionPurpose.TRANSFER, amountToken, amountValue]);
     }
     let body = {
-      k: KIND_GENERIC,
+      k: TransactionKind.GENERIC,
       t: BigInt(Date.now()),
       f: Buffer.from(AddressApi.parseTextAddress(address)),
       to: Buffer.from(AddressApi.parseTextAddress(sc)),
@@ -447,12 +451,12 @@ export const TransactionsApi = {
       c: toCall,
     };
     if (gasValue > 0n) {
-      body.p.push([PURPOSE_GAS, gasToken, gasValue]);
+      body.p.push([TransactionPurpose.GAS, gasToken, gasValue]);
     } else {
       body = this.autoAddGas(body, gasSettings);
     }
     if (feeToken && fee) {
-      body.p.push([PURPOSE_SRCFEE, feeToken, fee]);
+      body.p.push([TransactionPurpose.SRCFEE, feeToken, fee]);
     } else {
       body = this.autoAddFee(body, feeSettings);
     }
@@ -508,11 +512,11 @@ export const TransactionsApi = {
     });
 
     body.p.forEach((item) => {
-      if (item[0] === PURPOSE_SRCFEE) {
-        item[0] = PURPOSE_SPONSOR_SRCFEE;
+      if (item[0] === TransactionPurpose.SRCFEE) {
+        item[0] = TransactionPurpose.SPONSOR_SRCFEE;
       }
-      if (item[0] === PURPOSE_GAS) {
-        item[0] = PURPOSE_SPONSOR_GAS;
+      if (item[0] === TransactionPurpose.GAS) {
+        item[0] = TransactionPurpose.SPONSOR_GAS;
       }
     });
     const sponsorBody = {
