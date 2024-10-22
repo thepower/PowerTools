@@ -3,8 +3,8 @@ import { AddressApi } from './address/address';
 import { NetworkApi } from './network/network';
 import { TransactionsApi } from './transactions';
 import { COIN, CryptoApi, DERIVATION_PATH_BASE } from './crypto/crypto';
-import { correctAmountsObject } from '../utils/numbers';
-import { RegisteredAccount } from '../typings';
+import { correctAmount, correctAmountsObject } from '../utils/numbers';
+import { Maybe, RegisteredAccount } from '../typings';
 import { NetworkEnum } from '../config/network.enum';
 
 export class WalletApi {
@@ -141,6 +141,83 @@ export class WalletApi {
     });
 
     return this.networkApi.sendPreparedTX(transmission);
+  }
+
+  private prettifyTx(inputTx: any, block: any) {
+    const tx = { ...inputTx };
+    if (tx.ver >= 2) {
+      tx.timestamp = tx.t;
+
+      if (tx.payload) {
+        const payment =
+          tx.payload.find((elem: any) => elem.purpose === 'transfer') ||
+          tx.payload.find(
+            (elem: any) => elem.purpose === 'srcfee' ||
+              tx.payload.find((elem: any) => elem.purpose === 'srcfeehint'),
+          );
+        if (payment) {
+          tx.cur = payment.cur;
+          tx.amount = correctAmount(payment.amount, tx.cur);
+        }
+      }
+      if (!tx.cur || !tx.amount) {
+        tx.cur = '---';
+        tx.amount = 0;
+      }
+
+      tx.sig = Array.isArray(tx.sig)
+        ? tx.sig.reduce(
+          (acc: any, item: any) => Object.assign(acc, { [item.extra.pubkey]: item.signature }),
+          {},
+        )
+        : [];
+    } else if (tx.amount) {
+      tx.amount = correctAmount(tx.amount, tx.cur);
+    }
+
+    // Common conversions
+    if (tx.address) {
+      tx.address = AddressApi.hexToTextAddress(tx.address);
+    }
+
+    if (tx.to) {
+      tx.to = AddressApi.hexToTextAddress(tx.to);
+    }
+
+    if (tx.from) {
+      tx.from = AddressApi.hexToTextAddress(tx.from);
+    }
+
+    tx.inBlock = block.hash;
+    tx.blockNumber = block.header.height;
+
+    return tx;
+  }
+
+  public async getBlock(inputHash: string, address: Maybe<string> = null) {
+    let hash = inputHash;
+    if (address !== null) {
+      hash = `${hash}?addr=${address}`;
+    }
+
+    const block = await this.networkApi.getBlock(hash);
+    // Correct the sums and addresses: we bring the addresses to text form, and the sums to the required number of characters after the decimal point
+    block.bals = Object.keys(block.bals).reduce(
+      (acc, key) => Object.assign(acc, {
+        [AddressApi.hexToTextAddress(key)]: {
+          ...block.bals[key],
+          amount: correctAmountsObject(block.bals[key].amount),
+        },
+      }),
+      {},
+    );
+
+    block.txs = Object.keys(block.txs).reduce(
+      (acc, key) => Object.assign(acc, { [key]: this.prettifyTx(block.txs[key], block) }),
+      {},
+    );
+
+    return block;
   }
 
   public async loadBalance(address: string) {
