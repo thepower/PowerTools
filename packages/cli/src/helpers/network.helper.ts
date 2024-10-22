@@ -33,7 +33,7 @@ export async function initializeNetworkApi({
   return networkApi;
 }
 
-export async function loadWallet(keyFilePath: string, password: string, isEth?: boolean) {
+export async function loadWallet(keyFilePath: string, password: string, isEth: boolean) {
   const importedData = readFileSync(keyFilePath, 'utf8');
 
   try {

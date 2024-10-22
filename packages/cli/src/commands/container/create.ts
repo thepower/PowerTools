@@ -42,17 +42,20 @@ export default class ContainerCreate extends BaseCommand {
       char: 'c',
       description: 'Chain ID',
     }),
+    isEth: Flags.boolean({
+      char: 'e', description: 'Use an ethereum address',
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContainerCreate);
     const {
-      keyFilePath, password, containerKeyFilePath, containerName, containerPassword, ordersScAddress, sponsorAddress, chain,
+      keyFilePath, password, containerKeyFilePath, containerName, containerPassword, ordersScAddress, sponsorAddress, chain, isEth,
     } = flags;
 
     ux.action.start('Loading');
 
-    const importedWallet = await loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password, isEth);
     const networkApi = await initializeNetworkApi({ address: importedWallet.address, chain });
 
     const ordersContract = new EvmContract(networkApi, ordersScAddress);

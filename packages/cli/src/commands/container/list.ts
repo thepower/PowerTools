@@ -31,18 +31,21 @@ export default class ContainerList extends BaseCommand {
       char: 'c',
       description: 'Chain ID',
     }),
+    isEth: Flags.boolean({
+      char: 'e', description: 'Use an ethereum address', default: false,
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContainerList);
     const {
-      keyFilePath, password, ordersScAddress, chain,
+      keyFilePath, password, ordersScAddress, chain, isEth,
     } = flags;
 
     ux.action.start('Loading');
 
     // Initialize network API and wallet
-    const importedWallet = await loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password, isEth);
     const networkApi = await initializeNetworkApi({ address: importedWallet.address, chain });
 
     // Initialize EVM core and orders contract

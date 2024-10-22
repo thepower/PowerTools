@@ -29,7 +29,7 @@ export default class AccGetBalance extends BaseCommand {
       char: 'p', default: '', description: 'Password for the key file (env: KEY_FILE_PASSWORD)', env: 'KEY_FILE_PASSWORD',
     }),
     isEth: Flags.boolean({
-      char: 'e', description: 'Get balance of an Ethereum account', exclusive: ['address'], default: false,
+      char: 'e', description: 'Use an ethereum address', default: false,
     }),
   };
 

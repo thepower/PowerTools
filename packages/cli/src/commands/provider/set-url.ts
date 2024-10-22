@@ -36,17 +36,22 @@ export default class ProviderSetUrl extends BaseCommand {
       char: 'c',
       description: 'Chain ID',
     }),
+    isEth: Flags.boolean({
+      char: 'e',
+      description: 'Use an ethereum address',
+      default: false,
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ProviderSetUrl);
     const {
-      keyFilePath, password, providerId, providerUrl, ordersScAddress, sponsorAddress, chain,
+      keyFilePath, password, providerId, providerUrl, ordersScAddress, sponsorAddress, chain, isEth,
     } = flags;
 
     ux.action.start('Loading');
 
-    const importedWallet = await loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password, isEth);
     const networkApi = await initializeNetworkApi({ address: importedWallet.address, chain });
     const ordersContract = new EvmContract(networkApi, ordersScAddress);
 

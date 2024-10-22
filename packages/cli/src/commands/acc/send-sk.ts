@@ -36,6 +36,9 @@ export default class AccSendSk extends BaseCommand {
       char: 'c',
       description: 'Chain ID',
     }),
+    isEth: Flags.boolean({
+      char: 'h', description: 'Use an ethereum address',
+    }),
   };
 
   public async run(): Promise<void> {
@@ -52,11 +55,12 @@ export default class AccSendSk extends BaseCommand {
       gasToken,
       gasValue,
       chain,
+      isEth,
     } = flags;
 
     ux.action.start('Loading');
 
-    const importedWallet = await loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password, isEth);
     const networkApi = await initializeNetworkApi({ address: importedWallet.address, defaultChain: bootstrapChain, chain });
 
     if (!networkApi) {

@@ -63,12 +63,15 @@ export default class ContractSet extends BaseCommand {
       char: 'c',
       description: 'Chain ID',
     }),
+    isEth: Flags.boolean({
+      char: 'e', description: 'Use an ethereum address', default: false,
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContractSet);
     const {
-      abiPath, address, keyFilePath, method, params, amount, password, sponsorAddress, chain,
+      abiPath, address, keyFilePath, method, params, amount, password, sponsorAddress, chain, isEth,
     } = flags;
     const paramsParser = new ParamsParser();
 
@@ -79,7 +82,7 @@ export default class ContractSet extends BaseCommand {
     ux.action.start('Loading');
 
     // Load wallet
-    const importedWallet = await loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password, isEth);
 
     // Initialize network API
     const networkApi = await initializeNetworkApi({

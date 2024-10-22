@@ -36,12 +36,15 @@ export default class ProviderList extends BaseCommand {
       char: 'c',
       description: 'Chain ID',
     }),
+    isEth: Flags.boolean({
+      char: 'e', description: 'Use an ethereum address', default: false,
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ProviderList);
     const {
-      keyFilePath, password, providersScAddress, ordersScAddress, address, chain,
+      keyFilePath, password, providersScAddress, ordersScAddress, address, chain, isEth,
     } = flags;
 
     ux.action.start('Loading providers');
@@ -51,7 +54,7 @@ export default class ProviderList extends BaseCommand {
     if (address) {
       providerOwnerAddress = address;
     } else if (keyFilePath) {
-      const importedWallet = await loadWallet(keyFilePath, password);
+      const importedWallet = await loadWallet(keyFilePath, password, isEth);
       providerOwnerAddress = importedWallet.address;
     }
     const networkApi = await initializeNetworkApi({ address: providerOwnerAddress || providersScAddress, chain });
