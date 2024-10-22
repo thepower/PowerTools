@@ -20,7 +20,7 @@ $ npm install -g @thepowereco/cli
 $ tpe COMMAND
 running command...
 $ tpe (--version)
-@thepowereco/cli/1.12.5 linux-x64 node-v18.20.4
+@thepowereco/cli/1.12.6 linux-x64 node-v18.20.4
 $ tpe --help [COMMAND]
 USAGE
   $ tpe COMMAND
@@ -67,13 +67,13 @@ Get the balance of a wallet address
 
 ```
 USAGE
-  $ tpe acc get-balance [-c <value>] [-b <value>] [-p <value>] [-e | [-a <value> | -k <value>]]
+  $ tpe acc get-balance [-a <value> | -k <value>] [-c <value>] [-b <value>] [-p <value>] [-e]
 
 FLAGS
   -a, --address=<value>         Wallet address
   -b, --bootstrapChain=<value>  [default: 1025] Bootstrap chain ID
   -c, --chain=<value>           Chain ID
-  -e, --isEth                   Get balance of an Ethereum account
+  -e, --isEth                   Use an ethereum address
   -k, --keyFilePath=<value>     Path to the key file
   -p, --password=<value>        Password for the key file (env: KEY_FILE_PASSWORD)
 
@@ -90,7 +90,7 @@ EXAMPLES
   $ tpe acc get-balance --keyFilePath ./path/to/keyfile.pem --password mypassword
 ```
 
-_See code: [dist/commands/acc/get-balance.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/acc/get-balance.js)_
+_See code: [dist/commands/acc/get-balance.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/acc/get-balance.js)_
 
 ## `tpe acc register`
 
@@ -131,7 +131,7 @@ EXAMPLES
   Register a new account on a specified chain without saving the data to a file.
 ```
 
-_See code: [dist/commands/acc/register.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/acc/register.js)_
+_See code: [dist/commands/acc/register.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/acc/register.js)_
 
 ## `tpe acc send-sk`
 
@@ -140,7 +140,7 @@ Send SK tokens to a specified address
 ```
 USAGE
   $ tpe acc send-sk -a <value> -k <value> -t <value> [-b <value>] [-m <value>] [-p <value>] [-e <value>] [-d
-    <value>] [-g <value>] [-v <value>] [-c <value>]
+    <value>] [-g <value>] [-v <value>] [-c <value>] [-h]
 
 FLAGS
   -a, --amount=<value>          (required) Amount to send
@@ -149,6 +149,7 @@ FLAGS
   -d, --decimals=<value>        [default: 9] Decimals of the token
   -e, --token=<value>           [default: SK] Token to send
   -g, --gasToken=<value>        Token used to pay for gas
+  -h, --isEth                   Use an ethereum address
   -k, --keyFilePath=<value>     (required) Path to the key file
   -m, --message=<value>         Message to include
   -p, --password=<value>        Password for the key file (env: KEY_FILE_PASSWORD)
@@ -166,7 +167,7 @@ EXAMPLES
   $ tpe acc send-sk --amount 100 --to AA100000001677748249 --keyFilePath ./path/to/keyfile.pem
 ```
 
-_See code: [dist/commands/acc/send-sk.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/acc/send-sk.js)_
+_See code: [dist/commands/acc/send-sk.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/acc/send-sk.js)_
 
 ## `tpe autocomplete [SHELL]`
 
@@ -230,7 +231,7 @@ EXAMPLES
   $ tpe container actions -m "container_getLogs" -p 1 -f ./path/to/keyfile.pem -s mypassword
 ```
 
-_See code: [dist/commands/container/actions.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/container/actions.js)_
+_See code: [dist/commands/container/actions.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/container/actions.js)_
 
 ## `tpe container create`
 
@@ -239,11 +240,12 @@ Create a new container with a given name and key pair
 ```
 USAGE
   $ tpe container create -k <value> -n <value> [-p <value>] [-f <value>] [-s <value>] [-a <value>] [-r <value>] [-c
-    <value>]
+    <value>] [-e]
 
 FLAGS
   -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
   -c, --chain=<value>                 Chain ID
+  -e, --isEth                         Use an ethereum address
   -f, --containerKeyFilePath=<value>  Path to the container key file
   -k, --keyFilePath=<value>           (required) Path to the key file
   -n, --containerName=<value>         (required) Name of the container
@@ -260,7 +262,7 @@ EXAMPLES
   $ tpe container create -k ./key.pem --password mypassword --containerName "NewContainer" --containerPassword containerpassword
 ```
 
-_See code: [dist/commands/container/create.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/container/create.js)_
+_See code: [dist/commands/container/create.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/container/create.js)_
 
 ## `tpe container list`
 
@@ -268,11 +270,12 @@ List containers owned by a user
 
 ```
 USAGE
-  $ tpe container list -k <value> [-p <value>] [-a <value>] [-c <value>]
+  $ tpe container list -k <value> [-p <value>] [-a <value>] [-c <value>] [-e]
 
 FLAGS
   -a, --ordersScAddress=<value>  [default: AA100000001677749450] Orders smart contract address
   -c, --chain=<value>            Chain ID
+  -e, --isEth                    Use an ethereum address
   -k, --keyFilePath=<value>      (required) Path to the key file
   -p, --password=<value>         Password for the key file (env: KEY_FILE_PASSWORD)
 
@@ -285,7 +288,7 @@ EXAMPLES
   $ tpe container list -k ./key.pem --password mypassword
 ```
 
-_See code: [dist/commands/container/list.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/container/list.js)_
+_See code: [dist/commands/container/list.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/container/list.js)_
 
 ## `tpe container update`
 
@@ -294,10 +297,11 @@ Update container details
 ```
 USAGE
   $ tpe container update -k <value> -i <value> -n <value> -f <value> [-p <value>] [-s <value>] [-a <value>] [-r
-    <value>]
+    <value>] [-e]
 
 FLAGS
   -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
+  -e, --isEth                         Use an ethereum address
   -f, --containerKeyFilePath=<value>  (required) Path to the container key file
   -i, --containerId=<value>           (required) Id of the container
   -k, --keyFilePath=<value>           (required) Path to the key file
@@ -316,7 +320,7 @@ EXAMPLES
       --containerName "New Container Name" --containerKeyFilePath ./containerKey.pem --containerPassword containerpassword
 ```
 
-_See code: [dist/commands/container/update.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/container/update.js)_
+_See code: [dist/commands/container/update.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/container/update.js)_
 
 ## `tpe container upload`
 
@@ -325,12 +329,13 @@ Upload files to a container
 ```
 USAGE
   $ tpe container upload -k <value> -i <value> -f <value> -t <value> [-p <value>] [-s <value>] [-c] [-a <value>] [-b
-    <value>] [-n <value>]
+    <value>] [-n <value>] [-e]
 
 FLAGS
   -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
   -b, --providerScAddress=<value>     [default: AA100000001677749552] Provider smart contract address
   -c, --chooseProvider                Choose provider
+  -e, --isEth                         Use an ethereum address
   -f, --containerKeyFilePath=<value>  (required) Path to the container key file
   -i, --containerId=<value>           (required) Container ID
   -k, --keyFilePath=<value>           (required) Path to the key file
@@ -348,7 +353,7 @@ EXAMPLES
   $ tpe container upload -i 123 -f ./key.pem -s mypassword -p ./files
 ```
 
-_See code: [dist/commands/container/upload.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/container/upload.js)_
+_See code: [dist/commands/container/upload.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/container/upload.js)_
 
 ## `tpe contract deploy`
 
@@ -381,7 +386,7 @@ EXAMPLES
   $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --initParams "param1 param2"
 ```
 
-_See code: [dist/commands/contract/deploy.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/contract/deploy.js)_
+_See code: [dist/commands/contract/deploy.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/contract/deploy.js)_
 
 ## `tpe contract get`
 
@@ -408,7 +413,7 @@ EXAMPLES
   $ tpe contract get --abiPath ./path/to/abi.json --address AA100000001677748249 --method getInfo
 ```
 
-_See code: [dist/commands/contract/get.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/contract/get.js)_
+_See code: [dist/commands/contract/get.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/contract/get.js)_
 
 ## `tpe contract set`
 
@@ -417,12 +422,13 @@ Execute a method on a specified smart contract
 ```
 USAGE
   $ tpe contract set -a <value> -d <value> -k <value> -m <value> [-r <value>] [-n <value>] [-p <value>] [-s
-    <value>] [-c <value>]
+    <value>] [-c <value>] [-e]
 
 FLAGS
   -a, --abiPath=<value>         (required) Path to the ABI file
   -c, --chain=<value>           Chain ID
   -d, --address=<value>         (required) Smart contract address
+  -e, --isEth                   Use an ethereum address
   -k, --keyFilePath=<value>     (required) Path to the key file
   -m, --method=<value>          (required) Method name to call
   -n, --amount=<value>          Amount of tokens to send
@@ -443,7 +449,7 @@ EXAMPLES
       --address AA100000001677748249 --keyFilePath ./path/to/keyfile.pem --method setData --params "0x456 1 2 [1,2] {a: 1, b: 2} 1n"
 ```
 
-_See code: [dist/commands/contract/set.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/contract/set.js)_
+_See code: [dist/commands/contract/set.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/contract/set.js)_
 
 ## `tpe help [COMMAND]`
 
@@ -760,11 +766,12 @@ Create a new provider with a given name and key pair
 
 ```
 USAGE
-  $ tpe provider create -k <value> -n <value> [-p <value>] [-a <value>] [-r <value>] [-c <value>]
+  $ tpe provider create -k <value> -n <value> [-p <value>] [-a <value>] [-r <value>] [-c <value>] [-e]
 
 FLAGS
   -a, --providersScAddress=<value>  [default: AA100000001677749552] Provider smart contract address
   -c, --chain=<value>               Chain ID
+  -e, --isEth                       Use an ethereum address
   -k, --keyFilePath=<value>         (required) Path to the key file
   -n, --providerName=<value>        (required) Name of the provider
   -p, --password=<value>            Password for the key file (env: KEY_FILE_PASSWORD)
@@ -779,7 +786,7 @@ EXAMPLES
   $ tpe provider create -k ./key.pem --password mypassword --containerName "NewProvider" --containerPassword containerpassword
 ```
 
-_See code: [dist/commands/provider/create.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/provider/create.js)_
+_See code: [dist/commands/provider/create.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/provider/create.js)_
 
 ## `tpe provider list`
 
@@ -787,11 +794,12 @@ List all providers or filter by key file or address
 
 ```
 USAGE
-  $ tpe provider list [-k <value> | -r <value>] [-p <value>] [-a <value>] [-o <value>] [-c <value>]
+  $ tpe provider list [-k <value> | -r <value>] [-p <value>] [-a <value>] [-o <value>] [-c <value>] [-e]
 
 FLAGS
   -a, --providersScAddress=<value>  [default: AA100000001677749552] Providers smart contract address
   -c, --chain=<value>               Chain ID
+  -e, --isEth                       Use an ethereum address
   -k, --keyFilePath=<value>         Path to the key file (used for filtering by owner)
   -o, --ordersScAddress=<value>     [default: AA100000001677749450] Orders smart contract address
   -p, --password=<value>            Password for the key file (env: KEY_FILE_PASSWORD)
@@ -806,7 +814,7 @@ EXAMPLES
   $ tpe provider list --address 0x123...abc
 ```
 
-_See code: [dist/commands/provider/list.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/provider/list.js)_
+_See code: [dist/commands/provider/list.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/provider/list.js)_
 
 ## `tpe provider set-url`
 
@@ -814,11 +822,12 @@ Set or update the URL for a specific provider using the provider ID. Requires a 
 
 ```
 USAGE
-  $ tpe provider set-url -k <value> -i <value> -u <value> [-p <value>] [-a <value>] [-r <value>] [-c <value>]
+  $ tpe provider set-url -k <value> -i <value> -u <value> [-p <value>] [-a <value>] [-r <value>] [-c <value>] [-e]
 
 FLAGS
   -a, --ordersScAddress=<value>  [default: AA100000001677749450] Orders smart contract address
   -c, --chain=<value>            Chain ID
+  -e, --isEth                    Use an ethereum address
   -i, --providerId=<value>       (required) Id of the provider
   -k, --keyFilePath=<value>      (required) Path to the key file
   -p, --password=<value>         Password for the key file (env: KEY_FILE_PASSWORD)
@@ -836,7 +845,7 @@ EXAMPLES
   $ tpe provider set-url -k ./key.pem -i 123 -u "https://provider.example.com" --sponsorAddress 0xSponsorAddress
 ```
 
-_See code: [dist/commands/provider/set-url.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/provider/set-url.js)_
+_See code: [dist/commands/provider/set-url.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/provider/set-url.js)_
 
 ## `tpe storage tasklist`
 
@@ -861,7 +870,7 @@ EXAMPLES
   $ tpe storage tasklist ./tp-cli.json
 ```
 
-_See code: [dist/commands/storage/tasklist.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/storage/tasklist.js)_
+_See code: [dist/commands/storage/tasklist.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/storage/tasklist.js)_
 
 ## `tpe storage upload`
 
@@ -869,12 +878,13 @@ Upload application files to the storage
 
 ```
 USAGE
-  $ tpe storage upload [-b <value>] [-c <value>] [-a <value>] [-p <value>] [-s <value>] [-n <value>]
+  $ tpe storage upload [-b <value>] [-c <value>] [-a <value>] [-p <value>] [-s <value>] [-n <value>] [-e]
 
 FLAGS
   -a, --storageScAddress=<value>  [default: AA100000001677723663] Storage smart contract address
   -b, --bootstrapChain=<value>    [default: 1025] Default chain ID for bootstrap
   -c, --configPath=<value>        [default: ./tp-cli.json] Config to read
+  -e, --isEth                     Use an ethereum address
   -n, --chain=<value>             Chain ID
   -p, --password=<value>          Password for the key file (env: KEY_FILE_PASSWORD)
   -s, --sponsorAddress=<value>    Address of the sponsor
@@ -886,7 +896,7 @@ EXAMPLES
   $ tpe storage upload ./tp-cli.json
 ```
 
-_See code: [dist/commands/storage/upload.js](https://github.com/thepower/PowerTools/blob/v1.12.5/dist/commands/storage/upload.js)_
+_See code: [dist/commands/storage/upload.js](https://github.com/thepower/PowerTools/blob/v1.12.6/dist/commands/storage/upload.js)_
 
 ## `tpe update [CHANNEL]`
 
