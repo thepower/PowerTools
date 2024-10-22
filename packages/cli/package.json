@@ -40,13 +40,13 @@
     "@oclif/plugin-plugins": "^5",
     "@oclif/plugin-update": "^4.4.2",
     "@thepowereco/tssdk": "^2.2.3",
-    "viem": "^2.19.6",
     "axios": "^1.7.2",
     "cli-table3": "^0.6.5",
     "enquirer": "^2.4.1",
     "json-colorizer": "^3.0.1",
     "jsonwebtoken": "^9.0.2",
-    "listr2": "^8.2.1"
+    "listr2": "^8.2.1",
+    "viem": "^2.19.6"
   },
   "devDependencies": {
     "@oclif/test": "^4",

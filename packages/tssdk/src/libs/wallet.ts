@@ -1,7 +1,8 @@
+import { toHex } from 'viem';
 import { AddressApi } from './address/address';
 import { NetworkApi } from './network/network';
 import { TransactionsApi } from './transactions';
-import { CryptoApi } from './crypto/crypto';
+import { COIN, CryptoApi, DERIVATION_PATH_BASE } from './crypto/crypto';
 import { correctAmountsObject } from '../utils/numbers';
 import { RegisteredAccount } from '../typings';
 import { NetworkEnum } from '../config/network.enum';
@@ -31,10 +32,12 @@ export class WalletApi {
     await networkApi.bootstrap();
 
     const settings = await networkApi.getNodeSettings();
+
+    const derivationPath = `${DERIVATION_PATH_BASE}/${COIN}'/0'/${settings.current.allocblock.block}'/${settings.current.allocblock.group}'`;
+
     const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
       seed,
-      settings.current.allocblock.block,
-      settings.current.allocblock.group,
+      derivationPath,
     );
 
     const wif = keyPair.toWIF();
@@ -160,14 +163,15 @@ export class WalletApi {
     address: string,
     password: string,
     hint = '',
+    isEth?: boolean,
   ) {
     return `${JSON.stringify({
       version: 2,
       hint,
-    })}\n${CryptoApi.encryptWalletDataToPEM(wif, address, password)}\n`;
+    })}\n${CryptoApi.encryptWalletDataToPEM(wif, address, password, isEth)}\n`;
   }
 
-  public static parseExportData(data: string, password: string) {
+  public static parseExportData(data: string, password: string, isEth?: boolean) {
     const firstLine = data.split('\n')[0];
 
     try {
@@ -185,11 +189,11 @@ export class WalletApi {
         binaryAddress[i] = data.charCodeAt(i + offset);
       }
 
-      const textAddress = AddressApi.encodeAddress(binaryAddress).txt;
+      const textAddress = isEth ? toHex(binaryAddress) : AddressApi.encodeAddress(binaryAddress).txt;
 
       return { wif, address: textAddress };
     }
 
-    return CryptoApi.decryptWalletData(data, password);
+    return CryptoApi.decryptWalletData(data, password, isEth);
   }
 }

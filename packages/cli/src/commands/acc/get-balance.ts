@@ -28,19 +28,22 @@ export default class AccGetBalance extends BaseCommand {
     password: Flags.string({
       char: 'p', default: '', description: 'Password for the key file (env: KEY_FILE_PASSWORD)', env: 'KEY_FILE_PASSWORD',
     }),
+    isEth: Flags.boolean({
+      char: 'e', description: 'Get balance of an Ethereum account', exclusive: ['address'], default: false,
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(AccGetBalance);
     const {
-      address, chain, bootstrapChain, keyFilePath, password,
+      address, chain, bootstrapChain, keyFilePath, password, isEth,
     } = flags;
 
     ux.action.start('Loading');
 
     let walletAddress = address;
     if (keyFilePath) {
-      const importedWallet = await loadWallet(keyFilePath, password);
+      const importedWallet = await loadWallet(keyFilePath, password, isEth);
       walletAddress = importedWallet.address;
     }
 

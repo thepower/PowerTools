@@ -23,8 +23,8 @@ import { FileIsCorruptException } from './exceptions/file-is-corrupt.exception';
 const ECPair: ECPairAPI = ECPairFactory(ecc);
 const bip32 = BIP32Factory(ecc);
 
-const DERIVATION_PATH_BASE = 'm/44';
-const COIN = '31337';
+export const DERIVATION_PATH_BASE = 'm/44';
+export const COIN = '31337';
 const AES_CBC_ALGORITHM = 'aes-128-cbc';
 
 const splitTextToChunks = (text: string): MaybeUndef<string> => (
@@ -82,8 +82,8 @@ const encryptRawPrivateKeyToPEM = (rawPrivateKey: Buffer, password: string, algo
   return privateKeyPemTemplate(encrypt(binaryData, key, iv, algorithm), iv, algorithm);
 };
 
-const encryptAddressToPEM = (address: string, password: string, algorithm: string = AES_CBC_ALGORITHM) => {
-  const binaryAddress = AddressApi.parseTextAddress(address);
+const encryptAddressToPEM = (address: string, password: string, algorithm: string = AES_CBC_ALGORITHM, isEth?: boolean) => {
+  const binaryAddress = isEth ? Buffer.from(address.slice(2), 'hex') : AddressApi.parseTextAddress(address);
   const der = Buffer.concat([
     Buffer.from([0x30, 0x14, 0x0c, 0x08, 0x50, 0x57, 0x52, 0x5f, 0x41, 0x44, 0x44, 0x52, 0x04, 0x08]),
     Buffer.from(binaryAddress),
@@ -104,11 +104,17 @@ const decryptPrivateKey = (encrypted: string, password: string, iv: string, algo
   return decrypted.slice(-32).toString('hex');
 };
 
-const decryptAddress = (encrypted: string, password: string, iv: string, algorithm: string = AES_CBC_ALGORITHM) => {
+const decryptAddress = (encrypted: string, password: string, iv: string, algorithm: string = AES_CBC_ALGORITHM, isEth?: boolean) => {
   const selfEncrypted = Buffer.from(encrypted, 'base64');
   const hexedIv = textToHex(iv);
   const key = passwordToKey(password, hexedIv.slice(0, 8));
   const decrypted = decrypt(selfEncrypted, key, hexedIv, algorithm);
+  if (isEth) {
+    const binaryAddress = decrypted.slice(-20);
+
+    return `0x${binaryAddress.toString('hex')}`;
+  }
+
   return AddressApi.encodeAddress(decrypted.slice(-8))?.txt;
 };
 
@@ -161,10 +167,9 @@ export const CryptoApi = {
     return generateMnemonic();
   },
 
-  async generateKeyPairFromSeedPhrase(seedPhrase: string, block: number, group: number) {
+  async generateKeyPairFromSeedPhrase(seedPhrase: string, derivationPath: string) {
     const seed = await mnemonicToSeed(seedPhrase);
     const node = bip32.fromSeed(seed);
-    const derivationPath = `${DERIVATION_PATH_BASE}/${COIN}'/0'/${group}'/${block}'`;
     const rootKey = node.derivePath(derivationPath);
 
     return ECPair.fromWIF(rootKey.toWIF());
@@ -184,15 +189,17 @@ export const CryptoApi = {
 
   generateKeyPairFromSeedPhraseAndAddress(seedPhrase: string, address: string) {
     const { block, group } = AddressApi.encodeAddress(AddressApi.parseTextAddress(address));
-    return this.generateKeyPairFromSeedPhrase(seedPhrase, block, group!);
+    const derivationPath = `${DERIVATION_PATH_BASE}/${COIN}'/0'/${group}'/${block}'`;
+
+    return this.generateKeyPairFromSeedPhrase(seedPhrase, derivationPath);
   },
 
-  encryptWalletDataToPEM(myWIF: string, address: string, password: string) {
+  encryptWalletDataToPEM(myWIF: string, address: string, password: string, isEth?: boolean) {
     const decoded = wif.decode(myWIF, 128);
-    return `${encryptRawPrivateKeyToPEM(Buffer.from(decoded.privateKey), password)}\n${encryptAddressToPEM(address, password)}`;
+    return `${encryptRawPrivateKeyToPEM(Buffer.from(decoded.privateKey), password)}\n${encryptAddressToPEM(address, password, AES_CBC_ALGORITHM, isEth)}`;
   },
 
-  decryptWalletData(encrypted: string, password: string) {
+  decryptWalletData(encrypted: string, password: string, isEth?: boolean) {
     const sections = parseWholePem(encrypted);
 
     if (sections.length !== 2) {
@@ -205,8 +212,7 @@ export const CryptoApi = {
     if (!addressData?.data || !privateKeyData?.data) {
       throw new FileIsCorruptException();
     }
-
-    const address = decryptAddress(addressData?.data, password, addressData?.ivsalt!);
+    const address = decryptAddress(addressData?.data, password, addressData?.ivsalt!, AES_CBC_ALGORITHM, isEth);
     const privateKey = decryptPrivateKey(privateKeyData?.data, password, privateKeyData?.ivsalt!);
 
     return {
@@ -222,7 +228,6 @@ export const CryptoApi = {
 
   decryptWif(encrypted: string, password: string) {
     const parsedPEM = parsePKCS5PEM(encrypted);
-
     if (!parsedPEM.data) {
       throw new Error('Decryption failed');
     }
