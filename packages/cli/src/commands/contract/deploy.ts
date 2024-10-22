@@ -88,7 +88,7 @@ export default class ContractDeploy extends BaseCommand {
     ux.action.start('Loading');
 
     // Load wallet
-    const importedWallet = await loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password, !inPlace);
 
     // Initialize network API
     const networkApi = await initializeNetworkApi({

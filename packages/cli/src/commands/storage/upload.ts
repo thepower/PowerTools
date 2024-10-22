@@ -32,6 +32,11 @@ export default class StorageUpload extends Command {
       char: 'n',
       description: 'Chain ID',
     }),
+    isEth: Flags.boolean({
+      char: 'e',
+      description: 'Use an ethereum address',
+      default: false,
+    }),
   };
 
   static override description = 'Upload application files to the storage';
@@ -43,7 +48,7 @@ export default class StorageUpload extends Command {
   async run(): Promise<void> {
     const { flags } = await this.parse(StorageUpload);
     const {
-      bootstrapChain, configPath, storageScAddress, password, sponsorAddress, chain,
+      bootstrapChain, configPath, storageScAddress, password, sponsorAddress, chain, isEth,
     } = flags;
 
     // Get the current configuration
@@ -92,7 +97,7 @@ export default class StorageUpload extends Command {
 
       const expire = BigInt(60 * 60 * 24 * 30); // One month
 
-      const importedWallet = await loadWallet(keyFilePath, password);
+      const importedWallet = await loadWallet(keyFilePath, password, isEth);
 
       // await storageSc.scSet(
       //   importedWallet,

@@ -40,18 +40,21 @@ export default class ContainerUpdate extends BaseCommand {
     sponsorAddress: Flags.string({
       char: 'r', description: 'Address of the sponsor',
     }),
+    isEth: Flags.boolean({
+      char: 'e', description: 'Use an ethereum address', default: false,
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContainerUpdate);
     const {
-      keyFilePath, password, containerId, containerKeyFilePath, containerName, containerPassword, ordersScAddress, sponsorAddress,
+      keyFilePath, password, containerId, containerKeyFilePath, containerName, containerPassword, ordersScAddress, sponsorAddress, isEth,
     } = flags;
 
     ux.action.start('Loading');
 
     // Load wallet
-    const importedWallet = await loadWallet(keyFilePath, password);
+    const importedWallet = await loadWallet(keyFilePath, password, isEth);
 
     // Initialize network API
     const networkApi = await initializeNetworkApi({ address: importedWallet.address });
