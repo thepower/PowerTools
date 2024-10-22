@@ -19,6 +19,10 @@ export default class StorageTasklist extends Command {
     storageScAddress: Flags.string({
       char: 'a', default: cliConfig.storageScAddress, description: 'Storage smart contract address',
     }),
+    chain: Flags.integer({
+      char: 'n',
+      description: 'Chain ID',
+    }),
   };
 
   static override description = 'Shows the list of all tasks for the current account';
@@ -30,7 +34,9 @@ export default class StorageTasklist extends Command {
 
   async run(): Promise<void> {
     const { flags } = await this.parse(StorageTasklist);
-    const { bootstrapChain, configPath, storageScAddress } = flags;
+    const {
+      bootstrapChain, configPath, storageScAddress, chain,
+    } = flags;
 
     // Get the current configuration
     let config = await getConfig(configPath);
@@ -48,7 +54,7 @@ export default class StorageTasklist extends Command {
     this.log(color.whiteBright(`Task list for ${address} account`));
 
     // Initialize network API
-    const networkApi = await initializeNetworkApi({ address, defaultChain: bootstrapChain });
+    const networkApi = await initializeNetworkApi({ address, defaultChain: bootstrapChain, chain });
     // const addressChain = await networkApi.getAddressChain(address);
 
     const storageSc = new EvmContract(networkApi, storageScAddress);

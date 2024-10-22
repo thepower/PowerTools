@@ -33,11 +33,11 @@ export async function initializeNetworkApi({
   return networkApi;
 }
 
-export async function loadWallet(keyFilePath: string, password: string) {
+export async function loadWallet(keyFilePath: string, password: string, isEth?: boolean) {
   const importedData = readFileSync(keyFilePath, 'utf8');
 
   try {
-    return WalletApi.parseExportData(importedData, password);
+    return WalletApi.parseExportData(importedData, password, isEth);
   } catch (error) {
     ux.action.stop();
     const { password }: { password: string } = await prompt({
@@ -46,6 +46,6 @@ export async function loadWallet(keyFilePath: string, password: string) {
       type: 'password',
     });
     ux.action.start('Loading');
-    return WalletApi.parseExportData(importedData, password);
+    return WalletApi.parseExportData(importedData, password, isEth);
   }
 }

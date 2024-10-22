@@ -169,7 +169,11 @@ export const AddressApi = {
   },
 
   hexToAddress(hex: string) {
-    const array: string[] = hex.match(/(.{1,2})/g) || [];
+    let normalizedAddress = hex;
+    if (normalizedAddress.startsWith('0x')) {
+      normalizedAddress = normalizedAddress.slice(2);
+    }
+    const array: string[] = normalizedAddress.match(/(.{1,2})/g) || [];
     return Uint8Array.from(array, (item) => parseInt(item, 16));
   },
 
@@ -200,7 +204,15 @@ export const AddressApi = {
 
     return true;
   },
+  isEvmAddressValid(evmAddress: string) {
+    try {
+      this.parseTextAddress(this.hexToTextAddress(this.evmAddressToHexAddress(evmAddress)));
+    } catch (e) {
+      return false;
+    }
 
+    return true;
+  },
   hexToTextAddress(hexAddress: string) {
     const address = this.hexToAddress(hexAddress);
     return this.encodeAddress(address).txt;

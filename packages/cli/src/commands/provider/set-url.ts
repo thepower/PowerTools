@@ -32,18 +32,22 @@ export default class ProviderSetUrl extends BaseCommand {
     sponsorAddress: Flags.string({
       char: 'r', description: 'Address of the sponsor',
     }),
+    chain: Flags.integer({
+      char: 'c',
+      description: 'Chain ID',
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ProviderSetUrl);
     const {
-      keyFilePath, password, providerId, providerUrl, ordersScAddress, sponsorAddress,
+      keyFilePath, password, providerId, providerUrl, ordersScAddress, sponsorAddress, chain,
     } = flags;
 
     ux.action.start('Loading');
 
     const importedWallet = await loadWallet(keyFilePath, password);
-    const networkApi = await initializeNetworkApi({ address: importedWallet.address });
+    const networkApi = await initializeNetworkApi({ address: importedWallet.address, chain });
     const ordersContract = new EvmContract(networkApi, ordersScAddress);
 
     const setUrlResponse = await ordersContract.scSet({

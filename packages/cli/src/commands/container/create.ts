@@ -5,6 +5,7 @@ import path from 'node:path';
 import { AddressApi, EvmContract } from '@thepowereco/tssdk';
 import color from '@oclif/color';
 import { prompt } from 'enquirer';
+import { isAddress } from 'viem/utils';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
@@ -37,18 +38,23 @@ export default class ContainerCreate extends BaseCommand {
     sponsorAddress: Flags.string({
       char: 'r', description: 'Address of the sponsor',
     }),
+    chain: Flags.integer({
+      char: 'c',
+      description: 'Chain ID',
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContainerCreate);
     const {
-      keyFilePath, password, containerKeyFilePath, containerName, containerPassword, ordersScAddress, sponsorAddress,
+      keyFilePath, password, containerKeyFilePath, containerName, containerPassword, ordersScAddress, sponsorAddress, chain,
     } = flags;
 
     ux.action.start('Loading');
 
     const importedWallet = await loadWallet(keyFilePath, password);
-    const networkApi = await this.initializeNetwork(importedWallet.address);
+    const networkApi = await initializeNetworkApi({ address: importedWallet.address, chain });
+
     const ordersContract = new EvmContract(networkApi, ordersScAddress);
 
     const { privateKeyPem, publicKeyPem } = containerKeyFilePath
@@ -66,7 +72,9 @@ export default class ContainerCreate extends BaseCommand {
       abi: abis.order,
       functionName: 'mint',
       args: [
-        AddressApi.textAddressToEvmAddress(importedWallet.address),
+        isAddress(importedWallet.address) ?
+          importedWallet.address :
+          AddressApi.textAddressToEvmAddress(importedWallet.address),
         `0x${compactPublicKey?.buffer.toString('hex')}`,
         stringToBytes32(containerName),
       ],
@@ -80,12 +88,6 @@ export default class ContainerCreate extends BaseCommand {
     } else {
       this.log(color.red(`Container ${containerName} creation failed`));
     }
-  }
-
-  private async initializeNetwork(address: string) {
-    const networkApi = await initializeNetworkApi({ address });
-
-    return networkApi;
   }
 
   private async loadContainerKeys(containerKeyFilePath: string, containerPassword: string) {

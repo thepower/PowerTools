@@ -54,6 +54,15 @@ export default class ContractDeploy extends BaseCommand {
       description: 'Password for the key file (env: KEY_FILE_PASSWORD)',
       env: 'KEY_FILE_PASSWORD',
     }),
+    inPlace: Flags.boolean({
+      char: 'l',
+      description: '',
+      default: true,
+    }),
+    chain: Flags.integer({
+      char: 'c',
+      description: 'Chain ID',
+    }),
   };
 
   public async run(): Promise<void> {
@@ -66,6 +75,8 @@ export default class ContractDeploy extends BaseCommand {
       initParams,
       keyFilePath,
       password,
+      inPlace,
+      chain,
     } = flags;
     const paramsParser = new ParamsParser();
 
@@ -82,11 +93,11 @@ export default class ContractDeploy extends BaseCommand {
     // Initialize network API
     const networkApi = await initializeNetworkApi({
       address: importedWallet.address,
+      chain,
     });
 
     const sequence = await networkApi.getWalletSequence(importedWallet.address);
     const newSequence = sequence + 1;
-
     // Compose the deployment transaction
     const deployTX = TransactionsApi.composeDeployTX(
       { abi, bytecode: `0x${code}`, args: parsedParams || [] },
@@ -98,12 +109,11 @@ export default class ContractDeploy extends BaseCommand {
         gasToken,
         gasValue: BigInt(gasValue),
         wif: importedWallet.wif,
+        inPlace,
       },
     );
-
     // Send the prepared transaction
     const result: any = await networkApi.sendPreparedTX(deployTX);
-
     ux.action.stop();
 
     if (result?.txId) {

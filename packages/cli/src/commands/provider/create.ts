@@ -1,6 +1,7 @@
 import { Flags, ux } from '@oclif/core';
 import color from '@oclif/color';
 import { AddressApi, EvmContract } from '@thepowereco/tssdk';
+import { isAddress } from 'viem/utils';
 import cliConfig from '../../config/cli';
 import { BaseCommand } from '../../baseCommand';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
@@ -28,25 +29,31 @@ export default class ProviderCreate extends BaseCommand {
     sponsorAddress: Flags.string({
       char: 'r', description: 'Address of the sponsor',
     }),
+    chain: Flags.integer({
+      char: 'c',
+      description: 'Chain ID',
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ProviderCreate);
     const {
-      keyFilePath, password, providerName, providersScAddress, sponsorAddress,
+      keyFilePath, password, providerName, providersScAddress, sponsorAddress, chain,
     } = flags;
 
     ux.action.start('Loading');
 
     const importedWallet = await loadWallet(keyFilePath, password);
-    const networkApi = await initializeNetworkApi({ address: importedWallet.address });
+    const networkApi = await initializeNetworkApi({ address: importedWallet.address, chain });
     const providersContract = new EvmContract(networkApi, providersScAddress);
 
     const mintResponse = await providersContract.scSet({
       abi: abis.provider,
       functionName: 'mint',
       args: [
-        AddressApi.textAddressToEvmAddress(importedWallet.address),
+        isAddress(importedWallet.address) ?
+          importedWallet.address :
+          AddressApi.textAddressToEvmAddress(importedWallet.address),
         providerName,
       ],
     }, { key: importedWallet, sponsor: sponsorAddress });

@@ -2,6 +2,7 @@ import { Flags, ux } from '@oclif/core';
 import { AddressApi, EvmContract } from '@thepowereco/tssdk';
 import Table from 'cli-table3';
 import color from '@oclif/color';
+import { isAddress } from 'viem/utils';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import cliConfig from '../../config/cli';
 import abis from '../../abis';
@@ -26,23 +27,37 @@ export default class ContainerList extends BaseCommand {
     ordersScAddress: Flags.string({
       char: 'a', default: cliConfig.ordersScAddress, description: 'Orders smart contract address',
     }),
+    chain: Flags.integer({
+      char: 'c',
+      description: 'Chain ID',
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContainerList);
-    const { keyFilePath, password, ordersScAddress } = flags;
+    const {
+      keyFilePath, password, ordersScAddress, chain,
+    } = flags;
 
     ux.action.start('Loading');
 
     // Initialize network API and wallet
     const importedWallet = await loadWallet(keyFilePath, password);
-    const networkApi = await initializeNetworkApi({ address: importedWallet.address });
+    const networkApi = await initializeNetworkApi({ address: importedWallet.address, chain });
 
     // Initialize EVM core and orders contract
     const ordersContract = new EvmContract(networkApi, ordersScAddress);
 
     const containersCount = await ordersContract.scGet(
-      { abi: abis.order, functionName: 'balanceOf', args: [AddressApi.textAddressToEvmAddress(importedWallet.address)] },
+      {
+        abi: abis.order,
+        functionName: 'balanceOf',
+        args: [
+          isAddress(importedWallet.address) ?
+            importedWallet.address :
+            AddressApi.textAddressToEvmAddress(importedWallet.address),
+        ],
+      },
     );
 
     // Fetch all containers owned by the user
@@ -51,7 +66,12 @@ export default class ContainerList extends BaseCommand {
         const tokenId = await ordersContract.scGet({
           abi: abis.order,
           functionName: 'tokenOfOwnerByIndex',
-          args: [AddressApi.textAddressToEvmAddress(importedWallet.address), BigInt(index)],
+          args: [
+            isAddress(importedWallet.address) ?
+              importedWallet.address :
+              AddressApi.textAddressToEvmAddress(importedWallet.address),
+            BigInt(index),
+          ],
         });
         return ordersContract.scGet({ abi: abis.order, functionName: 'tasks', args: [tokenId] });
       }),

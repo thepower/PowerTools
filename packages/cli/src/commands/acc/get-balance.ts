@@ -20,24 +20,30 @@ export default class AccGetBalance extends BaseCommand {
     address: Flags.string({
       aliases: ['adr'], char: 'a', description: 'Wallet address', exclusive: ['keyFilePath'],
     }),
+    chain: Flags.integer({
+      char: 'c', description: 'Chain ID',
+    }),
     bootstrapChain: Flags.integer({ char: 'b', default: 1025, description: 'Bootstrap chain ID' }),
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', exclusive: ['address'] }),
     password: Flags.string({
       char: 'p', default: '', description: 'Password for the key file (env: KEY_FILE_PASSWORD)', env: 'KEY_FILE_PASSWORD',
+    }),
+    isEth: Flags.boolean({
+      char: 'e', description: 'Get balance of an Ethereum account', exclusive: ['address'], default: false,
     }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(AccGetBalance);
     const {
-      address, bootstrapChain, keyFilePath, password,
+      address, chain, bootstrapChain, keyFilePath, password, isEth,
     } = flags;
 
     ux.action.start('Loading');
 
     let walletAddress = address;
     if (keyFilePath) {
-      const importedWallet = await loadWallet(keyFilePath, password);
+      const importedWallet = await loadWallet(keyFilePath, password, isEth);
       walletAddress = importedWallet.address;
     }
 
@@ -45,7 +51,7 @@ export default class AccGetBalance extends BaseCommand {
       throw new Error('No wallet address provided.');
     }
 
-    const networkApi = await initializeNetworkApi({ address: walletAddress, defaultChain: bootstrapChain });
+    const networkApi = await initializeNetworkApi({ address: walletAddress, chain, defaultChain: bootstrapChain });
 
     const wallet = new WalletApi(networkApi);
     const result = await wallet.loadBalance(walletAddress);

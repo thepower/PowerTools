@@ -59,12 +59,16 @@ export default class ContractSet extends BaseCommand {
       char: 's',
       description: 'Address of the sponsor',
     }),
+    chain: Flags.integer({
+      char: 'c',
+      description: 'Chain ID',
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContractSet);
     const {
-      abiPath, address, keyFilePath, method, params, amount, password, sponsorAddress,
+      abiPath, address, keyFilePath, method, params, amount, password, sponsorAddress, chain,
     } = flags;
     const paramsParser = new ParamsParser();
 
@@ -80,6 +84,7 @@ export default class ContractSet extends BaseCommand {
     // Initialize network API
     const networkApi = await initializeNetworkApi({
       address: importedWallet.address,
+      chain,
     });
 
     // Initialize EVM and contract

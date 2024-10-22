@@ -96,6 +96,10 @@ export default class ContainerUpload extends BaseCommand {
       default: cliConfig.providerScAddress,
       description: 'Provider smart contract address',
     }),
+    chain: Flags.integer({
+      char: 'n',
+      description: 'Chain ID',
+    }),
   };
 
   public async run(): Promise<void> {
@@ -110,12 +114,14 @@ export default class ContainerUpload extends BaseCommand {
       chooseProvider,
       ordersScAddress,
       providerScAddress,
+      chain,
     } = flags;
     const importedWallet = await loadWallet(keyFilePath, password);
 
     // Initialize network API
     const networkApi = await initializeNetworkApi({
       address: importedWallet.address,
+      chain,
     });
 
     // Initialize EVM and contract

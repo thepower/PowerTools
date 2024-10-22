@@ -3,6 +3,7 @@ import { WalletApi } from '@thepowereco/tssdk';
 import { colorize } from 'json-colorizer';
 
 import color from '@oclif/color';
+import { parseUnits } from 'viem/utils';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import { BaseCommand } from '../../baseCommand';
 import cliConfig from '../../config/cli';
@@ -17,7 +18,7 @@ export default class AccSendSk extends BaseCommand {
   ];
 
   static override flags = {
-    amount: Flags.integer({ char: 'a', description: 'Amount to send', required: true }),
+    amount: Flags.string({ char: 'a', description: 'Amount to send', required: true }),
     bootstrapChain: Flags.integer({ char: 'b', default: 1025, description: 'Default chain ID' }),
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', required: true }),
     message: Flags.string({ char: 'm', default: '', description: 'Message to include' }),
@@ -31,6 +32,10 @@ export default class AccSendSk extends BaseCommand {
     }),
     gasToken: Flags.string({ char: 'g', description: 'Token used to pay for gas' }),
     gasValue: Flags.integer({ char: 'v', description: 'Gas value for deployment' }),
+    chain: Flags.integer({
+      char: 'c',
+      description: 'Chain ID',
+    }),
   };
 
   public async run(): Promise<void> {
@@ -46,12 +51,13 @@ export default class AccSendSk extends BaseCommand {
       decimals,
       gasToken,
       gasValue,
+      chain,
     } = flags;
 
     ux.action.start('Loading');
 
     const importedWallet = await loadWallet(keyFilePath, password);
-    const networkApi = await initializeNetworkApi({ address: importedWallet.address, defaultChain: bootstrapChain });
+    const networkApi = await initializeNetworkApi({ address: importedWallet.address, defaultChain: bootstrapChain, chain });
 
     if (!networkApi) {
       throw new Error('No network found.');
@@ -65,7 +71,7 @@ export default class AccSendSk extends BaseCommand {
       from: importedWallet.address,
       to,
       token,
-      inputAmount: BigInt(amount) * BigInt(10 ** decimals),
+      inputAmount: parseUnits(amount, decimals),
       message,
       gasToken,
       gasValue: gasValue ? BigInt(gasValue) : undefined,

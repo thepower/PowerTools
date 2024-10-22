@@ -1,15 +1,14 @@
+import { toHex } from 'viem';
 import { AddressApi } from './address/address';
 import { NetworkApi } from './network/network';
 import { TransactionsApi } from './transactions';
-import { CryptoApi } from './crypto/crypto';
+import { COIN, CryptoApi, DERIVATION_PATH_BASE } from './crypto/crypto';
 import { correctAmount, correctAmountsObject } from '../utils/numbers';
 import { Maybe, RegisteredAccount } from '../typings';
 import { NetworkEnum } from '../config/network.enum';
 
 export class WalletApi {
   private networkApi;
-
-  private blocksPerPage = 8;
 
   constructor(network: NetworkApi) {
     this.networkApi = network;
@@ -33,10 +32,12 @@ export class WalletApi {
     await networkApi.bootstrap();
 
     const settings = await networkApi.getNodeSettings();
+
+    const derivationPath = `${DERIVATION_PATH_BASE}/${COIN}'/0'/${settings.current.allocblock.block}'/${settings.current.allocblock.group}'`;
+
     const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
       seed,
-      settings.current.allocblock.block,
-      settings.current.allocblock.group,
+      derivationPath,
     );
 
     const wif = keyPair.toWIF();
@@ -60,7 +61,11 @@ export class WalletApi {
           throw status?.error;
         }
         if (status?.ok) {
-          address = status.res;
+          if (status.res?.startsWith('0x')) {
+            address = AddressApi.hexToTextAddress(status.res);
+          } else {
+            address = status.res;
+          }
           break;
         }
 
@@ -94,6 +99,48 @@ export class WalletApi {
       referrer,
       timeout,
     });
+  }
+
+  public static async sleep(ms: number) {
+    return new Promise((r) => setTimeout(r, ms));
+  }
+
+  public async makeNewTx({
+    wif,
+    from,
+    to,
+    token,
+    inputAmount,
+    message,
+    gasValue,
+    gasToken,
+  }: {
+    wif: string;
+    from: string;
+    to: string;
+    token: string;
+    inputAmount: bigint;
+    message: string;
+    gasValue?: bigint;
+    gasToken?: string;
+  }) {
+    const feeSettings = this.networkApi.feeSettings;
+    const sequence = await this.getWalletSequence(from);
+    const newSequence = BigInt(sequence + 1);
+    const transmission = TransactionsApi.composeSimpleTransferTX({
+      feeSettings,
+      wif,
+      from,
+      to,
+      token,
+      amount: inputAmount,
+      message,
+      seq: newSequence,
+      gasValue,
+      gasToken,
+    });
+
+    return this.networkApi.sendPreparedTX(transmission);
   }
 
   private prettifyTx(inputTx: any, block: any) {
@@ -147,48 +194,6 @@ export class WalletApi {
     return tx;
   }
 
-  public static async sleep(ms: number) {
-    return new Promise((r) => setTimeout(r, ms));
-  }
-
-  public async makeNewTx({
-    wif,
-    from,
-    to,
-    token,
-    inputAmount,
-    message,
-    gasValue,
-    gasToken,
-  }: {
-    wif: string;
-    from: string;
-    to: string;
-    token: string;
-    inputAmount: bigint;
-    message: string;
-    gasValue?: bigint;
-    gasToken?: string;
-  }) {
-    const feeSettings = this.networkApi.feeSettings;
-    const sequence = await this.getWalletSequence(from);
-    const newSequence = BigInt(sequence + 1);
-    const transmission = TransactionsApi.composeSimpleTransferTX({
-      feeSettings,
-      wif,
-      from,
-      to,
-      token,
-      amount: inputAmount,
-      message,
-      seq: newSequence,
-      gasValue,
-      gasToken,
-    });
-
-    return this.networkApi.sendPreparedTX(transmission);
-  }
-
   public async getBlock(inputHash: string, address: Maybe<string> = null) {
     let hash = inputHash;
     if (address !== null) {
@@ -230,67 +235,20 @@ export class WalletApi {
     return seq;
   }
 
-  public async getRawTransactionsHistory(
-    inputLastBlock: string,
-    address: string,
-    perPage: number = this.blocksPerPage,
-    txsFilter?: (txID: string, tx: any) => boolean,
-  ) {
-    const transactionHistory = new Map();
-    let loadedBlocks = 0;
-    let lastBlock = inputLastBlock;
-    // TODO refactor
-    while (lastBlock !== '0000000000000000' && loadedBlocks < perPage) {
-      const block = await this.getBlock(lastBlock, address);
-      loadedBlocks += 1;
-      const txs = txsFilter
-        ? Object.fromEntries(
-          Object.entries(block.txs).filter(([key, val]) => txsFilter(key, val)),
-        )
-        : Object.entries(block.txs);
-      const txsKeys = Object.keys(txs);
-      if (txsKeys.length) {
-        for (const key of txsKeys) {
-          const tx = block.txs[key];
-          if (tx.to === address || tx.from === address) {
-            transactionHistory.set(key, tx);
-          } else if (tx.address === address) {
-            transactionHistory.set(key, {
-              incoming: true,
-              inBlock: lastBlock,
-              blockNumber: block.header.height,
-              address,
-              addressAllocationBlock: true,
-            });
-          }
-        }
-      }
-
-      lastBlock = block.bals[address].lastblk
-        ? block.bals[address].lastblk
-        : '0000000000000000';
-    }
-
-    if (lastBlock !== '0000000000000000') {
-      transactionHistory.set('needMore', lastBlock);
-    }
-
-    return transactionHistory;
-  }
-
   public static getExportData(
     wif: string,
     address: string,
     password: string,
     hint = '',
+    isEth?: boolean,
   ) {
     return `${JSON.stringify({
       version: 2,
       hint,
-    })}\n${CryptoApi.encryptWalletDataToPEM(wif, address, password)}\n`;
+    })}\n${CryptoApi.encryptWalletDataToPEM(wif, address, password, isEth)}\n`;
   }
 
-  public static parseExportData(data: string, password: string) {
+  public static parseExportData(data: string, password: string, isEth?: boolean) {
     const firstLine = data.split('\n')[0];
 
     try {
@@ -308,11 +266,11 @@ export class WalletApi {
         binaryAddress[i] = data.charCodeAt(i + offset);
       }
 
-      const textAddress = AddressApi.encodeAddress(binaryAddress).txt;
+      const textAddress = isEth ? toHex(binaryAddress) : AddressApi.encodeAddress(binaryAddress).txt;
 
       return { wif, address: textAddress };
     }
 
-    return CryptoApi.decryptWalletData(data, password);
+    return CryptoApi.decryptWalletData(data, password, isEth);
   }
 }

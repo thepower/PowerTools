@@ -1,27 +1,20 @@
 import { color } from '@oclif/color';
 import { Flags, ux } from '@oclif/core';
-import { NetworkApi, NetworkEnum, WalletApi } from '@thepowereco/tssdk';
+import {
+  CryptoApi, NetworkApi, NetworkEnum, WalletApi,
+} from '@thepowereco/tssdk';
 import { prompt } from 'enquirer';
 import { colorize } from 'json-colorizer';
 import { writeFileSync } from 'node:fs';
 import * as path from 'node:path';
+
+import { publicKeyToAddress } from 'viem/utils';
 import { BaseCommand } from '../../baseCommand';
 
 interface AccountData {
   address: string
-  chain: number
-  wif: string
-}
-
-interface RegisterFlags {
   chain?: number
-  filePath?: string
-  hint?: string
-  network?: string
-  noSave?: boolean
-  password?: string
-  referrer?: string
-  seed?: string
+  wif: string
 }
 
 const networks = [NetworkEnum.devnet, NetworkEnum.testnet, NetworkEnum.appchain];
@@ -51,15 +44,25 @@ Register a new account on a specified chain without saving the data to a file.`,
     password: Flags.string({ char: 'p', default: '', description: 'Password for the account' }),
     referrer: Flags.string({ char: 'r', description: 'Referrer for the account' }),
     seed: Flags.string({ char: 's', description: 'Seed for the account' }),
+    isEth: Flags.boolean({
+      char: 'e', description: 'Register an Ethereum account',
+    }),
+    hdPath: Flags.string({
+      char: 'd', description: 'HD path for the account', default: 'm/44\'/60\'/0\'',
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(AccRegister);
     const {
-      chain, filePath, hint, network, noSave, password, referrer, seed,
-    }: RegisterFlags = flags;
+      chain, filePath, hint, network, noSave, password, referrer, seed, isEth, hdPath,
+    } = flags;
 
-    if (chain) {
+    if (isEth) {
+      await this.registerEthAccount({
+        filePath, hint, noSave, password, seed, hdPath: hdPath as `m/44'/60'/${string}`,
+      });
+    } else if (chain) {
       await this.registerAccountOnChain({
         chain, filePath, hint, noSave, password, referrer, seed,
       });
@@ -81,11 +84,12 @@ Register a new account on a specified chain without saving the data to a file.`,
     hint?: string
     noSave?: boolean
     password: string
+    isEth?: boolean
   }) {
     const {
-      acc, defaultFileName, filePath, hint, noSave, password,
+      acc, defaultFileName, filePath, hint, noSave, password, isEth,
     } = params;
-    const exportedData = WalletApi.getExportData(acc.wif, acc.address, password, hint);
+    const exportedData = WalletApi.getExportData(acc.wif, acc.address, password, hint, isEth);
     this.log(colorize(acc));
     if (!noSave) {
       const savePath = this.getSavePath(filePath, defaultFileName);
@@ -139,6 +143,7 @@ Register a new account on a specified chain without saving the data to a file.`,
 
     ux.action.start('Loading');
     const acc = await WalletApi.registerCertainChain({ chain, customSeed: seed, referrer });
+
     ux.action.stop();
 
     await this.exportAndSaveAccountData({
@@ -155,6 +160,48 @@ Register a new account on a specified chain without saving the data to a file.`,
     }
   }
 
+  private async registerEthAccount(params: {
+    filePath?: string
+    hint?: string
+    noSave?: boolean
+    password: string
+    seed?: string
+    hdPath: string
+  }) {
+    const {
+      filePath, hint, noSave, password, seed, hdPath,
+    } = params;
+
+    ux.action.start('Ethereum account registration');
+    const seedPhrase = seed || CryptoApi.generateSeedPhrase();
+
+    const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(
+      seedPhrase,
+      hdPath,
+    );
+
+    const address = publicKeyToAddress(`0x${keyPair.publicKey.toString('hex')}`);
+    const wif = keyPair.toWIF();
+
+    if (!wif) {
+      throw new Error('Failed to generate private key');
+    }
+
+    ux.action.stop();
+
+    await this.exportAndSaveAccountData({
+      acc: { address, wif },
+      defaultFileName: `eth_wallet_${address}.pem`,
+      filePath,
+      hint,
+      noSave,
+      password,
+      isEth: true,
+    });
+
+    this.log(color.greenBright('Ethereum account successfully created!'));
+  }
+
   private async registerAccountOnChain(params: {
     chain: number
     filePath?: string
@@ -169,6 +216,7 @@ Register a new account on a specified chain without saving the data to a file.`,
     } = params;
     ux.action.start('Account registration');
     const acc = await WalletApi.registerCertainChain({ chain, customSeed: seed, referrer });
+
     ux.action.stop();
 
     await this.exportAndSaveAccountData({
