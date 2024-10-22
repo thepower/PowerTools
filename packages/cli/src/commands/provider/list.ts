@@ -2,6 +2,7 @@ import { Flags, ux } from '@oclif/core';
 import { AddressApi, EvmContract } from '@thepowereco/tssdk';
 import Table from 'cli-table3';
 import color from '@oclif/color';
+import { isAddress } from 'viem/utils';
 import { BaseCommand } from '../../baseCommand';
 import cliConfig from '../../config/cli';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
@@ -31,12 +32,16 @@ export default class ProviderList extends BaseCommand {
     ordersScAddress: Flags.string({
       char: 'o', default: cliConfig.ordersScAddress, description: 'Orders smart contract address',
     }),
+    chain: Flags.integer({
+      char: 'c',
+      description: 'Chain ID',
+    }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ProviderList);
     const {
-      keyFilePath, password, providersScAddress, ordersScAddress, address,
+      keyFilePath, password, providersScAddress, ordersScAddress, address, chain,
     } = flags;
 
     ux.action.start('Loading providers');
@@ -49,7 +54,7 @@ export default class ProviderList extends BaseCommand {
       const importedWallet = await loadWallet(keyFilePath, password);
       providerOwnerAddress = importedWallet.address;
     }
-    const networkApi = await initializeNetworkApi({ address: providerOwnerAddress || providersScAddress });
+    const networkApi = await initializeNetworkApi({ address: providerOwnerAddress || providersScAddress, chain });
     const providersContract = new EvmContract(networkApi, providersScAddress);
     const ordersContract = new EvmContract(networkApi, ordersScAddress);
 
@@ -67,7 +72,11 @@ export default class ProviderList extends BaseCommand {
           const tokenId = await providersContract.scGet({
             abi: abis.provider,
             functionName: 'tokenOfOwnerByIndex',
-            args: [AddressApi.textAddressToEvmAddress(providerOwnerAddress), BigInt(index)],
+            args: [
+              isAddress(providerOwnerAddress) ?
+                providerOwnerAddress :
+                AddressApi.textAddressToEvmAddress(providerOwnerAddress),
+              BigInt(index)],
           });
 
           const name = await providersContract.scGet({
@@ -114,7 +123,9 @@ export default class ProviderList extends BaseCommand {
             functionName: 'ownerOf',
             args: [tokenId],
           });
-          const ownerAddress = owner && AddressApi.hexToTextAddress(AddressApi.evmAddressToHexAddress(owner));
+          const ownerAddress = owner && AddressApi.isEvmAddressValid(owner) ?
+            AddressApi.hexToTextAddress(AddressApi.evmAddressToHexAddress(owner)) :
+            owner;
 
           const url = await ordersContract.scGet({
             abi: abis.order,

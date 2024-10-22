@@ -1,6 +1,8 @@
 import { color } from '@oclif/color';
 import { Flags, ux } from '@oclif/core';
-import { NetworkApi, NetworkEnum, WalletApi } from '@thepowereco/tssdk';
+import {
+  NetworkApi, NetworkEnum, WalletApi,
+} from '@thepowereco/tssdk';
 import { prompt } from 'enquirer';
 import { colorize } from 'json-colorizer';
 import { writeFileSync } from 'node:fs';
@@ -86,6 +88,7 @@ Register a new account on a specified chain without saving the data to a file.`,
       acc, defaultFileName, filePath, hint, noSave, password,
     } = params;
     const exportedData = WalletApi.getExportData(acc.wif, acc.address, password, hint);
+
     this.log(colorize(acc));
     if (!noSave) {
       const savePath = this.getSavePath(filePath, defaultFileName);
@@ -139,6 +142,7 @@ Register a new account on a specified chain without saving the data to a file.`,
 
     ux.action.start('Loading');
     const acc = await WalletApi.registerCertainChain({ chain, customSeed: seed, referrer });
+
     ux.action.stop();
 
     await this.exportAndSaveAccountData({
@@ -169,6 +173,7 @@ Register a new account on a specified chain without saving the data to a file.`,
     } = params;
     ux.action.start('Account registration');
     const acc = await WalletApi.registerCertainChain({ chain, customSeed: seed, referrer });
+
     ux.action.stop();
 
     await this.exportAndSaveAccountData({

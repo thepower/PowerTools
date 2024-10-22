@@ -6,6 +6,7 @@ import { Listr } from 'listr2';
 import { resolve } from 'node:path';
 import color from '@oclif/color';
 
+import { isAddress } from 'viem/utils';
 import cliConfig from '../../config/cli';
 
 import { getHash } from '../../helpers/calc-hash.helper';
@@ -27,6 +28,10 @@ export default class StorageUpload extends Command {
     sponsorAddress: Flags.string({
       char: 's', description: 'Address of the sponsor',
     }),
+    chain: Flags.integer({
+      char: 'n',
+      description: 'Chain ID',
+    }),
   };
 
   static override description = 'Upload application files to the storage';
@@ -38,7 +43,7 @@ export default class StorageUpload extends Command {
   async run(): Promise<void> {
     const { flags } = await this.parse(StorageUpload);
     const {
-      bootstrapChain, configPath, storageScAddress, password, sponsorAddress,
+      bootstrapChain, configPath, storageScAddress, password, sponsorAddress, chain,
     } = flags;
 
     // Get the current configuration
@@ -57,14 +62,23 @@ export default class StorageUpload extends Command {
     const dir = resolve(source);
 
     // Initialize network API
-    const networkApi = await initializeNetworkApi({ address, defaultChain: bootstrapChain });
+    const networkApi = await initializeNetworkApi({ address, defaultChain: bootstrapChain, chain });
 
     // Initialize the smart contract
 
     const storageSc = new EvmContract(networkApi, storageScAddress);
 
     // Get the task ID by name
-    let taskId = await storageSc.scGet({ abi: abis.storage, functionName: 'taskIdByName', args: [AddressApi.textAddressToEvmAddress(address), projectId] });
+    let taskId = await storageSc.scGet({
+      abi: abis.storage,
+      functionName: 'taskIdByName',
+      args: [
+        isAddress(address) ?
+          address :
+          AddressApi.textAddressToEvmAddress(address),
+        projectId,
+      ],
+    });
 
     // Scan directory and create manifest JSON string
     const files = await scanDir(dir, dir);
@@ -92,7 +106,16 @@ export default class StorageUpload extends Command {
         abi: abis.storage, functionName: 'addTask', args: [projectId, manifestHash, expire, totalSize],
       }, { sponsor: sponsorAddress, amount: 1n, key: importedWallet });
 
-      taskId = await storageSc.scGet({ abi: abis.storage, functionName: 'taskIdByName', args: [AddressApi.textAddressToEvmAddress(address), projectId] });
+      taskId = await storageSc.scGet({
+        abi: abis.storage,
+        functionName: 'taskIdByName',
+        args: [
+          isAddress(address) ?
+            address :
+            AddressApi.textAddressToEvmAddress(address),
+          projectId,
+        ],
+      });
 
       const task = await storageSc.scGet({ abi: abis.storage, functionName: 'getTask', args: [taskId] });
       const uploader = task[6];

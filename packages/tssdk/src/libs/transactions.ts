@@ -3,6 +3,7 @@ import {
   encodeAbiParameters,
   EncodeDeployDataParameters,
   hexToBytes,
+  isAddress,
 } from 'viem/utils';
 import { Abi } from 'abitype';
 
@@ -161,8 +162,8 @@ export const TransactionsApi = {
 
     const timestamp = BigInt(Date.now());
 
-    const bufferFrom = Buffer.from(AddressApi.parseTextAddress(from));
-    const bufferTo = Buffer.from(AddressApi.parseTextAddress(to));
+    const bufferFrom = isAddress(from) ? Buffer.from(hexToBytes(from)) : Buffer.from(AddressApi.parseTextAddress(from));
+    const bufferTo = isAddress(to) ? Buffer.from(hexToBytes(to)) : Buffer.from(AddressApi.parseTextAddress(to));
 
     let body = getSimpleTransferTxBody({
       from: bufferFrom,
@@ -173,6 +174,7 @@ export const TransactionsApi = {
       timestamp,
       seq,
     });
+
     if (gasToken && gasValue !== undefined) {
       body.p.push([TransactionPurpose.GAS, gasToken, gasValue]);
     }
@@ -225,6 +227,7 @@ export const TransactionsApi = {
       gasSettings,
       fee,
       feeToken,
+      inPlace = true,
     }: {
       address: string;
       gasToken: string;
@@ -235,6 +238,7 @@ export const TransactionsApi = {
       gasSettings: any;
       fee?: bigint;
       feeToken?: string;
+      inPlace?: boolean;
     },
   ) {
     const { abi, args, bytecode } = parameters as EncodeDeployDataParameters;
@@ -245,13 +249,18 @@ export const TransactionsApi = {
     let body = {
       k: TransactionKind.DEPLOY,
       t: BigInt(Date.now()),
-      f: Buffer.from(AddressApi.parseTextAddress(address)),
-      to: Buffer.from(AddressApi.parseTextAddress(address)),
+      f: isAddress(address) ? Buffer.from(hexToBytes(address)) : Buffer.from(AddressApi.parseTextAddress(address)),
       s: seq,
       p: [] as any,
       c: [] as any,
-      e: { code: Buffer.from(scCode), vm: 'evm', view: [] },
+      e: {
+        code: Buffer.from(scCode), deploy: 'inplace', vm: 'evm', view: [],
+      },
     };
+
+    if (inPlace) {
+      body.e.deploy = 'inplace';
+    }
 
     if (args?.length) {
       const abiItem = abi?.find((item: any) => item.type === 'constructor');
@@ -279,7 +288,6 @@ export const TransactionsApi = {
     } else {
       body = this.autoAddFee(body, feeSettings);
     }
-
     return TransactionsApi.packAndSignTX(body, wif);
   },
 
@@ -367,7 +375,7 @@ export const TransactionsApi = {
     let body = {
       k: TransactionKind.LSTORE,
       t: BigInt(Date.now()),
-      f: Buffer.from(AddressApi.parseTextAddress(address)),
+      f: isAddress(address) ? Buffer.from(hexToBytes(address)) : Buffer.from(AddressApi.parseTextAddress(address)),
       s: seq,
       p: [] as any,
       pa: msgPackEncoder.encode(patches.map((i: any) => msgPackEncoder.encode(i))),
@@ -444,8 +452,8 @@ export const TransactionsApi = {
     let body = {
       k: TransactionKind.GENERIC,
       t: BigInt(Date.now()),
-      f: Buffer.from(AddressApi.parseTextAddress(address)),
-      to: Buffer.from(AddressApi.parseTextAddress(sc)),
+      f: isAddress(address) ? Buffer.from(hexToBytes(address)) : Buffer.from(AddressApi.parseTextAddress(address)),
+      to: isAddress(sc) ? Buffer.from(hexToBytes(sc)) : Buffer.from(AddressApi.parseTextAddress(sc)),
       s: seq,
       p: PURPOSE,
       c: toCall,
@@ -520,7 +528,7 @@ export const TransactionsApi = {
       }
     });
     const sponsorBody = {
-      e: { sponsor: [Buffer.from(AddressApi.parseTextAddress(sponsor))] },
+      e: { sponsor: [isAddress(sponsor) ? Buffer.from(hexToBytes(sponsor)) : Buffer.from(AddressApi.parseTextAddress(sponsor))] },
     };
     Object.assign(sponsorBody, body);
     return this.packAndSignTX(sponsorBody, wif);

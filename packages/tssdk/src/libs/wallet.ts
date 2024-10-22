@@ -58,7 +58,11 @@ export class WalletApi {
           throw status?.error;
         }
         if (status?.ok) {
-          address = status.res;
+          if (status.res?.startsWith('0x')) {
+            address = AddressApi.hexToTextAddress(status.res);
+          } else {
+            address = status.res;
+          }
           break;
         }
 

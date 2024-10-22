@@ -20,6 +20,9 @@ export default class AccGetBalance extends BaseCommand {
     address: Flags.string({
       aliases: ['adr'], char: 'a', description: 'Wallet address', exclusive: ['keyFilePath'],
     }),
+    chain: Flags.integer({
+      char: 'c', description: 'Chain ID',
+    }),
     bootstrapChain: Flags.integer({ char: 'b', default: 1025, description: 'Bootstrap chain ID' }),
     keyFilePath: Flags.file({ char: 'k', description: 'Path to the key file', exclusive: ['address'] }),
     password: Flags.string({
@@ -30,7 +33,7 @@ export default class AccGetBalance extends BaseCommand {
   public async run(): Promise<void> {
     const { flags } = await this.parse(AccGetBalance);
     const {
-      address, bootstrapChain, keyFilePath, password,
+      address, chain, bootstrapChain, keyFilePath, password,
     } = flags;
 
     ux.action.start('Loading');
@@ -45,7 +48,7 @@ export default class AccGetBalance extends BaseCommand {
       throw new Error('No wallet address provided.');
     }
 
-    const networkApi = await initializeNetworkApi({ address: walletAddress, defaultChain: bootstrapChain });
+    const networkApi = await initializeNetworkApi({ address: walletAddress, chain, defaultChain: bootstrapChain });
 
     const wallet = new WalletApi(networkApi);
     const result = await wallet.loadBalance(walletAddress);
