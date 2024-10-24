@@ -4,7 +4,7 @@ import {
   Abi,
   AbiStateMutability,
 } from 'abitype';
-import { DecodeFunctionResultReturnType, EncodeFunctionDataParameters } from 'viem/utils';
+import { DecodeFunctionResultReturnType, EncodeFunctionDataParameters, isAddress } from 'viem/utils';
 import { ContractFunctionArgs, ContractFunctionName } from 'viem/_types/types/contract';
 import { AddressApi } from '../address/address';
 import { decodeReturnValue, encodeFunction } from '../../helpers/abi.helper';
@@ -424,11 +424,11 @@ export class NetworkApi {
   ) {
     const { abi, functionName, args = [] } = parameters as EncodeFunctionDataParameters;
 
-    const addressHex = AddressApi.textAddressToHex(address);
+    const addressHex = isAddress(address) ? address : AddressApi.textAddressToEvmAddress(address);
 
     const encodedFunction = encodeFunction({ functionName, args, abi });
 
-    const data = { call: '0x0', args: [encodedFunction], to: `0x${addressHex}` };
+    const data = { call: '0x0', args: [encodedFunction], to: addressHex };
 
     const response = await this.askBlockchainTo(ChainAction.EXECUTE_CALL, {
       data,
