@@ -58,8 +58,7 @@ export class NetworkApi {
   public upload() {
     const {
       currentChain, currentNodes, nodeIndex, feeSettings, gasSettings, decimals,
-    } =
-      this;
+    } = this;
     return {
       currentChain,
       currentNodes,

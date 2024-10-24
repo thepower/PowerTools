@@ -3,7 +3,6 @@ import { AddressApi } from './address/address';
 import { NetworkApi } from './network/network';
 import { TransactionsApi } from './transactions';
 import { COIN, CryptoApi, DERIVATION_PATH_BASE } from './crypto/crypto';
-import { correctAmount, correctAmountsObject } from '../utils/numbers';
 import { Maybe, RegisteredAccount } from '../typings';
 import { NetworkEnum } from '../config/network.enum';
 
@@ -157,7 +156,7 @@ export class WalletApi {
           );
         if (payment) {
           tx.cur = payment.cur;
-          tx.amount = correctAmount(payment.amount, tx.cur);
+          tx.amount = payment.amount;
         }
       }
       if (!tx.cur || !tx.amount) {
@@ -171,11 +170,8 @@ export class WalletApi {
           {},
         )
         : [];
-    } else if (tx.amount) {
-      tx.amount = correctAmount(tx.amount, tx.cur);
     }
 
-    // Common conversions
     if (tx.address) {
       tx.address = AddressApi.hexToTextAddress(tx.address);
     }
@@ -204,10 +200,7 @@ export class WalletApi {
     // Correct the sums and addresses: we bring the addresses to text form, and the sums to the required number of characters after the decimal point
     block.bals = Object.keys(block.bals).reduce(
       (acc, key) => Object.assign(acc, {
-        [AddressApi.hexToTextAddress(key)]: {
-          ...block.bals[key],
-          amount: correctAmountsObject(block.bals[key].amount),
-        },
+        [AddressApi.hexToTextAddress(key)]: block.bals[key],
       }),
       {},
     );
@@ -223,10 +216,7 @@ export class WalletApi {
   public async loadBalance(address: string) {
     const walletData = await this.networkApi.getWallet(address);
 
-    return {
-      ...walletData,
-      amount: correctAmountsObject(walletData.amount),
-    };
+    return walletData;
   }
 
   public async getWalletSequence(address: string) {

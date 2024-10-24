@@ -3,6 +3,7 @@ import { WalletApi } from '@thepowereco/tssdk';
 import { colorize } from 'json-colorizer';
 
 import color from '@oclif/color';
+import { formatUnits } from 'viem/utils';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import { BaseCommand } from '../../baseCommand';
 
@@ -55,7 +56,7 @@ export default class AccGetBalance extends BaseCommand {
 
     const wallet = new WalletApi(networkApi);
     const result = await wallet.loadBalance(walletAddress);
-
+    result.amount = Object.keys(result.amount).reduce((acc, key) => Object.assign(acc, { [key]: formatUnits(result.amount[key], networkApi.decimals[key]) }), {});
     ux.action.stop();
 
     if (result !== undefined) {
