@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.6](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.5...@thepowereco/tssdk@2.2.6) (2024-10-24)
+
+
+### Bug Fixes
+
+* **tssdk:** added decimals to network api ([20ebd29](https://github.com/thepower/PowerTools/commit/20ebd293e27bac3d0ba5e8f049c19f286b26c1c1))
+
+
+
+
+
 ## [2.2.5](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.4...@thepowereco/tssdk@2.2.5) (2024-10-24)
 
 
