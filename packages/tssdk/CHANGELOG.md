@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.7](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.6...@thepowereco/tssdk@2.2.7) (2024-10-24)
+
+
+### Bug Fixes
+
+* **tssdk:** added decimals to upload, load func ([50e4aa5](https://github.com/thepower/PowerTools/commit/50e4aa55fc228663d612f52879053529d10d3de7))
+
+
+
+
+
 ## [2.2.6](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.5...@thepowereco/tssdk@2.2.6) (2024-10-24)
 
 
