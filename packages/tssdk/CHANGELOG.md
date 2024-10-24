@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.8](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.7...@thepowereco/tssdk@2.2.8) (2024-10-24)
+
+
+### Bug Fixes
+
+* **cli,tssdk:** fixed format acc balance ([cc5284b](https://github.com/thepower/PowerTools/commit/cc5284bb03882fc79418c3f54d5b8ce5dea894fa))
+
+
+
+
+
 ## [2.2.7](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.6...@thepowereco/tssdk@2.2.7) (2024-10-24)
 
 

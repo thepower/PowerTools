@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.10](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.12.9...@thepowereco/cli@1.12.10) (2024-10-24)
+
+
+### Bug Fixes
+
+* **cli,tssdk:** fixed format acc balance ([cc5284b](https://github.com/thepower/PowerTools/commit/cc5284bb03882fc79418c3f54d5b8ce5dea894fa))
+
+
+
+
+
 ## [1.12.9](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.12.8...@thepowereco/cli@1.12.9) (2024-10-24)
 
 **Note:** Version bump only for package @thepowereco/cli
