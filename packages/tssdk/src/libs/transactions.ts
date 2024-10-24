@@ -396,25 +396,34 @@ export const TransactionsApi = {
       feeSettings.baseEx &&
       feeSettings.kb
     ) {
+      feeSettings.fee = BigInt(feeSettings.fee);
+      feeSettings.baseEx = BigInt(feeSettings.baseEx);
+      feeSettings.kb = BigInt(feeSettings.kb);
+
       body.p.push([TransactionPurpose.SRCFEE, feeSettings.feeCur, feeSettings.fee]);
-      let bodySize;
+      let bodySize: bigint;
+
       do {
-        bodySize = msgPackEncoder.encode(body).length;
+        bodySize = BigInt(msgPackEncoder.encode(body).length);
         if (bodySize > feeSettings.baseEx) {
-          body.p.find((item: any) => item[0] === TransactionPurpose.SRCFEE)[2] =
-            feeSettings.fee +
-          Math.floor(
-            ((bodySize - feeSettings.baseEx) * feeSettings.kb) / 1024,
+          const srcFeeItem = body.p.find(
+            (item: any) => item[0] === TransactionPurpose.SRCFEE,
           );
+
+          srcFeeItem[2] =
+            feeSettings.fee +
+            ((bodySize - feeSettings.baseEx) * feeSettings.kb) / 1024n;
         }
-      } while (bodySize !== msgPackEncoder.encode(body).length);
+      } while (
+        bodySize !== BigInt(msgPackEncoder.encode(body).length)
+      );
     }
 
     return body;
   },
 
   autoAddGas(body: any, gasSettings: any) {
-    body.p.push([TransactionPurpose.GAS, 'SK', 2000000000n]);
+    body.p.push([TransactionPurpose.GAS, 'SK', BigInt(2e18)]);
     return body;
   },
 
