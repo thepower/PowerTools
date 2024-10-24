@@ -9,7 +9,7 @@ import { ContractFunctionArgs, ContractFunctionName } from 'viem/_types/types/co
 import { AddressApi } from '../address/address';
 import { decodeReturnValue, encodeFunction } from '../../helpers/abi.helper';
 import { config as cfg } from '../../config/chain.config';
-import { ChainGlobalConfig, ChainNode } from '../../typings';
+import { ChainGlobalConfig, ChainNode, Decimals } from '../../typings';
 import {
   queueNodes,
   transformNodeList,
@@ -37,9 +37,7 @@ export class NetworkApi {
 
   public gasSettings: any;
 
-  public decimals: {
-    [key: string]: number;
-  } = {};
+  public decimals: Decimals = {};
 
   constructor(chain: number, isHTTPSNodesOnly = true) {
     this.currentChain = chain;
@@ -52,13 +50,14 @@ export class NetworkApi {
     nodeIndex: number;
     feeSettings: any;
     gasSettings: any;
+    decimals: Decimals;
   }) {
     Object.assign(this, params);
   }
 
   public upload() {
     const {
-      currentChain, currentNodes, nodeIndex, feeSettings, gasSettings,
+      currentChain, currentNodes, nodeIndex, feeSettings, gasSettings, decimals,
     } =
       this;
     return {
@@ -67,6 +66,7 @@ export class NetworkApi {
       nodeIndex,
       feeSettings,
       gasSettings,
+      decimals,
     };
   }
 

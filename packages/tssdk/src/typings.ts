@@ -66,3 +66,7 @@ export type TxResponse<T> = {
   block?: string;
   retval?: T;
 };
+
+export type Decimals = {
+  [key: string]: number;
+};
