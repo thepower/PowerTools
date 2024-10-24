@@ -37,6 +37,10 @@ export class NetworkApi {
 
   public gasSettings: any;
 
+  public decimals: {
+    [key: string]: number;
+  } = {};
+
   constructor(chain: number, isHTTPSNodesOnly = true) {
     this.currentChain = chain;
     this.isHTTPSNodesOnly = isHTTPSNodesOnly;
@@ -208,7 +212,7 @@ export class NetworkApi {
         const nodesList: ChainNode[] = JSON.parse(stringifiedNodesList);
         await this.setCurrentConfig(nodesList);
         info(`Bootstrapped chain ${chainId}`, nodesList);
-        await this.loadFeeGasSettings();
+        await this.loadFeeGasSettingsAndDecimals();
       } else {
         throw new NoNodesFoundException(chainId);
       }
@@ -229,7 +233,7 @@ export class NetworkApi {
 
         await this.setCurrentConfig(nodesList);
         info(`Bootstrapped chain ${this.currentChain}`, this.currentNodes);
-        await this.loadFeeGasSettings();
+        await this.loadFeeGasSettingsAndDecimals();
         return;
       }
 
@@ -551,13 +555,15 @@ export class NetworkApi {
     return response;
   }
 
-  private async loadFeeGasSettings() {
+  private async loadFeeGasSettingsAndDecimals() {
     const settings = await this.askBlockchainTo(
       ChainAction.GET_NODE_SETTINGS,
       {},
     );
     this.feeSettings = this.calculateFeeSettings(settings);
     this.gasSettings = this.calculateGasSettings(settings);
+
+    this.decimals = settings?.current?.decimals || { SK: 9 };
   }
 
   private calculateGasSettings(settings: any) {
