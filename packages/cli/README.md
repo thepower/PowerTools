@@ -20,7 +20,7 @@ $ npm install -g @thepowereco/cli
 $ tpe COMMAND
 running command...
 $ tpe (--version)
-@thepowereco/cli/1.12.4 linux-x64 node-v18.20.4
+@thepowereco/cli/1.12.4 linux-x64 node-v22.8.0
 $ tpe --help [COMMAND]
 USAGE
   $ tpe COMMAND
@@ -67,11 +67,13 @@ Get the balance of a wallet address
 
 ```
 USAGE
-  $ tpe acc get-balance [-a <value> | -k <value>] [-b <value>] [-p <value>]
+  $ tpe acc get-balance [-a <value> | -k <value>] [-c <value>] [-b <value>] [-p <value>] [-e]
 
 FLAGS
   -a, --address=<value>         Wallet address
   -b, --bootstrapChain=<value>  [default: 1025] Bootstrap chain ID
+  -c, --chain=<value>           Chain ID
+  -e, --isEth                   Use an ethereum address
   -k, --keyFilePath=<value>     Path to the key file
   -p, --password=<value>        Password for the key file (env: KEY_FILE_PASSWORD)
 
@@ -97,10 +99,12 @@ Register a new account on the specified blockchain or network
 ```
 USAGE
   $ tpe acc register [-c <value> | -n devnet|testnet|appchain] [-f <value> | -x] [-h <value>] [-p <value>] [-r
-    <value>] [-s <value>]
+    <value>] [-s <value>] [-e] [-d <value>]
 
 FLAGS
   -c, --chain=<value>     Specify the chain
+  -d, --hdPath=<value>    [default: m/44'/60'/0'] HD path for the account
+  -e, --isEth             Register an Ethereum account
   -f, --filePath=<value>  Path to save the exported file
   -h, --hint=<value>      Hint for the account password
   -n, --network=<option>  Specify the network
@@ -136,14 +140,16 @@ Send SK tokens to a specified address
 ```
 USAGE
   $ tpe acc send-sk -a <value> -k <value> -t <value> [-b <value>] [-m <value>] [-p <value>] [-e <value>] [-d
-    <value>] [-g <value>] [-v <value>]
+    <value>] [-g <value>] [-v <value>] [-c <value>] [-h]
 
 FLAGS
   -a, --amount=<value>          (required) Amount to send
   -b, --bootstrapChain=<value>  [default: 1025] Default chain ID
+  -c, --chain=<value>           Chain ID
   -d, --decimals=<value>        [default: 9] Decimals of the token
   -e, --token=<value>           [default: SK] Token to send
   -g, --gasToken=<value>        Token used to pay for gas
+  -h, --isEth                   Use an ethereum address
   -k, --keyFilePath=<value>     (required) Path to the key file
   -m, --message=<value>         Message to include
   -p, --password=<value>        Password for the key file (env: KEY_FILE_PASSWORD)
@@ -233,10 +239,13 @@ Create a new container with a given name and key pair
 
 ```
 USAGE
-  $ tpe container create -k <value> -n <value> [-p <value>] [-f <value>] [-s <value>] [-a <value>] [-r <value>]
+  $ tpe container create -k <value> -n <value> [-p <value>] [-f <value>] [-s <value>] [-a <value>] [-r <value>] [-c
+    <value>] [-e]
 
 FLAGS
   -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
+  -c, --chain=<value>                 Chain ID
+  -e, --isEth                         Use an ethereum address
   -f, --containerKeyFilePath=<value>  Path to the container key file
   -k, --keyFilePath=<value>           (required) Path to the key file
   -n, --containerName=<value>         (required) Name of the container
@@ -261,10 +270,12 @@ List containers owned by a user
 
 ```
 USAGE
-  $ tpe container list -k <value> [-p <value>] [-a <value>]
+  $ tpe container list -k <value> [-p <value>] [-a <value>] [-c <value>] [-e]
 
 FLAGS
   -a, --ordersScAddress=<value>  [default: AA100000001677749450] Orders smart contract address
+  -c, --chain=<value>            Chain ID
+  -e, --isEth                    Use an ethereum address
   -k, --keyFilePath=<value>      (required) Path to the key file
   -p, --password=<value>         Password for the key file (env: KEY_FILE_PASSWORD)
 
@@ -286,10 +297,11 @@ Update container details
 ```
 USAGE
   $ tpe container update -k <value> -i <value> -n <value> -f <value> [-p <value>] [-s <value>] [-a <value>] [-r
-    <value>]
+    <value>] [-e]
 
 FLAGS
   -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
+  -e, --isEth                         Use an ethereum address
   -f, --containerKeyFilePath=<value>  (required) Path to the container key file
   -i, --containerId=<value>           (required) Id of the container
   -k, --keyFilePath=<value>           (required) Path to the key file
@@ -317,15 +329,17 @@ Upload files to a container
 ```
 USAGE
   $ tpe container upload -k <value> -i <value> -f <value> -t <value> [-p <value>] [-s <value>] [-c] [-a <value>] [-b
-    <value>]
+    <value>] [-n <value>] [-e]
 
 FLAGS
   -a, --ordersScAddress=<value>       [default: AA100000001677749450] Orders smart contract address
   -b, --providerScAddress=<value>     [default: AA100000001677749552] Provider smart contract address
   -c, --chooseProvider                Choose provider
+  -e, --isEth                         Use an ethereum address
   -f, --containerKeyFilePath=<value>  (required) Path to the container key file
   -i, --containerId=<value>           (required) Container ID
   -k, --keyFilePath=<value>           (required) Path to the key file
+  -n, --chain=<value>                 Chain ID
   -p, --password=<value>              Password for the key file (env: KEY_FILE_PASSWORD)
   -s, --containerPassword=<value>     Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)
   -t, --filesPath=<value>             (required) Path to the files
@@ -347,16 +361,19 @@ Deploy a smart contract to the blockchain
 
 ```
 USAGE
-  $ tpe contract deploy -a <value> -b <value> -k <value> [-t <value>] [-v <value>] [-i <value>] [-p <value>]
+  $ tpe contract deploy -a <value> -b <value> -k <value> [-t <value>] [-v <value>] [-i <value>] [-p <value>] [-l] [-c
+    <value>]
 
 FLAGS
   -a, --abiPath=<value>      (required) Path to the ABI file
   -b, --binPath=<value>      (required) Path to the binary file
+  -c, --chain=<value>        Chain ID
   -i, --initParams=<value>   Initialization parameters
   -k, --keyFilePath=<value>  (required) Path to the key file
+  -l, --inPlace
   -p, --password=<value>     Password for the key file (env: KEY_FILE_PASSWORD)
   -t, --gasToken=<value>     [default: SK] Token used to pay for gas
-  -v, --gasValue=<value>     [default: 2000000000] Gas value for deployment
+  -v, --gasValue=<value>     [default: 2000000000000000000] Gas value for deployment
 
 DESCRIPTION
   Deploy a smart contract to the blockchain
@@ -364,7 +381,7 @@ DESCRIPTION
 EXAMPLES
   $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --password mypassword
 
-  $ tpe contract deploy -a ./path/to/abi.json -b ./path/to/bin -k ./path/to/keyfile.pem -p mypassword --gasToken SK --gasValue 2000000000
+  $ tpe contract deploy -a ./path/to/abi.json -b ./path/to/bin -k ./path/to/keyfile.pem -p mypassword --gasToken SK --gasValue 2000000000000000000
 
   $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --initParams "param1 param2"
 ```
@@ -405,11 +422,13 @@ Execute a method on a specified smart contract
 ```
 USAGE
   $ tpe contract set -a <value> -d <value> -k <value> -m <value> [-r <value>] [-n <value>] [-p <value>] [-s
-    <value>]
+    <value>] [-c <value>] [-e]
 
 FLAGS
   -a, --abiPath=<value>         (required) Path to the ABI file
+  -c, --chain=<value>           Chain ID
   -d, --address=<value>         (required) Smart contract address
+  -e, --isEth                   Use an ethereum address
   -k, --keyFilePath=<value>     (required) Path to the key file
   -m, --method=<value>          (required) Method name to call
   -n, --amount=<value>          Amount of tokens to send
@@ -747,10 +766,12 @@ Create a new provider with a given name and key pair
 
 ```
 USAGE
-  $ tpe provider create -k <value> -n <value> [-p <value>] [-a <value>] [-r <value>]
+  $ tpe provider create -k <value> -n <value> [-p <value>] [-a <value>] [-r <value>] [-c <value>] [-e]
 
 FLAGS
   -a, --providersScAddress=<value>  [default: AA100000001677749552] Provider smart contract address
+  -c, --chain=<value>               Chain ID
+  -e, --isEth                       Use an ethereum address
   -k, --keyFilePath=<value>         (required) Path to the key file
   -n, --providerName=<value>        (required) Name of the provider
   -p, --password=<value>            Password for the key file (env: KEY_FILE_PASSWORD)
@@ -773,10 +794,12 @@ List all providers or filter by key file or address
 
 ```
 USAGE
-  $ tpe provider list [-k <value> | -r <value>] [-p <value>] [-a <value>] [-o <value>]
+  $ tpe provider list [-k <value> | -r <value>] [-p <value>] [-a <value>] [-o <value>] [-c <value>] [-e]
 
 FLAGS
   -a, --providersScAddress=<value>  [default: AA100000001677749552] Providers smart contract address
+  -c, --chain=<value>               Chain ID
+  -e, --isEth                       Use an ethereum address
   -k, --keyFilePath=<value>         Path to the key file (used for filtering by owner)
   -o, --ordersScAddress=<value>     [default: AA100000001677749450] Orders smart contract address
   -p, --password=<value>            Password for the key file (env: KEY_FILE_PASSWORD)
@@ -799,10 +822,12 @@ Set or update the URL for a specific provider using the provider ID. Requires a 
 
 ```
 USAGE
-  $ tpe provider set-url -k <value> -i <value> -u <value> [-p <value>] [-a <value>] [-r <value>]
+  $ tpe provider set-url -k <value> -i <value> -u <value> [-p <value>] [-a <value>] [-r <value>] [-c <value>] [-e]
 
 FLAGS
   -a, --ordersScAddress=<value>  [default: AA100000001677749450] Orders smart contract address
+  -c, --chain=<value>            Chain ID
+  -e, --isEth                    Use an ethereum address
   -i, --providerId=<value>       (required) Id of the provider
   -k, --keyFilePath=<value>      (required) Path to the key file
   -p, --password=<value>         Password for the key file (env: KEY_FILE_PASSWORD)
@@ -828,12 +853,13 @@ Shows the list of all tasks for the current account
 
 ```
 USAGE
-  $ tpe storage tasklist [-b <value>] [-c <value>] [-a <value>]
+  $ tpe storage tasklist [-b <value>] [-c <value>] [-a <value>] [-n <value>]
 
 FLAGS
   -a, --storageScAddress=<value>  [default: AA100000001677723663] Storage smart contract address
   -b, --bootstrapChain=<value>    [default: 1025] Default chain ID
   -c, --configPath=<value>        [default: ./tp-cli.json] Config to read
+  -n, --chain=<value>             Chain ID
 
 DESCRIPTION
   Shows the list of all tasks for the current account
@@ -852,12 +878,14 @@ Upload application files to the storage
 
 ```
 USAGE
-  $ tpe storage upload [-b <value>] [-c <value>] [-a <value>] [-p <value>] [-s <value>]
+  $ tpe storage upload [-b <value>] [-c <value>] [-a <value>] [-p <value>] [-s <value>] [-n <value>] [-e]
 
 FLAGS
   -a, --storageScAddress=<value>  [default: AA100000001677723663] Storage smart contract address
   -b, --bootstrapChain=<value>    [default: 1025] Default chain ID for bootstrap
   -c, --configPath=<value>        [default: ./tp-cli.json] Config to read
+  -e, --isEth                     Use an ethereum address
+  -n, --chain=<value>             Chain ID
   -p, --password=<value>          Password for the key file (env: KEY_FILE_PASSWORD)
   -s, --sponsorAddress=<value>    Address of the sponsor
 
