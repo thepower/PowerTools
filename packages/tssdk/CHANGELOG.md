@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.8](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.7...@thepowereco/tssdk@2.2.8) (2024-10-24)
+
+
+### Bug Fixes
+
+* **cli,tssdk:** fixed format acc balance ([cc5284b](https://github.com/thepower/PowerTools/commit/cc5284bb03882fc79418c3f54d5b8ce5dea894fa))
+
+
+
+
+
+## [2.2.7](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.6...@thepowereco/tssdk@2.2.7) (2024-10-24)
+
+
+### Bug Fixes
+
+* **tssdk:** added decimals to upload, load func ([50e4aa5](https://github.com/thepower/PowerTools/commit/50e4aa55fc228663d612f52879053529d10d3de7))
+
+
+
+
+
+## [2.2.6](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.5...@thepowereco/tssdk@2.2.6) (2024-10-24)
+
+
+### Bug Fixes
+
+* **tssdk:** added decimals to network api ([20ebd29](https://github.com/thepower/PowerTools/commit/20ebd293e27bac3d0ba5e8f049c19f286b26c1c1))
+
+
+
+
+
+## [2.2.5](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.4...@thepowereco/tssdk@2.2.5) (2024-10-24)
+
+
+### Bug Fixes
+
+* fix autoAddFee ([500c398](https://github.com/thepower/PowerTools/commit/500c39894d4948bad11aa26863b8f4bc76d45d59))
+
+
+
+
+
+## [2.2.4](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.3...@thepowereco/tssdk@2.2.4) (2024-10-22)
+
+**Note:** Version bump only for package @thepowereco/tssdk
+
+
+
+
+
 ## [2.2.3](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.2...@thepowereco/tssdk@2.2.3) (2024-09-25)
 
 
