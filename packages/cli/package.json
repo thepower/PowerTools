@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/cli",
-  "version": "1.12.10",
+  "version": "1.12.11",
   "description": "the power cli",
   "author": "thepower",
   "main": "dist/index.js",
@@ -39,7 +39,7 @@
     "@oclif/plugin-not-found": "^3.2.5",
     "@oclif/plugin-plugins": "^5",
     "@oclif/plugin-update": "^4.4.2",
-    "@thepowereco/tssdk": "^2.2.8",
+    "@thepowereco/tssdk": "^2.2.9",
     "axios": "^1.7.2",
     "cli-table3": "^0.6.5",
     "enquirer": "^2.4.1",

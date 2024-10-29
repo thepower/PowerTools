@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.11](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.12.10...@thepowereco/cli@1.12.11) (2024-10-29)
+
+
+### Bug Fixes
+
+* **cli,tssdk:** fixed the default gas value ([2b4f000](https://github.com/thepower/PowerTools/commit/2b4f000138be023091a5b8e8d4d580c5cbdde429))
+
+
+
+
+
 ## [1.12.10](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.12.9...@thepowereco/cli@1.12.10) (2024-10-24)
 
 
