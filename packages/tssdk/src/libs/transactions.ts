@@ -423,7 +423,7 @@ export const TransactionsApi = {
   },
 
   autoAddGas(body: any, gasSettings: any) {
-    body.p.push([TransactionPurpose.GAS, 'SK', BigInt(2e18)]);
+    body.p.push([TransactionPurpose.GAS, 'SK', BigInt('2000000000000000000')]);
     return body;
   },
 

@@ -14,7 +14,7 @@ export default class ContractDeploy extends BaseCommand {
 
   static override examples = [
     '<%= config.bin %> <%= command.id %> --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --password mypassword',
-    '<%= config.bin %> <%= command.id %> -a ./path/to/abi.json -b ./path/to/bin -k ./path/to/keyfile.pem -p mypassword --gasToken SK --gasValue 2000000000',
+    '<%= config.bin %> <%= command.id %> -a ./path/to/abi.json -b ./path/to/bin -k ./path/to/keyfile.pem -p mypassword --gasToken SK --gasValue 2000000000000000000',
     '<%= config.bin %> <%= command.id %> --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --initParams "param1 param2"',
   ];
 
@@ -36,7 +36,7 @@ export default class ContractDeploy extends BaseCommand {
     }),
     gasValue: Flags.string({
       char: 'v',
-      default: '2000000000',
+      default: '2000000000000000000',
       description: 'Gas value for deployment',
     }),
     initParams: Flags.string({

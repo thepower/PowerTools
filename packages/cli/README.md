@@ -20,7 +20,7 @@ $ npm install -g @thepowereco/cli
 $ tpe COMMAND
 running command...
 $ tpe (--version)
-@thepowereco/cli/1.12.10 linux-x64 node-v18.20.4
+@thepowereco/cli/1.12.4 linux-x64 node-v22.8.0
 $ tpe --help [COMMAND]
 USAGE
   $ tpe COMMAND
@@ -373,7 +373,7 @@ FLAGS
   -l, --inPlace
   -p, --password=<value>     Password for the key file (env: KEY_FILE_PASSWORD)
   -t, --gasToken=<value>     [default: SK] Token used to pay for gas
-  -v, --gasValue=<value>     [default: 2000000000] Gas value for deployment
+  -v, --gasValue=<value>     [default: 2000000000000000000] Gas value for deployment
 
 DESCRIPTION
   Deploy a smart contract to the blockchain
@@ -381,7 +381,7 @@ DESCRIPTION
 EXAMPLES
   $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --password mypassword
 
-  $ tpe contract deploy -a ./path/to/abi.json -b ./path/to/bin -k ./path/to/keyfile.pem -p mypassword --gasToken SK --gasValue 2000000000
+  $ tpe contract deploy -a ./path/to/abi.json -b ./path/to/bin -k ./path/to/keyfile.pem -p mypassword --gasToken SK --gasValue 2000000000000000000
 
   $ tpe contract deploy --abiPath ./path/to/abi.json --binPath ./path/to/bin --keyFilePath ./path/to/keyfile.pem --initParams "param1 param2"
 ```
