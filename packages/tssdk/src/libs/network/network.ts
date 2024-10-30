@@ -139,6 +139,11 @@ export class NetworkApi {
     hash,
   });
 
+  public getBlockByHeight = async (height: string) => this.askBlockchainTo(ChainAction.GET_BLOCK_BY_HEIGHT, {
+    chain: this.currentChain,
+    height,
+  });
+
   public getBlockInfo = async (hash = 'last') => this.askBlockchainTo(ChainAction.GET_BLOCK_INFO, {
     chain: this.currentChain,
     hash,
@@ -472,6 +477,11 @@ export class NetworkApi {
       case ChainAction.GET_BLOCK:
         actionUrl = '/block';
         requestParams.url = parameters.hash;
+        break;
+
+      case ChainAction.GET_BLOCK_BY_HEIGHT:
+        actionUrl = '/blockn';
+        requestParams.url = parameters.height;
         break;
 
       case ChainAction.GET_BLOCK_INFO:

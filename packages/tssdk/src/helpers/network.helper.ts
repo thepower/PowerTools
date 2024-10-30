@@ -74,6 +74,9 @@ export const transformResponse = async (response: any, kind: ChainAction, reques
     case ChainAction.GET_BLOCK:
       return response.block;
 
+    case ChainAction.GET_BLOCK_BY_HEIGHT:
+      return response.block;
+
     case ChainAction.GET_BLOCK_INFO:
       return response.block;
 
