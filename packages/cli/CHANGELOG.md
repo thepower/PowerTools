@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.12](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.12.11...@thepowereco/cli@1.12.12) (2024-10-30)
+
+
+### Bug Fixes
+
+* added jsonpath(for hardhat) to contract deploy ([be3e830](https://github.com/thepower/PowerTools/commit/be3e830ff3d58a1e87d307ab1ca78ee4b4fba66d))
+
+
+
+
+
 ## [1.12.11](https://github.com/thepower/PowerTools/compare/@thepowereco/cli@1.12.10...@thepowereco/cli@1.12.11) (2024-10-29)
 
 
