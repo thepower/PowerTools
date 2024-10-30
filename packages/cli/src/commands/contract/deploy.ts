@@ -4,10 +4,22 @@ import { readFileSync } from 'node:fs';
 
 import color from '@oclif/color';
 import { colorize } from 'json-colorizer';
+import { Abi } from 'viem';
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper';
 import { BaseCommand } from '../../baseCommand';
 import { ParamsParser } from '../../helpers/params-parser.helper';
 import cliConfig from '../../config/cli';
+
+export type JSON = {
+  _format: string
+  contractName: string
+  sourceName: string
+  abi: Abi
+  bytecode: string
+  deployedBytecode: string
+  linkReferences: {}
+  deployedLinkReferences: {}
+};
 
 export default class ContractDeploy extends BaseCommand {
   static override description = 'Deploy a smart contract to the blockchain';
@@ -19,15 +31,16 @@ export default class ContractDeploy extends BaseCommand {
   ];
 
   static override flags = {
+    jsonPath: Flags.file({ char: 'j', description: 'Path to the JSON file', exclusive: ['abiPath', 'binPath'] }),
     abiPath: Flags.file({
       char: 'a',
       description: 'Path to the ABI file',
-      required: true,
+      exclusive: ['jsonPath'],
     }),
     binPath: Flags.file({
       char: 'b',
       description: 'Path to the binary file',
-      required: true,
+      exclusive: ['jsonPath'],
     }),
     gasToken: Flags.string({
       char: 't',
@@ -68,6 +81,7 @@ export default class ContractDeploy extends BaseCommand {
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContractDeploy);
     const {
+      jsonPath,
       abiPath,
       binPath,
       gasToken,
@@ -80,10 +94,21 @@ export default class ContractDeploy extends BaseCommand {
     } = flags;
     const paramsParser = new ParamsParser();
 
+    let code;
+    let abi;
+
     const parsedParams = initParams && paramsParser.parse(initParams);
-    // Read and parse the ABI and binary files
-    const abi = JSON.parse(readFileSync(abiPath, 'utf8'));
-    const code = readFileSync(binPath, 'utf8');
+
+    if (jsonPath) {
+      const json = JSON.parse(readFileSync(jsonPath, 'utf8')) as JSON;
+      code = json.bytecode?.replace('0x', '');
+      abi = json.abi;
+    } else if (abiPath && binPath) {
+      abi = JSON.parse(readFileSync(abiPath, 'utf8'));
+      code = readFileSync(binPath, 'utf8')?.replace('0x', '');
+    } else {
+      throw new Error('Either jsonPath or abiPath and binPath are required');
+    }
 
     ux.action.start('Loading');
 
