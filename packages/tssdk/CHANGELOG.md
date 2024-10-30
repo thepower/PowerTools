@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.10](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.9...@thepowereco/tssdk@2.2.10) (2024-10-30)
+
+
+### Bug Fixes
+
+* added getBlockByHeight, removed prettifyTx, getBlock from wallet lib ([bf74ea2](https://github.com/thepower/PowerTools/commit/bf74ea2936a03b255d78b9f2093c86f01fce8a8c))
+
+
+
+
+
 ## [2.2.9](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.8...@thepowereco/tssdk@2.2.9) (2024-10-29)
 
 
