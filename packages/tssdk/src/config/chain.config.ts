@@ -1,8 +1,8 @@
-import { ChainConfig } from '../typings';
+import { type ChainConfig } from '../typings'
 
 export const config: ChainConfig = {
   requestTotalAttempts: 5,
   callbackCallDelay: 5000,
   chainRequestTimeout: 5000,
-  maxNodeResponseTime: 99999,
-};
+  maxNodeResponseTime: 99999
+}

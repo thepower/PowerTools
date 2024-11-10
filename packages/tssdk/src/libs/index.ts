@@ -1,7 +1,7 @@
-export { AddressApi } from './address/address';
-export { CryptoApi } from './crypto/crypto';
-export { NetworkApi } from './network/network';
-export { EvmContract } from './evm-api/evmCore';
-export { TransactionsApi } from './transactions';
-export { WalletApi } from './wallet';
-export { LStoreApi } from './lstore';
+export { AddressApi } from './address/address.js'
+export { CryptoApi } from './crypto/crypto.js'
+export { NetworkApi } from './network/network.js'
+export { EvmContract } from './evm-api/evmCore.js'
+export { TransactionsApi } from './transactions.js'
+export { WalletApi } from './wallet.js'
+export { LStoreApi } from './lstore.js'

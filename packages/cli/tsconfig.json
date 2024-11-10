@@ -1,15 +1,10 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "module": "commonjs",
-    "outDir": "dist",
-    "rootDir": "src",
-    "strict": true,
-    "target": "es2022",
-    "skipLibCheck": true
+    "composite": true,
+    "outDir": "./dist/esm",
+    "declarationDir": "./dist/types",
+    "removeComments": false
   },
-  "include": ["src/**/*"],
-  "exclude": ["dist"]
+  "extends": "../../tsconfig.json",
+  "include": ["exports", "src", "package.json"]
 }

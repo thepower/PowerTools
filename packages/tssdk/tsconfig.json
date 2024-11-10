@@ -1,16 +1,10 @@
 {
   "compilerOptions": {
-    "rootDir": "src"
+    "composite": true,
+    "outDir": "./dist/esm",
+    "declarationDir": "./dist/types",
+    "removeComments": false
   },
-  "extends": "./tsconfig.base.json",
-  "exclude": [
-    "node_modules",
-    "test",
-    "tests",
-    "__test__",
-    "dist"
-  ],
-  "include": [
-    "./src"
-  ]
+  "extends": "../../tsconfig.json",
+  "include": ["exports", "src", "package.json"]
 }

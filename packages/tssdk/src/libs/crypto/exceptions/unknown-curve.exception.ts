@@ -1,10 +1,10 @@
 export class UnknownCurveException extends Error {
-  static CODE = 'UNKNOWN_CURVE';
+  static CODE = 'UNKNOWN_CURVE'
 
-  static MESSAGE = 'Unknown curve';
+  static MESSAGE = 'Unknown curve'
 
   constructor() {
-    super(UnknownCurveException.MESSAGE);
-    this.name = UnknownCurveException.CODE;
+    super(UnknownCurveException.MESSAGE)
+    this.name = UnknownCurveException.CODE
   }
 }

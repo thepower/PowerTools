@@ -1,19 +1,22 @@
 {
   "name": "@thepowereco/tssdk",
   "version": "2.2.10",
-  "main": "dist/index.js",
+  "main": "./dist/esm/exports/index.js",
+  "types": "./dist/types/exports/index.d.ts",
   "description": "thepower tssdk",
   "author": "thepower",
+  "type": "module",
   "files": [
-    "dist/*"
+    "dist/*",
+    "!tsconfig.tsbuildinfo"
   ],
   "scripts": {
+    "build:clean": "rm -rf dist",
     "build": "tsc",
-    "lint": "eslint src/* --ext .ts",
-    "service": "nodemon",
-    "start": "node dist/index.js",
-    "release": "standard-version",
-    "prepare": "yarn build"
+    "watch": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .js,.ts",
+    "test": "vitest run --dir tests --coverage.enabled=true --coverage.reporter=json --coverage.reporter=json-summary --coverage.reportOnFailure=true"
   },
   "license": "MIT",
   "dependencies": {
