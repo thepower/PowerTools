@@ -33,16 +33,14 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: setup-node
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-
-      - name: Set up Yarn Berry
-        uses: threeal/setup-yarn-action@v2.0.0
-        with:
-          version: 'stable'
-          cache: true
+          cache: "yarn"
 
       - name: install
         run: yarn install
@@ -69,7 +67,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-          cache: 'yarn'
+          cache: "yarn"
 
       - name: install
         run: yarn install

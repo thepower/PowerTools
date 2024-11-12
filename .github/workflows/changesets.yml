@@ -23,7 +23,10 @@ jobs:
         with:
           # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
           fetch-depth: 0
-
+        
+      - name: Enable Corepack
+        run: corepack enable
+        
       - name: Set Git User
         run: |
           git config --global user.name "Power DCloud"
@@ -33,12 +36,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-
-      - name: Set up Yarn Berry
-        uses: threeal/setup-yarn-action@v2.0.0
-        with:
-          version: 'stable'
-          cache: true
+          cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install
