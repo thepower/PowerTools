@@ -2,6 +2,8 @@
 node_modules
 /packages/**/build
 /packages/**/dist
+/packages/**/.yarn
+/.yarn
 
 # Logs
 *.log
@@ -42,3 +44,5 @@ screenshots/
 
 tsconfig.tsbuildinfo
 .cache-synpress
+.gitignore
+

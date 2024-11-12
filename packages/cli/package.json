@@ -30,7 +30,9 @@
     "dev:win": "bin/dev.cmd",
     "prod:win": "bin/run.cmd",
     "prepare": "yarn build",
+    "build:clean": "rm -rf dist",
     "build": "shx rm -rf dist && tsc -b",
+    "watch": "tsc --watch",
     "lint": "eslint . --ext .ts",
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "yarn lint",
@@ -62,9 +64,11 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^18",
     "@types/supports-color": "^8.1.3",
+    "@vitest/coverage-v8": "2.1.3",
     "oclif": "^4",
     "shx": "^0.3.3",
-    "ts-node": "^10"
+    "ts-node": "^10",
+    "vitest": "2.1.3"
   },
   "engines": {
     "node": ">=18.0.0"
