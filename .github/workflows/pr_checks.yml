@@ -37,7 +37,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-          cache: 'yarn'
+
+      - name: Set up Yarn Berry
+        uses: threeal/setup-yarn-action@v2.0.0
+        with:
+          version: 'stable'
+          cache: true
 
       - name: install
         run: yarn install
@@ -48,7 +53,7 @@ jobs:
       - name: check
         run: yarn ${{ matrix.style-command }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   test:
     runs-on: ubuntu-latest
