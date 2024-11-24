@@ -5,235 +5,130 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.2.10](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.9...@thepowereco/tssdk@2.2.10) (2024-10-30)
 
-
 ### Bug Fixes
 
-* added getBlockByHeight, removed prettifyTx, getBlock from wallet lib ([bf74ea2](https://github.com/thepower/PowerTools/commit/bf74ea2936a03b255d78b9f2093c86f01fce8a8c))
-
-
-
-
+- added getBlockByHeight, removed prettifyTx, getBlock from wallet lib ([bf74ea2](https://github.com/thepower/PowerTools/commit/bf74ea2936a03b255d78b9f2093c86f01fce8a8c))
 
 ## [2.2.9](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.8...@thepowereco/tssdk@2.2.9) (2024-10-29)
 
-
 ### Bug Fixes
 
-* **cli,tssdk:** fixed the default gas value ([2b4f000](https://github.com/thepower/PowerTools/commit/2b4f000138be023091a5b8e8d4d580c5cbdde429))
-
-
-
-
+- **cli,tssdk:** fixed the default gas value ([2b4f000](https://github.com/thepower/PowerTools/commit/2b4f000138be023091a5b8e8d4d580c5cbdde429))
 
 ## [2.2.8](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.7...@thepowereco/tssdk@2.2.8) (2024-10-24)
 
-
 ### Bug Fixes
 
-* **cli,tssdk:** fixed format acc balance ([cc5284b](https://github.com/thepower/PowerTools/commit/cc5284bb03882fc79418c3f54d5b8ce5dea894fa))
-
-
-
-
+- **cli,tssdk:** fixed format acc balance ([cc5284b](https://github.com/thepower/PowerTools/commit/cc5284bb03882fc79418c3f54d5b8ce5dea894fa))
 
 ## [2.2.7](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.6...@thepowereco/tssdk@2.2.7) (2024-10-24)
 
-
 ### Bug Fixes
 
-* **tssdk:** added decimals to upload, load func ([50e4aa5](https://github.com/thepower/PowerTools/commit/50e4aa55fc228663d612f52879053529d10d3de7))
-
-
-
-
+- **tssdk:** added decimals to upload, load func ([50e4aa5](https://github.com/thepower/PowerTools/commit/50e4aa55fc228663d612f52879053529d10d3de7))
 
 ## [2.2.6](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.5...@thepowereco/tssdk@2.2.6) (2024-10-24)
 
-
 ### Bug Fixes
 
-* **tssdk:** added decimals to network api ([20ebd29](https://github.com/thepower/PowerTools/commit/20ebd293e27bac3d0ba5e8f049c19f286b26c1c1))
-
-
-
-
+- **tssdk:** added decimals to network api ([20ebd29](https://github.com/thepower/PowerTools/commit/20ebd293e27bac3d0ba5e8f049c19f286b26c1c1))
 
 ## [2.2.5](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.4...@thepowereco/tssdk@2.2.5) (2024-10-24)
 
-
 ### Bug Fixes
 
-* fix autoAddFee ([500c398](https://github.com/thepower/PowerTools/commit/500c39894d4948bad11aa26863b8f4bc76d45d59))
-
-
-
-
+- fix autoAddFee ([500c398](https://github.com/thepower/PowerTools/commit/500c39894d4948bad11aa26863b8f4bc76d45d59))
 
 ## [2.2.4](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.3...@thepowereco/tssdk@2.2.4) (2024-10-22)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [2.2.3](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.2...@thepowereco/tssdk@2.2.3) (2024-09-25)
-
 
 ### Bug Fixes
 
-* **cli,tssdk:** cli error handling, fixed TxResponse type ([774c93d](https://github.com/thepower/PowerTools/commit/774c93d3a4adaa792c2d62f91520349ed068d0ff))
-
-
-
-
+- **cli,tssdk:** cli error handling, fixed TxResponse type ([774c93d](https://github.com/thepower/PowerTools/commit/774c93d3a4adaa792c2d62f91520349ed068d0ff))
 
 ## [2.2.2](https://github.com/thepower/PowerTools/compare/@thepowereco/tssdk@2.2.1...@thepowereco/tssdk@2.2.2) (2024-09-13)
 
-
 ### Bug Fixes
 
-* amount bug fixed, small fixes ([a95296c](https://github.com/thepower/PowerTools/commit/a95296caf3eef13cc5dfb8893e51117219d4db90))
-
-
-
-
+- amount bug fixed, small fixes ([a95296c](https://github.com/thepower/PowerTools/commit/a95296caf3eef13cc5dfb8893e51117219d4db90))
 
 ## [2.2.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.2.0...@thepowereco/tssdk@2.2.1) (2024-08-17)
 
-
 ### Bug Fixes
 
-* removed ethereumjs ([e63230a](https://github.com/thepower/power_hub/commit/e63230a098152453a5be5bbb305738cf53648a16))
-
-
-
-
+- removed ethereumjs ([e63230a](https://github.com/thepower/power_hub/commit/e63230a098152453a5be5bbb305738cf53648a16))
 
 # [2.2.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.9...@thepowereco/tssdk@2.2.0) (2024-08-17)
 
-
 ### Features
 
-* smart contract methods types ([19b4928](https://github.com/thepower/power_hub/commit/19b4928d9a594b30fa91aa39311a01778ac7e090))
-
-
-
-
+- smart contract methods types ([19b4928](https://github.com/thepower/power_hub/commit/19b4928d9a594b30fa91aa39311a01778ac7e090))
 
 ## [2.1.9](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.8...@thepowereco/tssdk@2.1.9) (2024-08-16)
 
-
 ### Bug Fixes
 
-* fixed path ([f976eff](https://github.com/thepower/power_hub/commit/f976eff480286bfc1e9fc5281730c8f9df41bda2))
-
-
-
-
+- fixed path ([f976eff](https://github.com/thepower/power_hub/commit/f976eff480286bfc1e9fc5281730c8f9df41bda2))
 
 ## [2.1.8](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.7...@thepowereco/tssdk@2.1.8) (2024-08-16)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [2.1.7](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.6...@thepowereco/tssdk@2.1.7) (2024-08-15)
-
 
 ### Bug Fixes
 
-* updating dependencies, removed unused code ([fb903a2](https://github.com/thepower/power_hub/commit/fb903a2642a1d4a412ccb74b637a5f618e02c469))
-* yarn.lock ([7e65775](https://github.com/thepower/power_hub/commit/7e65775118ac7db40e2d0a385537c1338b753932))
-* yarn.lock ([ef6c721](https://github.com/thepower/power_hub/commit/ef6c72103716f3fc1f08d6311a1302bbb95f57d4))
-* yarn.lock ([480abfa](https://github.com/thepower/power_hub/commit/480abfaf26a1352cc5072856557b1ee85269a156))
-
-
-
-
+- updating dependencies, removed unused code ([fb903a2](https://github.com/thepower/power_hub/commit/fb903a2642a1d4a412ccb74b637a5f618e02c469))
+- yarn.lock ([7e65775](https://github.com/thepower/power_hub/commit/7e65775118ac7db40e2d0a385537c1338b753932))
+- yarn.lock ([ef6c721](https://github.com/thepower/power_hub/commit/ef6c72103716f3fc1f08d6311a1302bbb95f57d4))
+- yarn.lock ([480abfa](https://github.com/thepower/power_hub/commit/480abfaf26a1352cc5072856557b1ee85269a156))
 
 ## [2.1.6](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.5...@thepowereco/tssdk@2.1.6) (2024-07-18)
 
-
 ### Bug Fixes
 
-* removed .env ([7a55db5](https://github.com/thepower/power_hub/commit/7a55db589b80dbc65a5398bdf9657df38ac4922c))
-
-
-
-
+- removed .env ([7a55db5](https://github.com/thepower/power_hub/commit/7a55db589b80dbc65a5398bdf9657df38ac4922c))
 
 ## [2.1.5](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.4...@thepowereco/tssdk@2.1.5) (2024-07-18)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [2.1.4](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.3...@thepowereco/tssdk@2.1.4) (2024-07-16)
 
 **Note:** Version bump only for package @thepowereco/tssdk
-
-
-
-
 
 ## [2.1.3](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.2...@thepowereco/tssdk@2.1.3) (2024-07-16)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 ## [2.1.2](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.1...@thepowereco/tssdk@2.1.2) (2024-06-24)
-
 
 ### Bug Fixes
 
-* added seq to other set methods ([de00573](https://github.com/thepower/power_hub/commit/de00573c09ed0b99e9703ffc0348e325d8671834))
-
-
-
-
+- added seq to other set methods ([de00573](https://github.com/thepower/power_hub/commit/de00573c09ed0b99e9703ffc0348e325d8671834))
 
 ## [2.1.1](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.1.0...@thepowereco/tssdk@2.1.1) (2024-06-17)
 
 **Note:** Version bump only for package @thepowereco/tssdk
 
-
-
-
-
 # [2.1.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@2.0.0...@thepowereco/tssdk@2.1.0) (2024-05-31)
-
 
 ### Features
 
-* **lib wallet:** registerCertainChain: added timeout parameter, sleep 500 => 1000 ([6de95a2](https://github.com/thepower/power_hub/commit/6de95a2fd8cf7340225b515ca03b05b30ced460f))
-
-
-
-
+- **lib wallet:** registerCertainChain: added timeout parameter, sleep 500 => 1000 ([6de95a2](https://github.com/thepower/power_hub/commit/6de95a2fd8cf7340225b515ca03b05b30ced460f))
 
 # [2.0.0](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.36...@thepowereco/tssdk@2.0.0) (2024-05-30)
 
-
 ### Features
 
-* **tssdk:** added new api method (getWalletSequence) and calculate seq in makeNewTx method ([a04ce9d](https://github.com/thepower/power_hub/commit/a04ce9d84f6a0f7511c29ee0272f040063e2cd3e))
-
+- **tssdk:** added new api method (getWalletSequence) and calculate seq in makeNewTx method ([a04ce9d](https://github.com/thepower/power_hub/commit/a04ce9d84f6a0f7511c29ee0272f040063e2cd3e))
 
 ### BREAKING CHANGES
 
-* **tssdk:** new method getWalletSequence, calculating seq
-
-
-
-
+- **tssdk:** new method getWalletSequence, calculating seq
 
 ## [1.15.36](https://github.com/thepower/power_hub/compare/@thepowereco/tssdk@1.15.35...@thepowereco/tssdk@1.15.36) (2024-05-17)
 

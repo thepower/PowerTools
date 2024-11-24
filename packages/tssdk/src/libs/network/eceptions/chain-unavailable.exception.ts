@@ -1,11 +1,11 @@
 export class ChainUnavailableException extends Error {
-  static CODE = 'CHAIN_UNAVAILABLE';
+  static CODE = 'CHAIN_UNAVAILABLE'
 
-  static MESSAGE = 'Chain unavailable';
+  static MESSAGE = 'Chain unavailable'
 
   constructor() {
-    super(ChainUnavailableException.MESSAGE);
+    super(ChainUnavailableException.MESSAGE)
 
-    this.name = ChainUnavailableException.CODE;
+    this.name = ChainUnavailableException.CODE
   }
 }

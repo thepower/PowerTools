@@ -1,5 +1,5 @@
-import storage from './storage';
-import order from './order';
-import provider from './provider';
+import storage from './storage.js'
+import order from './order.js'
+import provider from './provider.js'
 
-export default { storage, order, provider };
+export default { storage, order, provider }

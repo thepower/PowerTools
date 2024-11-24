@@ -5,11 +5,11 @@ export {
   TransactionsApi,
   LStoreApi,
   WalletApi,
-  EvmContract,
-} from './libs';
+  EvmContract
+} from './libs/index.js'
 
-export { msgPackEncoder } from './utils/msgpack';
+export { msgPackEncoder } from './utils/msgpack.js'
 
-export { ChainAction } from './helpers/network.enum';
-export { NetworkEnum } from './config/network.enum';
-export * from './typings';
+export { ChainAction } from './helpers/network.enum.js'
+export { NetworkEnum } from './config/network.enum.js'
+export * from './typings.js'
