@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.11
+
+### Patch Changes
+
+- [#178](https://github.com/thepower/PowerTools/pull/178) [`9448349`](https://github.com/thepower/PowerTools/commit/944834975c79aedd8f368003c2118d5a18da2c2f) Thanks [@jackkru69](https://github.com/jackkru69)! - turborepo
+
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
