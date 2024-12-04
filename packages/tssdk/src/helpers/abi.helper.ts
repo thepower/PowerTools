@@ -1,5 +1,5 @@
-import { decodeFunctionResult, encodeFunctionData } from 'viem/utils';
+import { decodeFunctionResult, encodeFunctionData } from 'viem/utils'
 
-export const encodeFunction = encodeFunctionData;
+export const encodeFunction = encodeFunctionData
 
-export const decodeReturnValue = decodeFunctionResult;
+export const decodeReturnValue = decodeFunctionResult

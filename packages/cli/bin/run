@@ -1,7 +1,0 @@
-#!/usr/bin/env node
-
-const { run, handle, flush } = require('@oclif/core');
-
-run(process.argv.slice(2))
-  .catch((error) => handle(error))
-  .finally(() => flush());

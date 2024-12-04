@@ -7,14 +7,16 @@ the power cli
 [![Downloads/week](https://img.shields.io/npm/dw/@thepowereco/cli.svg)](https://npmjs.org/package/@thepowereco/cli)
 
 <!-- toc -->
-* [@thepowereco/cli](#thepowerecocli)
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [@thepowereco/cli](#thepowerecocli)
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @thepowereco/cli
 $ tpe COMMAND
@@ -26,40 +28,42 @@ USAGE
   $ tpe COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`tpe acc get-balance`](#tpe-acc-get-balance)
-* [`tpe acc register`](#tpe-acc-register)
-* [`tpe acc send-sk`](#tpe-acc-send-sk)
-* [`tpe autocomplete [SHELL]`](#tpe-autocomplete-shell)
-* [`tpe container actions`](#tpe-container-actions)
-* [`tpe container create`](#tpe-container-create)
-* [`tpe container list`](#tpe-container-list)
-* [`tpe container update`](#tpe-container-update)
-* [`tpe container upload`](#tpe-container-upload)
-* [`tpe contract deploy`](#tpe-contract-deploy)
-* [`tpe contract get`](#tpe-contract-get)
-* [`tpe contract set`](#tpe-contract-set)
-* [`tpe help [COMMAND]`](#tpe-help-command)
-* [`tpe plugins`](#tpe-plugins)
-* [`tpe plugins add PLUGIN`](#tpe-plugins-add-plugin)
-* [`tpe plugins:inspect PLUGIN...`](#tpe-pluginsinspect-plugin)
-* [`tpe plugins install PLUGIN`](#tpe-plugins-install-plugin)
-* [`tpe plugins link PATH`](#tpe-plugins-link-path)
-* [`tpe plugins remove [PLUGIN]`](#tpe-plugins-remove-plugin)
-* [`tpe plugins reset`](#tpe-plugins-reset)
-* [`tpe plugins uninstall [PLUGIN]`](#tpe-plugins-uninstall-plugin)
-* [`tpe plugins unlink [PLUGIN]`](#tpe-plugins-unlink-plugin)
-* [`tpe plugins update`](#tpe-plugins-update)
-* [`tpe provider create`](#tpe-provider-create)
-* [`tpe provider list`](#tpe-provider-list)
-* [`tpe provider set-url`](#tpe-provider-set-url)
-* [`tpe storage tasklist`](#tpe-storage-tasklist)
-* [`tpe storage upload`](#tpe-storage-upload)
-* [`tpe update [CHANNEL]`](#tpe-update-channel)
+
+- [`tpe acc get-balance`](#tpe-acc-get-balance)
+- [`tpe acc register`](#tpe-acc-register)
+- [`tpe acc send-sk`](#tpe-acc-send-sk)
+- [`tpe autocomplete [SHELL]`](#tpe-autocomplete-shell)
+- [`tpe container actions`](#tpe-container-actions)
+- [`tpe container create`](#tpe-container-create)
+- [`tpe container list`](#tpe-container-list)
+- [`tpe container update`](#tpe-container-update)
+- [`tpe container upload`](#tpe-container-upload)
+- [`tpe contract deploy`](#tpe-contract-deploy)
+- [`tpe contract get`](#tpe-contract-get)
+- [`tpe contract set`](#tpe-contract-set)
+- [`tpe help [COMMAND]`](#tpe-help-command)
+- [`tpe plugins`](#tpe-plugins)
+- [`tpe plugins add PLUGIN`](#tpe-plugins-add-plugin)
+- [`tpe plugins:inspect PLUGIN...`](#tpe-pluginsinspect-plugin)
+- [`tpe plugins install PLUGIN`](#tpe-plugins-install-plugin)
+- [`tpe plugins link PATH`](#tpe-plugins-link-path)
+- [`tpe plugins remove [PLUGIN]`](#tpe-plugins-remove-plugin)
+- [`tpe plugins reset`](#tpe-plugins-reset)
+- [`tpe plugins uninstall [PLUGIN]`](#tpe-plugins-uninstall-plugin)
+- [`tpe plugins unlink [PLUGIN]`](#tpe-plugins-unlink-plugin)
+- [`tpe plugins update`](#tpe-plugins-update)
+- [`tpe provider create`](#tpe-provider-create)
+- [`tpe provider list`](#tpe-provider-list)
+- [`tpe provider set-url`](#tpe-provider-set-url)
+- [`tpe storage tasklist`](#tpe-storage-tasklist)
+- [`tpe storage upload`](#tpe-storage-upload)
+- [`tpe update [CHANNEL]`](#tpe-update-channel)
 
 ## `tpe acc get-balance`
 
@@ -316,7 +320,7 @@ DESCRIPTION
 EXAMPLES
   $ tpe container update -k ./key.pem -p mypassword -i 123 -n "New Container Name" -f ./containerKey.pem -s containerpassword
 
-  $ tpe container update -k ./key.pem --password mypassword --containerId 123 
+  $ tpe container update -k ./key.pem --password mypassword --containerId 123
       --containerName "New Container Name" --containerKeyFilePath ./containerKey.pem --containerPassword containerpassword
 ```
 
@@ -441,12 +445,12 @@ DESCRIPTION
   Execute a method on a specified smart contract
 
 EXAMPLES
-  $ tpe contract set --abiPath ./path/to/abi.json 
+  $ tpe contract set --abiPath ./path/to/abi.json
       --address AA100000001677748249 --keyFilePath ./path/to/keyfile.pem --method set --params value1 --password mypassword
 
   $ tpe contract set -a ./path/to/abi.json -d AA100000001677748249 -k ./path/to/keyfile.pem -m set -r "value1 value2" -p mypassword
 
-  $ tpe contract set --abiPath ./path/to/abi.json 
+  $ tpe contract set --abiPath ./path/to/abi.json
       --address AA100000001677748249 --keyFilePath ./path/to/keyfile.pem --method setData --params "0x456 1 2 [1,2] {a: 1, b: 2} 1n"
 ```
 
@@ -935,4 +939,5 @@ EXAMPLES
 ```
 
 _See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v4.4.2/src/commands/update.ts)_
+
 <!-- commandsstop -->

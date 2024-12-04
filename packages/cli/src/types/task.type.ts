@@ -8,4 +8,4 @@ export type Task = {
   status: number
   taskTime: number
   uploader: number
-};
+}

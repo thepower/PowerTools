@@ -3,4 +3,4 @@ export type CliConfig = {
   projectId: string
   source: string
   keyFilePath: string
-};
+}
