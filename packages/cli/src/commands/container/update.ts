@@ -1,7 +1,7 @@
 import { Flags, ux } from '@oclif/core'
 import crypto from 'crypto'
 import { EvmContract } from '@thepowereco/tssdk'
-import color from '@oclif/color'
+import { color } from '@oclif/color'
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper.js'
 import cliConfig from '../../config/cli.js'
 import abis from '../../abis/index.js'
@@ -120,8 +120,7 @@ export default class ContainerUpdate extends BaseCommand {
       this.log(color.green(`Container ${containerName} updated with ID: ${containerId}`))
       this.log(
         color.yellow(
-          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${
-            taskUpdateResponse.txId
+          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${taskUpdateResponse.txId
           }`
         )
       )

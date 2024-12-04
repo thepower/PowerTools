@@ -3324,7 +3324,7 @@ __metadata:
     "@oclif/plugin-plugins": "npm:^5"
     "@oclif/plugin-update": "npm:^4.4.2"
     "@oclif/test": "npm:^4"
-    "@thepowereco/tssdk": "*"
+    "@thepowereco/tssdk": "npm:*"
     "@types/jsonwebtoken": "npm:^9.0.6"
     "@types/node": "npm:^18"
     "@types/supports-color": "npm:^8.1.3"

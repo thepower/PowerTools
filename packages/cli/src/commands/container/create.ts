@@ -3,7 +3,7 @@ import crypto from 'crypto'
 import { readFileSync, writeFileSync } from 'fs'
 import path from 'path'
 import { AddressApi, EvmContract } from '@thepowereco/tssdk'
-import color from '@oclif/color'
+import { color } from '@oclif/color'
 import enquirer from 'enquirer'
 import { isAddress } from 'viem/utils'
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper.js'
@@ -125,8 +125,7 @@ export default class ContainerCreate extends BaseCommand {
       )
       this.log(
         color.yellow(
-          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${
-            mintResponse.txId
+          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${mintResponse.txId
           }`
         )
       )

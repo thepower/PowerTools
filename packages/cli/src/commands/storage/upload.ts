@@ -2,7 +2,7 @@ import { Command, Flags } from '@oclif/core'
 import { AddressApi, EvmContract } from '@thepowereco/tssdk'
 import { Listr } from 'listr2'
 import { resolve } from 'path'
-import color from '@oclif/color'
+import { color } from '@oclif/color'
 
 import { isAddress } from 'viem/utils'
 import cliConfig from '../../config/cli.js'

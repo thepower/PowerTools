@@ -2,7 +2,7 @@ import { Flags, ux } from '@oclif/core'
 import { EvmContract } from '@thepowereco/tssdk'
 import { readFileSync } from 'fs'
 
-import color from '@oclif/color'
+import { color } from '@oclif/color'
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper.js'
 import { BaseCommand } from '../../baseCommand.js'
 import { ParamsParser } from '../../helpers/params-parser.helper.js'
@@ -125,8 +125,7 @@ export default class ContractSet extends BaseCommand {
       // This.log(setResult);
       this.log(
         color.yellow(
-          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${
-            setResult.txId
+          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${setResult.txId
           }`
         )
       )

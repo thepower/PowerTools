@@ -1,5 +1,5 @@
 import { Flags, ux } from '@oclif/core'
-import color from '@oclif/color'
+import { color } from '@oclif/color'
 import { EvmContract } from '@thepowereco/tssdk'
 import cliConfig from '../../config/cli.js'
 import { BaseCommand } from '../../baseCommand.js'
@@ -93,8 +93,7 @@ export default class ProviderSetUrl extends BaseCommand {
       this.log(color.green(`Provider url ${providerUrl} updated with provider ID: ${providerId}`))
       this.log(
         color.yellow(
-          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${
-            setUrlResponse.txId
+          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${setUrlResponse.txId
           }`
         )
       )

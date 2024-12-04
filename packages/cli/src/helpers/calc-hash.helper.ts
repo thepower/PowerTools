@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto'
+import { createHash } from 'crypto'
 import { promises } from 'fs'
 
 export const getFileHash = async (filePath: string) => {

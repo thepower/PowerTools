@@ -2,7 +2,7 @@ import { Flags, ux } from '@oclif/core'
 import { TransactionsApi } from '@thepowereco/tssdk'
 import { readFileSync } from 'fs'
 
-import color from '@oclif/color'
+import { color } from '@oclif/color'
 import { colorize } from 'json-colorizer'
 import { type Abi } from 'viem'
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper.js'
@@ -155,8 +155,7 @@ export default class ContractDeploy extends BaseCommand {
       this.log(colorize(result))
       this.log(
         color.yellow(
-          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${
-            result.txId
+          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${result.txId
           }`
         )
       )

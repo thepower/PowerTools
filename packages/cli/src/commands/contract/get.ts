@@ -2,7 +2,7 @@ import { Flags, ux } from '@oclif/core'
 import { EvmContract } from '@thepowereco/tssdk'
 import { readFileSync } from 'fs'
 
-import color from '@oclif/color'
+import { color } from '@oclif/color'
 import { initializeNetworkApi } from '../../helpers/network.helper.js'
 import { BaseCommand } from '../../baseCommand.js'
 import { ParamsParser } from '../../helpers/params-parser.helper.js'

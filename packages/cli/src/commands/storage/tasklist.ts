@@ -2,7 +2,7 @@ import { Command, Flags, ux } from '@oclif/core'
 import { EvmContract } from '@thepowereco/tssdk'
 // Import Table from 'cli-table3';
 
-import color from '@oclif/color'
+import { color } from '@oclif/color'
 import cliConfig from '../../config/cli.js'
 
 import { DEFAULT_CONFIG_FILE_PATH, getConfig, setConfig } from '../../helpers/config.helper.js'

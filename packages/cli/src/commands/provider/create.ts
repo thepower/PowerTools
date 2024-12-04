@@ -1,5 +1,5 @@
 import { Flags, ux } from '@oclif/core'
-import color from '@oclif/color'
+import { color } from '@oclif/color'
 import { AddressApi, EvmContract } from '@thepowereco/tssdk'
 import { isAddress } from 'viem/utils'
 import cliConfig from '../../config/cli.js'
@@ -94,8 +94,7 @@ export default class ProviderCreate extends BaseCommand {
       )
       this.log(
         color.yellow(
-          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${
-            mintResponse.txId
+          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${mintResponse.txId
           }`
         )
       )

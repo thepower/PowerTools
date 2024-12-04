@@ -1,7 +1,7 @@
 import { Flags, ux } from '@oclif/core'
 import { AddressApi, EvmContract } from '@thepowereco/tssdk'
 import Table from 'cli-table3'
-import color from '@oclif/color'
+import { color } from '@oclif/color'
 import { isAddress } from 'viem/utils'
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper.js'
 import cliConfig from '../../config/cli.js'

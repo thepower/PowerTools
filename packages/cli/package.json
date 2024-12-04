@@ -79,7 +79,7 @@
   "oclif": {
     "bin": "tpe",
     "dirname": "tpe",
-    "commands": "./dist/commands",
+    "commands": "./dist/esm/src/commands",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-plugins",

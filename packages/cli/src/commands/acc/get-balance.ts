@@ -1,8 +1,7 @@
 import { Flags, ux } from '@oclif/core'
 import { WalletApi } from '@thepowereco/tssdk'
-import { colorize } from 'json-colorizer'
+import { color, colorize } from 'json-colorizer'
 
-import { color } from '@oclif/color'
 import { formatUnits } from 'viem/utils'
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper.js'
 import { BaseCommand } from '../../baseCommand.js'
@@ -57,12 +56,7 @@ export default class AccGetBalance extends BaseCommand {
 
     if (keyFilePath) {
       const importedWallet = await loadWallet(keyFilePath, password, isEth)
-
-      if (!importedWallet) {
-        throw new Error('No wallet found.')
-      }
-
-      walletAddress = importedWallet.address
+      walletAddress = importedWallet?.address
     }
 
     if (!walletAddress) {

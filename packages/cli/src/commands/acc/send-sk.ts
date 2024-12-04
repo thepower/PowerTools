@@ -2,7 +2,7 @@ import { Flags, ux } from '@oclif/core'
 import { WalletApi } from '@thepowereco/tssdk'
 import { colorize } from 'json-colorizer'
 
-import color from '@oclif/color'
+import { color } from '@oclif/color'
 import { parseUnits } from 'viem/utils'
 import { initializeNetworkApi, loadWallet } from '../../helpers/network.helper.js'
 import { BaseCommand } from '../../baseCommand.js'
@@ -102,8 +102,7 @@ export default class AccSendSk extends BaseCommand {
       this.log(colorize(result))
       this.log(
         color.yellow(
-          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${
-            result.txId
+          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${result.txId
           }`
         )
       )
