@@ -102,7 +102,8 @@ export default class AccSendSk extends BaseCommand {
       this.log(colorize(result))
       this.log(
         color.yellow(
-          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${result.txId
+          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${
+            result.txId
           }`
         )
       )

@@ -94,7 +94,8 @@ export default class ProviderCreate extends BaseCommand {
       )
       this.log(
         color.yellow(
-          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${mintResponse.txId
+          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${
+            mintResponse.txId
           }`
         )
       )

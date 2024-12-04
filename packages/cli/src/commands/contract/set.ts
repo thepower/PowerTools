@@ -125,7 +125,8 @@ export default class ContractSet extends BaseCommand {
       // This.log(setResult);
       this.log(
         color.yellow(
-          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${setResult.txId
+          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${
+            setResult.txId
           }`
         )
       )

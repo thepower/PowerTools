@@ -120,7 +120,8 @@ export default class ContainerUpdate extends BaseCommand {
       this.log(color.green(`Container ${containerName} updated with ID: ${containerId}`))
       this.log(
         color.yellow(
-          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${taskUpdateResponse.txId
+          `Transaction: ${cliConfig.explorerUrl}/${networkApi.getChain()}/transaction/${
+            taskUpdateResponse.txId
           }`
         )
       )
