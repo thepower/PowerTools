@@ -17,28 +17,34 @@ import { UnknownChainException } from './eceptions/unknown-chain.exception.js'
 import { ChainUnavailableException } from './eceptions/chain-unavailable.exception.js'
 import { NoNodesToQueryException } from './eceptions/no-nodes-to-query.exception.js'
 import { NetworkEnum } from '../../config/network.enum.js'
-import type { ContractFunctionArgs, ContractFunctionName } from 'viem'
+import type {
+  ContractFunctionArgs,
+  ContractFunctionName,
+  PublicClient,
+  PublicClientConfig
+} from 'viem'
+import { createPublicClient as createPublicClientViem, fallback, http } from 'viem'
 
 const info = debug('info')
 
 export class NetworkApi {
-  private currentChain: number
+  private _currentChain: number
 
-  private currentNodes: ChainNode[] = []
+  private _currentNodes: ChainNode[] = []
 
-  public isHTTPSNodesOnly = true
+  private _isHTTPSNodesOnly = true
 
-  private nodeIndex = 0
+  private _nodeIndex = 0
 
-  public feeSettings: any
+  private _feeSettings: any
 
-  public gasSettings: any
+  private _gasSettings: any
 
-  public decimals: Decimals = {}
+  private _decimals: Decimals = {}
 
   constructor(chain: number, isHTTPSNodesOnly = true) {
-    this.currentChain = chain
-    this.isHTTPSNodesOnly = isHTTPSNodesOnly
+    this._currentChain = chain
+    this._isHTTPSNodesOnly = isHTTPSNodesOnly
   }
 
   public load(params: {
@@ -53,7 +59,14 @@ export class NetworkApi {
   }
 
   public upload() {
-    const { currentChain, currentNodes, nodeIndex, feeSettings, gasSettings, decimals } = this
+    const {
+      _currentChain: currentChain,
+      _currentNodes: currentNodes,
+      _nodeIndex: nodeIndex,
+      _feeSettings: feeSettings,
+      _gasSettings: gasSettings,
+      _decimals: decimals
+    } = this
     return {
       currentChain,
       currentNodes,
@@ -62,6 +75,38 @@ export class NetworkApi {
       gasSettings,
       decimals
     }
+  }
+
+  get currentNode() {
+    return this._currentNodes[this._nodeIndex]
+  }
+
+  get isHTTPSNodesOnly() {
+    return this._isHTTPSNodesOnly
+  }
+
+  get currentChain() {
+    return this._currentChain
+  }
+
+  get currentNodes() {
+    return this._currentNodes
+  }
+
+  get nodeIndex() {
+    return this._nodeIndex
+  }
+
+  get feeSettings() {
+    return this._feeSettings
+  }
+
+  get gasSettings() {
+    return this._gasSettings
+  }
+
+  get decimals() {
+    return this._decimals
   }
 
   public static async getChainGlobalConfig(): Promise<ChainGlobalConfig> {
@@ -92,7 +137,7 @@ export class NetworkApi {
   }
 
   public async changeChain(chain: number) {
-    this.currentChain = chain
+    this._currentChain = chain
     await this.bootstrap()
   }
 
@@ -105,8 +150,8 @@ export class NetworkApi {
       currentNodes = await queueNodes(newNodes, 5000)
     }
 
-    this.currentNodes = currentNodes
-    this.nodeIndex = 0
+    this._currentNodes = currentNodes
+    this._nodeIndex = 0
   }
 
   public async sendTxAndWaitForResponse(tx: any, timeout = 120) {
@@ -120,38 +165,38 @@ export class NetworkApi {
 
   public getBlockHash = async (height: number) =>
     this.askBlockchainTo(ChainAction.GET_BLOCK_HASH, {
-      chain: this.currentChain,
+      chain: this._currentChain,
       height
     })
 
   public getBlock = async (hash = 'last') =>
     this.askBlockchainTo(ChainAction.GET_BLOCK, {
-      chain: this.currentChain,
+      chain: this._currentChain,
       hash
     })
 
   public getBlockByHeight = async (height: string) =>
     this.askBlockchainTo(ChainAction.GET_BLOCK_BY_HEIGHT, {
-      chain: this.currentChain,
+      chain: this._currentChain,
       height
     })
 
   public getBlockInfo = async (hash = 'last') =>
     this.askBlockchainTo(ChainAction.GET_BLOCK_INFO, {
-      chain: this.currentChain,
+      chain: this._currentChain,
       hash
     })
 
   public getWallet = async (address: string) =>
     this.askBlockchainTo(ChainAction.GET_WALLET, {
-      chain: this.currentChain,
+      chain: this._currentChain,
       address
     })
 
   public getWalletSequence = async (address: string) => {
     try {
       return await this.askBlockchainTo(ChainAction.GET_WALLET_SEQUENCE, {
-        chain: this.currentChain,
+        chain: this._currentChain,
         address
       })
     } catch {
@@ -162,7 +207,7 @@ export class NetworkApi {
   public loadScCode = async (address: string) =>
     new Uint8Array(
       await this.askBlockchainTo(ChainAction.GET_SC_CODE, {
-        chain: this.currentChain,
+        chain: this._currentChain,
         address
       })
     )
@@ -170,7 +215,7 @@ export class NetworkApi {
   public loadScState = async (address: string) =>
     new Uint8Array(
       await this.askBlockchainTo(ChainAction.GET_SC_STATE, {
-        chain: this.currentChain,
+        chain: this._currentChain,
         address
       })
     )
@@ -178,7 +223,7 @@ export class NetworkApi {
   public loadScStateByKey = async (address: string, key: string) =>
     new Uint8Array(
       await this.askBlockchainTo(ChainAction.GET_SC_STATE_BY_KEY, {
-        chain: this.currentChain,
+        chain: this._currentChain,
         address,
         key
       })
@@ -186,21 +231,39 @@ export class NetworkApi {
 
   public getLstoreData = async (address: string, path: string) =>
     this.askBlockchainTo(ChainAction.GET_LSTORE, {
-      chain: this.currentChain,
+      chain: this._currentChain,
       address,
       path
     })
 
   public getChain() {
-    return this.currentChain
+    return this._currentChain
   }
 
   public getIsHTTPSNodesOnly() {
-    return this.isHTTPSNodesOnly
+    return this._isHTTPSNodesOnly
   }
 
   public setIsHTTPSNodesOnly(isHTTPSNodesOnly: boolean) {
-    this.isHTTPSNodesOnly = isHTTPSNodesOnly
+    this._isHTTPSNodesOnly = isHTTPSNodesOnly
+  }
+
+  public createPublicClient(
+    config?: PublicClientConfig,
+    queryParams?: URLSearchParams
+  ): PublicClient {
+    const queryParamsString = new URLSearchParams(queryParams).toString()
+
+    const fallbackTransport = fallback(
+      this._currentNodes.map(node => http(`${node.address}/jsonrpc?${queryParamsString}`))
+    )
+
+    const client = createPublicClientViem({
+      transport: fallbackTransport,
+      ...config
+    })
+
+    return client
   }
 
   public bootstrap = async () => {
@@ -212,10 +275,10 @@ export class NetworkApi {
     ) {
       const stringifiedNodesList = localStorage.getItem('nodesList')
       const chainIdString = localStorage.getItem('chainId')
-      const chainId = chainIdString ? Number(chainIdString) : this.currentChain
+      const chainId = chainIdString ? Number(chainIdString) : this._currentChain
 
       if (stringifiedNodesList) {
-        this.currentChain = chainId
+        this._currentChain = chainId
         const nodesList: ChainNode[] = JSON.parse(stringifiedNodesList)
         await this.setCurrentConfig(nodesList)
         info(`Bootstrapped chain ${chainId}`, nodesList)
@@ -226,27 +289,27 @@ export class NetworkApi {
     } else {
       const chainInfo = await NetworkApi.getChainGlobalConfig()
 
-      const chainData = chainInfo.chains[this.currentChain]
+      const chainData = chainInfo.chains[this._currentChain]
 
       if (chainData) {
         const httpsRegExp = /^https:\/\//gi
 
         const transformedNodeList = transformNodeList(chainData)
-        const nodesList = this.isHTTPSNodesOnly
+        const nodesList = this._isHTTPSNodesOnly
           ? transformedNodeList.filter(node => httpsRegExp.test(node.address))
           : transformedNodeList
 
         if (!transformedNodeList.length) {
-          throw new NoNodesFoundException(this.currentChain)
+          throw new NoNodesFoundException(this._currentChain)
         }
 
         await this.setCurrentConfig(nodesList)
-        info(`Bootstrapped chain ${this.currentChain}`, this.currentNodes)
+        info(`Bootstrapped chain ${this._currentChain}`, this._currentNodes)
         await this.loadFeeGasSettingsAndDecimals()
         return
       }
 
-      throw new UnknownChainException(this.currentChain)
+      throw new UnknownChainException(this._currentChain)
     }
   }
 
@@ -319,17 +382,17 @@ export class NetworkApi {
     })
 
   private incrementNodeIndex = async () => {
-    this.nodeIndex += 1
+    this._nodeIndex += 1
     if (
-      this.nodeIndex >= this.currentNodes.length ||
-      this.currentNodes[this.nodeIndex]?.time === cfg.maxNodeResponseTime
+      this._nodeIndex >= this._currentNodes.length ||
+      this._currentNodes[this._nodeIndex]?.time === cfg.maxNodeResponseTime
     ) {
-      this.currentNodes = await queueNodes(this.currentNodes, 5000)
-      this.nodeIndex = 0
+      this._currentNodes = await queueNodes(this._currentNodes, 5000)
+      this._nodeIndex = 0
 
       if (
-        this.nodeIndex >= this.currentNodes.length ||
-        this.currentNodes[this.nodeIndex]?.time === cfg.maxNodeResponseTime
+        this._nodeIndex >= this._currentNodes.length ||
+        this._currentNodes[this._nodeIndex]?.time === cfg.maxNodeResponseTime
       ) {
         throw new ChainUnavailableException()
       }
@@ -342,13 +405,13 @@ export class NetworkApi {
     let result: any
     let i = 0
 
-    if (!this.currentNodes.length) {
+    if (!this._currentNodes.length) {
       throw new NoNodesToQueryException()
     }
 
     while (!success) {
       i += 1
-      parameters.baseURL = `${this.currentNodes?.[this.nodeIndex]?.address}/api${actionUrl}`
+      parameters.baseURL = `${this._currentNodes?.[this._nodeIndex]?.address}/api${actionUrl}`
       try {
         result = await axios.request(parameters)
         success = true
@@ -557,10 +620,10 @@ export class NetworkApi {
 
   private async loadFeeGasSettingsAndDecimals() {
     const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {})
-    this.feeSettings = this.calculateFeeSettings(settings)
-    this.gasSettings = this.calculateGasSettings(settings)
+    this._feeSettings = this.calculateFeeSettings(settings)
+    this._gasSettings = this.calculateGasSettings(settings)
 
-    this.decimals = settings?.current?.decimals || { SK: 9 }
+    this._decimals = settings?.current?.decimals || { SK: 9 }
   }
 
   private calculateGasSettings(settings: any) {
