@@ -1,6 +1,6 @@
 {
   "name": "@thepowereco/tssdk",
-  "version": "2.2.12-canary.2",
+  "version": "2.2.12-canary.3",
   "main": "./dist/esm/src/index.js",
   "types": "./dist/types/src/index.d.ts",
   "description": "thepower tssdk",

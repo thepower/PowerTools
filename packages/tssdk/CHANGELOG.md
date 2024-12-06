@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.12-canary.3
+
+### Patch Changes
+
+- [#188](https://github.com/thepower/PowerTools/pull/188) [`f57b006`](https://github.com/thepower/PowerTools/commit/f57b006d517f55c08ff5c36819c5b4e0a3a2c6d5) Thanks [@jackkru69](https://github.com/jackkru69)! - network lib fix
+
 ## 2.2.12-canary.2
 
 ### Patch Changes
