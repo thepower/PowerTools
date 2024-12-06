@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.12-canary.0
+
+### Patch Changes
+
+- [#180](https://github.com/thepower/PowerTools/pull/180) [`244b549`](https://github.com/thepower/PowerTools/commit/244b54926db603038ba970b0cdaa6765b64d79da) Thanks [@jackkru69](https://github.com/jackkru69)! - added createPublicClient, network lib refactoring
+
 ## 2.2.11
 
 ### Patch Changes

@@ -5,5 +5,7 @@
     "@thepowereco/cli": "1.12.14",
     "@thepowereco/tssdk": "2.2.11"
   },
-  "changesets": []
+  "changesets": [
+    "light-needles-chew"
+  ]
 }
