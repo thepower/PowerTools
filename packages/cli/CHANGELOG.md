@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.12.15-canary.1
+
+### Patch Changes
+
+- Updated dependencies [[`0b08e22`](https://github.com/thepower/PowerTools/commit/0b08e2224ae10f1fdac491d3f068e1e2854279e6)]:
+  - @thepowereco/tssdk@2.2.12-canary.1
+
 ## 1.12.15-canary.0
 
 ### Patch Changes
