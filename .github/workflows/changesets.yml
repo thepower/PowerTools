@@ -33,7 +33,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: yarn install
         shell: bash
 
       - name: PR or publish
