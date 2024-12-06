@@ -55,7 +55,14 @@ export class NetworkApi {
     gasSettings: any
     decimals: Decimals
   }) {
-    Object.assign(this, params)
+    Object.assign(this, {
+      _currentChain: params.currentChain,
+      _currentNodes: params.currentNodes,
+      _nodeIndex: params.nodeIndex,
+      _feeSettings: params.feeSettings,
+      _gasSettings: params.gasSettings,
+      _decimals: params.decimals
+    })
   }
 
   public upload() {
