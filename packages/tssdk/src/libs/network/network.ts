@@ -24,7 +24,7 @@ import type {
   PublicClientConfig
 } from 'viem'
 import { createPublicClient as createPublicClientViem, fallback, http } from 'viem'
-
+import { type PartialBy } from '../../typings.js'
 const info = debug('info')
 
 export class NetworkApi {
@@ -248,10 +248,13 @@ export class NetworkApi {
     this._isHTTPSNodesOnly = isHTTPSNodesOnly
   }
 
-  public createPublicClient(
-    config?: PublicClientConfig,
+  public createPublicClient({
+    config,
+    queryParams
+  }: {
+    config?: PartialBy<PublicClientConfig, 'transport'>
     queryParams?: URLSearchParams
-  ): PublicClient {
+  }): PublicClient {
     const queryParamsString = new URLSearchParams(queryParams).toString()
 
     const fallbackTransport = fallback(
