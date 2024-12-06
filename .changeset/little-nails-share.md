@@ -1,0 +1,5 @@
+---
+'@thepowereco/tssdk': patch
+---
+
+retry
