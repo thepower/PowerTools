@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.12-canary.1
+
+### Patch Changes
+
+- [#183](https://github.com/thepower/PowerTools/pull/183) [`0b08e22`](https://github.com/thepower/PowerTools/commit/0b08e2224ae10f1fdac491d3f068e1e2854279e6) Thanks [@jackkru69](https://github.com/jackkru69)! - retry
+
 ## 2.2.12-canary.0
 
 ### Patch Changes
