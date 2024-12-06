@@ -73,7 +73,7 @@ jobs:
           cache: 'yarn'
 
       - name: install
-        run: yarn install
+        run: yarn install --no-immutable
 
       - name: build
         run: yarn build
