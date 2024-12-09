@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.12-canary.4
+
+### Patch Changes
+
+- [#190](https://github.com/thepower/PowerTools/pull/190) [`eb17875`](https://github.com/thepower/PowerTools/commit/eb17875a9de81f806896ea7ead92017b0cabaefa) Thanks [@jackkru69](https://github.com/jackkru69)! - added evmAddressToTextAddress
+
 ## 2.2.12-canary.3
 
 ### Patch Changes
