@@ -203,7 +203,6 @@ export const AddressApi = {
 
     return result
   },
-
   textAddressToEvmAddress(textAddress: string): `0x${string}` {
     const hexAddress = AddressApi.textAddressToHex(textAddress)
     return getAddress(`0x000000000000000000000000${hexAddress}`)
@@ -211,6 +210,10 @@ export const AddressApi = {
   evmAddressToHexAddress(evmHexAddress: string) {
     const arr = evmHexAddress.split('0x000000000000000000000000')
     return arr[1]
+  },
+  evmAddressToTextAddress(evmAddress: string): string {
+    const hexAddress = this.evmAddressToHexAddress(evmAddress)
+    return this.hexToTextAddress(hexAddress)
   },
   isTextAddressValid(textAddress: string) {
     try {
