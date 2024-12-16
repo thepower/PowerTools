@@ -72,8 +72,10 @@ export default class AccGetBalance extends BaseCommand {
     const wallet = new WalletApi(networkApi)
     const result = await wallet.loadBalance(walletAddress)
     result.amount = Object.keys(result.amount).reduce((acc, key) => {
-      if (networkApi.decimals[key]) {
-        Object.assign(acc, { [key]: formatUnits(result.amount[key], networkApi.decimals[key]) })
+      const decimals = networkApi?.decimals?.[key]
+
+      if (decimals) {
+        Object.assign(acc, { [key]: formatUnits(result.amount[key], decimals) })
       }
       return acc
     }, {})

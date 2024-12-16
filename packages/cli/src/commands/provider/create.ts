@@ -31,7 +31,7 @@ export default class ProviderCreate extends BaseCommand {
     }),
     providersScAddress: Flags.string({
       char: 'a',
-      default: cliConfig.providerScAddress,
+      default: cliConfig.providersScAddress,
       description: 'Provider smart contract address'
     }),
     sponsorAddress: Flags.string({

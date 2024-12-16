@@ -3,10 +3,13 @@ import axios from 'axios'
 import jsonwebtoken from 'jsonwebtoken'
 import { colorize } from 'json-colorizer'
 import { color } from '@oclif/color'
-import cliConfig from '../../config/cli.js'
 import { BaseCommand } from '../../baseCommand.js'
 import { ParamsParser } from '../../helpers/params-parser.helper.js'
 import { importContainerKey } from '../../helpers/container.helper.js'
+import { EvmContract } from '@thepowereco/tssdk'
+import abis from '../../abis/index.js'
+import { initializeNetworkApi } from '../../helpers/network.helper.js'
+import cliConfig from '../../config/cli.js'
 
 async function jsonRpcRequest({
   url,
@@ -57,6 +60,11 @@ export default class ContainerActions extends BaseCommand {
       char: 'p',
       description: 'Parameters for the method'
     }),
+    containerId: Flags.integer({
+      char: 'i',
+      description: 'Container ID',
+      required: true
+    }),
     containerKeyFilePath: Flags.file({
       char: 'f',
       description: 'Path to the container key file',
@@ -67,12 +75,35 @@ export default class ContainerActions extends BaseCommand {
       default: '',
       description: 'Password for the container key file (env: CONTAINER_KEY_FILE_PASSWORD)',
       env: 'CONTAINER_KEY_FILE_PASSWORD'
+    }),
+    ordersScAddress: Flags.string({
+      char: 'a',
+      default: cliConfig.ordersScAddress,
+      description: 'Orders smart contract address'
+    }),
+    providersScAddress: Flags.string({
+      char: 'b',
+      default: cliConfig.providersScAddress,
+      description: 'Provider smart contract address'
+    }),
+    chain: Flags.integer({
+      char: 'n',
+      description: 'Chain ID'
     })
   }
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ContainerActions)
-    const { method, params, containerKeyFilePath, containerPassword } = flags
+    const {
+      method,
+      params,
+      containerId,
+      containerKeyFilePath,
+      containerPassword,
+      ordersScAddress,
+      providersScAddress,
+      chain
+    } = flags
 
     const paramsParser = new ParamsParser()
 
@@ -86,8 +117,29 @@ export default class ContainerActions extends BaseCommand {
 
     ux.action.start('Requesting')
 
+    const networkApi = await initializeNetworkApi({
+      address: providersScAddress,
+      chain
+    })
+
+    const ordersContract = new EvmContract(networkApi, ordersScAddress)
+
+    const tasks = await ordersContract.scGet({
+      abi: abis.order,
+      functionName: 'tasks',
+      args: [BigInt(containerId)]
+    })
+
+    const activeProvider = tasks?.[4]
+
+    const url = await ordersContract.scGet({
+      abi: abis.order,
+      functionName: 'urls',
+      args: [activeProvider]
+    })
+
     const response = await jsonRpcRequest({
-      url: `${cliConfig.containersUploadBaseUrl}/jsonrpc`,
+      url: `${url}/jsonrpc`,
       method,
       params: parsedParams || [],
       jwt
