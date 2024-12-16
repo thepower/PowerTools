@@ -54,6 +54,8 @@
     "no-use-before-define": "off",
     "require-atomic-updates": "off",
     "no-bitwise": "off",
+    "capitalized-comments": "off",
+    "multiline-comment-style": "off",
     "no-restricted-imports": [
       "error",
       {

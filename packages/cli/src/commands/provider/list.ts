@@ -37,7 +37,7 @@ export default class ProviderList extends BaseCommand {
     }),
     providersScAddress: Flags.string({
       char: 'a',
-      default: cliConfig.providerScAddress,
+      default: cliConfig.providersScAddress,
       description: 'Providers smart contract address'
     }),
     ordersScAddress: Flags.string({
@@ -182,7 +182,9 @@ export default class ProviderList extends BaseCommand {
 
     // Add provider data to the table
     providers.forEach(({ tokenId, name, owner, url }) => {
-      table.push([tokenId, name, owner, url])
+      if (url) {
+        table.push([tokenId, name, owner, url])
+      }
     })
 
     ux.action.stop()

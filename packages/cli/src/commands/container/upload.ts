@@ -92,7 +92,7 @@ export default class ContainerUpload extends BaseCommand {
     }),
     providerScAddress: Flags.string({
       char: 'b',
-      default: cliConfig.providerScAddress,
+      default: cliConfig.providersScAddress,
       description: 'Provider smart contract address'
     }),
     chain: Flags.integer({
@@ -182,12 +182,20 @@ export default class ContainerUpload extends BaseCommand {
             args: [tokenIdBigint]
           })
 
-          return { name, tokenId }
+          const providerUrl = await ordersContract.scGet({
+            abi: abis.order,
+            functionName: 'urls',
+            args: [BigInt(tokenIdBigint)]
+          })
+
+          return { name, tokenId, providerUrl }
         })
       )
 
+      const providerList = providers.filter(({ providerUrl }) => Boolean(providerUrl))
+
       const { providerId }: { providerId: number } = await enquirer.prompt({
-        choices: providers.map(({ name, tokenId }) => ({
+        choices: providerList.map(({ name, tokenId }) => ({
           message: name,
           name: tokenId
         })),
@@ -217,15 +225,19 @@ export default class ContainerUpload extends BaseCommand {
       throw new Error('Provider not found')
     }
 
+    const ignoreList = ['.git']
+
     const uploadTasks = new Listr(
       files.map(file => ({
         async task() {
-          await uploadFile({
-            url: `${activeProviderUrl}/files/${containerId}`,
-            dir: filesPath,
-            jwt,
-            file
-          })
+          if (!ignoreList.some(ignore => file.path.startsWith(ignore))) {
+            await uploadFile({
+              url: `${activeProviderUrl}/files/${containerId}`,
+              dir: filesPath,
+              jwt,
+              file
+            })
+          }
         },
         title: color.whiteBright(`Uploading ${file.name}, size: ${file.size} bytes`)
       }))

@@ -13,15 +13,18 @@ export async function initializeNetworkApi({
   defaultChain?: number
 }) {
   let networkApi: NetworkApi | null = null
+
   if (chain) {
     networkApi = new NetworkApi(chain)
     await networkApi.bootstrap()
   } else if (address) {
     const defaultNetworkApi = new NetworkApi(defaultChain)
     await defaultNetworkApi.bootstrap()
+
     const addressChain = await defaultNetworkApi.getAddressChain(address)
     if (addressChain?.chain && addressChain.chain !== defaultChain) {
       networkApi = new NetworkApi(addressChain.chain)
+
       await networkApi.bootstrap()
     }
   }
