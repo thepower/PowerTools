@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.12.15-canary.5
+
+### Patch Changes
+
+- [#192](https://github.com/thepower/PowerTools/pull/192) [`0908799`](https://github.com/thepower/PowerTools/commit/0908799dce72bbd9fdba912606b33b56bf669aaa) Thanks [@jackkru69](https://github.com/jackkru69)! - replace containers contracts, small fixes
+
 ## 1.12.15-canary.4
 
 ### Patch Changes

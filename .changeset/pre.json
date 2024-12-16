@@ -6,6 +6,7 @@
     "@thepowereco/tssdk": "2.2.11"
   },
   "changesets": [
+    "hot-keys-glow",
     "light-needles-chew",
     "little-nails-share",
     "many-phones-dance",
