@@ -1,5 +1,19 @@
 # Change Log
 
+## 2.2.12
+
+### Patch Changes
+
+- [#180](https://github.com/thepower/PowerTools/pull/180) [`244b549`](https://github.com/thepower/PowerTools/commit/244b54926db603038ba970b0cdaa6765b64d79da) Thanks [@jackkru69](https://github.com/jackkru69)! - added createPublicClient, network lib refactoring
+
+- [#183](https://github.com/thepower/PowerTools/pull/183) [`0b08e22`](https://github.com/thepower/PowerTools/commit/0b08e2224ae10f1fdac491d3f068e1e2854279e6) Thanks [@jackkru69](https://github.com/jackkru69)! - retry
+
+- [#190](https://github.com/thepower/PowerTools/pull/190) [`eb17875`](https://github.com/thepower/PowerTools/commit/eb17875a9de81f806896ea7ead92017b0cabaefa) Thanks [@jackkru69](https://github.com/jackkru69)! - added evmAddressToTextAddress
+
+- [#188](https://github.com/thepower/PowerTools/pull/188) [`f57b006`](https://github.com/thepower/PowerTools/commit/f57b006d517f55c08ff5c36819c5b4e0a3a2c6d5) Thanks [@jackkru69](https://github.com/jackkru69)! - network lib fix
+
+- [#185](https://github.com/thepower/PowerTools/pull/185) [`5ae44a4`](https://github.com/thepower/PowerTools/commit/5ae44a439e7300b5560e01dc18cb08e21fdeb01b) Thanks [@jackkru69](https://github.com/jackkru69)! - createPublicClient fix
+
 ## 2.2.12-canary.4
 
 ### Patch Changes
