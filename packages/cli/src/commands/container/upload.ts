@@ -11,6 +11,7 @@ import abis from '../../abis/index.js'
 import { scanDir } from '../../helpers/upload.helper.js'
 import { BaseCommand } from '../../baseCommand.js'
 import { importContainerKey } from '../../helpers/container.helper.js'
+import { ParamsParser } from '../../helpers/params-parser.helper.js'
 
 async function uploadFile({
   url,
@@ -99,6 +100,10 @@ export default class ContainerUpload extends BaseCommand {
       char: 'n',
       description: 'Chain ID'
     }),
+    ignoreUploadList: Flags.string({
+      char: 'g',
+      description: 'Ignore upload list'
+    }),
     isEth: Flags.boolean({
       char: 'e',
       description: 'Use an ethereum address',
@@ -119,6 +124,7 @@ export default class ContainerUpload extends BaseCommand {
       ordersScAddress,
       providerScAddress,
       chain,
+      ignoreUploadList,
       isEth
     } = flags
 
@@ -127,6 +133,10 @@ export default class ContainerUpload extends BaseCommand {
     if (!importedWallet) {
       throw new Error('No wallet found.')
     }
+
+    const paramsParser = new ParamsParser()
+
+    const parsedIgnoreUploadList = ignoreUploadList && paramsParser.parse(ignoreUploadList)
 
     // Initialize network API
     const networkApi = await initializeNetworkApi({
@@ -227,17 +237,30 @@ export default class ContainerUpload extends BaseCommand {
 
     const ignoreList = ['.git']
 
+    if (parsedIgnoreUploadList) {
+      for (const ignore of parsedIgnoreUploadList) {
+        if (typeof ignore === 'string') {
+          ignoreList.push(ignore)
+        }
+      }
+    }
+
+    const filteredFiles = files.filter(
+      file =>
+        !ignoreList.some(ignore =>
+          `${file.path !== '.' ? file.path : ''}${file.name}`.startsWith(ignore)
+        )
+    )
+
     const uploadTasks = new Listr(
-      files.map(file => ({
+      filteredFiles.map(file => ({
         async task() {
-          if (!ignoreList.some(ignore => file.path.startsWith(ignore))) {
-            await uploadFile({
-              url: `${activeProviderUrl}/files/${containerId}`,
-              dir: filesPath,
-              jwt,
-              file
-            })
-          }
+          await uploadFile({
+            url: `${activeProviderUrl}/files/${containerId}`,
+            dir: filesPath,
+            jwt,
+            file
+          })
         },
         title: color.whiteBright(`Uploading ${file.name}, size: ${file.size} bytes`)
       }))
