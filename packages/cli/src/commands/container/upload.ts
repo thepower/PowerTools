@@ -45,7 +45,12 @@ export default class ContainerUpload extends BaseCommand {
 
   static override examples = [
     '<%= config.bin %> <%= command.id %> --containerId 123 --containerKeyFilePath ./key.pem --containerPassword mypassword --filesPath ./files',
-    '<%= config.bin %> <%= command.id %> -i 123 -f ./key.pem -s mypassword -p ./files'
+    '<%= config.bin %> <%= command.id %> -i 123 -f ./key.pem -s mypassword -t ./files',
+    '<%= config.bin %> <%= command.id %> --containerId 123 --containerKeyFilePath ./key.pem --containerPassword mypassword --filesPath ./files --chooseProvider',
+    '<%= config.bin %> <%= command.id %> -i 123 -f ./key.pem -s mypassword -t ./files --ignoreUploadList "[.git,node_modules,logs]"',
+    '<%= config.bin %> <%= command.id %> --containerId 456 --containerKeyFilePath ./key.pem --containerPassword ethpassword --filesPath ./upload --isEth',
+    '<%= config.bin %> <%= command.id %> -i 789 -f ./container-key.pem -s "securepassword" -t ./files --ordersScAddress 0xOrder123 --providerScAddress 0xProvider456',
+    '<%= config.bin %> <%= command.id %> --containerId 321 --containerKeyFilePath ./key.pem --containerPassword mypassword --filesPath ./data --chain 5'
   ]
 
   static override flags = {
@@ -102,7 +107,7 @@ export default class ContainerUpload extends BaseCommand {
     }),
     ignoreUploadList: Flags.string({
       char: 'g',
-      description: 'Ignore upload list'
+      description: 'Ignore upload list (e.g. "[.git,node_modules,logs]")'
     }),
     isEth: Flags.boolean({
       char: 'e',
