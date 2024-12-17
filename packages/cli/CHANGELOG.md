@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.12.16
+
+### Patch Changes
+
+- [#196](https://github.com/thepower/PowerTools/pull/196) [`a615945`](https://github.com/thepower/PowerTools/commit/a615945eed62c5f048d2ec4f5643d28dc2cb8dde) Thanks [@jackkru69](https://github.com/jackkru69)! - container upload fix
+
 ## 1.12.15
 
 ### Patch Changes
