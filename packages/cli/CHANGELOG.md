@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.12.19-canary.0
+
+### Patch Changes
+
+- [#202](https://github.com/thepower/PowerTools/pull/202) [`5671591`](https://github.com/thepower/PowerTools/commit/5671591eea56760473c9ce3712667ee756dbc4d0) Thanks [@jackkru69](https://github.com/jackkru69)! - fix cli containers actions examples, fix create provider, fix scSet
+
+- Updated dependencies [[`5671591`](https://github.com/thepower/PowerTools/commit/5671591eea56760473c9ce3712667ee756dbc4d0)]:
+  - @thepowereco/tssdk@2.2.13-canary.0
+
 ## 1.12.18
 
 ### Patch Changes
