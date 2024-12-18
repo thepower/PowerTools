@@ -93,15 +93,6 @@ export default class ContainerCreate extends BaseCommand {
     const jwkPublicKey = crypto.createPublicKey(publicKeyPem).export({ format: 'jwk' })
     const compactPublicKey = createCompactPublicKey(jwkPublicKey)
 
-    if (!containerKeyFilePath && compactPublicKey?.base64) {
-      this.savePrivateKey({
-        privateKeyPem,
-        containerName,
-        compactPublicKeyBase64: compactPublicKey.base64,
-        containerPassword
-      })
-    }
-
     const mintResponse = await ordersContract.scSet(
       {
         abi: abis.order,
@@ -116,6 +107,15 @@ export default class ContainerCreate extends BaseCommand {
       },
       { key: importedWallet, sponsor: sponsorAddress }
     )
+
+    if (!containerKeyFilePath && compactPublicKey?.base64) {
+      this.savePrivateKey({
+        privateKeyPem,
+        containerName,
+        compactPublicKeyBase64: compactPublicKey.base64,
+        containerPassword
+      })
+    }
 
     ux.action.stop()
 
