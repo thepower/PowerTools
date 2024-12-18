@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.12.19
+
+### Patch Changes
+
+- [#202](https://github.com/thepower/PowerTools/pull/202) [`5671591`](https://github.com/thepower/PowerTools/commit/5671591eea56760473c9ce3712667ee756dbc4d0) Thanks [@jackkru69](https://github.com/jackkru69)! - fix cli containers actions examples, fix create provider, fix scSet
+
+- [#204](https://github.com/thepower/PowerTools/pull/204) [`8335f5c`](https://github.com/thepower/PowerTools/commit/8335f5cea83b0faad5812b436e4667cce8414f30) Thanks [@jackkru69](https://github.com/jackkru69)! - oclif readme
+
+- Updated dependencies [[`5671591`](https://github.com/thepower/PowerTools/commit/5671591eea56760473c9ce3712667ee756dbc4d0)]:
+  - @thepowereco/tssdk@2.2.13
+
 ## 1.12.19-canary.0
 
 ### Patch Changes
