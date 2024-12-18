@@ -1,5 +1,5 @@
 import { Flags, ux } from '@oclif/core'
-import { TransactionsApi } from '@thepowereco/tssdk'
+import { AddressApi, TransactionsApi } from '@thepowereco/tssdk'
 import { readFileSync } from 'fs'
 
 import { color } from '@oclif/color'
@@ -147,11 +147,15 @@ export default class ContractDeploy extends BaseCommand {
     )
 
     // Send the prepared transaction
-    const result = (await networkApi.sendPreparedTX(deployTX)) as { txId?: string }
+    const result = (await networkApi.sendPreparedTX(deployTX)) as { txId?: string; res: string }
 
     ux.action.stop()
 
     if (result?.txId) {
+      if (result?.res) {
+        result.res = AddressApi.evmAddressToTextAddress(result.res)
+      }
+
       this.log(colorize(result))
       this.log(
         color.yellow(

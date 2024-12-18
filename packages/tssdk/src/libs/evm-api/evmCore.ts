@@ -1,6 +1,7 @@
 import { type Abi } from 'abitype'
 import {
   encodeFunctionData,
+  decodeFunctionResult,
   type EncodeFunctionDataParameters,
   hexToBytes,
   type DecodeFunctionResultReturnType
@@ -60,11 +61,15 @@ export class EvmContract {
     {
       key,
       amount = 0n,
-      sponsor = ''
+      sponsor = '',
+      gasToken = '',
+      gasValue = 0n
     }: {
       key: AccountKey
       amount?: bigint
       sponsor?: string
+      gasToken?: string
+      gasValue?: bigint
     }
   ) {
     const { abi, functionName, args = [] } = parameters as EncodeFunctionDataParameters
@@ -94,8 +99,8 @@ export class EvmContract {
             address: key.address,
             sc: this.address,
             toCall: ['0x0', [dataBuffer]],
-            gasToken: '',
-            gasValue: 0n,
+            gasToken,
+            gasValue,
             wif: key.wif,
             seq: newSequence,
             amountToken: 'SK',
@@ -107,8 +112,8 @@ export class EvmContract {
             address: key.address,
             sc: this.address,
             toCall: ['0x0', [dataBuffer]],
-            gasToken: '',
-            gasValue: 0n,
+            gasToken,
+            gasValue,
             wif: key.wif,
             seq: newSequence,
             amountToken: 'SK',
@@ -118,8 +123,24 @@ export class EvmContract {
             sponsor
           })
 
-    const res = await this.network.sendTxAndWaitForResponse(tx)
+    const response = await this.network.sendTxAndWaitForResponse(tx)
 
-    return res as TxResponse<DecodeFunctionResultReturnType<TAbi, TFunctionName, TArgs>>
+    const typedResponse = response as TxResponse<`0x${string}`>
+
+    const retval = typedResponse?.retval
+
+    if (retval) {
+      const decodedRetval = decodeFunctionResult({
+        abi,
+        data: retval,
+        functionName
+      }) as DecodeFunctionResultReturnType<TAbi, TFunctionName, TArgs>
+
+      return {
+        ...typedResponse,
+        retval: decodedRetval
+      }
+    }
+    return typedResponse
   }
 }

@@ -106,16 +106,6 @@ export default class StorageUpload extends Command {
         throw new Error('No wallet found.')
       }
 
-      /*
-       * Await storageSc.scSet(
-       *   importedWallet,
-       *   'addTask',
-       *   [projectId, manifestHash, expire, totalSize],
-       *   1, // TODO: Change to normal amount
-       *   sponsorAddress,
-       * );
-       */
-
       await storageSc.scSet(
         {
           abi: abis.storage,

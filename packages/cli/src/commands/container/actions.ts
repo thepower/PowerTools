@@ -42,12 +42,12 @@ export default class ContainerActions extends BaseCommand {
   static override description = 'Perform various container actions'
 
   static override examples = [
-    '<%= config.bin %> <%= command.id %> -m "container_start" -p 1 -f ./path/to/keyfile.pem -s mypassword',
-    '<%= config.bin %> <%= command.id %> -m "container_stop" -p 1 -f ./path/to/keyfile.pem -s mypassword',
-    '<%= config.bin %> <%= command.id %> -m "container_destroy" -p 1 -f ./path/to/keyfile.pem -s mypassword',
-    '<%= config.bin %> <%= command.id %> -m "container_handover" -p 1 -f ./path/to/keyfile.pem -s mypassword',
-    '<%= config.bin %> <%= command.id %> -m "container_getPort" -p "1 web 5000" -f ./path/to/keyfile.pem -s mypassword',
-    '<%= config.bin %> <%= command.id %> -m "container_getLogs" -p 1 -f ./path/to/keyfile.pem -s mypassword'
+    '<%= config.bin %> <%= command.id %> -m "container_start" -i 1 -p 1 -f ./path/to/keyfile.pem -s mypassword',
+    '<%= config.bin %> <%= command.id %> -m "container_stop" -i 1 -p 1 -f ./path/to/keyfile.pem -s mypassword',
+    '<%= config.bin %> <%= command.id %> -m "container_destroy" -i 1 -p 1 -f ./path/to/keyfile.pem -s mypassword',
+    '<%= config.bin %> <%= command.id %> -m "container_handover" -i 1 -p 1 -f ./path/to/keyfile.pem -s mypassword',
+    '<%= config.bin %> <%= command.id %> -m "container_getPort" -i 1 -p "1 web 5000" -f ./path/to/keyfile.pem -s mypassword',
+    '<%= config.bin %> <%= command.id %> -m "container_getLogs" -i 1 -p 1 -f ./path/to/keyfile.pem -s mypassword'
   ]
 
   static override flags = {
