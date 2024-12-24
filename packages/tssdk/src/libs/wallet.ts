@@ -32,7 +32,7 @@ export class WalletApi {
 
     const settings = await networkApi.getNodeSettings()
 
-    const derivationPath = `${DERIVATION_PATH_BASE}/${COIN}'/0'/${settings.current.allocblock.block}'/${settings.current.allocblock.group}'`
+    const derivationPath = `${DERIVATION_PATH_BASE}/${COIN}'/0'/${settings.allocblock.block}'/${settings.allocblock.group}'`
 
     const keyPair = await CryptoApi.generateKeyPairFromSeedPhrase(seed, derivationPath)
 

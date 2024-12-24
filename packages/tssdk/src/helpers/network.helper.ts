@@ -96,6 +96,9 @@ export const transformResponse = (response: any, kind: ChainAction, requestParam
 
     case ChainAction.GET_NODE_SETTINGS:
       return response.settings
+
+    case ChainAction.GET_NODE_SETTINGS_CURRENT:
+      return response.settings
     default:
       return response
   }
