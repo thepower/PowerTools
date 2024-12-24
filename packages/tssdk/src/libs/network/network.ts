@@ -166,7 +166,7 @@ export class NetworkApi {
   }
 
   public async getFeeSettings() {
-    const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {})
+    const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS_CURRENT, {})
     return this.calculateFeeSettings(settings)
   }
 
@@ -329,7 +329,7 @@ export class NetworkApi {
   }
 
   private calculateFeeSettings(settings: any) {
-    let result = settings.current
+    let result = settings
     let feeCur = ''
 
     if (result.fee) {
@@ -467,7 +467,7 @@ export class NetworkApi {
   }
 
   public async getNodeSettings() {
-    return this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {})
+    return this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS_CURRENT, {})
   }
 
   public async createTransaction(data: { tx: string }) {
@@ -594,6 +594,10 @@ export class NetworkApi {
         actionUrl = '/settings'
         break
 
+      case ChainAction.GET_NODE_SETTINGS_CURRENT:
+        actionUrl = '/settings/current'
+        break
+
       case ChainAction.GET_SC_CODE:
         requestParams.responseType = 'arraybuffer'
         requestParams.url = `${parameters.address}/code`
@@ -629,15 +633,15 @@ export class NetworkApi {
   }
 
   private async loadFeeGasSettingsAndDecimals() {
-    const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS, {})
+    const settings = await this.askBlockchainTo(ChainAction.GET_NODE_SETTINGS_CURRENT, {})
     this._feeSettings = this.calculateFeeSettings(settings)
     this._gasSettings = this.calculateGasSettings(settings)
 
-    this._decimals = settings?.current?.decimals || { SK: 9 }
+    this._decimals = settings?.decimals || { SK: 9 }
   }
 
   private calculateGasSettings(settings: any) {
-    let result = settings.current
+    let result = settings
     let gasCur
 
     if (result.gas) {
