@@ -5,5 +5,7 @@
     "@thepowereco/cli": "1.12.15",
     "@thepowereco/tssdk": "2.2.12"
   },
-  "changesets": []
+  "changesets": [
+    "dry-islands-push"
+  ]
 }
