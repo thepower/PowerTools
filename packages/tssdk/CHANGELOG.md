@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.14-canary.0
+
+### Patch Changes
+
+- [#206](https://github.com/thepower/PowerTools/pull/206) [`c2f97b8`](https://github.com/thepower/PowerTools/commit/c2f97b8364eef4ec1ca5ebcf76c21a2389e26c1c) Thanks [@jackkru69](https://github.com/jackkru69)! - add chain setting current api method
+
 ## 2.2.13
 
 ### Patch Changes
